@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>丹华公馆5栋租赁合同 · 风险分析报告</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  .header {
+    background: linear-gradient(135deg, #c53030, #e53e3e);
+    color: white;
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(197,48,48,0.3);
+  }
+  .header h1 { font-size: 24px; margin-bottom: 8px; }
+  .header p { opacity: 0.9; font-size: 14px; }
+
+  .summary-banner {
+    background: #fff5f5;
+    border-left: 4px solid #c53030;
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 24px;
+  }
+  .summary-banner strong { color: #c53030; }
+
+  .section {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+    flex-shrink: 0;
+  }
+  .red .icon { background: #c53030; }
+  .orange .icon { background: #d69e2e; }
+  .blue .icon { background: #2b6cb0; }
+
+  .risk-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid #c53030;
+    background: #fefefe;
+  }
+  .risk-card:last-child { margin-bottom: 0; }
+  .risk-card h3 {
+    font-size: 15px;
+    color: #c53030;
+    margin-bottom: 8px;
+  }
+  .risk-card .clause {
+    background: #f7fafc;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    color: #4a5568;
+    margin-bottom: 10px;
+    border-left: 3px solid #cbd5e0;
+  }
+  .risk-card .problem {
+    font-size: 13px;
+    color: #744210;
+    background: #fffff0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+  }
+  .risk-card .fix {
+    font-size: 13px;
+    color: #22543d;
+    background: #f0fff4;
+    padding: 8px 12px;
+    border-radius: 6px;
+  }
+  .risk-card .location {
+    font-size: 12px;
+    color: #718096;
+    margin-bottom: 6px;
+  }
+
+  .medium-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+    border-left: 4px solid #d69e2e;
+    background: #fefefe;
+  }
+  .medium-card:last-child { margin-bottom: 0; }
+  .medium-card h3 {
+    font-size: 15px;
+    color: #975a16;
+    margin-bottom: 8px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 12px;
+  }
+  th {
+    background: #2d3748;
+    color: white;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+  }
+  th:first-child { border-radius: 6px 0 0 0; }
+  th:last-child { border-radius: 0 6px 0 0; }
+  td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  tr:hover { background: #f7fafc; }
+  .blank-table tr td:first-child {
+    font-weight: 600;
+    color: #c53030;
+    white-space: nowrap;
+  }
+
+  .action-box {
+    background: linear-gradient(135deg, #1a365d, #2c5282);
+    color: white;
+    padding: 20px 24px;
+    border-radius: 12px;
+    margin-top: 24px;
+  }
+  .action-box h2 {
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #fefcbf;
+  }
+  .action-box ol {
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 2;
+  }
+  .action-box li span {
+    background: rgba(255,255,255,0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: #a0aec0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>🏠 丹华公馆5栋租赁合同 · 风险分析报告</h1>
+    <p>出租方：深圳桑年公寓运营有限公司 · 生成时间：2026-05-13</p>
+  </div>
+
+  <!-- Summary -->
+  <div class="summary-banner">
+    <strong>⚠️ 综合评估：</strong>本合同为"房东友好型"模板，约 80% 条款倾向于保护甲方（房东）利益，乙方（租客）权利保障较弱。签约前建议就以下条款进行谈判修改。
+  </div>
+
+  <!-- 高危条款 -->
+  <div class="section red">
+    <div class="section-title"><span class="icon">🔴</span> 高危条款 — 建议明天必须谈判修改</div>
+
+    <div class="risk-card">
+      <div class="location">📍 第二条 2.2 · 学位占用违约金</div>
+      <h3>① 学位违约金 5 万元，触发条件过于宽泛</h3>
+      <div class="clause">"若乙方违反本约定，导致该房产学位被占用<strong>或锁定</strong>，甲方有权立即单方解除合同收回房屋，并要求乙方向甲方支付违约金 5 万元。"</div>
+      <div class="problem">⚠️ 问题："或锁定"表述模糊——只要申请了学位（即使未成功），房东也可主张"锁定"，直接罚 5 万。</div>
+      <div class="fix">✅ 修改建议：删除"或锁定"，改为"实际被占用"。</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="location">📍 第四条 4.4 · 保证金不得抵扣</div>
+      <h3>② 押金不得抵扣任何费用</h3>
+      <div class="clause">"物业租赁保证金(房租押金)不可以抵扣任何费用，仅为履约保证。"</div>
+      <div class="problem">⚠️ 问题：正常合同押金可用于抵扣最后一个月租金或欠费。此条款等于押金交了就要不回来，只能靠"无违约"才能退还。</div>
+      <div class="fix">✅ 修改建议：改为"押金可在合同终止时抵扣乙方应付未付费用"。</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="location">📍 第九条 9.1.3 · 甲方单独进入权</div>
+      <h3>③ 房东可在乙方不在场时进入房屋</h3>
+      <div class="clause">"但在无法即时联络到乙方情形下，甲方及物业管理公司有权在乙方不在场的情况下进入该物业。"</div>
+      <div class="problem">⚠️ 问题："无法即时联络"定义模糊，等于甲方可随时以"联系不上"为由进入房屋，严重侵犯隐私权。</div>
+      <div class="fix">✅ 修改建议：加"紧急情况除外"，并明确"紧急情况指火灾、漏水等直接威胁房屋安全的情形"。</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="location">📍 第十三条 13.8 · 滞纳金 + 停水停电</div>
+      <h3>④ 滞纳金 0.1%/天 + 可停水停电</h3>
+      <div class="clause">"每逾期一日，则应按逾期之款项的 <strong>0.1%</strong> 支付滞纳金…甲方有权经提前3个工作日通知乙方后<strong>停止有关能源供应</strong>。"</div>
+      <div class="problem">⚠️ 问题：0.1%/天 = 年息 36.5%，远超法律保护上限（LPR 4倍，约15%/年）。停水停电属于极端手段，合同未要求"经法院程序"。</div>
+      <div class="fix">✅ 修改建议：滞纳金降至 0.03%/天（年息约11%），删除"停止能源供应"条款，改为"经法院判决后执行"。</div>
+    </div>
+
+    <div class="risk-card">
+      <div class="location">📍 第十三条 13.3 · 提前退租押金全扣</div>
+      <h3>⑤ 提前退租押金全额没收</h3>
+      <div class="clause">"乙方需足额缴纳当月应交租金，甲方有权<strong>没收全部</strong>租赁保证金和水电燃气及管理费保证金作为乙方违约金。"</div>
+      <div class="problem">⚠️ 问题："押金全扣 + 还要补损失"属于惩罚性违约金，法院通常不支持全额没收。</div>
+      <div class="fix">✅ 修改建议：改为"押金抵扣违约金，不足部分另行赔偿"，并设上限（如押金总额的50%）。</div>
+    </div>
+  </div>
+
+  <!-- 中等风险 -->
+  <div class="section orange">
+    <div class="section-title"><span class="icon">🟡</span> 中等风险 — 建议争取修改</div>
+
+    <div class="medium-card">
+      <div class="location">📍 第十条 10.1 · 转租更名费 1000 元</div>
+      <h3>⑥ 转租需缴纳 1000 元"更名费"</h3>
+      <div class="clause">"经甲方书面同意乙方转租给他人的，乙方需另行向甲方缴纳 <strong>1000 元</strong>更名费后办理转租手续。"</div>
+      <div class="problem">⚠️ 问题："更名费"无法律依据，属于房东巧立名目收费。深圳市场上更名费一般为 200-500 元（覆盖行政成本）。</div>
+      <div class="fix">✅ 修改建议：要求删除，或改为"手续费 200 元"（合理行政成本）。</div>
+    </div>
+
+    <div class="medium-card">
+      <div class="location">📍 第九条 vs 附件二 · 维修责任矛盾</div>
+      <h3>⑦ 维修责任合同条款与附件矛盾</h3>
+      <div class="clause">合同正文（9.1.3）："由甲方负责相关维修义务。"<br>附件二（第7条）："租赁期间乙方为出租房屋的实际管理人，乙方自身的人身、财产安全均由乙方自行负责。"</div>
+      <div class="problem">⚠️ 问题：两个条款直接矛盾——出了事故会互相推诿。房屋主体结构/自然老化损坏应由房东负责，但附件把全部责任推给租客。</div>
+      <div class="fix">✅ 修改建议：要求统一条款，明确"房屋主体结构/自然老化损坏由甲方负责，乙方使用不当由乙方负责"。</div>
+    </div>
+
+    <div class="medium-card">
+      <div class="location">📍 第十二条 12.4.8 + 附件四 · 宠物禁止</div>
+      <h3>⑧ 宠物饲养条款不明确</h3>
+      <div class="clause">合同正文："租赁过程中在该物业内<strong>私自饲养宠物</strong>的"（视为违约）<br>附件四：《宠物饲养承诺书》模板存在，但未写明"经甲方同意可以饲养"</div>
+      <div class="problem">⚠️ 问题：如果想养宠物，合同正文禁止"私自饲养"，但附件四又有承诺书模板，逻辑矛盾。若不提前书面确认，房东可随时以"私自饲养"为由解除合同。</div>
+      <div class="fix">✅ 修改建议：若需养宠物，明天必须书面确认"甲方同意饲养宠物，且已签署附件四"，并将附件四作为正式合同附件（双方签字）。</div>
+    </div>
+  </div>
+
+  <!-- 空白项 -->
+  <div class="section blue">
+    <div class="section-title"><span class="icon">📋</span> 空白项清单 — 明天签约前必须填清楚</div>
+    <p style="font-size:13px;color:#4a5568;margin-bottom:8px;">以下空白项若不填写，合同关键条款等于未约定，具有重大法律风险：</p>
+    <table class="blank-table">
+      <tr>
+        <th>空白项</th>
+        <th>所在位置</th>
+        <th>风险说明</th>
+        <th>建议填写</th>
+      </tr>
+      <tr>
+        <td>租期起止日期</td>
+        <td>第三条 3.1</td>
+        <td>不填等于无明确租期，房东可随时要求搬离</td>
+        <td>明确年月日，建议租期≥1年</td>
+      </tr>
+      <tr>
+        <td>免租期</td>
+        <td>第三条 3.1</td>
+        <td>不填等于没有免租期，签约当天即计租金</td>
+        <td>通常为3-7天，用于搬家/保洁</td>
+      </tr>
+      <tr>
+        <td>押金金额</td>
+        <td>第四条 4.1</td>
+        <td>不填等于押金数额由房东事后单方确定</td>
+        <td>通常为1-2个月租金，需与月租金同时填写</td>
+      </tr>
+      <tr>
+        <td>月租金</td>
+        <td>第四条 4.1 + 第五条 5.2</td>
+        <td><strong>最重要</strong>——不填等于租金未约定，是合同核心漏洞</td>
+        <td>明确数字 + 大写，如"¥6500元（陆仟伍佰元整）"</td>
+      </tr>
+      <tr>
+        <td>交付日期</td>
+        <td>第八条 8.1.1</td>
+        <td>不填等于交了钱却拿不到房，无交付时间点</td>
+        <td>与签约日同一天或明确约定日期</td>
+      </tr>
+      <tr>
+        <td>退房日期</td>
+        <td>第八条 8.2.1</td>
+        <td>不填等于不知道何时到期，续租/退租均无依据</td>
+        <td>与租期截止日一致</td>
+      </tr>
+      <tr>
+        <td>乙方身份证号</td>
+        <td>封面 + 签署页</td>
+        <td>不填等于合同主体身份不明，法律效力存疑</td>
+        <td>必须准确填写并附身份证复印件（附件五）</td>
+      </tr>
+      <tr>
+        <td>乙方联系电话/地址</td>
+        <td>封面 + 第十四条</td>
+        <td>不填等于送达地址不明，法律文书无法送达</td>
+        <td>填写常用手机号 + 现住址</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 行动清单 -->
+  <div class="action-box">
+    <h2>📌 明天签约行动优先级</h2>
+    <ol>
+      <li><span>必须改</span>：学位违约金条款（删除"或锁定"）</li>
+      <li><span>必须改</span>：保证金抵扣条款（允许抵扣欠费）</li>
+      <li><span>必须改</span>：甲方单独进入权（限定"紧急情况"）</li>
+      <li><span>必须改</span>：滞纳金标准（降至0.03%/天）</li>
+      <li><span>争取改</span>：提前退租押金全扣（设上限50%）</li>
+      <li><span>争取改</span>：转租更名费（降至200元或删除）</li>
+      <li><span>必须填</span>：月租金、押金金额、租期起止日期</li>
+      <li><span>必须确认</span>：是否可养宠物（书面确认并签附件四）</li>
+    </ol>
+    <p style="margin-top:16px;font-size:13px;opacity:0.8;">💡 如果房东不同意修改核心条款（特别是①-④），建议重新评估是否签约——此类"霸王合同"后续纠纷风险极高。</p>
+  </div>
+
+  <div class="footer">
+    本报告由龙虾🦞生成 · 仅供参考，签约前建议咨询专业律师<br>
+    生成时间：2026-05-13 · 丹华公馆5栋租赁合同风险分析
+  </div>
+
+</div>
+</body>
+</html>
