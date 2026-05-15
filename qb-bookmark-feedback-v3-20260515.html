@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>书签管理反馈数据分析报告 V3 · 严格清洗版 · 2026-05-15</title>
+<style>
+  :root {
+    --primary: #1a73e8; --primary-light: #e8f0fe;
+    --danger: #d93025; --danger-bg: #fce8e6;
+    --warning: #f9ab00; --warning-bg: #fef7e0;
+    --success: #0d904f; --success-bg: #e6f4ea;
+    --gray: #5f6368; --gray-light: #f1f3f4;
+    --bg: #fff;
+    --card-shadow: 0 1px 3px rgba(60,64,67,.15), 0 1px 2px rgba(60,64,67,.1);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--gray-light); color: #202124; line-height: 1.6; }
+  .header { background: linear-gradient(135deg, #1a73e8 0%, #0d47a1 100%); color: #fff; padding: 32px 24px 28px; text-align: center; }
+  .header h1 { font-size: 26px; font-weight: 700; }
+  .header .meta { opacity: .85; font-size: 13px; margin-top: 6px; }
+  .header .badge-v3 { display: inline-block; background: #fff; color: #d93025; font-weight: 700; padding: 3px 12px; border-radius: 999px; font-size: 12px; margin-left: 8px; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 20px; }
+
+  .metrics-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 22px; }
+  .metric-card { background: var(--bg); border-radius: 12px; padding: 20px; box-shadow: var(--card-shadow); text-align: center; position: relative; overflow: hidden; }
+  .metric-card::before { content:''; position: absolute; top: 0; left: 0; right: 0; height: 4px; }
+  .mc-total::before { background: var(--primary); }
+  .mc-valid::before { background: var(--success); }
+  .mc-trash::before { background: var(--danger); }
+  .mc-cat::before { background: var(--warning); }
+  .metric-num { font-size: 36px; font-weight: 800; line-height: 1.1; }
+  .mn-blue { color: var(--primary); } .mn-green { color: var(--success); } .mn-red { color: var(--danger); } .mn-orange { color: var(--warning); }
+  .metric-label { font-size: 13px; color: var(--gray); margin-top: 4px; font-weight: 500; }
+
+  .section { background: var(--bg); border-radius: 12px; box-shadow: var(--card-shadow); margin-bottom: 18px; overflow: hidden; }
+  .section-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; }
+  .section-header .icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .section-body { padding: 16px 20px; }
+
+  .priority-banner { border-radius: 12px; padding: 18px 22px; margin-bottom: 18px; display: flex; align-items: flex-start; gap: 14px; }
+  .ban-p0 { background: linear-gradient(135deg, #d93025, #c5221f); color: #fff; }
+  .ban-info { background: linear-gradient(135deg, #1a73e8, #0d47a1); color: #fff; }
+  .ban-warn { background: linear-gradient(135deg, #f9ab00, #e37400); color: #fff; }
+  .ban-clean { background: linear-gradient(135deg, #0d904f, #198754); color: #fff; }
+  .banner-icon { font-size: 28px; flex-shrink: 0; line-height: 1; }
+  .banner-content h3 { font-size: 16px; margin-bottom: 4px; }
+  .banner-content p { font-size: 13px; opacity: .92; line-height: 1.5; }
+
+  .v2-vs-v3 { background: #fff7ed; border-radius: 12px; padding: 16px 20px; margin-bottom: 18px; border: 1px solid #fed7aa; }
+  .v2-vs-v3 h4 { color: #c2410c; font-size: 14px; margin-bottom: 12px; }
+  .compare-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .compare-cell { background: #fff; padding: 12px; border-radius: 8px; }
+  .compare-label { font-size: 11.5px; color: #92400e; font-weight: 600; }
+  .compare-v2 { font-size: 14px; color: #999; text-decoration: line-through; margin-top: 4px; }
+  .compare-v3 { font-size: 18px; color: #c2410c; font-weight: 800; }
+  .compare-delta { font-size: 11px; color: #d97706; margin-top: 2px; }
+
+  .action-list { list-style: none; }
+  .action-item { display: flex; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f0f0f0; align-items: flex-start; }
+  .action-item:last-child { border-bottom: none; }
+  .action-rank { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff; flex-shrink: 0; }
+  .rk-gold { background: linear-gradient(135deg, #ffd700, #ffb300); color: #333; }
+  .rk-silver { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); }
+  .rk-bronze { background: linear-gradient(135deg, #cd7f32, #b06820); }
+  .rk-blue { background: var(--primary); }
+  .action-body { flex: 1; min-width: 0; }
+  .action-title { font-weight: 700; font-size: 14.5px; }
+  .action-desc { font-size: 13px; color: var(--gray); margin-top: 3px; }
+  .action-badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 600; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
+  .bp0 { background: var(--danger-bg); color: var(--danger); }
+  .bp1 { background: var(--warning-bg); color: #b06000; }
+  .bp2 { background: var(--primary-light); color: var(--primary); }
+  .action-quote { background: var(--gray-light); border-left: 3px solid var(--primary); padding: 6px 12px; margin-top: 6px; font-size: 12.5px; color: var(--gray); border-radius: 0 6px 6px 0; font-style: italic; }
+  .quote-user { float: right; font-weight: 700; color: var(--primary); font-style: normal; font-size: 11.5px; }
+
+  .cat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .cat-card { border-radius: 10px; padding: 16px 12px; text-align: center; }
+  .cat-icon { font-size: 28px; margin-bottom: 6px; }
+  .cat-name { font-size: 12.5px; font-weight: 700; margin-bottom: 6px; }
+  .cat-count { font-size: 26px; font-weight: 800; line-height: 1; }
+  .cat-pct { font-size: 11.5px; color: var(--gray); margin-top: 3px; }
+  .cc-a { background: #e8f0fe; } .cc-a .cat-count { color: #1a73e8; }
+  .cc-b { background: #fce8e6; } .cc-b .cat-count { color: #d93025; }
+  .cc-c { background: #fef7e0; } .cc-c .cat-count { color: #f9ab00; }
+  .cc-d { background: #fef7e0; } .cc-d .cat-count { color: #e37400; }
+
+  .trash-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .trash-table th { text-align: left; padding: 9px 10px; background: var(--gray-light); font-weight: 600; color: var(--gray); font-size: 11.5px; text-transform: uppercase; }
+  .trash-table td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  .tag-test { display: inline-block; padding: 1px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .t-red { background: var(--danger-bg); color: var(--danger); }
+  .t-org { background: #fff7ed; color: #c2410c; }
+  .t-yel { background: var(--warning-bg); color: #b06000; }
+
+  .reason-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .reason-card { background: var(--gray-light); padding: 12px 14px; border-radius: 8px; }
+  .reason-count { font-size: 22px; font-weight: 800; color: #333; }
+  .reason-name { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+  .detail-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .detail-item { background: var(--gray-light); border-radius: 8px; padding: 10px 14px; font-size: 13px; display: flex; gap: 8px; align-items: baseline; }
+  .detail-id { font-weight: 800; color: var(--primary); font-size: 12px; flex-shrink: 0; min-width: 38px; }
+
+  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .bar-label { width: 90px; font-size: 12.5px; font-weight: 600; text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 26px; background: var(--gray-light); border-radius: 6px; overflow: hidden; position: relative; }
+  .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-size: 12px; font-weight: 700; color: #fff; min-width: 48px; }
+  .bar-val { width: 50px; font-size: 12.5px; font-weight: 700; color: var(--gray); text-align: right; flex-shrink: 0; }
+
+  .footer-note { text-align: center; padding: 22px; color: var(--gray); font-size: 12px; }
+
+  @media (max-width: 768px) {
+    .metrics-row, .compare-grid, .cat-grid, .reason-grid { grid-template-columns: repeat(2, 1fr); }
+    .detail-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📊 书签管理反馈数据分析报告 <span class="badge-v3">V3 严格清洗版</span></h1>
+  <div class="meta">数据来源：pages-test-wilburhe.pages.woa.com/feedback.html · 分析日期 2026-05-15 · 严格去重 + 噪音过滤</div>
+</div>
+
+<div class="container">
+
+  <!-- 数据清洗说明 -->
+  <div class="priority-banner ban-clean">
+    <div class="banner-icon">🧼</div>
+    <div class="banner-content">
+      <h3>本版数据清洗规则升级</h3>
+      <p>① <strong>连续刷屏检测</strong>（连续 3 次相同 → 标记重复）&nbsp;&nbsp;② <strong>全局高频重复</strong>（>5 次相同，仅保留前 2 条）&nbsp;&nbsp;③ <strong>恶意/无意义剔除</strong>（字母数字测试、纯情绪、单词无上下文）&nbsp;&nbsp;④ <strong>真实诉求保留</strong>（一字千金，少而精）</p>
+    </div>
+  </div>
+
+  <!-- 核心指标 -->
+  <div class="metrics-row">
+    <div class="metric-card mc-total"><div class="metric-num mn-blue">400</div><div class="metric-label">原始条目</div></div>
+    <div class="metric-card mc-valid"><div class="metric-num mn-green">147</div><div class="metric-label">真实有效反馈</div></div>
+    <div class="metric-card mc-trash"><div class="metric-num mn-red">253</div><div class="metric-label">已剔除（63.2%）</div></div>
+    <div class="metric-card mc-cat"><div class="metric-num mn-orange">4</div><div class="metric-label">ABCD 分类</div></div>
+  </div>
+
+  <!-- V2 → V3 修正对比 -->
+  <div class="v2-vs-v3">
+    <h4>🔄 V2 → V3 关键修正（旧数据被刷屏污染了）</h4>
+    <div class="compare-grid">
+      <div class="compare-cell">
+        <div class="compare-label">有效反馈数</div>
+        <div class="compare-v2">283 条</div>
+        <div class="compare-v3">147 条</div>
+        <div class="compare-delta">- 136 条噪音被剔除</div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-label">导出书签</div>
+        <div class="compare-v2">126 条 (44.5%)</div>
+        <div class="compare-v3">19 条 (12.9%)</div>
+        <div class="compare-delta">- 107 条刷屏（其实没那么炸）</div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-label">A 智能整理</div>
+        <div class="compare-v2">32 条 (11.3%)</div>
+        <div class="compare-v3">32 条 (21.8%)</div>
+        <div class="compare-delta">占比翻倍 → 真实 P0</div>
+      </div>
+      <div class="compare-cell">
+        <div class="compare-label">B 智能清理</div>
+        <div class="compare-v2">24 条 (8.5%)</div>
+        <div class="compare-v3">22 条 (15.0%)</div>
+        <div class="compare-delta">占比近翻倍 → 真实 P0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P0 -->
+  <div class="priority-banner ban-p0">
+    <div class="banner-icon">🎯</div>
+    <div class="banner-content">
+      <h3>核心需求 — P0 必须立即行动</h3>
+      <p>清洗后真实 P0 三项：<strong>智能整理（32）+ 智能清理（22）+ 导出书签（19）</strong>，覆盖 <strong>73 条用户反馈（49.7%）</strong>。其中 <strong>智能整理是真正的第一诉求</strong>。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#d93025;color:#fff;">⭐</span>Part 1 · 核心需求（按真实占比排序）</div>
+    <div class="section-body">
+      <ul class="action-list">
+        <li class="action-item">
+          <div class="action-rank rk-gold">1</div>
+          <div class="action-body">
+            <div class="action-title">🔧 AI 智能整理（真正 P0）</div>
+            <div class="action-desc">用户最强诉求：AI 自动按工作 / 娱乐 / 学习等场景归类，支持自定义规则。</div>
+            <div class="action-quote">#22 "AI自动根据标签整理收藏的网址"<span class="quote-user">#376 "按工作（防灾减灾，安全），娱乐..."</span></div>
+          </div>
+          <span class="action-badge bp0">P0 · 32 条 · 21.8%</span>
+        </li>
+        <li class="action-item">
+          <div class="action-rank rk-silver">2</div>
+          <div class="action-body">
+            <div class="action-title">🧹 书签智能清理（去重 + 清死链）</div>
+            <div class="action-desc">将「去重」「死链」「批量删除失效」合为一个一键模块。</div>
+            <div class="action-quote">#3 "筛选出失效的网站"<span class="quote-user">#13 "帮我整理相同网站的收藏"</span></div>
+          </div>
+          <span class="action-badge bp0">P0 · 22 条 · 15.0%</span>
+        </li>
+        <li class="action-item">
+          <div class="action-rank rk-bronze">3</div>
+          <div class="action-body">
+            <div class="action-title">📤 一键导出 / 导入书签</div>
+            <div class="action-desc">导出为 HTML / 跨浏览器迁移。<strong>注：V2 这条数据被刷屏污染（126 条里 107 条同一句"导出书签"），实际真实诉求 19 条，仍然是 P0 但远没"暴涨"那么夸张。</strong></div>
+            <div class="action-quote">#240 "导出书签，方便edge浏览器导入"<span class="quote-user">#11 "导入Chrome的书签不完整"</span></div>
+          </div>
+          <span class="action-badge bp0">P0 · 19 条 · 12.9%</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 行动建议 -->
+  <div class="priority-banner ban-info">
+    <div class="banner-icon">💡</div>
+    <div class="banner-content">
+      <h3>立即行动建议</h3>
+      <p>以下三项需重点关注 / 跟进 / 排查。</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#f9ab00;color:#333;">📋</span>Part 2 · 行动建议</div>
+    <div class="section-body">
+      <ol class="action-list">
+        <li class="action-item">
+          <div class="action-rank rk-blue" style="width:auto;padding:0 12px;">①</div>
+          <div class="action-body">
+            <div class="action-title">⚠️ 排查书签丢失 / 数据异常根因</div>
+            <div class="action-desc">8 条情绪激烈反馈（占有效反馈 5.4%），怀疑数据可靠性。可能涉及同步/升级流程。<strong>需技术侧立即排查。</strong></div>
+            <div class="action-quote">#365 "以前的书签都找不到了，一夜之间消失了，怎么找回"<span style="float:right;color:#999;font-style:normal;font-size:11.5px;">→ 持续跟进</span></div>
+          </div>
+          <span class="action-badge bp2">跟踪 · 8 条</span>
+        </li>
+        <li class="action-item">
+          <div class="action-rank rk-blue" style="width:auto;padding:0 12px;">②</div>
+          <div class="action-body">
+            <div class="action-title">🎨 书签栏显示位置 / UI 设置</div>
+            <div class="action-desc">20 条反馈（占 13.6%）涉及"书签栏显示在浏览器上方/下方/侧边"、"不显示了"、"加密文件夹"等。当前 UI 设置入口不明显。</div>
+            <div class="action-quote">#62 "书签可以放在左侧边栏显示吗"<span class="quote-user">#65 "书签栏常驻显示"</span></div>
+          </div>
+          <span class="action-badge bp1">待开发 · 20 条</span>
+        </li>
+        <li class="action-item">
+          <div class="action-rank rk-blue" style="width:auto;padding:0 12px;">③</div>
+          <div class="action-body">
+            <div class="action-title">📱 手机书签跨端同步</div>
+            <div class="action-desc">6 条同步相关诉求。核心痛点：手机书签在 PC 查看不全 / 双向同步。</div>
+            <div class="action-quote">#34 "和手机浏览器同步"<span style="float:right;color:#999;font-style:normal;font-size:11.5px;">→ 待规划</span></div>
+          </div>
+          <span class="action-badge bp1">待规划 · 6 条</span>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- 分布图 -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#1a73e8;color:#fff;">📈</span>ABCD 需求分布（真实数据）</div>
+    <div class="section-body">
+      <div class="bar-row"><span class="bar-label">A 智能整理</span><div class="bar-track"><div class="bar-fill" style="width:21.8%;background:linear-gradient(90deg,#1a73e8,#4285f4);">21.8%</div></div><span class="bar-val">32 条</span></div>
+      <div class="bar-row"><span class="bar-label">B 智能清理</span><div class="bar-track"><div class="bar-fill" style="width:15.0%;background:linear-gradient(90deg,#d93025,#ea4335);">15.0%</div></div><span class="bar-val">22 条</span></div>
+      <div class="bar-row"><span class="bar-label">C 排序</span><div class="bar-track"><div class="bar-fill" style="width:2.0%;background:linear-gradient(90deg,#f9ab00,#fdd835);">2.0%</div></div><span class="bar-val">3 条</span></div>
+      <div class="bar-row"><span class="bar-label">D 其他</span><div class="bar-track"><div class="bar-fill" style="width:55.8%;background:linear-gradient(90deg,#e37400,#ffab40);">55.8%</div></div><span class="bar-val">82 条</span></div>
+      <div class="bar-row"><span class="bar-label">数据丢失</span><div class="bar-track"><div class="bar-fill" style="width:5.4%;background:linear-gradient(90deg,#7b1fa2,#9c27b0);">5.4%</div></div><span class="bar-val">8 条</span></div>
+    </div>
+  </div>
+
+  <!-- 总览 -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#8e24aa;color:#fff;">📂</span>ABCD 四类总览</div>
+    <div class="section-body">
+      <div class="cat-grid">
+        <div class="cat-card cc-a"><div class="cat-icon">🔧</div><div class="cat-name">A 类 · AI 智能整理</div><div class="cat-count">32</div><div class="cat-pct">21.8% · 自动分类打标</div></div>
+        <div class="cat-card cc-b"><div class="cat-icon">🧹</div><div class="cat-name">B 类 · 智能清理</div><div class="cat-count">22</div><div class="cat-pct">15.0% · 去重+清死链</div></div>
+        <div class="cat-card cc-c"><div class="cat-icon">🔀</div><div class="cat-name">C 类 · 排序</div><div class="cat-count">3</div><div class="cat-pct">2.0% · 时间/名称排序</div></div>
+        <div class="cat-card cc-d"><div class="cat-icon">📋</div><div class="cat-name">D 类 · 其他</div><div class="cat-count">82</div><div class="cat-pct">55.8% · 导出/同步/UI</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- A -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#1a73e8;color:#fff;">🔧</span>A 类 · AI 智能整理 — 32 条</div>
+    <div class="section-body"><div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#6</span><span class="detail-text">帮我整理一下</span></div><div class="detail-item"><span class="detail-id">#13</span><span class="detail-text">帮我整理相同网站的收藏</span></div><div class="detail-item"><span class="detail-id">#19</span><span class="detail-text">帮我整理</span></div><div class="detail-item"><span class="detail-id">#22</span><span class="detail-text">AI自动根据标签整理收藏的网址</span></div><div class="detail-item"><span class="detail-id">#29</span><span class="detail-text">帮我分类整理一下浏览器书签</span></div><div class="detail-item"><span class="detail-id">#30</span><span class="detail-text">全部书签重新分类排序</span></div><div class="detail-item"><span class="detail-id">#35</span><span class="detail-text">对书签自动分类</span></div><div class="detail-item"><span class="detail-id">#38</span><span class="detail-text">分类整理书签</span></div><div class="detail-item"><span class="detail-id">#55</span><span class="detail-text">整理书签</span></div><div class="detail-item"><span class="detail-id">#71</span><span class="detail-text">书签的自动分类功能</span></div><div class="detail-item"><span class="detail-id">#92</span><span class="detail-text">整理书签</span></div><div class="detail-item"><span class="detail-id">#101</span><span class="detail-text">可以对现有标签自动加标签</span></div><div class="detail-item"><span class="detail-id">#110</span><span class="detail-text">整理书签</span></div><div class="detail-item"><span class="detail-id">#141</span><span class="detail-text">为所有书签添加标签</span></div><div class="detail-item"><span class="detail-id">#323</span><span class="detail-text">自动去除重复项目，并按网站内容进行自动分类和排序。</span></div><div class="detail-item"><span class="detail-id">#334</span><span class="detail-text">将网站按使用场景分类</span></div><div class="detail-item"><span class="detail-id">#335</span><span class="detail-text">帮我重新梳理分类</span></div><div class="detail-item"><span class="detail-id">#337</span><span class="detail-text">按功能归类整理</span></div><div class="detail-item"><span class="detail-id">#342</span><span class="detail-text">自动去除重复项目，并按网站内容进行自动分类和排序。</span></div><div class="detail-item"><span class="detail-id">#353</span><span class="detail-text">将网站按使用场景分类</span></div><div class="detail-item"><span class="detail-id">#354</span><span class="detail-text">帮我重新梳理分类</span></div><div class="detail-item"><span class="detail-id">#356</span><span class="detail-text">按功能归类整理</span></div><div class="detail-item"><span class="detail-id">#366</span><span class="detail-text">重新梳理一下书签的类型并进行分类</span></div><div class="detail-item"><span class="detail-id">#367</span><span class="detail-text">按访问频率重新排序</span></div><div class="detail-item"><span class="detail-id">#374</span><span class="detail-text">帮我把书签进行归类整理。</span></div><div class="detail-item"><span class="detail-id">#375</span><span class="detail-text">为每个书签添加标签</span></div><div class="detail-item"><span class="detail-id">#377</span><span class="detail-text">帮我按照 名称顺序整理动漫游戏书签里的书签</span></div><div class="detail-item"><span class="detail-id">#381</span><span class="detail-text">整理书签</span></div><div class="detail-item"><span class="detail-id">#382</span><span class="detail-text">把所有书签重新分类</span></div><div class="detail-item"><span class="detail-id">#386</span><span class="detail-text">帮我按照功能不同将所有书签都分类放到不同的标签以及文件夹当中</span></div><div class="detail-item"><span class="detail-id">#395</span><span class="detail-text">上线AI书签页整理</span></div><div class="detail-item"><span class="detail-id">#398</span><span class="detail-text">帮我整理书签</span></div></div></div>
+  </div>
+
+  <!-- B -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#d93025;color:#fff;">🧹</span>B 类 · 智能清理（去重 + 清死链）— 22 条</div>
+    <div class="section-body"><div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#2</span><span class="detail-text">重复书签查找</span></div><div class="detail-item"><span class="detail-id">#3</span><span class="detail-text">筛选出失效的网站</span></div><div class="detail-item"><span class="detail-id">#7</span><span class="detail-text">删除无效链接</span></div><div class="detail-item"><span class="detail-id">#8</span><span class="detail-text">查看链接有效性，把无效链接删除</span></div><div class="detail-item"><span class="detail-id">#14</span><span class="detail-text">删除2年以上没用过的书签</span></div><div class="detail-item"><span class="detail-id">#23</span><span class="detail-text">检查一下有没有打不开链接的书签，有的话清除掉</span></div><div class="detail-item"><span class="detail-id">#37</span><span class="detail-text">看看哪个失效了</span></div><div class="detail-item"><span class="detail-id">#42</span><span class="detail-text">删除失效的网页</span></div><div class="detail-item"><span class="detail-id">#57</span><span class="detail-text">删除失效书签</span></div><div class="detail-item"><span class="detail-id">#64</span><span class="detail-text">失效书签删除</span></div><div class="detail-item"><span class="detail-id">#74</span><span class="detail-text">删除重复书签</span></div><div class="detail-item"><span class="detail-id">#79</span><span class="detail-text">书签失效检测</span></div><div class="detail-item"><span class="detail-id">#326</span><span class="detail-text">测试删除无响应，过时的网址</span></div><div class="detail-item"><span class="detail-id">#331</span><span class="detail-text">批量删除书签</span></div><div class="detail-item"><span class="detail-id">#345</span><span class="detail-text">测试删除无响应，过时的网址</span></div><div class="detail-item"><span class="detail-id">#350</span><span class="detail-text">批量删除书签</span></div><div class="detail-item"><span class="detail-id">#364</span><span class="detail-text">帮我把书签去重</span></div><div class="detail-item"><span class="detail-id">#387</span><span class="detail-text">书签打不开显示403</span></div><div class="detail-item"><span class="detail-id">#390</span><span class="detail-text">帮我把无效的标签都删除一下</span></div><div class="detail-item"><span class="detail-id">#391</span><span class="detail-text">筛选超过三十天未更新的小说并列出了</span></div><div class="detail-item"><span class="detail-id">#392</span><span class="detail-text">这里面失效的链接？</span></div><div class="detail-item"><span class="detail-id">#393</span><span class="detail-text">快捷删除</span></div></div></div>
+  </div>
+
+  <!-- C -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#f9ab00;color:#333;">🔀</span>C 类 · 排序功能 — 3 条</div>
+    <div class="section-body"><div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#368</span><span class="detail-text">多选书签时，只能点选，不能画框多选，快改进！！！！！</span></div><div class="detail-item"><span class="detail-id">#369</span><span class="detail-text">收藏的标签顺序可以自由移动</span></div><div class="detail-item"><span class="detail-id">#370</span><span class="detail-text">希望可以批量多选书签！！！</span></div></div></div>
+  </div>
+
+  <!-- D -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#e37400;color:#fff;">📋</span>D 类 · 其他有效需求 — 82 条</div>
+    <div class="section-body">
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:700;font-size:13.5px;color:#e37400;margin-bottom:8px;">📤 D-1 导入 / 导出 / 备份（19 条）</div>
+        <div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#11</span><span class="detail-text">导入Chrome的书签不完整</span></div><div class="detail-item"><span class="detail-id">#15</span><span class="detail-text">导出书签</span></div><div class="detail-item"><span class="detail-id">#17</span><span class="detail-text">手机书签导出</span></div><div class="detail-item"><span class="detail-id">#31</span><span class="detail-text">导出书签</span></div><div class="detail-item"><span class="detail-id">#45</span><span class="detail-text">批量导出书签</span></div><div class="detail-item"><span class="detail-id">#47</span><span class="detail-text">书签备份</span></div><div class="detail-item"><span class="detail-id">#49</span><span class="detail-text">书签导出</span></div><div class="detail-item"><span class="detail-id">#58</span><span class="detail-text">书签备份</span></div><div class="detail-item"><span class="detail-id">#59</span><span class="detail-text">导入Chrome书签</span></div><div class="detail-item"><span class="detail-id">#66</span><span class="detail-text">书签导出</span></div><div class="detail-item"><span class="detail-id">#73</span><span class="detail-text">备份书签</span></div><div class="detail-item"><span class="detail-id">#78</span><span class="detail-text">书签怎么导入</span></div><div class="detail-item"><span class="detail-id">#83</span><span class="detail-text">书签备份</span></div><div class="detail-item"><span class="detail-id">#240</span><span class="detail-text">导出书签，方便edge浏览器导入</span></div><div class="detail-item"><span class="detail-id">#241</span><span class="detail-text">导出书签，方便edge浏览器导入</span></div><div class="detail-item"><span class="detail-id">#336</span><span class="detail-text">这里删掉书签，请问微软edge的书签是否也会同步删除呢？</span></div><div class="detail-item"><span class="detail-id">#355</span><span class="detail-text">这里删掉书签，请问微软edge的书签是否也会同步删除呢？</span></div><div class="detail-item"><span class="detail-id">#385</span><span class="detail-text">我打开已导入的书签里的一个字文件夹，结果显示的很多书签都看不全，屏幕右边不够展示，你把他整理好能够全部展示</span></div><div class="detail-item"><span class="detail-id">#397</span><span class="detail-text">帮我备份到我的账号上，因为我要换电脑了</span></div></div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:700;font-size:13.5px;color:#ea4335;margin-bottom:8px;">🎨 D-2 UI / 显示位置（20 条）</div>
+        <div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#32</span><span class="detail-text">放到浏览器下面直接显示</span></div><div class="detail-item"><span class="detail-id">#41</span><span class="detail-text">显示在浏览器上方</span></div><div class="detail-item"><span class="detail-id">#44</span><span class="detail-text">怎么不显示在浏览器上</span></div><div class="detail-item"><span class="detail-id">#48</span><span class="detail-text">书签栏显示</span></div><div class="detail-item"><span class="detail-id">#62</span><span class="detail-text">书签可以放在左侧边栏显示吗</span></div><div class="detail-item"><span class="detail-id">#65</span><span class="detail-text">书签栏常驻显示</span></div><div class="detail-item"><span class="detail-id">#68</span><span class="detail-text">怎么不显示在浏览器上</span></div><div class="detail-item"><span class="detail-id">#76</span><span class="detail-text">书签显示在浏览器下方</span></div><div class="detail-item"><span class="detail-id">#77</span><span class="detail-text">书签栏显示</span></div><div class="detail-item"><span class="detail-id">#87</span><span class="detail-text">书签栏不显示了</span></div><div class="detail-item"><span class="detail-id">#89</span><span class="detail-text">书签不显示</span></div><div class="detail-item"><span class="detail-id">#91</span><span class="detail-text">书签不显示</span></div><div class="detail-item"><span class="detail-id">#98</span><span class="detail-text">书签栏显示</span></div><div class="detail-item"><span class="detail-id">#161</span><span class="detail-text">书签栏始终显示，怎么设置</span></div><div class="detail-item"><span class="detail-id">#242</span><span class="detail-text">书签在侧边栏显示</span></div><div class="detail-item"><span class="detail-id">#261</span><span class="detail-text">书签在侧边栏显示</span></div><div class="detail-item"><span class="detail-id">#320</span><span class="detail-text">书签文件夹加密</span></div><div class="detail-item"><span class="detail-id">#321</span><span class="detail-text">书签文件夹加密</span></div><div class="detail-item"><span class="detail-id">#371</span><span class="detail-text">把我的所有书签显示在标签栏下方</span></div><div class="detail-item"><span class="detail-id">#388</span><span class="detail-text">书签怎么设密码</span></div></div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:700;font-size:13.5px;color:#188038;margin-bottom:8px;">📱 D-3 手机跨端同步（6 条）</div>
+        <div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#28</span><span class="detail-text">删除手机书签</span></div><div class="detail-item"><span class="detail-id">#33</span><span class="detail-text">手机书签怎么删除</span></div><div class="detail-item"><span class="detail-id">#34</span><span class="detail-text">和手机浏览器同步</span></div><div class="detail-item"><span class="detail-id">#181</span><span class="detail-text">如何删除手机书签？</span></div><div class="detail-item"><span class="detail-id">#380</span><span class="detail-text">同步手机上的书签</span></div><div class="detail-item"><span class="detail-id">#389</span><span class="detail-text">同步手机书签</span></div></div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:700;font-size:13.5px;color:#8e24aa;margin-bottom:8px;">⚙️ D-4 操作类（9 条）</div>
+        <div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#18</span><span class="detail-text">为所有页面新建书签</span></div><div class="detail-item"><span class="detail-id">#40</span><span class="detail-text">我想删除部分我的书签</span></div><div class="detail-item"><span class="detail-id">#201</span><span class="detail-text">全部删除</span></div><div class="detail-item"><span class="detail-id">#280</span><span class="detail-text">添加书签</span></div><div class="detail-item"><span class="detail-id">#281</span><span class="detail-text">添加书签</span></div><div class="detail-item"><span class="detail-id">#322</span><span class="detail-text">删除默认的常用书签</span></div><div class="detail-item"><span class="detail-id">#329</span><span class="detail-text">书签快速整理分类</span></div><div class="detail-item"><span class="detail-id">#341</span><span class="detail-text">删除默认的常用书签</span></div><div class="detail-item"><span class="detail-id">#348</span><span class="detail-text">书签快速整理分类</span></div></div>
+      </div>
+      <div style="margin-bottom:18px;">
+        <div style="font-weight:700;font-size:13.5px;color:#0d47a1;margin-bottom:8px;">🔁 D-5 移动 / 替换（4 条）</div>
+        <div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#21</span><span class="detail-text">将小说书签，作家后台，全部整理进一个</span></div><div class="detail-item"><span class="detail-id">#25</span><span class="detail-text">把书签里这个https://lkrs1.com/前缀的网址改成这个https://qes3.com/，但是shop/666888后面的不要替换掉，能做吗？</span></div><div class="detail-item"><span class="detail-id">#324</span><span class="detail-text">选中的四项转移到澳门工作生活书签</span></div><div class="detail-item"><span class="detail-id">#343</span><span class="detail-text">选中的四项转移到澳门工作生活书签</span></div></div>
+      </div>
+      <div>
+        <div style="font-weight:700;font-size:13.5px;color:#5f6368;margin-bottom:8px;">📦 D-6 其他长尾（24 条）</div>
+        <div class="detail-grid" style="grid-template-columns:repeat(2,1fr);"><div class="detail-item"><span class="detail-id">#1</span><span class="detail-text">现在这个分类还有优化空间吗</span></div><div class="detail-item"><span class="detail-id">#4</span><span class="detail-text">一键迁移到别的浏览器</span></div><div class="detail-item"><span class="detail-id">#5</span><span class="detail-text">帮我弄的更好找一些 现在找东西找不到 文件夹一个套一个</span></div><div class="detail-item"><span class="detail-id">#9</span><span class="detail-text">将常用的网站跟Ai类型的网站放到最前面</span></div><div class="detail-item"><span class="detail-id">#10</span><span class="detail-text">把收藏的书签直接在打开网页时就能看见</span></div><div class="detail-item"><span class="detail-id">#16</span><span class="detail-text">删除历史能否找到</span></div><div class="detail-item"><span class="detail-id">#26</span><span class="detail-text">1.收藏多个页面时出现收藏的页面少了。2.页面多了不知道自己开了多少个页面。</span></div><div class="detail-item"><span class="detail-id">#27</span><span class="detail-text">恢复之前的书签</span></div><div class="detail-item"><span class="detail-id">#36</span><span class="detail-text">设置hao123网站为主页</span></div><div class="detail-item"><span class="detail-id">#63</span><span class="detail-text">书签整理</span></div><div class="detail-item"><span class="detail-id">#80</span><span class="detail-text">书签整理</span></div><div class="detail-item"><span class="detail-id">#81</span><span class="detail-text">复制这些书签</span></div><div class="detail-item"><span class="detail-id">#95</span><span class="detail-text">书签整理</span></div><div class="detail-item"><span class="detail-id">#106</span><span class="detail-text">书签整理</span></div><div class="detail-item"><span class="detail-id">#325</span><span class="detail-text">把购物类的收藏删除</span></div><div class="detail-item"><span class="detail-id">#330</span><span class="detail-text">根据网页功能整理书签</span></div><div class="detail-item"><span class="detail-id">#333</span><span class="detail-text">检查书签里面电影文件夹的网站是否能连接</span></div><div class="detail-item"><span class="detail-id">#344</span><span class="detail-text">把购物类的收藏删除</span></div><div class="detail-item"><span class="detail-id">#349</span><span class="detail-text">根据网页功能整理书签</span></div><div class="detail-item"><span class="detail-id">#352</span><span class="detail-text">检查书签里面电影文件夹的网站是否能连接</span></div><div class="detail-item"><span class="detail-id">#373</span><span class="detail-text">调整了我的顺序吗？</span></div><div class="detail-item"><span class="detail-id">#376</span><span class="detail-text">将书签分类，按工作（防灾减灾，安全），娱乐（游戏，trpg，影视），3D打印，国内模型，国外模型，游戏制作，文学、知识等进行</span></div><div class="detail-item"><span class="detail-id">#379</span><span class="detail-text">不能用的网站显示</span></div><div class="detail-item"><span class="detail-id">#394</span><span class="detail-text">元宝可读取QQ浏览器书签收藏</span></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOSS -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#c5221f;color:#fff;">⚠️</span>书签丢失 / 数据异常 — 8 条（5.4% · 持续跟踪）</div>
+    <div class="section-body"><div class="detail-grid" style="grid-template-columns:1fr;"><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#50</span><span class="detail-text">书签页面怎么没了</span></div><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#60</span><span class="detail-text">书签不显示了</span></div><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#328</span><span class="detail-text">我收藏的书签怎么都没了</span></div><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#347</span><span class="detail-text">我收藏的书签怎么都没了</span></div><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#365</span><span class="detail-text">以前的书签都找不到了，一夜之间消失了，怎么找回</span></div><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#378</span><span class="detail-text">之前的书签怎么没了</span></div><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#396</span><span class="detail-text">书签有新消息，马上通知我</span></div><div class="detail-item" style="background:#fce8e6;border-left:3px solid #d93025;"><span class="detail-id">#399</span><span class="detail-text">我收藏的书签为什么不显示了？</span></div></div></div>
+  </div>
+
+  <!-- 剔除原因汇总 -->
+  <div class="section">
+    <div class="section-header"><span class="icon" style="background:#5f6368;color:#fff;">📉</span>剔除明细 — 253 条（占原始 63.2%）</div>
+    <div class="section-body">
+      <div style="margin-bottom:14px;"><div class="reason-grid"><div class="reason-card" style="border-left:4px solid #fb923c;"><div class="reason-count">108</div><div class="reason-name">🟠 高频重复</div></div><div class="reason-card" style="border-left:4px solid #facc15;"><div class="reason-count">92</div><div class="reason-name">🟡 过短</div></div><div class="reason-card" style="border-left:4px solid #eab308;"><div class="reason-count">37</div><div class="reason-name">🟡 单词无上下文</div></div><div class="reason-card" style="border-left:4px solid #dc2626;"><div class="reason-count">9</div><div class="reason-name">🔴 字母/数字测试</div></div><div class="reason-card" style="border-left:4px solid #ca8a04;"><div class="reason-count">4</div><div class="reason-name">🟡 操作疑问</div></div><div class="reason-card" style="border-left:4px solid #999;"><div class="reason-count">2</div><div class="reason-name">🟡 纯情绪</div></div><div class="reason-card" style="border-left:4px solid #999;"><div class="reason-count">1</div><div class="reason-name">🔴 重复字符</div></div></div></div>
+      <table class="trash-table"><thead><tr><th style="width:46px">#</th><th>原始内容</th><th style="width:170px">剔除原因</th></tr></thead><tbody><tr><td>#12</td><td>导出</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#20</td><td>怎么删除书签</td><td><span class="tag-test t-yel">🟡 操作疑问</span></td></tr><tr><td>#24</td><td>导出</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#39</td><td>你好</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#43</td><td>书签可以隐藏吗？</td><td><span class="tag-test t-yel">🟡 操作疑问</span></td></tr><tr><td>#46</td><td>书签订阅</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#51</td><td>书签夹</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#52</td><td>同步书签</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#53</td><td>导出</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#54</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#56</td><td>书签管理</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#61</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#67</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#69</td><td>导入书签</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#70</td><td>书签导出</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#72</td><td>书签夹</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#75</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#82</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#84</td><td>导出</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#85</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#86</td><td>书签管理</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#88</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#90</td><td>书签导出</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#93</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#94</td><td>导出</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#96</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#97</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#99</td><td>书签导出</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#100</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#102</td><td>书签夹</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#103</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#104</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#105</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#107</td><td>导出</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#108</td><td>书签栏</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#109</td><td>书签导出</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#111</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#112</td><td>书签导出</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#113</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#114</td><td>书签栏</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#115</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#116</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#117</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#118</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#119</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#120</td><td>书签导出</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#121</td><td>删掉</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#122</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#123</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#124</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#125</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#126</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#127</td><td>书签导出</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#128</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#129</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#130</td><td>书签显示</td><td><span class="tag-test t-yel">🟡 单词无上下文</span></td></tr><tr><td>#131</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#132</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr><tr><td>#133</td><td>导出书签</td><td><span class="tag-test t-org">🟠 高频重复</span></td></tr><tr><td>#134</td><td>书签</td><td><span class="tag-test t-yel">🟡 过短</span></td></tr></tbody></table>
+      <div style="text-align:center;margin-top:10px;color:#999;font-size:12px;">…还有 193 条剔除记录未展示</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer-note">Generated by 龙虾🦞 · 2026-05-15 · V3 严格清洗版 <br>原始 400 条 → 剔除 253 条噪音 → 真实有效 147 条 → 4 类 ABCD 分布</div>
+
+</body>
+</html>
