@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>死链清理方案 v1 · 对齐版</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f5; padding: 30px 20px; line-height: 1.65; color: #2c2c2a; }
+  .container { max-width: 800px; margin: 0 auto; }
+  .header { background: #185FA5; color: #fff; padding: 26px 32px; border-radius: 14px 14px 0 0; }
+  h1 { font-size: 21px; margin-bottom: 6px; }
+  .meta { font-size: 13px; opacity: 0.85; }
+  .section { background: #fff; padding: 26px 32px; border-bottom: 1px solid #eee; }
+  .section:last-of-type { border-radius: 0 0 14px 14px; border-bottom: none; }
+  .section h2 { font-size: 17px; color: #1a1a1a; margin-bottom: 14px; padding-left: 10px; border-left: 3px solid #185FA5; }
+  .section h3 { font-size: 14px; color: #185FA5; margin: 16px 0 8px; font-weight: 500; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  th, td { text-align: left; padding: 10px 12px; border: 1px solid #eee; vertical-align: top; }
+  th { background: #f0f4f9; font-weight: 500; color: #185FA5; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .key { font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; background: #FFF8E1; padding: 1px 5px; border-radius: 3px; color: #854F0B; }
+  .alert { background: #FAECE7; border-left: 4px solid #D85A30; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13.5px; }
+  .alert strong { color: #993C1D; }
+  .ok { background: #E1F5EE; border-left: 4px solid #0F6E56; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13.5px; }
+  .ok strong { color: #0F6E56; }
+  ul { padding-left: 22px; margin: 8px 0; }
+  li { margin-bottom: 5px; font-size: 13.5px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-left: 6px; }
+  .badge-red { background: #F7C1C1; color: #791F1F; }
+  .badge-green { background: #C0DD97; color: #27500A; }
+  .badge-amber { background: #FAC775; color: #633806; }
+  .flow { background: #f8f9fb; border-radius: 10px; padding: 18px; margin: 12px 0; font-family: ui-monospace, Menlo, monospace; font-size: 13px; line-height: 1.9; color: #444; }
+  .question { background: #FFF8E1; border-left: 4px solid #EF9F27; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13.5px; }
+  .footer { text-align: center; color: #aaa; font-size: 12px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>死链清理方案 v1 · 待对齐</h1>
+    <div class="meta">@AI产品Geoffrey · 对齐对象：晓航（封禁产品）+ 研发 + 技术总监 · 2026-05-18</div>
+  </div>
+
+  <div class="section">
+    <h2>1. 核心约束（不可妥协）</h2>
+    <ul>
+      <li><strong>用户体感"一次扫描"</strong>，不允许多次复扫</li>
+      <li><strong>少量误杀可接受</strong>，但必须有兜底机制（30 天回收 + 一键撤销）</li>
+      <li><strong>永久信号优先</strong>，永久信号即使指纹存在也照样清理</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>2. 双层判定架构</h2>
+    <div class="flow">
+扫描每条书签<br>
+&nbsp;&nbsp;↓<br>
+<strong>第一层 · 指纹兜底</strong>：用户曾成功访问过 + 指纹匹配？<br>
+&nbsp;&nbsp;✅ → 保留（除非命中第二层永久信号）<br>
+&nbsp;&nbsp;↓<br>
+<strong>第二层 · 错误码判定</strong>：<br>
+&nbsp;&nbsp;A 永久信号（410 / 451 / DNS NXDOMAIN）→ 进清理候选 <span class="badge badge-red">直清</span><br>
+&nbsp;&nbsp;B 强嫌疑（单次 404 / 5xx / 证书过期 / 连接失败 / 超时）→ 进清理候选 <span class="badge badge-amber">可清</span><br>
+&nbsp;&nbsp;C 不判定（403 / ERR_BLOCKED_BY_ADMINISTRATOR）→ 保留 <span class="badge badge-green">不动</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3. 错误码档位表</h2>
+    <table>
+      <thead><tr><th width="35%">信号</th><th width="15%">档位</th><th>处置</th></tr></thead>
+      <tbody>
+        <tr><td><span class="key">HTTP 410 Gone</span></td><td><span class="badge badge-red">永久</span></td><td>服务器明牌"我没了"，直接清理（指纹也不能挽救）</td></tr>
+        <tr><td><span class="key">HTTP 451</span></td><td><span class="badge badge-red">永久</span></td><td>法律永久下架</td></tr>
+        <tr><td><span class="key">ERR_NAME_NOT_RESOLVED</span><br><span class="key">ERR_NAME_RESOLUTION_FAILED</span></td><td><span class="badge badge-red">永久</span></td><td>一次扫描内并发查 3 个 DNS（114/8.8.8.8/腾讯）全失败 → 域名永久失效</td></tr>
+        <tr><td><span class="key">HTTP 404</span>（单次）</td><td><span class="badge badge-amber">嫌疑</span></td><td>无指纹保护 → 进清理候选；有指纹 → 保留</td></tr>
+        <tr><td><span class="key">HTTP 5xx</span></td><td><span class="badge badge-amber">嫌疑</span></td><td>同上</td></tr>
+        <tr><td><span class="key">ERR_CERT_DATE_INVALID</span></td><td><span class="badge badge-amber">嫌疑</span></td><td>同上</td></tr>
+        <tr><td><span class="key">ERR_CONNECTION_TIMED_OUT</span><br><span class="key">ERR_CONNECTION_REFUSED</span><br><span class="key">ERR_CONNECTION_RESET</span></td><td><span class="badge badge-amber">嫌疑</span></td><td>同上</td></tr>
+        <tr><td><span class="key">HTTP 403</span></td><td><span class="badge badge-green">不判</span></td><td>权限/地域问题，页面活着</td></tr>
+        <tr><td><span class="key">ERR_BLOCKED_BY_ADMINISTRATOR</span></td><td><span class="badge badge-green">不判</span></td><td>当前环境被企业策略拦截，不是页面失效</td></tr>
+        <tr><td><span class="key">ERR_INTERNET_DISCONNECTED</span><br><span class="key">ERR_NETWORK_CHANGED</span></td><td><span class="badge badge-green">不判</span></td><td>用户本地网络问题，跳过本次扫描</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>4. 指纹机制（依赖晓航方案）</h2>
+    <h3>用法</h3>
+    <ul>
+      <li>指纹库提供查询接口：传入 URL → 返回（是否有指纹 / 历史指纹值）</li>
+      <li>判定时，对当前扫描页面算一次指纹 → 与历史指纹比对</li>
+      <li>匹配 → 保留；不匹配或无指纹 → 走错误码判定</li>
+    </ul>
+    <h3>边界</h3>
+    <ul>
+      <li><strong>动态页面</strong>（淘宝商品/微博 feed）—— 内容指纹不可用，按域名加白名单</li>
+      <li><strong>新用户/冷启动</strong>—— 指纹库为空，完全依赖错误码</li>
+      <li><strong>永久信号优先</strong>—— 410 / 451 / DNS 永久失败 即使指纹匹配也照样清理</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5. 误杀兜底（必须有）</h2>
+    <div class="ok">
+      <strong>三层防线，缺一不可</strong>
+      <ul>
+        <li>清理项<strong>不直接删</strong>，移到"已清理"回收文件夹</li>
+        <li>回收文件夹<strong>保留 30 天</strong>，到期才真正删除</li>
+        <li>每条清理项显示<strong>判定原因</strong>（"HTTP 404 找不到页面" / "域名失效" / "证书过期"），用户能看懂为什么</li>
+        <li>顶部提供<strong>"撤销全部"</strong>按钮，一键恢复</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6. 上线策略</h2>
+    <ul>
+      <li>建议先<strong>灰度 1%-5% 用户跑 1-2 周</strong>，观测投诉率</li>
+      <li>核心指标：<strong>误杀率（撤销率/总清理数）</strong> &lt; 3% 才放量</li>
+      <li>埋点：清理候选数 / 用户实际确认清理数 / 撤销数 / 投诉数</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>7. 待晓航确认（关键依赖）</h2>
+    <div class="question">
+      <strong>问题 1</strong>：指纹库当前对书签 URL 的覆盖率多少？（直接决定误杀率）<br>
+      <strong>问题 2</strong>：动态页面（淘宝/微博/抖音）有没有黑名单？指纹方案怎么处理？<br>
+      <strong>问题 3</strong>：指纹查询接口的 QPS 上限？（一次扫描可能批量查上千 URL）<br>
+      <strong>问题 4</strong>：永久信号即使指纹存在也清理 —— 这条规则你那边能接受吗？
+    </div>
+  </div>
+
+  <div class="footer">@AI产品Geoffrey · 死链清理方案 v1 · 对齐版</div>
+</div>
+</body>
+</html>
