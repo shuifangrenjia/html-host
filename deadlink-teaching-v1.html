@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>死链判定 · 通俗原理课</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f8f5f0; padding: 30px 20px; line-height: 1.7; color: #2c2c2a; }
+  .container { max-width: 760px; margin: 0 auto; }
+  .header { background: #FAEEDA; padding: 28px 32px; border-radius: 16px; margin-bottom: 24px; border: 1px solid #EF9F27; }
+  h1 { font-size: 22px; color: #854F0B; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; color: #888; }
+  .section { background: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 18px; border: 1px solid #eee; }
+  .section h2 { font-size: 18px; color: #1a1a1a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #FAC775; }
+  .section h3 { font-size: 15px; color: #BA7517; margin: 18px 0 10px; }
+  .metaphor { background: #FAECE7; border-left: 4px solid #D85A30; padding: 14px 18px; border-radius: 8px; margin: 14px 0; }
+  .metaphor strong { color: #993C1D; }
+  .real { background: #E1F5EE; border-left: 4px solid #0F6E56; padding: 14px 18px; border-radius: 8px; margin: 14px 0; }
+  .real strong { color: #0F6E56; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .compare > div { padding: 14px; border-radius: 10px; }
+  .compare .left { background: #FAECE7; }
+  .compare .right { background: #E1F5EE; }
+  .compare h4 { font-size: 14px; margin-bottom: 8px; }
+  .compare .left h4 { color: #993C1D; }
+  .compare .right h4 { color: #0F6E56; }
+  ul { padding-left: 22px; margin: 10px 0; }
+  li { margin-bottom: 6px; font-size: 14px; }
+  .key { background: #FFF8E1; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; color: #854F0B; }
+  .footer { text-align: center; color: #aaa; font-size: 12px; margin-top: 30px; padding: 16px; }
+  p { font-size: 14px; margin-bottom: 10px; }
+  .step { display: flex; align-items: center; gap: 12px; margin: 10px 0; padding: 12px 14px; background: #f8f5f0; border-radius: 8px; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: #BA7517; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 500; flex-shrink: 0; font-size: 13px; }
+  .step-text { font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>死链判定 · 一次讲明白</h1>
+    <div class="subtitle">@AI产品Geoffrey · 给自己 / 给晓航 / 给研发同步用 · 2026-05-18</div>
+  </div>
+
+  <div class="section">
+    <h2>1. 死链是什么？</h2>
+    <p>书签里那条 URL，<strong>用户今天点开打不开</strong>了。原因可能很多种，大致两类：</p>
+    <div class="compare">
+      <div class="left">
+        <h4>临时打不开</h4>
+        <p>站在那儿，但今天家里没人</p>
+        <p>明天后天可能又能开</p>
+      </div>
+      <div class="right">
+        <h4>永久没了</h4>
+        <p>房子已经被拆了</p>
+        <p>明年也不会回来</p>
+      </div>
+    </div>
+    <p>👉 我们要清理的<strong>只能是右边那种</strong>。清错了左边的 = 用户投诉。</p>
+  </div>
+
+  <div class="section">
+    <h2>2. Chrome 错误码 · 浏览器的"诊断报告"</h2>
+    <div class="metaphor">
+      <strong>类比：你按门铃没人开</strong><br>
+      浏览器去访问网址，就像你上门按门铃。<br>
+      门铃响了 → 没人开（<span class="key">超时</span>）<br>
+      门牌号查不到 → 找不到这家（<span class="key">DNS 失败</span>）<br>
+      门口贴条"本户已搬走"→ <span class="key">410 Gone</span><br>
+      门口写"本房屋租赁合同到期"→ <span class="key">404</span>
+    </div>
+    <p>Chrome 浏览器内核内置了 <strong>231 个</strong>错误码，每个对应一种"失败原因"。我们的工作是：<strong>挑出来哪些错误码代表"房子真的拆了"，哪些只是"今天没人开门"</strong>。</p>
+
+    <h3>能直接判"永久没了"的（很少）</h3>
+    <ul>
+      <li><span class="key">HTTP 410</span> —— 服务器主动告诉你"这页面我永久删了"（明牌）</li>
+      <li><span class="key">DNS NXDOMAIN</span> —— 域名压根不存在了（房子地址都没了）</li>
+      <li><span class="key">HTTP 451</span> —— 法律原因下架（被强拆了）</li>
+    </ul>
+
+    <h3>不能直接判（很多）</h3>
+    <ul>
+      <li><span class="key">超时 / 连接失败</span> —— 可能服务器临时挂了</li>
+      <li><span class="key">5xx</span> —— 服务器闹毛病，不是"没了"</li>
+      <li><span class="key">单次 404</span> —— 可能临时维护下架</li>
+      <li><span class="key">403</span> —— 你没权限，但页面活着</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>3. 网页指纹 · 给网页发"护照"</h2>
+
+    <div class="metaphor">
+      <strong>类比：你护照上的证件照</strong><br>
+      你 10 年前办的护照，照片是当时拍的。<br>
+      10 年后过海关，海关掏出你的护照对照片 —— "嗯，这人是你"。<br>
+      <br>
+      <strong>网页指纹同理</strong>：用户 3 个月前**成功**访问过某个网页，浏览器把当时的网页"长什么样"存了一份照片（指纹）。<br>
+      今天再访问 → 拿当下页面对一下指纹 → 对得上，是同一个网页 → 还活着。
+    </div>
+
+    <h3>指纹是怎么"拍照"的？</h3>
+    <div class="step"><div class="step-num">1</div><div class="step-text">用户成功访问一次网页</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">浏览器把页面的关键特征提取出来：URL + 页面标题 + 正文摘要 hash + 关键 DOM 结构</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-text">这一串特征值 = 这个网页的"指纹"，存在用户本地或云端</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-text">下次扫描时，对当前页面再算一次特征 —— 对得上 = 网页还是那个网页</div></div>
+
+    <h3>为什么需要指纹？</h3>
+    <div class="real">
+      <strong>真实场景</strong>：用户书签里有一篇 5 年前的博客文章。<br>
+      今天扫描 —— 服务器返回 <span class="key">503</span>（临时维护）。<br>
+      <br>
+      <strong>只看错误码</strong>：可能误判为"挂了"想清理。<br>
+      <strong>有指纹兜底</strong>：3 个月前用户成功访问过，指纹存在 —— "这页面用户认得，先别动"。<br>
+      <br>
+      指纹的核心价值：<strong>用"用户曾经认可过"作为防误杀的最后一道闸</strong>。
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4. 错误码 + 指纹 · 双层判定</h2>
+    <div class="metaphor">
+      <strong>类比：法院判决</strong><br>
+      错误码 = 物证（房子拆了的照片）<br>
+      指纹 = 人证（邻居说"以前住过人"）<br>
+      <br>
+      要判一个房子"永久不存在"，<strong>物证最强（明牌的 410/451/DNS失败）</strong>就直接判。<br>
+      物证不够（404/超时/5xx），就靠人证（指纹）兜底 —— 邻居说住过人，那就先不动。
+    </div>
+
+    <h3>但指纹不是万能的</h3>
+    <ul>
+      <li><strong>动态页面</strong>（淘宝/微博）—— 每次刷新内容都不一样，指纹永远对不上 ❌</li>
+      <li><strong>新用户</strong> —— 没访问过，指纹库是空的 ❌</li>
+      <li><strong>服务器明牌说没了</strong>（410）—— 即使指纹存在也照样清理（房主自己说房子拆了，不能因为邻居说有就保留）✅</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5. 一句话总结</h2>
+    <p style="font-size: 16px; color: #BA7517; font-weight: 500;">错误码看"网页在不在"，指纹看"用户认不认"。两者互补，永久信号优先。</p>
+  </div>
+
+  <div class="footer">@AI产品Geoffrey · 死链判定原理通俗版 · v1</div>
+</div>
+</body>
+</html>
