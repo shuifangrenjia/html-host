@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>书签整理 · 工程&算法 Review · v1</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f8f5f0; padding: 30px 20px; line-height: 1.65; color: #2c2c2a; }
+  .container { max-width: 880px; margin: 0 auto; }
+  .header { background: #185FA5; color: #fff; padding: 26px 32px; border-radius: 14px 14px 0 0; }
+  h1 { font-size: 22px; margin-bottom: 6px; }
+  .meta { font-size: 13px; opacity: 0.85; }
+  .section { background: #fff; padding: 26px 32px; border-bottom: 1px solid #eee; }
+  .section:last-of-type { border-radius: 0 0 14px 14px; border-bottom: none; }
+  .section h2 { font-size: 18px; color: #1a1a1a; margin-bottom: 14px; padding-left: 10px; border-left: 3px solid #185FA5; }
+  .section h3 { font-size: 14.5px; color: #185FA5; margin: 18px 0 8px; font-weight: 500; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  th, td { text-align: left; padding: 10px 12px; border: 1px solid #eee; vertical-align: top; }
+  th { background: #f0f4f9; font-weight: 500; color: #185FA5; }
+  tr:nth-child(even) td { background: #fafbfc; }
+  .key { font-family: ui-monospace, Menlo, monospace; font-size: 12.5px; background: #FFF8E1; padding: 1px 5px; border-radius: 3px; color: #854F0B; }
+  .alert { background: #FAECE7; border-left: 4px solid #D85A30; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13.5px; }
+  .alert strong { color: #993C1D; }
+  .ok { background: #E1F5EE; border-left: 4px solid #0F6E56; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13.5px; }
+  .ok strong { color: #0F6E56; }
+  .warn { background: #FFF8E1; border-left: 4px solid #EF9F27; padding: 12px 16px; border-radius: 6px; margin: 12px 0; font-size: 13.5px; }
+  .warn strong { color: #BA7517; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin-bottom: 5px; font-size: 13.5px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500; margin-left: 6px; vertical-align: middle; }
+  .b-fix { background: #F7C1C1; color: #791F1F; }
+  .b-add { background: #C0DD97; color: #27500A; }
+  .b-p2 { background: #B5D4F4; color: #0C447C; }
+  .b-must { background: #FAC775; color: #633806; }
+  .footer { text-align: center; color: #aaa; font-size: 12px; margin-top: 18px; padding: 10px; }
+  .summary-box { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 16px 20px; margin: 14px 0; }
+  .summary-box h4 { color: #c2410c; font-size: 14px; margin-bottom: 8px; }
+  .quote { background: #f8f9fb; border-left: 3px solid #B4B2A9; padding: 8px 14px; margin: 8px 0; font-size: 13px; color: #555; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>书签整理 · 工程 & 算法 Review · v1</h1>
+    <div class="meta">@AI产品Geoffrey · 对接：vance（算法）/ orange + carbonweng（工程）/ 云光（测评）· 2026-05-20</div>
+  </div>
+
+  <div class="section">
+    <h2>1. Review 结论一句话</h2>
+    <div class="ok">
+      <strong>整体链路 OK，可按当前方案先跑通拿数据</strong>。本文档提出 <strong>4 条建议调整</strong>（产品强约束）+ <strong>1 条二期再做</strong>。
+    </div>
+    <p style="font-size:13px;color:#555;">建议先按当前方案 + 4 条调整跑一轮，结合<strong>真实用户书签 + 测评集</strong>得到 baseline，再决定是否进入二期优化。</p>
+  </div>
+
+  <div class="section">
+    <h2>2. 产品强约束（建议本期接入）</h2>
+
+    <h3>① layer 改为相对 base，base 之下最多 4 层 <span class="badge b-must">必须</span></h3>
+    <div class="alert">
+      <strong>当前问题</strong>：技术文档里 layer1-4 没有明确"相对什么"。用户勾选的文件夹本身可能已在第 5/6 层（相对 root），如果工程把"layer1-4"理解为"绝对 root 下的层级"，会出现两种 case：
+      <ul>
+        <li>用户勾选很深的子目录 → 工程不知道当前已经在第几层，无法判断 bound</li>
+        <li>"4 层"如果是相对 root，base 在第 5 层就触发不到分组逻辑</li>
+      </ul>
+    </div>
+    <div class="ok">
+      <strong>产品定义</strong>：<br>
+      • <strong>layer 全部相对 base</strong>（用户勾选的根位置）<br>
+      • <strong>base 之下最多再加 4 层</strong>（不管 base 相对 root 是几层）<br>
+      • base 已是第 6 层 → 工程在第 6 层之下做 layer1-4 分组（相对 root 第 7-10 层）
+    </div>
+
+    <h3>② 打标 prompt 加入"命名规范化"约束 <span class="badge b-add">新增</span></h3>
+    <div class="alert">
+      <strong>当前风险</strong>：<span class="key">tag_list</span> 直接当 <span class="key">group_path</span> 的 layer 名 → 如果打标输出"AI平台"、"翻译工具与技术"等冗余命名，组名也跟着冗余，命名质量直接被测评扣分。
+    </div>
+    <div class="ok">
+      <strong>建议在打标 prompt 内显式约束</strong>：
+      <ul>
+        <li>tag <strong>不带尾缀</strong>："平台 / 服务 / 网站 / 专题 / 分类 / 系统 / 工具与XX / XX与XX"（A+B 命名）</li>
+        <li>tag <strong>字数</strong>：2-6 个汉字 / 1 个英文专有名词</li>
+        <li>tag <strong>颗粒度</strong>：子层 tag 比父层更具体（如父层 "AI"，子层应是 "chatbot/绘图工具"，不是 "AI 模型"）</li>
+        <li><strong>避免泛化</strong>：不出现单独的"生活/工作/学习"作为子层 tag</li>
+      </ul>
+    </div>
+
+    <h3>③ 打标 prompt 加入"已有 tag 复用"约束 <span class="badge b-add">新增</span></h3>
+    <div class="alert">
+      <strong>当前问题</strong>：N-M 条已有 tag 的书签直接跳过打标流程，但 M 条新打标书签<strong>不会参考已有 tag</strong> → 同一类内容打出来的 tag 可能不一致（如老书签 "电商购物"，新书签变 "网购"）。
+    </div>
+    <div class="ok">
+      <strong>建议</strong>：M 条新打标书签的 prompt 中，传入<strong>同批 N-M 条已有 tag 列表</strong>作为参考词表：
+      <ul>
+        <li>规则：相似内容/形式的网页，<strong>优先复用</strong>已有 tag，仅当确实没有合适的才生成新 tag</li>
+        <li>例：用户已有 "电商购物" tag，新书签内容是"淘宝商品页" → 应输出 "电商购物"，不应输出 "网购/购物"</li>
+      </ul>
+    </div>
+
+    <h3>④ 单次整理书签数上限 = 1000 条 <span class="badge b-add">产品定义</span></h3>
+    <div class="warn">
+      <strong>依据</strong>（简要）：典型重度用户书签量约 500-2000 条。结合模型上下文限制（16K-32K）+ "分属打标助手(摘要版)" T2≤4 的批处理速度，<strong>1000 条对应约 12-15 分钟处理时长</strong>，覆盖 95% 以上场景。<br>
+      超过 1000 条建议：① 报错提示用户分批 ② 或后台分批跑 + 进度显示。具体由工程评估。
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3. 暂缓事项（二期再做）</h2>
+
+    <h3>用户已有结构尊重度（path 复用） <span class="badge b-p2">二期</span></h3>
+    <div class="warn">
+      用户原有书签结构（path）的复用方案有多种（提炼组名当 tag / 当 path_hint / 打标 prompt 传入参考），<strong>本期不做</strong>。先跑通通用链路，等一轮真实数据后再决定二期方案。<br>
+      <strong>本期测评中此维度也不评测</strong>（满分按 4 维度 = 4 分计）。
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>4. 当前方案保留不动的（明确确认）</h2>
+    <ul>
+      <li><strong>N-M-P 三段式打标流程</strong> ✅ 合理</li>
+      <li><strong>layer1-4 bound 默认值</strong>（20 / 10 / 5 / 999）✅ 不动，layer4=999 当不限处理是合理的</li>
+      <li><strong>"应分尽分"原则</strong> ✅ 即使某组只有 1 条也允许成组（产品确认接受）</li>
+      <li><strong>启发式合并 + 拆分助手 + 重命名助手</strong> ✅ 合理</li>
+      <li><strong>摘要总结助手长文拆段拼接逻辑</strong> ✅ 合理</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5. 流程图（产品视角）</h2>
+    <div class="quote">
+      用户勾选 N 条书签（base = 用户勾选位置）<br>
+      &nbsp;↓<br>
+      <strong>① 已有 tag 的 N-M 条</strong>：直接进入分组阶段，tag 作为参考词表 →<br>
+      <strong>② 新打标的 M 条</strong>：<br>
+      &nbsp;&nbsp;• P 条可爬正文 → 摘要助手 → 摘要版打标助手（T2≤4）<br>
+      &nbsp;&nbsp;• M-P 条仅有标题 → 标题版打标助手（T1&lt;20）<br>
+      &nbsp;&nbsp;<em>打标 prompt 内置：命名规范化 + 已有 tag 复用</em><br>
+      &nbsp;↓<br>
+      <strong>③ N 条全部进入分组</strong>：<br>
+      &nbsp;&nbsp;• layer 相对 base，最多 4 层<br>
+      &nbsp;&nbsp;• 每层 bound = 20 / 10 / 5 / 999<br>
+      &nbsp;&nbsp;• 超 bound 且未到 layer4 → 拆分助手 → 重命名助手<br>
+      &nbsp;↓<br>
+      输出：每条书签 group_path（最多 4 层，相对 base）
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>6. 待确认 / 后续讨论</h2>
+    <ol>
+      <li><strong>命名规范化是否在打标 prompt 内做</strong>（vs 打标后单独跑一个 polish 助手）？倾向前者，但请算法侧评估 prompt 复杂度</li>
+      <li><strong>已有 tag 复用机制</strong>：传入"参考词表"还是"严格匹配"？倾向参考</li>
+      <li><strong>1000 条上限的工程兜底策略</strong>：报错 / 截断 / 分批 → 工程定方案</li>
+    </ol>
+  </div>
+
+  <div class="footer">@AI产品Geoffrey · 书签整理工程&算法 Review · v1 · 2026-05-20</div>
+</div>
+</body>
+</html>
