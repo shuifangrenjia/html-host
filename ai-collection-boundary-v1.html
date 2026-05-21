@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 收藏夹 · 边界清单 v1</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #1a365d;
+  --primary-light: #2d4f7c;
+  --accent: #c53030;
+  --gold: #d69e2e;
+  --green: #38a169;
+  --bg: #f5f7fa;
+  --text: #1a365d;
+  --text-secondary: #4a5568;
+  --border: #e2e8f0;
+  --highlight-yellow: #fef3c7;
+  --highlight-red: #fff5f5;
+  --highlight-green: #f0fff4;
+  --highlight-blue: #ebf8ff;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 24px;
+}
+.container { max-width: 1080px; margin: 0 auto; }
+
+header {
+  background: linear-gradient(135deg, #102849 0%, var(--primary) 50%, var(--primary-light) 100%);
+  color: white;
+  padding: 32px 40px;
+  border-radius: 14px 14px 0 0;
+}
+header h1 { font-size: 26px; margin-bottom: 8px; }
+header .meta { font-size: 13px; opacity: 0.85; margin-bottom: 18px; }
+header .core {
+  background: rgba(214, 158, 46, 0.18);
+  border-left: 4px solid var(--gold);
+  padding: 16px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1.9;
+}
+header .core strong { color: var(--highlight-yellow); }
+
+.section {
+  background: white;
+  padding: 22px 40px;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-of-type { border-radius: 0 0 14px 14px; border-bottom: none; }
+.section h2 {
+  font-size: 20px;
+  color: var(--primary);
+  border-left: 5px solid var(--primary);
+  padding-left: 12px;
+  margin-bottom: 14px;
+}
+.section h3 {
+  font-size: 15px;
+  color: var(--accent);
+  margin: 16px 0 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 8px 0 14px;
+  background: white;
+}
+th {
+  background: var(--primary);
+  color: white;
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+  font-size: 12px;
+}
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #fafbfc; }
+td.dim { color: var(--text-secondary); }
+
+.type-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  border-top: 4px solid var(--primary);
+}
+.type-card.allowed { border-top-color: var(--green); }
+.type-card.banned { border-top-color: var(--accent); background: var(--highlight-red); }
+.type-card .head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.type-card .head .icon { font-size: 22px; }
+.type-card .head .name { font-size: 16px; font-weight: 700; color: var(--primary); }
+.type-card .head .tag {
+  margin-left: auto;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+.type-card.allowed .tag { background: #c6f6d5; color: #22543d; }
+.type-card.banned .tag { background: #fed7d7; color: #742a2a; }
+
+.kv {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 6px 12px;
+  font-size: 13px;
+}
+.kv .k { color: var(--text-secondary); font-weight: 600; }
+.kv .v { color: var(--text); }
+.kv .v.warn { color: var(--accent); }
+.kv .v.good { color: var(--green); }
+
+.banned-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 10px 0;
+}
+.banned-item {
+  background: var(--highlight-red);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.banned-item strong { color: #742a2a; }
+.banned-item .reason { display: block; font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+.alert {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 14px;
+}
+.alert.warn { border-left: 4px solid var(--gold); background: var(--highlight-yellow); color: #744210; }
+.alert.info { border-left: 4px solid var(--primary); background: var(--highlight-blue); color: #2c5282; }
+.alert.danger { border-left: 4px solid var(--accent); background: var(--highlight-red); color: #742a2a; }
+.alert .alert-title { font-weight: 700; margin-bottom: 4px; font-size: 13px; letter-spacing: 0.3px; }
+
+.principle {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 14px 0;
+}
+.principle-box {
+  background: white;
+  border: 2px solid var(--gold);
+  border-radius: 10px;
+  padding: 14px 16px;
+  text-align: left;
+}
+.principle-box .num {
+  display: inline-block;
+  background: var(--gold);
+  color: white;
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  border-radius: 11px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-right: 6px;
+}
+.principle-box h4 { font-size: 14px; color: var(--primary); margin-bottom: 6px; }
+.principle-box p { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
+
+.compare-table th { font-size: 11px; padding: 8px 10px; }
+.compare-table td { font-size: 12px; padding: 8px 10px; }
+
+.closing {
+  background: var(--primary);
+  color: white;
+  padding: 22px 40px;
+  text-align: center;
+  border-radius: 0 0 14px 14px;
+  font-size: 13px;
+  line-height: 1.8;
+}
+.closing strong { color: var(--highlight-yellow); }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🦞 AI 收藏夹 · 边界清单 v1</h1>
+  <div class="meta">2026-05-21 · 哪些能进 / 哪些不能 / 每类边界细节</div>
+  <div class="core">
+    <strong>总原则</strong>：存「线索 + 语义」/ 不存「文件本体」<br>
+    用户的资产留在原处（网站 / 云盘 / 本地），AI 收藏夹只存 <strong>找回它 + AI 能用它</strong> 的能力。
+  </div>
+</header>
+
+<!-- 6 类支持 -->
+<div class="section">
+  <h2>✅ 支持收藏的 6 大类型</h2>
+
+  <div class="type-card allowed">
+    <div class="head">
+      <span class="icon">📚</span>
+      <span class="name">1 · 网页书签（URL）</span>
+      <span class="tag">支持</span>
+    </div>
+    <div class="kv">
+      <span class="k">存什么</span><span class="v">URL + 标题 + 抽取正文（≤ 50K 字）+ 向量 + 缩略图</span>
+      <span class="k">上限</span><span class="v">单条正文 ≤ 50K 字（超过截断）/ 总数 ≤ 1 万条</span>
+      <span class="k">不支持</span><span class="v warn">需登录态才能访问的内部网页（抽取失败时仅存 URL+标题）</span>
+      <span class="k">特殊</span><span class="v good">与书签管理器双向同步，三位一体</span>
+    </div>
+  </div>
+
+  <div class="type-card allowed">
+    <div class="head">
+      <span class="icon">🖼️</span>
+      <span class="name">2 · 图片</span>
+      <span class="tag">支持</span>
+    </div>
+    <div class="kv">
+      <span class="k">存什么</span><span class="v">网页图：URL 引用 + OCR + 视觉描述 + 向量；本地图：≤2MB 直接上云存副本</span>
+      <span class="k">上限</span><span class="v">单图 ≤ <strong>10MB</strong> / 格式 jpg/png/webp/gif/bmp / heic 自动转 jpg</span>
+      <span class="k">不支持</span><span class="v warn">> 10MB 大图（提示压缩）/ 动图 GIF 仅存首帧描述 / 加密相册图片</span>
+      <span class="k">特殊</span><span class="v good">网页图优先存 URL 引用，本地拖入存副本</span>
+    </div>
+  </div>
+
+  <div class="type-card allowed">
+    <div class="head">
+      <span class="icon">🎬</span>
+      <span class="name">3 · 视频</span>
+      <span class="tag">支持</span>
+    </div>
+    <div class="kv">
+      <span class="k">存什么</span><span class="v">视频 URL + 封面 + <strong>字幕文本</strong>（如有）+ 关键帧描述 + 向量</span>
+      <span class="k">上限</span><span class="v warn"><strong>不存视频本体</strong>（学 NotebookLM 处理 YouTube）</span>
+      <span class="k">不支持</span><span class="v warn">本地视频文件（>50MB 不收，引导走云盘）/ DRM 加密 / 直播流</span>
+      <span class="k">特殊</span><span class="v good">支持时间戳锚点（"看到 03:25 这段"）</span>
+    </div>
+  </div>
+
+  <div class="type-card allowed">
+    <div class="head">
+      <span class="icon">📄</span>
+      <span class="name">4 · 文档（PDF / Word / PPT / Excel / Markdown / TXT）</span>
+      <span class="tag">支持</span>
+    </div>
+    <div class="kv">
+      <span class="k">存什么</span><span class="v">文件名 + <strong>解析后的文本</strong>（≤ 200 页）+ 向量 + 缩略图</span>
+      <span class="k">上限</span><span class="v">单文件 ≤ <strong>50MB</strong>（参考 NotebookLM 单 Source 上限）/ 总文档数 ≤ 500</span>
+      <span class="k">不支持</span><span class="v warn">加密 PDF（提示输入密码或跳过）/ 扫描件无 OCR 时仅存图（标"图像版"）/ 嵌套压缩包</span>
+      <span class="k">特殊</span><span class="v good">文件本体不存（引用本地路径或来源 URL），原文件被删时显示"已不存在"</span>
+    </div>
+  </div>
+
+  <div class="type-card allowed">
+    <div class="head">
+      <span class="icon">✂️</span>
+      <span class="name">5 · 网页摘录（划词 / 截图）</span>
+      <span class="tag">支持</span>
+    </div>
+    <div class="kv">
+      <span class="k">存什么</span><span class="v">选中文字 / 截图 + 上下文 50 字 + 来源 URL + 抓取时间 + 向量</span>
+      <span class="k">上限</span><span class="v">单条文字 ≤ 5000 字 / 截图 ≤ 5MB</span>
+      <span class="k">不支持</span><span class="v warn">跨网页拼接的摘录（只能单页内）/ 受版权保护页面整页拷贝（高敏感站点限缩）</span>
+      <span class="k">特殊</span><span class="v good">保留原文锚点，回访时高亮原位置</span>
+    </div>
+  </div>
+
+  <div class="type-card allowed">
+    <div class="head">
+      <span class="icon">🤖</span>
+      <span class="name">6 · AI 对话 / Prompt</span>
+      <span class="tag">支持 · 核心差异化</span>
+    </div>
+    <div class="kv">
+      <span class="k">存什么</span><span class="v">元宝对话完整记录（QA + 引用 Source）+ 向量 / Prompt 模板（标题+内容+变量）</span>
+      <span class="k">上限</span><span class="v">单对话 ≤ 100K token / 用户 Prompt 库 ≤ 200 条</span>
+      <span class="k">不支持</span><span class="v warn">第三方 AI 产品（ChatGPT / Claude）的对话——只支持元宝</span>
+      <span class="k">特殊</span><span class="v good">对话沉淀时<strong>自动关联当时引用的 Source 资产</strong></span>
+    </div>
+  </div>
+</div>
+
+<!-- 不收的类型 -->
+<div class="section">
+  <h2>❌ 明确不收的 7 类（红线）</h2>
+  <div class="banned-grid">
+    <div class="banned-item">
+      <strong>大文件视频本体</strong>（&gt; 50MB）
+      <span class="reason">学 NotebookLM，非云盘业务，引导走小云盘</span>
+    </div>
+    <div class="banned-item">
+      <strong>可执行文件</strong>（exe / dmg / apk）
+      <span class="reason">安全风险 + 无 AI 价值</span>
+    </div>
+    <div class="banned-item">
+      <strong>加密压缩包</strong>
+      <span class="reason">内容不可解析 = AI 用不了</span>
+    </div>
+    <div class="banned-item">
+      <strong>数据库 / 代码仓库整体</strong>（.db / .git）
+      <span class="reason">工程文件不是"知识资产"</span>
+    </div>
+    <div class="banned-item">
+      <strong>私密性极高内容</strong>（密码 / 身份证扫描件）
+      <span class="reason">应走"私密空间"独立产品（1Password 模式）</span>
+    </div>
+    <div class="banned-item">
+      <strong>其他 AI 产品的对话</strong>（ChatGPT / Claude）
+      <span class="reason">数据合规风险 + 元宝场景内闭环</span>
+    </div>
+    <div class="banned-item">
+      <strong>直播流 / 实时音视频</strong>
+      <span class="reason">非"沉淀"语义</span>
+    </div>
+  </div>
+</div>
+
+<!-- 横向对比 -->
+<div class="section">
+  <h2>📊 边界对比 · 横向参照</h2>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>维度</th>
+        <th>NotebookLM</th>
+        <th>元宝助手</th>
+        <th>WorkBuddy</th>
+        <th>AI 收藏夹</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>核心定位</strong></td>
+        <td>项目化主题工作台</td>
+        <td>通用 AI 助手</td>
+        <td>AI 工作台</td>
+        <td class="hot">场景化资产沉淀池</td>
+      </tr>
+      <tr>
+        <td><strong>存储位置</strong></td>
+        <td>全云端</td>
+        <td>全云端</td>
+        <td>端云结合</td>
+        <td class="hot">元数据/文本/向量上云<br>文件本体不存</td>
+      </tr>
+      <tr>
+        <td><strong>单文件上限</strong></td>
+        <td>200MB / 500K token</td>
+        <td>取决于会话</td>
+        <td>—</td>
+        <td class="hot">50MB 文档 / 10MB 图 / 0 视频本体</td>
+      </tr>
+      <tr>
+        <td><strong>总容量上限</strong></td>
+        <td>50/300 Source/notebook</td>
+        <td>—</td>
+        <td>—</td>
+        <td class="hot">总文档 ≤500 / 书签 ≤1万</td>
+      </tr>
+      <tr>
+        <td><strong>跨容器搜索</strong></td>
+        <td>❌ 不支持</td>
+        <td>—</td>
+        <td>—</td>
+        <td class="hot">✅ 全量统一搜（差异化）</td>
+      </tr>
+      <tr>
+        <td><strong>AI 用法</strong></td>
+        <td>RAG 内置</td>
+        <td>通用问答</td>
+        <td>工作流</td>
+        <td class="hot">走元宝 RAG，AI 收藏夹只供数据</td>
+      </tr>
+      <tr>
+        <td><strong>是否存原始文件</strong></td>
+        <td>✅ 存</td>
+        <td>❌</td>
+        <td>部分</td>
+        <td class="hot">❌ 几乎不存（引用为主）</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 3 大设计原则 -->
+<div class="section">
+  <h2>🎯 边界设计的 3 条核心原则</h2>
+  <div class="principle">
+    <div class="principle-box">
+      <h4><span class="num">1</span> 存"线索 + 语义"</h4>
+      <p>不存"文件本体" → 区别于云盘 → 成本可控</p>
+    </div>
+    <div class="principle-box">
+      <h4><span class="num">2</span> 网页类优先 URL 引用</h4>
+      <p>用户原资产在原网站，我们只存"找回 + 用得上"的能力</p>
+    </div>
+    <div class="principle-box">
+      <h4><span class="num">3</span> 本地文件用引用</h4>
+      <p>不替用户保管原文件，原文件删了我们只留"曾经存过"的元数据</p>
+    </div>
+  </div>
+</div>
+
+<!-- 与云盘共生 -->
+<div class="section">
+  <h2>🤝 关键边界 · 与小云盘业务共生</h2>
+  <div class="alert warn">
+    <div class="alert-title">⚠️ 最容易出问题的场景</div>
+    用户拖一个 500MB 视频进 AI 收藏夹 → 用户期待存好 → 我们做不到（成本+合规）
+  </div>
+  <div class="alert info">
+    <div class="alert-title">✅ 解决方案</div>
+    超过阈值时给清晰提示「文件过大，建议存到小云盘后再加入 AI 收藏夹」+ 一键跳转小云盘。<br>
+    <strong>这是和小云盘业务划边界 + 共生的关键 hook</strong>，避免被误读为"又一个云盘"。
+  </div>
+  <div class="alert danger">
+    <div class="alert-title">🚨 写进 PRD 的硬约束</div>
+    AI 收藏夹的存储模型 = "metadata + text + vector"，不是 "file storage"。<br>
+    单条资产体积约 ≤ 几 KB，1000 条 ≈ 几十 MB 索引（云端）→ 成本可控、和云盘业务无重叠。
+  </div>
+</div>
+
+<div class="closing">
+  🦞 <strong>一句话定调</strong>：云盘 = 存文件本体；<strong>AI 收藏夹 = 存"线索 + 语义索引"</strong>。<br>
+  云盘解决"存东西"，AI 收藏夹解决"找东西 + 用东西"。
+</div>
+
+</div>
+</body>
+</html>
