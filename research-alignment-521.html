@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>研发总参谋部对齐 · AI 收藏夹弹药库</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f7fa;
+  color: #1a365d;
+  line-height: 1.6;
+  padding: 20px;
+}
+.container { max-width: 960px; margin: 0 auto; }
+
+header {
+  background: linear-gradient(135deg, #1a365d 0%, #2d4f7c 100%);
+  color: white;
+  padding: 28px 32px;
+  border-radius: 12px 12px 0 0;
+}
+header h1 { font-size: 24px; margin-bottom: 8px; }
+header .subtitle { font-size: 13px; opacity: 0.85; }
+header .verdict {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: rgba(214, 158, 46, 0.2);
+  border-left: 4px solid #d69e2e;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+header .verdict strong { color: #fef3c7; }
+
+.alert {
+  background: #fff5f5;
+  padding: 18px 32px;
+  border-bottom: 1px solid #fed7d7;
+  border-left: 4px solid #c53030;
+}
+.alert .alert-title {
+  font-weight: 700;
+  color: #c53030;
+  font-size: 15px;
+  margin-bottom: 6px;
+}
+.alert .alert-body { font-size: 13px; color: #742a2a; line-height: 1.7; }
+
+.section { background: white; border-bottom: 1px solid #e2e8f0; }
+.section:last-of-type { border-radius: 0 0 12px 12px; border-bottom: none; }
+.section-title {
+  padding: 16px 32px;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a365d;
+  background: #edf2f7;
+  border-left: 4px solid #1a365d;
+}
+.section-body { padding: 20px 32px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+th {
+  background: #1a365d;
+  color: white;
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+}
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid #e2e8f0;
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f7fafc; }
+td.dim { color: #4a5568; font-size: 12px; }
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-must { background: #fed7d7; color: #c53030; }
+.badge-mid { background: #feebc8; color: #c05621; }
+.badge-long { background: #c3dafe; color: #2c5282; }
+.badge-key { background: #fef3c7; color: #92400e; }
+
+.action-card {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #d69e2e;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+.action-card.must { border-left-color: #c53030; }
+.action-card.mid { border-left-color: #d69e2e; }
+.action-card.long { border-left-color: #3182ce; }
+
+.action-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.action-header .q-num {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a365d;
+}
+.action-header .who {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c5282;
+}
+.action-header .why {
+  font-size: 12px;
+  color: #4a5568;
+  margin-left: auto;
+}
+
+.message-box {
+  background: white;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-top: 8px;
+  font-size: 13px;
+  white-space: pre-wrap;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #2d3748;
+}
+.message-box .label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #c53030;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.todo {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+.todo:last-child { border-bottom: none; }
+.todo .checkbox {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #cbd5e0;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.todo .text { flex: 1; font-size: 13px; }
+.todo .meta {
+  font-size: 11px;
+  color: #718096;
+  background: #edf2f7;
+  padding: 2px 8px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.closing {
+  background: #1a365d;
+  color: white;
+  padding: 20px 32px;
+  border-radius: 0 0 12px 12px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.closing strong { color: #fef3c7; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🦞 研发总参谋部对齐 · AI 收藏夹弹药库</h1>
+    <div class="subtitle">2026-05-21 · 浏览器12篇调研 + AI 资产需求映射</div>
+    <div class="verdict">
+      <strong>一句话结论</strong>：研发的 12 个 TODO 里有 <strong>5 个能直接当 AI 收藏夹弹药</strong>，但研发<strong>没把"书签整理"当作落地场景</strong>。你要做的是把你的需求"塞"进他们已有的方向，不是另起炉灶。
+    </div>
+  </header>
+
+  <div class="alert">
+    <div class="alert-title">🚨 致命发现</div>
+    <div class="alert-body">
+      12 篇调研、203 行 TODO，<strong>无一处直接提"书签整理 / AI 收藏夹"</strong>。但他们做的几乎所有底层能力（抽取/打标/分类/语义索引/页面类型识别）都是你的需求所需要的。<br>
+      <strong>风险</strong>：能力做出来如果不知道你的落地场景，会优先服务"垂类 Agent 矩阵"（教育/医疗/金融），不是 AI 收藏夹。
+    </div>
+  </div>
+
+  <!-- 5个能力映射 -->
+  <div class="section">
+    <div class="section-title">📦 你直接能用的 5 个研发能力</div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:18%">研发方向</th>
+            <th style="width:14%">负责人</th>
+            <th>你能用来做什么</th>
+            <th style="width:14%">优先级</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>D7 网页抽取</strong><br><span class="dim">ReaderLM-v2 / Readability</span></td>
+            <td><strong>steven</strong><br><span class="dim">苏磊</span></td>
+            <td>书签<strong>离线正文抽取</strong> —— 给智能打标 / 分组喂内容</td>
+            <td><span class="badge badge-must">必接 Q1</span></td>
+          </tr>
+          <tr>
+            <td><strong>D4 端模型 P0</strong><br><span class="dim">页面类型识别 / 正文抽取 / 本地语义索引</span></td>
+            <td><strong>damon</strong><br><span class="dim">阮宜德</span></td>
+            <td>① 给书签自动<strong>打类型标</strong>（新闻/电商/工具/文档）<br>② <strong>本地语义搜索</strong>书签</td>
+            <td><span class="badge badge-must">必接 Q2</span></td>
+          </tr>
+          <tr>
+            <td><strong>D11 Chrome Built-in AI Web API</strong><br><span class="dim">Summarizer / Classification</span></td>
+            <td><strong>ricedeng</strong><br><span class="dim">邓磊</span></td>
+            <td>书签<strong>自动摘要</strong>（卡片预览）+ <strong>自动分类</strong></td>
+            <td><span class="badge badge-mid">中期 Q3</span></td>
+          </tr>
+          <tr>
+            <td><strong>D12 绘制层抽取</strong><br><span class="dim">Canvas 自绘文档</span></td>
+            <td><strong>ricedeng</strong></td>
+            <td>解决你扫不到的 <strong>腾讯文档 / 金山 / 飞书</strong> 类书签的内容抽取</td>
+            <td><span class="badge badge-mid">中期 Q3</span></td>
+          </tr>
+          <tr>
+            <td><strong>D3 全网登录态</strong><br><span class="dim">多 Tab / 跨站点</span></td>
+            <td><strong>xianyi</strong> / damon</td>
+            <td>书签收藏后续访问自动恢复登录态 → <strong>死链判定更准</strong></td>
+            <td><span class="badge badge-long">长期 Q4</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="section">
+    <div class="section-title">🎯 Q1 · 必做 · 找 steven 把书签抽取挂进 D7</div>
+    <div class="section-body">
+      <div class="action-card must">
+        <div class="action-header">
+          <span class="q-num">Q1</span>
+          <span class="who">→ @stevenleisu（苏磊）</span>
+          <span class="why">D7 抽取是你下游所有 AI 链路的输入源</span>
+        </div>
+        <div class="message-box">
+<span class="label">📤 飞书私聊话术（可直接复制）</span>苏磊，看了 D7 网页抽取调研，我们 AI 资产侧的"书签智能打标 + 智能分组"现在就在用 carbon 跑 ReaderLM-v2 抽取。
+
+你这边 D7 后续如果要做 PoC 落地场景，我们这边有现成 3000 条书签测评集 + 端到端链路（一期已 ready），可以作为 D7 的第一批落地业务，反向给你提抽取质量数据。
+
+要不要约 30 分钟对一下，看怎么把"书签整理"挂进 D7 的落地路线图？
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="section">
+    <div class="section-title">🎯 Q2 · 必做 · 找 damon 把书签场景挂进端模型 P0</div>
+    <div class="section-body">
+      <div class="action-card must">
+        <div class="action-header">
+          <span class="q-num">Q2</span>
+          <span class="who">→ @damonruan（阮宜德）</span>
+          <span class="why">AI 收藏夹四大杀手功能全部依赖端模型 P0</span>
+        </div>
+        <div class="message-box">
+<span class="label">📤 飞书私聊话术（可直接复制）</span>damon，看了端模型 P0 清单（页面类型识别 / 正文抽取 / 本地语义索引）—— 每一项都是 AI 收藏夹核心能力。
+
+我们 AI 资产侧的诉求：
+1. 页面类型识别：自动给书签打类型标（新闻/电商/工具/文档）
+2. 本地语义索引：用户在 AI 收藏夹里"自然语言搜索书签"
+3. 多标签页聚类（P1）：AI 收藏夹的"智能分组"
+
+想看 P0 排期里能不能把"书签整理"作为第一批接入业务，反向帮你验证端模型效果。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="section">
+    <div class="section-title">🟡 Q3 · 中期 · 找 ricedeng 谈两个事</div>
+    <div class="section-body">
+      <div class="action-card mid">
+        <div class="action-header">
+          <span class="q-num">Q3</span>
+          <span class="who">→ @ricedeng（邓磊）</span>
+          <span class="why">他正好也是评测平台 owner，本来就要打交道</span>
+        </div>
+        <div class="message-box">
+<span class="label">📤 飞书私聊话术（可直接复制）</span>ricedeng 哥，两个事：
+
+1. D11 Chrome Built-in AI Web API 的 Summarizer / Classification —— 我们 AI 收藏夹想做"书签卡片自动摘要" + "自动分类"，能不能直接复用这两个 API？还是要自己接？
+
+2. D12 绘制层抽取（Canvas 自绘文档）—— 用户书签里有不少腾讯文档/金山文档的链接，目前 D7 抽不到。D12 做出来后，优先支持"书签里的腾讯文档"作为落地场景？
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="section">
+    <div class="section-title">🔵 Q4 · 长期 hook · 给 xianyi 留个口</div>
+    <div class="section-body">
+      <div class="action-card long">
+        <div class="action-header">
+          <span class="q-num">Q4</span>
+          <span class="who">→ @xianyizhang</span>
+          <span class="why">长期 hook，不催，让他知道有这个落地场景</span>
+        </div>
+        <div class="message-box">
+<span class="label">📤 飞书私聊话术（可直接复制）</span>xianyi，D3 全网登录态这个能力如果做出来，AI 收藏夹的死链清理可以更精准——很多书签不是真死链，是"用户没登录看不到" → 现在被误判为死链。
+
+不急在这个迭代，但希望你方向上记一下"AI 收藏夹"这个落地诉求，后面排期参考。
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODO 清单 -->
+  <div class="section">
+    <div class="section-title">✅ 立刻动作清单</div>
+    <div class="section-body">
+      <div class="todo">
+        <div class="checkbox"></div>
+        <div class="text"><strong>私聊 steven</strong>（Q1 话术）—— 把书签抽取挂进 D7</div>
+        <div class="meta">5 分钟 · 今天</div>
+      </div>
+      <div class="todo">
+        <div class="checkbox"></div>
+        <div class="text"><strong>私聊 damon</strong>（Q2 话术）—— 把书签场景挂进端模型 P0</div>
+        <div class="meta">5 分钟 · 今天</div>
+      </div>
+      <div class="todo">
+        <div class="checkbox"></div>
+        <div class="text">Q3 / Q4 等本周内有合适时机再发</div>
+        <div class="meta">慢慢来</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 战略升级 -->
+  <div class="section">
+    <div class="section-title">🦞 龙虾必须 challenge 你的</div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th>之前对接</th>
+            <th>现在要对接</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>执行层</strong>：carbon / vance / orange / 云光</td>
+            <td><strong>总参谋部</strong>：norman / steven / damon / ricedeng / xianyi</td>
+          </tr>
+        </tbody>
+      </table>
+      <p style="margin-top:14px; font-size:13px; color:#4a5568; line-height:1.8;">
+        你 0.4 主战场（AI 收藏夹）的真正命门是：<strong style="color:#c53030;">让总参谋部把"AI 收藏夹"作为落地场景纳入路线图</strong>。<br>
+        ❌ 没纳入 = 你永远是"抢能力的下游业务方"<br>
+        ✅ 纳入了 = 你变成"驱动技术演进的 P0 业务方"
+      </p>
+    </div>
+  </div>
+
+  <div class="closing">
+    <strong>顺序</strong>：今天发 Q1 + Q2（10 分钟） · Q3 / Q4 这周看时机<br>
+    <strong>核心战略</strong>：AI 收藏夹 = 总参谋部的"落地业务"，不是抢能力的下游
+  </div>
+</div>
+</body>
+</html>
