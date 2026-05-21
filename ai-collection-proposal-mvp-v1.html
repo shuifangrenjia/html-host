@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 收藏夹整体产品方案 · MVP v1.0</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #1a365d;
+  --primary-light: #2d4f7c;
+  --accent: #c53030;
+  --gold: #d69e2e;
+  --green: #38a169;
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #1a365d;
+  --text-secondary: #4a5568;
+  --border: #e2e8f0;
+  --highlight-yellow: #fef3c7;
+  --highlight-red: #fff5f5;
+  --highlight-green: #f0fff4;
+  --highlight-blue: #ebf8ff;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  padding: 20px;
+}
+.container { max-width: 1080px; margin: 0 auto; }
+
+/* === HEADER === */
+header {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  color: white;
+  padding: 36px 40px;
+  border-radius: 14px 14px 0 0;
+}
+header h1 { font-size: 30px; margin-bottom: 8px; letter-spacing: 0.5px; }
+header .meta { font-size: 13px; opacity: 0.85; margin-bottom: 18px; }
+header .one-liner {
+  background: rgba(214, 158, 46, 0.18);
+  border-left: 4px solid var(--gold);
+  padding: 16px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1.8;
+}
+header .one-liner strong { color: var(--highlight-yellow); }
+
+/* === TOC === */
+.toc {
+  background: white;
+  padding: 18px 32px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.toc .item {
+  font-size: 12px;
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  background: var(--bg);
+  border-radius: 12px;
+}
+.toc .item strong { color: var(--primary); }
+
+/* === SECTION === */
+.section {
+  background: white;
+  border-bottom: 1px solid var(--border);
+}
+.section:last-of-type { border-radius: 0 0 14px 14px; border-bottom: none; }
+.section-title {
+  padding: 22px 40px 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--primary);
+  border-left: 5px solid var(--primary);
+  margin: 0;
+}
+.section-subtitle {
+  padding: 0 40px 16px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-left: 5px solid var(--primary);
+  margin-bottom: 8px;
+}
+.section-body { padding: 8px 40px 28px; }
+h3 {
+  font-size: 16px;
+  color: var(--primary);
+  margin: 20px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px dashed var(--border);
+}
+h4 { font-size: 14px; color: var(--accent); margin: 14px 0 6px; }
+
+p { margin-bottom: 10px; font-size: 14px; color: var(--text); }
+ul, ol { padding-left: 22px; margin-bottom: 12px; }
+li { font-size: 14px; margin-bottom: 4px; }
+
+/* === TABLE === */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 12px 0 16px;
+  background: white;
+}
+th {
+  background: var(--primary);
+  color: white;
+  text-align: left;
+  padding: 10px 12px;
+  font-weight: 600;
+}
+td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+tr:nth-child(even) td { background: #f7fafc; }
+td.dim { color: var(--text-secondary); font-size: 12px; }
+td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
+td.green-hot { background: var(--highlight-green) !important; }
+td.red-hot { background: var(--highlight-red) !important; }
+
+/* === CARDS === */
+.card {
+  background: var(--bg);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  border-left: 4px solid var(--gold);
+}
+.card.green { border-left-color: var(--green); background: var(--highlight-green); }
+.card.red { border-left-color: var(--accent); background: var(--highlight-red); }
+.card.blue { border-left-color: var(--primary); background: var(--highlight-blue); }
+.card .label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.card.green .label { color: var(--green); }
+.card.blue .label { color: var(--primary); }
+
+/* === BADGES === */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+}
+.badge-1 { background: #fed7d7; color: #c53030; }
+.badge-2 { background: #feebc8; color: #c05621; }
+.badge-3 { background: #c3dafe; color: #2c5282; }
+.badge-mvp { background: #fef3c7; color: #92400e; }
+.badge-p2 { background: #e2e8f0; color: #4a5568; }
+.badge-key { background: #fbd38d; color: #7b341e; }
+
+/* === GRID === */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 12px 0; }
+
+/* === ARENA DIAGRAM === */
+.arena {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+.arena-box {
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  background: white;
+}
+.arena-box h5 { font-size: 14px; margin-bottom: 6px; color: var(--primary); }
+.arena-box.center { border-color: var(--gold); background: var(--highlight-yellow); }
+.arena-box .icon { font-size: 24px; }
+.arena-box .desc { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
+.arena-box .data { margin-top: 8px; font-size: 12px; }
+.arena-box .data span { display: block; padding: 2px 0; }
+
+/* === WORKBENCH === */
+.workbench {
+  display: grid;
+  grid-template-columns: 200px 1fr 240px;
+  gap: 0;
+  height: 280px;
+  border: 2px solid var(--primary);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 14px 0;
+  font-size: 12px;
+}
+.wb-left { background: #f7fafc; padding: 12px; border-right: 1px solid var(--border); }
+.wb-mid { padding: 12px; background: white; border-right: 1px solid var(--border); }
+.wb-right { padding: 12px; background: var(--highlight-blue); }
+.wb-section-label { font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+.wb-list-item { padding: 4px 0; color: var(--text-secondary); font-size: 12px; }
+.wb-list-item.active { color: var(--accent); font-weight: 600; }
+
+/* === ALERT === */
+.alert {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 12px 0;
+  font-size: 13px;
+  border-left: 4px solid var(--accent);
+  background: var(--highlight-red);
+  color: #742a2a;
+}
+.alert.info {
+  border-left-color: var(--primary);
+  background: var(--highlight-blue);
+  color: #2c5282;
+}
+.alert.warn {
+  border-left-color: var(--gold);
+  background: var(--highlight-yellow);
+  color: #744210;
+}
+.alert .alert-title { font-weight: 700; margin-bottom: 4px; }
+
+/* === CLOSING === */
+.closing {
+  background: var(--primary);
+  color: white;
+  padding: 28px 40px;
+  border-radius: 0 0 14px 14px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.9;
+}
+.closing strong { color: var(--highlight-yellow); }
+.closing h3 { color: white; border: none; margin-bottom: 12px; }
+
+/* === KPI === */
+.kpi-row { display: flex; gap: 12px; margin: 12px 0; flex-wrap: wrap; }
+.kpi {
+  flex: 1;
+  min-width: 180px;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  border-top: 3px solid var(--gold);
+}
+.kpi .num { font-size: 22px; font-weight: 700; color: var(--accent); }
+.kpi .name { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+/* === PHASE === */
+.phase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 14px 0;
+}
+.phase-col {
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  background: white;
+}
+.phase-col.now { border-color: var(--accent); background: var(--highlight-red); }
+.phase-col.next { border-color: var(--gold); background: var(--highlight-yellow); }
+.phase-col.future { border-color: var(--primary); background: var(--highlight-blue); }
+.phase-col h5 { font-size: 14px; margin-bottom: 8px; }
+.phase-col ul { padding-left: 18px; }
+.phase-col li { font-size: 12px; }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- HEADER -->
+<header>
+  <h1>🦞 AI 收藏夹整体产品方案 · MVP v1.0</h1>
+  <div class="meta">2026-05-21 · QQ 浏览器 · AI 资产专项 · 游杰</div>
+  <div class="one-liner">
+    <strong>一句话定位</strong>：AI 收藏夹 = 用户「场景化资产沉淀池」，<strong>主动收集 + AI 整理 + 元宝调用</strong>三位一体的 PC 浏览器工作台，承接 Agent 时代用户「记忆入口」的争夺战。
+  </div>
+</header>
+
+<!-- TOC -->
+<div class="toc">
+  <div class="item"><strong>1</strong> 战略对齐</div>
+  <div class="item"><strong>2</strong> 用户场景&痛点</div>
+  <div class="item"><strong>3</strong> 竞品分析</div>
+  <div class="item"><strong>4</strong> 产品定义</div>
+  <div class="item"><strong>5</strong> 核心功能 MVP</div>
+  <div class="item"><strong>6</strong> 原子能力清单</div>
+  <div class="item"><strong>7</strong> 用户教育</div>
+  <div class="item"><strong>8</strong> 副作用&风险</div>
+  <div class="item"><strong>9</strong> 路线图</div>
+  <div class="item"><strong>10</strong> 数据埋点</div>
+  <div class="item"><strong>11</strong> 附录·竞品速览</div>
+  <div class="item"><strong>12</strong> 附录·破圈策略</div>
+</div>
+
+<!-- ============== 章节 1 战略对齐 ============== -->
+<div class="section">
+  <h2 class="section-title">1 · 战略对齐</h2>
+  <div class="section-subtitle">为什么这件事必须现在做？</div>
+  <div class="section-body">
+
+    <h3>1.1 浏览器 0.4 主战场 · 大目标</h3>
+    <p>2026 H2 浏览器核心命题：<strong>从"看网页的工具"升级为"承接用户记忆与行为的 AI 入口"</strong>。AI 资产专项是这个升级的核心载体。</p>
+
+    <h3>1.2 AI 收藏夹的战略位</h3>
+    <div class="card blue">
+      <span class="label">📍 三个层次</span>
+      <ol style="padding-left:22px;">
+        <li><strong>近期价值</strong>：补齐浏览器"用户主动留痕"的能力空白，提升 PC 端 DAU 与停留时长</li>
+        <li><strong>中期价值</strong>：成为浏览器与元宝助手的<strong>共享记忆中枢</strong>——浏览器贡献场景化资产，元宝消费这些资产做个性化</li>
+        <li><strong>长期价值</strong>：在 Agent 时代抢占"用户记忆入口"——用户的工作流上下文 = 浏览器拥有 = AI 时代的核心资产</li>
+      </ol>
+    </div>
+
+<!-- ============== 章节 2 用户场景痛点 ============== -->
+<div class="section">
+  <h2 class="section-title">2 · 用户场景洞察 & 痛点</h2>
+  <div class="section-subtitle">基于 QB 历史调研 + 0618 用户行为分析</div>
+  <div class="section-body">
+
+    <h3>2.1 用户三大场景分布（PC 端）</h3>
+    <p>历史调研：QB PC 端约 <strong>90% 用户</strong>集中在以下三大场景：</p>
+    <table>
+      <thead><tr><th>场景</th><th>典型行为</th><th>资产沉淀痛点</th></tr></thead>
+      <tbody>
+        <tr><td><strong>信息收集</strong></td><td>看资讯、查资料、做研究、追内容</td><td>临时收藏太多、找不回来、用不起来</td></tr>
+        <tr><td><strong>资源获取</strong></td><td>下视频、下文件、找模板</td><td>下载完散落各处、复用率低</td></tr>
+        <tr><td><strong>文件&事务处理</strong></td><td>看文档、写报告、做表格</td><td>跨工作流的文件/网页/对话无法关联</td></tr>
+      </tbody>
+    </table>
+
+    <h3>2.2 阶段性资产 · 核心痛点</h3>
+    <div class="card red">
+      <span class="label">🎯 核心痛点</span>
+      <p><strong>用户因临时工作流（短期项目、研究任务、决策对比）产生的"阶段性资产"，浏览器目前承接极弱：</strong></p>
+      <ul>
+        <li>❌ <strong>不想全存书签</strong>：怕积累冗余、编辑成本高、找不回来</li>
+        <li>❌ <strong>但又怕丢失上下文</strong>：关闭浏览器 / 切换设备就忘了"我刚才在干嘛"</li>
+        <li>❌ <strong>用户主动收藏后，AI 用不起来</strong>：收藏只是"存"，没有"用"的闭环</li>
+        <li>❌ <strong>多模态资产无处放</strong>：网页、文件、图片、AI 对话 各自孤立</li>
+      </ul>
+    </div>
+
+    <h3>2.3 真实场景举例（讲给汉博/陈颖）</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="label">📌 场景 A · 买车决策</span>
+        <p style="font-size:13px;">用户花两周对比 5 款车：看了 30+ 网页、收了一些视频测评、和元宝聊过 2-3 次对比、下了几份报价单 PDF —— <strong>这些资产现在散落在书签 / 历史 / 下载 / 元宝聊天记录 4 个地方，决策时根本拼不起来</strong>。</p>
+      </div>
+      <div class="card">
+        <span class="label">📚 场景 B · 学习资料</span>
+        <p style="font-size:13px;">学生收集"机器学习入门"资料：知乎专栏 + GitHub 项目 + B 站课程 + PDF 论文 + 元宝梳理的笔记 —— <strong>下次想复习，需要去 4 个入口翻找</strong>。AI 收藏夹 = 一站式资产箱。</p>
+      </div>
+      <div class="card">
+        <span class="label">💼 场景 C · 跨端汇报</span>
+        <p style="font-size:13px;">用户白天在公司 PC 上整理了一组"行业研究"资料，晚上回家想用手机 / 平板继续看：<strong>书签同步可以，但行为层资产（停留时长、AI 对话、批注）丢失</strong>。AI 收藏夹 = 资产 + 行为同步。</p>
+      </div>
+      <div class="card">
+        <span class="label">🛍️ 场景 D · 临时清单</span>
+        <p style="font-size:13px;">用户买年货：30 个商品页 + 5 张比价截图 + 几篇评测 —— <strong>不想存书签污染收藏夹，又想保留到买完为止</strong>。AI 收藏夹 = 短周期临时存储 + 完成后一键归档/删除。</p>
+      </div>
+    </div>
+
+    <h3>2.4 用户分层（按使用强度）</h3>
+    <table>
+      <thead><tr><th>层</th><th>占比预估</th><th>使用模式</th><th>对 AI 收藏夹的需求</th></tr></thead>
+      <tbody>
+        <tr><td><strong>轻度</strong></td><td>~58%</td><td>每月收藏 1-10 条书签</td><td>低 → 主要是"快存"+ 减少认知负担</td></tr>
+        <tr><td><strong>黄金中度</strong> ⭐</td><td>~37%</td><td>11-100 条，有手动分类</td><td><strong>核心目标用户</strong> → AI 整理 + 多模态收纳 + 元宝调用</td></tr>
+        <tr><td><strong>重度</strong></td><td>~5%</td><td>100+ 条，文件夹层级深</td><td>极高 → 智能整理 + 资产搜索 + 跨设备同步</td></tr>
+      </tbody>
+    </table>
+    <p style="color:var(--text-secondary); font-size:12px;">数据来源：QB PC 书签量分布（2026-04 内部调研）</p>
+
+  </div>
+</div>
+
+<!-- ============== 章节 3 竞品分析 ============== -->
+<div class="section">
+  <h2 class="section-title">3 · 竞品分析</h2>
+  <div class="section-subtitle">类似形态产品对比 + 我们的差异化</div>
+  <div class="section-body">
+
+    <h3>3.1 直接对标产品</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>产品</th>
+          <th>形态</th>
+          <th>承载内容</th>
+          <th>分类逻辑</th>
+          <th>AI 能力</th>
+          <th>同步</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>微信 · 星标</strong></td>
+          <td>App 内私聊+收藏夹</td>
+          <td>文字/图片/链接/文件</td>
+          <td>主题（用户自创）</td>
+          <td>弱（基础搜索）</td>
+          <td>多端同步</td>
+        </tr>
+        <tr>
+          <td><strong>Edge · 集锦</strong></td>
+          <td>侧边栏</td>
+          <td>笔记 + 网页</td>
+          <td>用户自创集锦</td>
+          <td>无</td>
+          <td>多设备同步</td>
+        </tr>
+        <tr>
+          <td><strong>文件夹夹</strong></td>
+          <td>系统级悬浮</td>
+          <td>仅文件</td>
+          <td>文件夹 + 标签</td>
+          <td>无</td>
+          <td>有限</td>
+        </tr>
+        <tr>
+          <td><strong>Notion / 印象笔记</strong></td>
+          <td>独立 App</td>
+          <td>全模态</td>
+          <td>层级 + 数据库</td>
+          <td>近期补 AI</td>
+          <td>多端</td>
+        </tr>
+        <tr>
+          <td><strong>Arc Browser · Easel</strong></td>
+          <td>侧边栏 + 工作台</td>
+          <td>网页片段</td>
+          <td>空间（Space）</td>
+          <td>有 Arc Max</td>
+          <td>多设备</td>
+        </tr>
+        <tr class="hot-row" style="background:var(--highlight-yellow);">
+          <td><strong>QB AI 收藏夹</strong></td>
+          <td><strong>三栏工作台 + 悬浮球</strong></td>
+          <td><strong>全模态（含 AI 对话）</strong></td>
+          <td><strong>AI 智能分组 + 标签</strong></td>
+          <td><strong>元宝深度承接</strong></td>
+          <td>多端</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3.2 我们的 3 个差异化锚点</h3>
+    <div class="grid-3">
+      <div class="card green">
+        <span class="label">🥇 锚点 1</span>
+        <h4 style="color:var(--green); margin-top:0;">深度元宝整合</h4>
+        <p style="font-size:12px;">竞品 AI 能力多是"附加" → 我们 AI 收藏夹的资产 <strong>原生作为元宝助手的记忆库</strong>，问答时自动调用。这是 QB 独有的产品矩阵优势。</p>
+      </div>
+      <div class="card green">
+        <span class="label">🥇 锚点 2</span>
+        <h4 style="color:var(--green); margin-top:0;">AI 自动整理</h4>
+        <p style="font-size:12px;">竞品全靠用户手动建文件夹 / 打标 → 我们一键智能打标 + 智能分组（已与 vance 算法链路打通）。<strong>用户零分类成本</strong>。</p>
+      </div>
+      <div class="card green">
+        <span class="label">🥇 锚点 3</span>
+        <h4 style="color:var(--green); margin-top:0;">浏览器原生触手</h4>
+        <p style="font-size:12px;">竞品需要"切换 App / 复制粘贴"才能存东西 → 我们直接在浏览器内：<strong>悬浮球拖拽 / 划词右键 / 截图 / Ctrl+Space</strong>。零摩擦留痕。</p>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-title">💡 为什么用户会用我们而不用 Notion / Edge？</div>
+      <p style="font-size:13px;">Notion 是"独立工具"——要主动打开 / 切应用；Edge 集锦只能存网页；微信星标只能链上传。<strong>AI 收藏夹长在浏览器里，是用户日常浏览的"原生留痕通道"</strong>——做的是"顺手"，不是"专门"。</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============== 章节 4 产品定义 ============== -->
+<div class="section">
+  <h2 class="section-title">4 · 产品定义</h2>
+  <div class="section-subtitle">边界、形态、数据源</div>
+  <div class="section-body">
+
+    <h3>4.1 一句话定位（重申）</h3>
+    <div class="card blue">
+      <p style="font-size:15px; line-height:1.9;">AI 收藏夹 = 用户「场景化资产沉淀池」<br>—— 在 PC 浏览器内提供 <strong>主动收集 / AI 整理 / 元宝调用</strong> 三位一体的工作台 —— <br>承接 Agent 时代用户「记忆入口」的争夺战。</p>
+    </div>
+
+    <h3>4.2 三阵地边界（核心）</h3>
+    <p>AI 收藏夹与浏览器已有阵地的关系，必须严格区分：</p>
+    <div class="arena">
+      <div class="arena-box">
+        <div class="icon">📚</div>
+        <h5>书签管理器</h5>
+        <div class="desc">网页 URL 树状管理</div>
+        <div class="data">
+          <span><strong>承载</strong>：仅 URL</span>
+          <span><strong>关系</strong>：与 AI 收藏夹「书签 Tab」<strong>同一份数据</strong></span>
+          <span><strong>入口</strong>：完整保留</span>
+        </div>
+      </div>
+      <div class="arena-box center">
+        <div class="icon">🌟</div>
+        <h5>AI 收藏夹</h5>
+        <div class="desc">主动收集 + AI 整理 + 元宝承接</div>
+        <div class="data">
+          <span><strong>承载</strong>：全模态资产</span>
+          <span><strong>关系</strong>：主战场</span>
+          <span><strong>入口</strong>：地址栏 / 悬浮球 / 顶部栏</span>
+        </div>
+      </div>
+      <div class="arena-box">
+        <div class="icon">📁</div>
+        <h5>文件阵地（我的文件）</h5>
+        <div class="desc">用户下载文件管理</div>
+        <div class="data">
+          <span><strong>承载</strong>：用户下载的文件</span>
+          <span><strong>关系</strong>：<strong>不自动同步</strong>，需用户手动"加入 AI 收藏夹"晋升</span>
+          <span><strong>入口</strong>：完整保留</span>
+        </div>
+      </div>
+    </div>
+    <div class="alert warn">
+      <div class="alert-title">📌 关键设计原则</div>
+      <p style="font-size:13px;"><strong>「下载 ≠ 收藏」</strong>：用户下载文件是"我要这东西落本地"；用户收藏是"我觉得这东西有沉淀价值"。两件事不能混。这就是为什么文件阵地不自动同步到 AI 收藏夹。</p>
+    </div>
+
+    <h3>4.3 数据源清单（一期 4 类）</h3>
+    <table>
+      <thead><tr><th>#</th><th>数据源</th><th>来源动作</th><th>与原阵地关系</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><strong>书签</strong></td><td>地址栏 ⭐ / Ctrl+D / 右键收藏 / 划词收藏到书签</td><td>与书签管理器 <strong>双向同步</strong></td></tr>
+        <tr><td>2</td><td><strong>文件</strong></td><td>「文件阵地」内点"加入 AI 收藏夹" / 拖拽进 AI 收藏夹页面</td><td>引用方式存储，<strong>不自动同步</strong></td></tr>
+        <tr><td>3</td><td><strong>网页元素</strong></td><td>右键图片/视频 → "收藏到 AI 收藏夹" / 划词 → "收藏摘录"</td><td>独占</td></tr>
+        <tr><td>4</td><td><strong>AI 资产</strong></td><td>元宝助手对话内 → "沉淀此对话" / 用户保存常用 prompt</td><td>独占（依赖 Geoffrey 自己提单加按钮）</td></tr>
+      </tbody>
+    </table>
+    <div class="alert info">
+      <div class="alert-title">💪 关键资源优势</div>
+      <p style="font-size:13px;">"沉淀此对话"按钮 → 我有元宝助手内容权限可<strong>自己提单加</strong> → 不依赖元宝团队排期 → MVP 落地强杠杆。</p>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ============== 章节 5 核心功能 MVP ============== -->
+<div class="section">
+  <h2 class="section-title">5 · 核心功能设计（一期 MVP）</h2>
+  <div class="section-subtitle">工作台 + 快存 + 智能整理 + 元宝调用 四件套</div>
+  <div class="section-body">
+
+    <h3>5.1 主体形态：三栏工作台</h3>
+    <div class="workbench">
+      <div class="wb-left">
+        <div class="wb-section-label">左导航</div>
+        <div class="wb-list-item active">📌 全部</div>
+        <div class="wb-list-item">📅 最近添加</div>
+        <hr style="margin:8px 0; border:none; border-top:1px solid var(--border);">
+        <div class="wb-section-label">Tab</div>
+        <div class="wb-list-item">📚 书签 (套壳)</div>
+        <div class="wb-list-item">📁 文件</div>
+        <div class="wb-list-item">🖼 图片</div>
+        <div class="wb-list-item">🎬 视频</div>
+        <div class="wb-list-item">📄 文档</div>
+        <div class="wb-list-item">✂️ 摘录</div>
+        <div class="wb-list-item active">🤖 AI 对话</div>
+      </div>
+      <div class="wb-mid">
+        <div class="wb-section-label">中间内容流（默认列表 / 可切瀑布流）</div>
+        <div style="border:1px dashed var(--border); padding:8px; border-radius:6px; margin-bottom:6px;">📚 一篇文章 · 关于产品方法论</div>
+        <div style="border:1px dashed var(--border); padding:8px; border-radius:6px; margin-bottom:6px; background:var(--highlight-yellow);">🤖 元宝对话 · 5 款洗碗机对比</div>
+        <div style="border:1px dashed var(--border); padding:8px; border-radius:6px; margin-bottom:6px;">🖼 图片 · 设计灵感</div>
+        <div style="border:1px dashed var(--border); padding:8px; border-radius:6px;">📁 文件 · Q3 工作总结.pdf</div>
+      </div>
+      <div class="wb-right">
+        <div class="wb-section-label">右预览区</div>
+        <p style="font-size:11px;">选中后展示：</p>
+        <p style="font-size:11px;">• 内容预览<br>• 来源 URL<br>• 收藏时间<br>• AI 标签<br>• 快捷操作（问元宝 / 删 / 取消收藏）</p>
+      </div>
+    </div>
+
+    <h3>5.2 双视图切换：列表 / 瀑布流</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="label">📋 列表态（默认）</span>
+        <p style="font-size:13px;">高密度信息流，适合快速找东西。同时显示：标题 / 来源 / 时间 / AI 标签</p>
+      </div>
+      <div class="card">
+        <span class="label">🧱 瀑布流态</span>
+        <p style="font-size:13px;">视觉沉浸，适合"翻看图片/视频"模式。卡片式渲染，缩略图突出</p>
+      </div>
+    </div>
+    <p style="font-size:13px; color:var(--text-secondary);">用户最后选择的视图会被记忆（账号级持久化）。</p>
+
+    <h3>5.3 7 个 Tab 详解</h3>
+    <table>
+      <thead><tr><th style="width:14%">Tab</th><th>承载</th><th>关键说明</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>📚 书签</strong></td>
+          <td>网页 URL</td>
+          <td><strong>完全套壳现有书签管理器</strong>：树状结构 + 文件夹 + 拖拽 + 智能整理一键启动入口；列表/瀑布流双视图都有左侧树（可折叠）</td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>📁 文件</strong></td>
+          <td>用户从文件阵地"加入 AI 收藏夹"的文件</td>
+          <td>引用方式存储，原文件删除时显示"文件已被删除"提示</td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>🖼 图片</strong></td>
+          <td>网页右键收藏的图片 + 拖拽进来的本地图</td>
+          <td>支持预览大图 / 一键问元宝 / 复制链接</td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>🎬 视频</strong></td>
+          <td>网页嗅探后收藏的视频 / 视频片段</td>
+          <td>支持播放 / 时间戳标记 / 一键导出</td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>📄 文档</strong></td>
+          <td>专门收藏的 PDF/Word/PPT 等文档</td>
+          <td>支持 QB 文档查看器打开 + 提问元宝</td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr>
+          <td><strong>✂️ 摘录</strong></td>
+          <td>网页划词收藏的文字片段</td>
+          <td>保留原文 URL 和上下文，支持二次问元宝</td>
+          <td><span class="badge badge-mvp">MVP</span></td>
+        </tr>
+        <tr style="background:var(--highlight-yellow);">
+          <td><strong>🤖 AI 对话</strong></td>
+          <td>元宝助手对话沉淀 + 常用 Prompt 库</td>
+          <td><strong>核心差异化 Tab</strong>。元宝对话内"沉淀此对话"按钮触发；常用 Prompt 库支持收藏/分类/调用</td>
+          <td><span class="badge badge-key">MVP · 关键</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>5.4 快存悬浮球（轻量化留痕）</h3>
+    <div class="card">
+      <span class="label">🎯 设计目标</span>
+      <p style="font-size:13px;"><strong>降低留痕门槛 → 让用户"想存就存、不想想就存"</strong>，覆盖主动 + 被动全场景。</p>
+    </div>
+
+    <h4>5.4.1 触发与位置</h4>
+    <ul>
+      <li><strong>常驻位置</strong>：浏览器内右下角（默认） / 可调左下/顶部/侧边</li>
+      <li><strong>快捷键</strong>：Win <code>Ctrl + Space</code> / Mac <code>Cmd + Enter</code> 一键唤起</li>
+      <li><strong>鼠标行为</strong>：拖拽内容到悬浮球即存（默认 0s 触发，可调 0.3/0.5/0.7/1/3s）</li>
+    </ul>
+
+    <h4>5.4.2 支持的存储方式</h4>
+    <table>
+      <thead><tr><th>方式</th><th>对象</th><th>触发</th></tr></thead>
+      <tbody>
+        <tr><td>拖拽</td><td>文字/图片/网页/标签组/文件</td><td>拖到悬浮球即存</td></tr>
+        <tr><td>右键菜单</td><td>图片/视频/链接/选中文字</td><td>右键 → "收藏到 AI 收藏夹"</td></tr>
+        <tr><td>划词收藏</td><td>网页正文文字</td><td>选中文字后悬浮按钮一键存</td></tr>
+        <tr><td>截图</td><td>网页区域</td><td>调用 QB 截图工具 → 存入收藏夹</td></tr>
+        <tr><td>本地上传</td><td>从桌面拖文件</td><td>拖到 AI 收藏夹页面即存</td></tr>
+        <tr><td>地址栏 ⭐ / Ctrl+D</td><td>当前网页</td><td>原书签收藏路径，自动入库</td></tr>
+        <tr><td>元宝对话沉淀</td><td>对话记录 + 关键 Prompt</td><td>元宝助手对话 → "沉淀此对话"按钮</td></tr>
+      </tbody>
+    </table>
+
+    <h4>5.4.3 默认元数据（自动记录）</h4>
+    <ul>
+      <li>保存时间</li>
+      <li>来源 URL（如有）</li>
+      <li>页面标题（自动抓取）</li>
+      <li>缩略图（自动生成）</li>
+      <li>设备信息（PC / 移动）</li>
+    </ul>
+
+    <h3>5.5 智能整理 · 仅作用于书签 Tab</h3>
+    <div class="card blue">
+      <span class="label">🤖 工作流（已与 vance 算法链路打通）</span>
+      <ol style="padding-left:22px; margin-top:6px;">
+        <li>用户勾选要整理的书签范围（base 文件夹）</li>
+        <li>已抽取的网页内容 → 模型 → 生成 tag_list（智能打标）</li>
+        <li>tag_list + 用户 path 偏好 → 启发式分组（base 之下最多 4 层 = L1~L4）</li>
+        <li>预览结果 → 用户确认 → 落地</li>
+      </ol>
+    </div>
+    <div class="alert warn">
+      <div class="alert-title">⚠️ 重要约束（与工程已对齐）</div>
+      <ul style="font-size:13px;">
+        <li><strong>结果默认预览</strong>：不直接覆盖用户原结构，用户确认后才落地</li>
+        <li><strong>30 天回收 + 撤销</strong>：兜底误整理，可一键回滚</li>
+        <li><strong>单次上限 1000 条</strong>：超过分批处理</li>
+        <li><strong>用户原结构尊重</strong>：一期不做，二期接入 path 复用</li>
+      </ul>
+    </div>
+
+    <h3>5.6 AI 能力调用 · 全部走元宝助手</h3>
+    <div class="card green">
+      <span class="label">💡 设计哲学</span>
+      <p style="font-size:13px;"><strong>不自造 AI 能力</strong>——AI 收藏夹只负责"准备好资产"，AI 调用全部交给元宝助手承接：</p>
+      <ul style="font-size:13px;">
+        <li>✅ 复用元宝已有的全部能力（总结/对比/PPT/思维导图/订阅）</li>
+        <li>✅ 不重复造轮子，不和元宝产品打架</li>
+        <li>✅ AI 收藏夹的资产 → 自动成为元宝的记忆库</li>
+      </ul>
+    </div>
+    <h4>5.6.1 调用入口</h4>
+    <ul>
+      <li><strong>右键单条资产</strong> → "问元宝" / "总结" / "做PPT"</li>
+      <li><strong>多选 + 右键</strong> → "对比/合并问元宝"</li>
+      <li><strong>整组资产</strong>（如某个标签下全部）→ "整组发给元宝分析"</li>
+      <li><strong>反向</strong>：元宝助手内问"我之前收藏的洗碗机对比" → 自动调出 AI 收藏夹相关资产</li>
+    </ul>
+
+    <h3>5.7 用户路径 · 4 步闭环</h3>
+    <table>
+      <thead><tr><th style="width:12%">步骤</th><th>动作</th><th>关键体验</th></tr></thead>
+      <tbody>
+        <tr><td><strong>1. 标记</strong></td><td>悬浮球 / 右键 / 快捷键 / Ctrl+D</td><td>3 秒内完成，零摩擦</td></tr>
+        <tr><td><strong>2. 沉淀</strong></td><td>自动入 AI 收藏夹，AI 自动打标</td><td>无需手动分类</td></tr>
+        <tr><td><strong>3. 应用</strong></td><td>右键 / 多选 → 元宝助手承接</td><td>AI 一键生成总结/PPT</td></tr>
+        <tr><td><strong>4. 同步</strong></td><td>多端可见（移动端只读）</td><td>跨设备无缝衔接</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- ============== 章节 6 原子能力清单 ============== -->
+<div class="section">
+  <h2 class="section-title">6 · 原子能力清单</h2>
+  <div class="section-subtitle">技术只点到"需要哪些能力"，引用已有研发调研背书</div>
+  <div class="section-body">
+
+    <h3>6.1 一句话技术依赖（不深入实现）</h3>
+    <table>
+      <thead><tr><th style="width:22%">能力</th><th>用在哪</th><th>研发现状</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>网页正文抽取</strong></td>
+          <td>书签智能打标 / 摘录上下文恢复</td>
+          <td>D7 steven 调研中，ReaderLM-v2 已可用</td>
+        </tr>
+        <tr>
+          <td><strong>页面类型识别</strong></td>
+          <td>给资产自动打类型标（新闻/电商/工具/文档）</td>
+          <td>D4 damon 端模型 P0 清单</td>
+        </tr>
+        <tr>
+          <td><strong>本地语义索引</strong></td>
+          <td>AI 收藏夹的"自然语言搜书签"功能</td>
+          <td>D4 damon 端模型 P0 清单</td>
+        </tr>
+        <tr>
+          <td><strong>大模型分组聚类</strong></td>
+          <td>智能整理（书签 Tab 一键整理）</td>
+          <td>vance 算法链路一期已 ready</td>
+        </tr>
+        <tr>
+          <td><strong>书签管理器套壳</strong></td>
+          <td>书签 Tab</td>
+          <td>orange 工程对齐中</td>
+        </tr>
+        <tr>
+          <td><strong>悬浮球渲染层</strong></td>
+          <td>快存悬浮球</td>
+          <td>需新建工程能力（参考桌面整理悬浮球架构）</td>
+        </tr>
+        <tr>
+          <td><strong>跨设备同步</strong></td>
+          <td>多端已收藏可见</td>
+          <td>复用现有书签同步通道</td>
+        </tr>
+        <tr>
+          <td><strong>元宝对话沉淀</strong></td>
+          <td>AI 对话 Tab</td>
+          <td><strong>Geoffrey 自有权限提单加按钮</strong></td>
+        </tr>
+        <tr>
+          <td><strong>30 天回收站 + 撤销</strong></td>
+          <td>智能整理误整理兜底</td>
+          <td>orange 工程</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="alert info">
+      <div class="alert-title">📌 关键信息</div>
+      <p style="font-size:13px;">所有"需要新建的能力"在浏览器 12 篇研发调研里都有对应方向，<strong>不需要从零造</strong>。我已私聊 steven / damon / ricedeng，把"AI 收藏夹"列入他们的落地业务排期。</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============== 章节 7 用户教育 ============== -->
+<div class="section">
+  <h2 class="section-title">7 · 用户教育（轻量 A）</h2>
+  <div class="section-subtitle">创新功能必答题：用户怎么知道"这个东西能做啥"？</div>
+  <div class="section-body">
+
+    <h3>7.1 用户教育的核心难题</h3>
+    <div class="card red">
+      <span class="label">⚠️ 真问题</span>
+      <p style="font-size:13px;">AI 收藏夹是<strong>创新功能</strong>，用户没有现成心智可对标：</p>
+      <ul style="font-size:13px;">
+        <li>用户看到"AI 收藏夹"四个字 → 第一反应是"和书签收藏夹有啥区别？"</li>
+        <li>用户进入工作台 → 不知道悬浮球能拖拽 / 不知道能问元宝</li>
+        <li>用户不主动用 = 不知道价值 = DAU 起不来</li>
+      </ul>
+    </div>
+
+    <h3>7.2 一期用户教育策略 · 轻量 A</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="label">A1 · 首次进入引导</span>
+        <p style="font-size:13px;">用户首次打开 AI 收藏夹 → 5 步交互式 Tour：</p>
+        <ol style="font-size:12px; padding-left:20px;">
+          <li>这是你的资产工作台</li>
+          <li>左侧导航分类查找</li>
+          <li>试试拖拽这条文字到悬浮球（动手）</li>
+          <li>右键 → "问元宝"试试</li>
+          <li>恭喜，已经会用了！</li>
+        </ol>
+      </div>
+      <div class="card">
+        <span class="label">A2 · 入口处 Tooltip</span>
+        <p style="font-size:13px;">悬浮球 / 右键菜单 / 快捷键首次出现时，附带 1 句话提示：</p>
+        <ul style="font-size:12px; padding-left:20px;">
+          <li>悬浮球："拖东西到这里就能存"</li>
+          <li>右键："试试 AI 一键问元宝"</li>
+          <li>快捷键 (Ctrl+Space)："秒存任何东西"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="label">A3 · 帮助中心 + 案例展示卡</span>
+        <p style="font-size:13px;">在 AI 收藏夹工作台空状态时展示<strong>4 个案例卡</strong>：</p>
+        <ul style="font-size:12px; padding-left:20px;">
+          <li>📌 买车决策案例</li>
+          <li>📚 学习资料案例</li>
+          <li>💼 跨端汇报案例</li>
+          <li>🛍️ 临时清单案例</li>
+        </ul>
+        <p style="font-size:12px; color:var(--text-secondary);">用户点击 → 自动加载 demo 数据演示效果</p>
+      </div>
+      <div class="card">
+        <span class="label">A4 · 入口运营位</span>
+        <p style="font-size:13px;">浏览器首页卡片 / 地址栏星标 hover / 元宝助手内 → 加运营条："✨ 试试 AI 收藏夹，让你收藏的东西真正有用"</p>
+      </div>
+    </div>
+
+    <h3>7.3 后续教育策略（二期 / 三期）</h3>
+    <p style="font-size:13px;">本方案 MVP 仅做轻量 A。后续基于一期用户行为数据，再判断是否需要：</p>
+    <ul>
+      <li><strong>B 中度</strong>：视频教程 + 入门任务（如"完成首次收藏奖励"）</li>
+      <li><strong>C 重度</strong>：B 站 / 小红书 KOL 合作 + 用户社区运营</li>
+    </ul>
+    <p style="color:var(--text-secondary); font-size:12px;">→ 详见第 9 章路线图 / 第 12 章附录破圈策略。</p>
+
+  </div>
+</div>
+
+<!-- ============== 章节 8 副作用 & 风险 ============== -->
+<div class="section">
+  <h2 class="section-title">8 · 副作用 & 风险</h2>
+  <div class="section-subtitle">必须正面回答的"夺命问"</div>
+  <div class="section-body">
+
+    <h3>8.1 隐私风险</h3>
+    <div class="card red">
+      <span class="label">⚠️ 法务边界已对齐</span>
+      <p style="font-size:13px;">参考前期咨询法务结论：</p>
+      <ul style="font-size:13px;">
+        <li><strong>暂态资产</strong>（标签页、临时浏览）= 隐私程度低 = 用户手动触发即可整理，但需告知规则</li>
+        <li><strong>恒态资产</strong>（书签、历史、文件）= 隐私程度高 = <strong>需用户授权才能整理</strong>，可关闭授权退出</li>
+        <li><strong>本地优先</strong>：所有资产默认本地存储，云端同步需用户主动开启</li>
+      </ul>
+    </div>
+
+    <h3>8.2 用户认知负担</h3>
+    <div class="card">
+      <span class="label">⚠️ 风险</span>
+      <p style="font-size:13px;">7 个 Tab + 工作台 + 悬浮球 + 智能整理 + 元宝调用 = <strong>功能多 → 用户懵</strong></p>
+      <span class="label">✅ 缓解</span>
+      <ul style="font-size:13px;">
+        <li>首次进入引导（章节 7.2）</li>
+        <li>默认列表态（最低认知成本）</li>
+        <li>Tab 默认仅显示有内容的，空 Tab 不强行 push</li>
+        <li>"智能整理"需用户主动点，不自动触发</li>
+      </ul>
+    </div>
+
+    <h3>8.3 性能风险</h3>
+    <div class="card">
+      <span class="label">⚠️ 风险</span>
+      <p style="font-size:13px;">资产量大（千+条）时，工作台加载慢、智能整理耗时长、跨设备同步压力</p>
+      <span class="label">✅ 缓解</span>
+      <ul style="font-size:13px;">
+        <li>列表/瀑布流均使用虚拟滚动（按需渲染）</li>
+        <li>智能整理单次上限 1000 条，超过分批</li>
+        <li>同步走轻量化 diff 机制，复用现有书签同步链路</li>
+      </ul>
+    </div>
+
+    <h3>8.4 数据源耦合风险</h3>
+    <div class="card">
+      <span class="label">⚠️ 风险</span>
+      <p style="font-size:13px;">书签 Tab 与书签管理器/浏览器顶部书签栏三位一体 = <strong>一处改动可能影响三处</strong></p>
+      <span class="label">✅ 缓解</span>
+      <ul style="font-size:13px;">
+        <li>统一数据 Schema，三个入口都 read-write 同一份</li>
+        <li>测试覆盖：每个动作（增/删/改/移动）三处一致性自动校验</li>
+        <li>灰度策略：新功能先小流量验证</li>
+      </ul>
+    </div>
+
+    <h3>8.5 与友邻产品的边界风险</h3>
+    <div class="card">
+      <span class="label">⚠️ 风险</span>
+      <p style="font-size:13px;"><strong>桌面整理</strong>（summer/lakin 主导）也在做"主动收纳" = 边界可能模糊</p>
+      <span class="label">✅ 缓解</span>
+      <ul style="font-size:13px;">
+        <li>明确分工：桌面整理 = 系统层（OS 文件） / AI 收藏夹 = 浏览器内主动收藏</li>
+        <li>协同入口：桌面整理悬浮球 → "加入 AI 收藏夹"作为外部资产入口</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============== 章节 9 路线图 ============== -->
+<div class="section">
+  <h2 class="section-title">9 · 阶段路线图</h2>
+  <div class="section-subtitle">三期演进 · 一期立刻可启动</div>
+  <div class="section-body">
+
+    <div class="phase">
+      <div class="phase-col now">
+        <h5>🔥 一期 MVP · 立刻启动</h5>
+        <ul>
+          <li>三栏工作台 + 双视图</li>
+          <li>7 个 Tab（含 AI 对话）</li>
+          <li>快存悬浮球</li>
+          <li>智能打标 + 智能分组（书签 Tab）</li>
+          <li>元宝助手承接全部 AI 调用</li>
+          <li>多端同步（移动只读）</li>
+          <li>用户教育 · 轻量 A</li>
+          <li>30 天回收 + 撤销兜底</li>
+        </ul>
+      </div>
+      <div class="phase-col next">
+        <h5>🌟 二期 · 系统智能存证</h5>
+        <ul>
+          <li>资产关联图谱（同来源/同标签/相关历史）</li>
+          <li>系统智能存证（高价值行为自动标记）</li>
+          <li>重复访问推荐沉淀</li>
+          <li>用户原 path 复用（智能整理升级）</li>
+          <li>用户教育 · 中度 B（视频教程 + 入门任务）</li>
+        </ul>
+      </div>
+      <div class="phase-col future">
+        <h5>🚀 三期 · 场景反向赋能</h5>
+        <ul>
+          <li>地址栏匹配（搜索时优先展示收藏内容）</li>
+          <li>主动推荐（基于资产画像首页推荐）</li>
+          <li>千人千面个性化（订阅助手）</li>
+          <li>跨应用资产收集（系统级）</li>
+          <li>用户教育 · 重度 C（KOL + 社区运营）</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>9.1 一期 MVP 关键里程碑</h3>
+    <table>
+      <thead><tr><th>阶段</th><th>关键产出</th><th>负责</th></tr></thead>
+      <tbody>
+        <tr><td>方案对齐</td><td>本方案过汉博/陈颖 review</td><td>游杰</td></tr>
+        <tr><td>设计稿 final</td><td>三栏工作台 + 7 Tab 视觉稿</td><td>设计师</td></tr>
+        <tr><td>研发对齐</td><td>orange 工程实现 + vance 算法接入</td><td>游杰主导</td></tr>
+        <tr><td>评测准备</td><td>3000 条测评集 + 评测 agent ready</td><td>云光 + carbon</td></tr>
+        <tr><td>灰度上线</td><td>5%-10% 用户 1-2 周观察</td><td>全员</td></tr>
+        <tr><td>全量推广</td><td>用户教育 A 启动 + 数据看板</td><td>运营 + 游杰</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>
+
+<!-- ============== 章节 10 数据埋点 ============== -->
+<div class="section">
+  <h2 class="section-title">10 · 数据埋点 & 北极星指标</h2>
+  <div class="section-subtitle">怎么证明 AI 收藏夹真的有用？</div>
+  <div class="section-body">
+
+    <h3>10.1 北极星指标</h3>
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="num">DAU 渗透率</div>
+        <div class="name">PC 端浏览器活跃用户中，使用 AI 收藏夹的比例</div>
+      </div>
+      <div class="kpi">
+        <div class="num">人均收藏量</div>
+        <div class="name">活跃用户的月度新增收藏数</div>
+      </div>
+      <div class="kpi">
+        <div class="num">资产复访率</div>
+        <div class="name">收藏后 7 天内被复访 / 调用的资产占比</div>
+      </div>
+      <div class="kpi">
+        <div class="num">元宝调用率</div>
+        <div class="name">资产被发送给元宝助手的次数 / 总收藏数</div>
+      </div>
+    </div>
+
+    <h3>10.2 关键漏斗 & 行为埋点</h3>
+    <table>
+      <thead><tr><th>阶段</th><th>埋点</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td>入口</td><td>悬浮球展现/点击 / 地址栏星标 / 右键 / Ctrl+Space</td><td>哪个入口最有效</td></tr>
+        <tr><td>标记（收藏）</td><td>各种存储方式触发量 + 内容类型分布</td><td>用户实际收什么</td></tr>
+        <tr><td>沉淀</td><td>智能打标准确率 / 智能分组用户接受率</td><td>AI 整理效果</td></tr>
+        <tr><td>应用</td><td>右键问元宝触发率 / 多选发送元宝率 / 资产复访率</td><td>资产价值兑现</td></tr>
+        <tr><td>同步</td><td>跨设备访问率 / 多端编辑冲突率</td><td>同步链路健康度</td></tr>
+        <tr><td>教育</td><td>首次引导完成率 / Tooltip 点击率 / 案例卡使用率</td><td>用户教育有效性</td></tr>
+      </tbody>
+    </table>
+
+    <h3>10.3 早期成功定义（一期上线后 3 个月）</h3>
+    <div class="card green">
+      <span class="label">✅ 北极星早期门槛</span>
+      <ul style="font-size:13px;">
+        <li>DAU 渗透率 ≥ 10%</li>
+        <li>活跃用户月度新增 ≥ 20 条资产</li>
+        <li>7 天复访率 ≥ 30%</li>
+        <li>元宝调用率 ≥ 15%（含跨产品矩阵价值兑现）</li>
+      </ul>
+      <p style="font-size:12px; color:var(--text-secondary);">达不到这些 → 触发"是不是产品定义错了"的复盘，不是单纯优化。</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============== 附录 A 竞品速览 ============== -->
+<div class="section">
+  <h2 class="section-title">附录 A · 类似形态产品速览</h2>
+  <div class="section-body">
+
+    <h3>A.1 已对标的 5 款产品</h3>
+    <table>
+      <thead><tr><th>产品</th><th>启发我们</th><th>差异化</th></tr></thead>
+      <tbody>
+        <tr><td>微信 · 星标</td><td>"收藏后能复用"是核心</td><td>我们多模态、有 AI 整理</td></tr>
+        <tr><td>Edge · 集锦</td><td>笔记+网页混排，集锦概念</td><td>我们更重视全模态</td></tr>
+        <tr><td>文件夹夹</td><td>系统级悬浮，触手轻</td><td>我们长在浏览器，AI 加持</td></tr>
+        <tr><td>Notion / 印象笔记</td><td>资产数据库化</td><td>我们不强调"独立 App"，用户零迁移成本</td></tr>
+        <tr><td>Arc · Easel</td><td>侧边栏工作台体验</td><td>我们有元宝深度承接，国内场景更适配</td></tr>
+      </tbody>
+    </table>
+
+    <h3>A.2 间接借鉴</h3>
+    <ul>
+      <li><strong>ChatGPT Atlas</strong>：浏览器记忆 + RAG 调用 → 我们的"元宝调用收藏夹资产"思路与之类似</li>
+      <li><strong>桌面整理（summer/lakin）</strong>：QB 内部友邻产品 → 协同关系，不重叠</li>
+    </ul>
+
+  </div>
+</div>
+
+<!-- ============== 附录 B 破圈策略 ============== -->
+<div class="section">
+  <h2 class="section-title">附录 B · 破圈策略（简提）</h2>
+  <div class="section-subtitle">创新功能必须破圈才有用户增量</div>
+  <div class="section-body">
+
+    <h3>B.1 内部增长（默认）</h3>
+    <p style="font-size:13px;">QB 已有 4 亿 PC 月活，先做<strong>内部渗透</strong>：</p>
+    <ul>
+      <li>地址栏星标 hover 引流</li>
+      <li>书签管理器入口加运营条引流</li>
+      <li>元宝助手回答时反向推荐"看看你之前收藏的"</li>
+      <li>首页文件卡片加 AI 收藏夹运营位</li>
+    </ul>
+
+    <h3>B.2 外部破圈（重要 · 二期 / 三期推进）</h3>
+    <div class="grid-2">
+      <div class="card">
+        <span class="label">📺 B 站</span>
+        <p style="font-size:13px;">搜"如何整理 1000+ 书签 / 收藏夹分类技巧 / 学习资料管理"等高搜索量话题，找博主合作 / QB 自营号产出。视频结尾导流 AI 收藏夹。</p>
+        <p style="font-size:12px; color:var(--text-secondary);">参考桌面整理 summer 方案的 B 站引流路径。</p>
+      </div>
+      <div class="card">
+        <span class="label">📕 小红书</span>
+        <p style="font-size:13px;">面向"白领 / 学生 / 知识工作者"群体，KOL 合作软种草。话题方向：</p>
+        <ul style="font-size:12px; padding-left:20px;">
+          <li>#我的资料库分享</li>
+          <li>#学习资料怎么管</li>
+          <li>#高效办公小技巧</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert info">
+      <div class="alert-title">📌 提醒</div>
+      <p style="font-size:13px;">破圈策略不是 MVP 必做，但是<strong>方案中必须呈现，让汉博/陈颖看到完整的增长打算</strong>。一期默认走"内部增长"，外部破圈在用户教育验证后再启动（二期/三期）。</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- CLOSING -->
+<div class="closing">
+  <h3>🦞 一句话总结</h3>
+  <p>AI 收藏夹 = QB 在 Agent 时代的<strong>用户记忆入口</strong>地基。<br>主动收集 + AI 整理 + 元宝承接 三位一体，<br>为浏览器和元宝矩阵贡献<strong>共享记忆系统</strong>的核心数据资产。</p>
+  <p style="margin-top:14px;"><strong>一期 MVP 立刻可启动</strong>——研发能力都已就位，元宝权限我自有，等你拍板方向。</p>
+</div>
+
+</div>
+</body>
+</html>
