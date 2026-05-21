@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 收藏夹整体产品方案 · MVP v1.0</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary: #1a365d;
+  --primary-light: #2d4f7c;
+  --primary-deep: #102849;
+  --accent: #c53030;
+  --gold: #d69e2e;
+  --green: #38a169;
+  --bg: #f5f7fa;
+  --card: #ffffff;
+  --text: #1a365d;
+  --text-secondary: #4a5568;
+  --border: #e2e8f0;
+  --highlight-yellow: #fef3c7;
+  --highlight-red: #fff5f5;
+  --highlight-green: #f0fff4;
+  --highlight-blue: #ebf8ff;
+}
+html, body {
+  height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #0a1628;
+  color: var(--text);
+  overflow: hidden;
+}
+
+/* === DECK CONTAINER === */
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* === SLIDE === */
+.slide {
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  padding: 50px 70px 80px;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(40px);
+  transition: opacity 0.45s ease, transform 0.45s ease, visibility 0s 0.45s;
+}
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+  transition: opacity 0.45s ease, transform 0.45s ease, visibility 0s;
+}
+.slide.prev {
+  transform: translateX(-40px);
+}
+
+.slide-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+/* === TITLE BAR === */
+.slide-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 3px solid var(--primary);
+}
+.slide-num {
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+.slide-header h1 {
+  font-size: 30px;
+  color: var(--primary);
+  font-weight: 700;
+}
+.slide-header .sub {
+  margin-left: auto;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+/* === COVER SLIDE === */
+.cover {
+  background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 50%, var(--primary-light) 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  padding: 60px;
+}
+.cover .lobster { font-size: 64px; margin-bottom: 20px; }
+.cover h1 {
+  font-size: 56px;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+  font-weight: 800;
+}
+.cover .version {
+  display: inline-block;
+  padding: 6px 16px;
+  background: rgba(214, 158, 46, 0.25);
+  border: 1px solid var(--gold);
+  border-radius: 18px;
+  font-size: 13px;
+  color: var(--highlight-yellow);
+  margin-bottom: 36px;
+  letter-spacing: 0.5px;
+}
+.cover .one-liner {
+  background: rgba(255,255,255,0.08);
+  border-left: 5px solid var(--gold);
+  border-radius: 8px;
+  padding: 24px 32px;
+  font-size: 19px;
+  line-height: 1.9;
+  max-width: 800px;
+  text-align: left;
+}
+.cover .one-liner strong { color: var(--highlight-yellow); }
+.cover .meta {
+  margin-top: 32px;
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+/* === COMMON BLOCKS === */
+h2 { font-size: 22px; color: var(--primary); margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px dashed var(--border); }
+h3 { font-size: 17px; color: var(--accent); margin: 14px 0 8px; }
+p { font-size: 15px; line-height: 1.8; color: var(--text); margin-bottom: 8px; }
+ul, ol { padding-left: 24px; margin-bottom: 10px; }
+li { font-size: 15px; line-height: 1.8; margin-bottom: 4px; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin: 10px 0 16px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+th {
+  background: var(--primary);
+  color: white;
+  text-align: left;
+  padding: 12px 14px;
+  font-weight: 600;
+  font-size: 13px;
+}
+td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  font-size: 14px;
+}
+tr:nth-child(even) td { background: #fafbfc; }
+tr:last-child td { border-bottom: none; }
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin: 12px 0;
+  border-left: 5px solid var(--gold);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.card.green { border-left-color: var(--green); background: var(--highlight-green); }
+.card.red { border-left-color: var(--accent); background: var(--highlight-red); }
+.card.blue { border-left-color: var(--primary); background: var(--highlight-blue); }
+.card.yellow { border-left-color: var(--gold); background: var(--highlight-yellow); }
+.card .label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.card.green .label { color: var(--green); }
+.card.blue .label { color: var(--primary); }
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+.badge-mvp { background: #fef3c7; color: #92400e; }
+.badge-key { background: #fbd38d; color: #7b341e; font-weight: 700; }
+.badge-p2 { background: #e2e8f0; color: #4a5568; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+/* === ARENA === */
+.arena {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1fr;
+  gap: 14px;
+  margin: 16px 0;
+  align-items: stretch;
+}
+.arena-box {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px;
+  background: white;
+  text-align: center;
+}
+.arena-box .icon { font-size: 32px; margin-bottom: 6px; }
+.arena-box h5 { font-size: 16px; margin-bottom: 6px; color: var(--primary); }
+.arena-box .desc { font-size: 12px; color: var(--text-secondary); margin-bottom: 10px; }
+.arena-box .data {
+  text-align: left;
+  font-size: 12px;
+  background: var(--bg);
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+.arena-box .data div { padding: 2px 0; }
+.arena-box.center {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #fff8e1 0%, var(--highlight-yellow) 100%);
+  transform: scale(1.04);
+  box-shadow: 0 4px 16px rgba(214, 158, 46, 0.18);
+}
+
+/* === WORKBENCH === */
+.workbench {
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  gap: 0;
+  height: 360px;
+  border: 2px solid var(--primary);
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 12px 0;
+  font-size: 13px;
+  background: white;
+  box-shadow: 0 4px 20px rgba(26, 54, 93, 0.12);
+}
+.wb-left { background: #f7fafc; padding: 14px; border-right: 1px solid var(--border); overflow-y: auto; }
+.wb-mid { padding: 14px; background: white; border-right: 1px solid var(--border); overflow-y: auto; }
+.wb-right { padding: 14px; background: var(--highlight-blue); overflow-y: auto; }
+.wb-section-label { font-weight: 700; color: var(--primary); margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+.wb-list-item { padding: 5px 0; color: var(--text-secondary); font-size: 13px; }
+.wb-list-item.active { color: var(--accent); font-weight: 600; background: var(--highlight-red); padding-left: 6px; border-radius: 4px; }
+.wb-card-item {
+  border: 1px dashed var(--border);
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-bottom: 6px;
+  font-size: 13px;
+}
+.wb-card-item.hl { background: var(--highlight-yellow); border-color: var(--gold); }
+
+/* === KPI === */
+.kpi-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; margin: 10px 0 16px; }
+.kpi {
+  padding: 16px 18px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  border-top: 3px solid var(--gold);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.kpi .num { font-size: 18px; font-weight: 700; color: var(--accent); margin-bottom: 4px; }
+.kpi .name { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+
+/* === PHASE === */
+.phase {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  margin: 10px 0 14px;
+}
+.phase-col {
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 18px;
+  background: white;
+}
+.phase-col.now { border-color: var(--accent); background: var(--highlight-red); }
+.phase-col.next { border-color: var(--gold); background: var(--highlight-yellow); }
+.phase-col.future { border-color: var(--primary); background: var(--highlight-blue); }
+.phase-col h5 { font-size: 16px; margin-bottom: 10px; color: var(--primary); }
+.phase-col ul { padding-left: 20px; }
+.phase-col li { font-size: 13px; line-height: 1.7; }
+
+/* === ALERTS === */
+.alert {
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin: 10px 0;
+  font-size: 14px;
+  border-left: 4px solid var(--accent);
+  background: var(--highlight-red);
+  color: #742a2a;
+}
+.alert.info { border-left-color: var(--primary); background: var(--highlight-blue); color: #2c5282; }
+.alert.warn { border-left-color: var(--gold); background: var(--highlight-yellow); color: #744210; }
+.alert.success { border-left-color: var(--green); background: var(--highlight-green); color: #22543d; }
+.alert .alert-title { font-weight: 700; margin-bottom: 4px; font-size: 13px; }
+
+/* === FINAL CARD === */
+.final-card {
+  background: linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 100%);
+  color: white;
+  border-radius: 14px;
+  padding: 36px 44px;
+  text-align: center;
+  margin: 24px 0;
+}
+.final-card h2 {
+  color: white;
+  border: none;
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+.final-card p { font-size: 17px; line-height: 2; color: white; }
+.final-card strong { color: var(--highlight-yellow); }
+
+/* === NAV CONTROLS === */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(10, 22, 40, 0.92);
+  backdrop-filter: blur(8px);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.nav-btn {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.nav-btn:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.page-indicator {
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  font-feature-settings: 'tnum';
+}
+.page-indicator .current { color: var(--gold); font-size: 16px; font-weight: 700; }
+
+/* === PROGRESS BAR === */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), var(--accent));
+  z-index: 101;
+  transition: width 0.45s ease;
+}
+
+/* === SLIDE TITLE BADGE === */
+.slide-title-badge {
+  position: fixed;
+  top: 16px;
+  right: 24px;
+  background: rgba(10, 22, 40, 0.85);
+  color: white;
+  padding: 6px 14px;
+  border-radius: 14px;
+  font-size: 12px;
+  z-index: 99;
+  backdrop-filter: blur(6px);
+}
+
+/* === SECTION TAG === */
+.section-tag {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+
+/* === HOVER ROW === */
+tr.hot-row { background: var(--highlight-yellow) !important; font-weight: 600; }
+
+/* === SCENE GRID === */
+.scene-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 12px 0;
+}
+.scene {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 18px;
+  border-top: 3px solid var(--gold);
+}
+.scene .icon-name { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 6px; }
+.scene .body { font-size: 13px; line-height: 1.7; color: var(--text); }
+.scene .body strong { color: var(--accent); }
+
+/* === TAB ROW === */
+.tab-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr 80px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.tab-row.hl { background: var(--highlight-yellow); border-radius: 6px; font-weight: 600; }
+.tab-row .ico { font-size: 14px; color: var(--primary); font-weight: 700; }
+
+/* === SMALL HINT === */
+.hint { font-size: 12px; color: var(--text-secondary); font-style: italic; }
+
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar" style="width: 0%"></div>
+<div class="slide-title-badge" id="slideBadge">AI 收藏夹方案 v1.0</div>
+
+<div class="deck" id="deck">
+  <!-- SLIDE 1 · COVER -->
+  <div class="slide cover active" data-title="封面">
+    <div class="lobster">🦞</div>
+    <h1>AI 收藏夹整体产品方案</h1>
+    <div class="version">MVP v1.0 · 2026-05-21</div>
+    <div class="one-liner">
+      <strong>一句话定位</strong>：AI 收藏夹 = 用户「场景化资产沉淀池」<br>
+      —— <strong>主动收集 + AI 整理 + 元宝调用</strong> 三位一体 ——<br>
+      承接 Agent 时代用户「记忆入口」的争夺战
+    </div>
+    <div class="meta">QQ 浏览器 · AI 资产专项 · 游杰</div>
+  </div>
+
+  <!-- SLIDE 2 · 战略对齐 -->
+  <div class="slide" data-title="战略对齐">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">02</span>
+        <h1>战略对齐</h1>
+        <span class="sub">为什么这件事必须现在做</span>
+      </div>
+
+      <h2>0.4 主战场 · 大目标</h2>
+      <p>2026 H2 浏览器核心命题：<strong>从"看网页的工具"升级为"承接用户记忆与行为的 AI 入口"</strong>。AI 资产专项是这个升级的核心载体。</p>
+
+      <h2>AI 收藏夹的战略价值 · 三层</h2>
+      <div class="grid-3">
+        <div class="card red">
+          <span class="label">📍 近期</span>
+          <p style="font-size:14px;">补齐浏览器"用户主动留痕"的能力空白，提升 PC 端 DAU 与停留时长。</p>
+        </div>
+        <div class="card yellow">
+          <span class="label">🌟 中期</span>
+          <p style="font-size:14px;">成为浏览器与元宝助手的<strong>共享记忆中枢</strong>——浏览器贡献场景化资产，元宝消费这些资产做个性化。</p>
+        </div>
+        <div class="card blue">
+          <span class="label">🚀 长期</span>
+          <p style="font-size:14px;">在 Agent 时代抢占"用户记忆入口"——用户的工作流上下文 = 浏览器拥有 = AI 时代的核心资产。</p>
+        </div>
+      </div>
+
+      <h2>与上游产品矩阵的关系</h2>
+      <table>
+        <thead><tr><th style="width:22%">产品</th><th>关系</th><th style="width:30%">价值流向</th></tr></thead>
+        <tbody>
+          <tr><td><strong>元宝助手</strong></td><td>AI 收藏夹是元宝的"记忆库"，用户在浏览器收藏的资产 → 元宝问答时自动调用</td><td>双向：贡献 / 调用</td></tr>
+          <tr><td><strong>书签管理器</strong></td><td>AI 收藏夹「书签 Tab」完全套壳 — 三位一体（AI 收藏夹 / 浏览器顶部书签栏 / 旧书签管理器）</td><td>同一份数据，双视图</td></tr>
+          <tr><td><strong>文件阵地</strong></td><td>不自动同步 — 用户在文件阵地手动点"加入 AI 收藏夹"完成精选</td><td>异源，单向晋升</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- SLIDE 3 · 用户场景痛点 -->
+  <div class="slide" data-title="用户场景痛点">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">03</span>
+        <h1>用户场景洞察 &amp; 核心痛点</h1>
+        <span class="sub">基于 QB 历史调研 + 0618 用户行为分析</span>
+      </div>
+
+      <h2>PC 端用户三大场景分布（约 90%）</h2>
+      <table>
+        <thead><tr><th style="width:18%">场景</th><th>典型行为</th><th style="width:38%">资产沉淀痛点</th></tr></thead>
+        <tbody>
+          <tr><td><strong>信息收集</strong></td><td>看资讯、查资料、做研究、追内容</td><td>临时收藏太多 / 找不回来 / 用不起来</td></tr>
+          <tr><td><strong>资源获取</strong></td><td>下视频、下文件、找模板</td><td>下载完散落各处，复用率低</td></tr>
+          <tr><td><strong>文件 &amp; 事务处理</strong></td><td>看文档、写报告、做表格</td><td>跨工作流的文件 / 网页 / 对话无法关联</td></tr>
+        </tbody>
+      </table>
+
+      <h2>阶段性资产 · 4 大痛点</h2>
+      <div class="card red">
+        <ul style="margin-bottom:0;">
+          <li>❌ <strong>不想全存书签</strong>：怕积累冗余、编辑成本高、找不回来</li>
+          <li>❌ <strong>但又怕丢失上下文</strong>：关闭浏览器/切换设备就忘了"我刚才在干嘛"</li>
+          <li>❌ <strong>用户主动收藏后，AI 用不起来</strong>：收藏只是"存"，没有"用"的闭环</li>
+          <li>❌ <strong>多模态资产无处放</strong>：网页、文件、图片、AI 对话各自孤立</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4 · 真实场景案例 + 用户分层 -->
+  <div class="slide" data-title="场景案例 + 用户分层">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">04</span>
+        <h1>真实场景案例 &amp; 用户分层</h1>
+        <span class="sub">讲清楚"谁会用 / 怎么用"</span>
+      </div>
+
+      <h2>4 个真实场景案例</h2>
+      <div class="scene-grid">
+        <div class="scene"><div class="icon-name">📌 场景 A · 买车决策</div><div class="body">用户花两周对比 5 款车：30+ 网页 + 视频测评 + 元宝聊过对比 + 报价单 PDF —— <strong>这些资产现在散落 4 个地方，决策时根本拼不起来</strong>。</div></div>
+        <div class="scene"><div class="icon-name">📚 场景 B · 学习资料</div><div class="body">学生收集"机器学习入门"：知乎 + GitHub + B 站 + PDF 论文 + 元宝笔记 —— <strong>下次复习要去 4 个入口翻找</strong>。AI 收藏夹 = 一站式资产箱。</div></div>
+        <div class="scene"><div class="icon-name">💼 场景 C · 跨端汇报</div><div class="body">白天公司 PC 整理"行业研究"，晚上回家用手机继续 —— <strong>书签同步可以，但行为层资产（停留时长 / AI 对话 / 批注）丢失</strong>。</div></div>
+        <div class="scene"><div class="icon-name">🛍️ 场景 D · 临时清单</div><div class="body">用户买年货：30 商品页 + 比价截图 + 评测 —— <strong>不想存书签污染收藏夹，又想保留到买完为止</strong>。AI 收藏夹 = 短周期临存。</div></div>
+      </div>
+
+      <h2>用户分层（按使用强度）· 黄金中度是核心目标</h2>
+      <table>
+        <thead><tr><th>层</th><th style="width:14%">占比</th><th>使用模式</th><th>对 AI 收藏夹的需求</th></tr></thead>
+        <tbody>
+          <tr><td><strong>轻度</strong></td><td>~58%</td><td>每月收藏 1-10 条</td><td>低 → 主要是"快存" + 减少认知负担</td></tr>
+          <tr class="hot-row"><td><strong>黄金中度 ⭐</strong></td><td>~37%</td><td>11-100 条，有手动分类</td><td><strong>核心目标用户</strong> → AI 整理 + 多模态收纳 + 元宝调用</td></tr>
+          <tr><td><strong>重度</strong></td><td>~5%</td><td>100+ 条，文件夹层级深</td><td>极高 → 智能整理 + 资产搜索 + 跨设备同步</td></tr>
+        </tbody>
+      </table>
+      <p class="hint">数据来源：QB PC 书签量分布（2026-04 内部调研）</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 5 · 竞品分析 -->
+  <div class="slide" data-title="竞品分析">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">05</span>
+        <h1>竞品分析</h1>
+        <span class="sub">类似形态产品对比 + 我们的差异化</span>
+      </div>
+
+      <table>
+        <thead><tr><th>产品</th><th>形态</th><th>承载</th><th>分类逻辑</th><th>AI 能力</th><th>同步</th></tr></thead>
+        <tbody>
+          <tr><td><strong>微信 · 星标</strong></td><td>App 内</td><td>文/图/链/文件</td><td>主题（用户自创）</td><td>弱（搜索）</td><td>多端</td></tr>
+          <tr><td><strong>Edge · 集锦</strong></td><td>侧边栏</td><td>笔记 + 网页</td><td>用户自创集锦</td><td>无</td><td>多设备</td></tr>
+          <tr><td><strong>文件夹夹</strong></td><td>系统级悬浮</td><td>仅文件</td><td>文件夹 + 标签</td><td>无</td><td>有限</td></tr>
+          <tr><td><strong>Notion / 印象</strong></td><td>独立 App</td><td>全模态</td><td>层级 + 数据库</td><td>近期补 AI</td><td>多端</td></tr>
+          <tr><td><strong>Arc · Easel</strong></td><td>侧栏 + 工作台</td><td>网页片段</td><td>空间（Space）</td><td>有 Arc Max</td><td>多设备</td></tr>
+          <tr class="hot-row"><td><strong>QB AI 收藏夹</strong></td><td><strong>三栏工作台 + 悬浮球</strong></td><td><strong>全模态（含 AI 对话）</strong></td><td><strong>AI 智能分组 + 标签</strong></td><td><strong>元宝深度承接</strong></td><td>多端</td></tr>
+        </tbody>
+      </table>
+
+      <h2>我们的 3 个差异化锚点</h2>
+      <div class="grid-3">
+        <div class="card green"><span class="label">🥇 锚点 1</span><h3 style="color:var(--green); margin-top:0;">深度元宝整合</h3><p style="font-size:13px;">AI 收藏夹的资产 <strong>原生作为元宝助手的记忆库</strong>，问答时自动调用。QB 独有产品矩阵优势。</p></div>
+        <div class="card green"><span class="label">🥇 锚点 2</span><h3 style="color:var(--green); margin-top:0;">AI 自动整理</h3><p style="font-size:13px;">一键智能打标 + 智能分组（已与 vance 算法链路打通）。<strong>用户零分类成本</strong>。</p></div>
+        <div class="card green"><span class="label">🥇 锚点 3</span><h3 style="color:var(--green); margin-top:0;">浏览器原生触手</h3><p style="font-size:13px;">直接在浏览器内：<strong>悬浮球拖拽 / 划词右键 / 截图 / Ctrl+Space</strong>。零摩擦留痕。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6 · 产品定义 + 三阵地 -->
+  <div class="slide" data-title="产品定义 · 三阵地">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">06</span>
+        <h1>产品定义 · 三阵地边界</h1>
+        <span class="sub">边界、形态、定位</span>
+      </div>
+
+      <div class="card blue" style="text-align:center;">
+        <p style="font-size:18px; line-height:2;">AI 收藏夹 = 用户「场景化资产沉淀池」<br>—— 在 PC 浏览器内提供 <strong>主动收集 / AI 整理 / 元宝调用</strong> 三位一体的工作台 ——<br>承接 Agent 时代用户「记忆入口」的争夺战</p>
+      </div>
+
+      <h2>三阵地边界（核心 · 必须严格区分）</h2>
+      <div class="arena">
+        <div class="arena-box">
+          <div class="icon">📚</div>
+          <h5>书签管理器</h5>
+          <div class="desc">网页 URL 树状管理</div>
+          <div class="data">
+            <div><strong>承载</strong>：仅 URL</div>
+            <div><strong>关系</strong>：与「书签 Tab」<strong>同一份数据</strong></div>
+            <div><strong>入口</strong>：完整保留</div>
+          </div>
+        </div>
+        <div class="arena-box center">
+          <div class="icon">🌟</div>
+          <h5>AI 收藏夹</h5>
+          <div class="desc">主动收集 + AI 整理 + 元宝承接</div>
+          <div class="data">
+            <div><strong>承载</strong>：全模态资产</div>
+            <div><strong>关系</strong>：主战场</div>
+            <div><strong>入口</strong>：地址栏 / 悬浮球 / 顶部</div>
+          </div>
+        </div>
+        <div class="arena-box">
+          <div class="icon">📁</div>
+          <h5>文件阵地</h5>
+          <div class="desc">用户下载文件管理</div>
+          <div class="data">
+            <div><strong>承载</strong>：用户下载的文件</div>
+            <div><strong>关系</strong>：<strong>不自动同步</strong>，手动晋升</div>
+            <div><strong>入口</strong>：完整保留</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert warn">
+        <div class="alert-title">📌 关键设计原则</div>
+        <strong>「下载 ≠ 收藏」</strong>：用户下载文件是"我要这东西落本地"；用户收藏是"我觉得这东西有沉淀价值"。两件事不能混。
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7 · 数据源 -->
+  <div class="slide" data-title="数据源">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">07</span>
+        <h1>数据源清单（一期 4 类）</h1>
+        <span class="sub">从哪进 / 怎么进</span>
+      </div>
+
+      <table>
+        <thead><tr><th style="width:6%">#</th><th style="width:18%">数据源</th><th>来源动作</th><th style="width:24%">与原阵地关系</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><strong>📚 书签</strong></td><td>地址栏 ⭐ / Ctrl+D / 右键收藏 / 划词收藏到书签</td><td>与书签管理器 <strong>双向同步</strong></td></tr>
+          <tr><td>2</td><td><strong>📁 文件</strong></td><td>「文件阵地」内点"加入 AI 收藏夹" / 拖拽进 AI 收藏夹页面</td><td>引用方式存储，<strong>不自动同步</strong></td></tr>
+          <tr><td>3</td><td><strong>🖼 网页元素</strong></td><td>右键图片/视频 → "收藏到 AI 收藏夹" / 划词 → "收藏摘录"</td><td>独占</td></tr>
+          <tr><td>4</td><td><strong>🤖 AI 资产</strong></td><td>元宝助手对话内 → "沉淀此对话" / 用户保存常用 prompt</td><td>独占</td></tr>
+        </tbody>
+      </table>
+
+      <div class="alert success">
+        <div class="alert-title">💪 关键资源优势</div>
+        "沉淀此对话"按钮 → 我有元宝助手内容权限可<strong>自己提单加</strong> → 不依赖元宝团队排期 → MVP 落地强杠杆。
+      </div>
+
+      <h2>用户路径 · 4 步闭环</h2>
+      <div class="grid-4">
+        <div class="card"><span class="label">1️⃣ 标记</span><p style="font-size:13px;">悬浮球 / 右键 / 快捷键 / Ctrl+D · 3 秒完成</p></div>
+        <div class="card"><span class="label">2️⃣ 沉淀</span><p style="font-size:13px;">自动入收藏夹，AI 自动打标 · 无需手动分类</p></div>
+        <div class="card"><span class="label">3️⃣ 应用</span><p style="font-size:13px;">右键 / 多选 → 元宝承接 · 一键总结/PPT</p></div>
+        <div class="card"><span class="label">4️⃣ 同步</span><p style="font-size:13px;">多端可见（移动端只读）· 跨设备无缝</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8 · 三栏工作台 -->
+  <div class="slide" data-title="工作台形态">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">08</span>
+        <h1>核心形态 · 三栏工作台</h1>
+        <span class="sub">默认列表 · 可切瀑布流 · 视图偏好持久化</span>
+      </div>
+
+      <div class="workbench">
+        <div class="wb-left">
+          <div class="wb-section-label">左导航</div>
+          <div class="wb-list-item active">📌 全部</div>
+          <div class="wb-list-item">📅 最近添加</div>
+          <hr style="margin:10px 0; border:none; border-top:1px solid var(--border);">
+          <div class="wb-section-label">Tab</div>
+          <div class="wb-list-item">📚 书签 (套壳)</div>
+          <div class="wb-list-item">📁 文件</div>
+          <div class="wb-list-item">🖼 图片</div>
+          <div class="wb-list-item">🎬 视频</div>
+          <div class="wb-list-item">📄 文档</div>
+          <div class="wb-list-item">✂️ 摘录</div>
+          <div class="wb-list-item active">🤖 AI 对话</div>
+          <hr style="margin:10px 0; border:none; border-top:1px solid var(--border);">
+          <div class="wb-section-label">标签 (AI 自动)</div>
+          <div class="wb-list-item">#工作 #学习 #生活</div>
+        </div>
+        <div class="wb-mid">
+          <div class="wb-section-label">中间内容流（默认列表 / 可切瀑布流）</div>
+          <div class="wb-card-item">📚 一篇文章 · 关于产品方法论</div>
+          <div class="wb-card-item hl">🤖 元宝对话 · 5 款洗碗机对比</div>
+          <div class="wb-card-item">🖼 图片 · 设计灵感</div>
+          <div class="wb-card-item">📁 文件 · Q3 工作总结.pdf</div>
+          <div class="wb-card-item">✂️ 摘录 · 一段读书笔记</div>
+        </div>
+        <div class="wb-right">
+          <div class="wb-section-label">右预览区</div>
+          <p style="font-size:12px; line-height:1.7;">选中后展示：</p>
+          <p style="font-size:12px; line-height:1.7;">• 内容预览<br>• 来源 URL<br>• 收藏时间<br>• AI 标签<br>• 快捷操作（问元宝 / 删除 / 取消收藏）</p>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card"><span class="label">📋 列表态（默认）</span><p style="font-size:13px;">高密度信息流，适合快速找东西。同时显示标题 / 来源 / 时间 / AI 标签</p></div>
+        <div class="card"><span class="label">🧱 瀑布流态</span><p style="font-size:13px;">视觉沉浸，适合"翻看图片/视频"模式。卡片式渲染，缩略图突出</p></div>
+      </div>
+      <p class="hint">用户最后选择的视图会被记忆（账号级持久化）</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 9 · 7 Tab 详解 -->
+  <div class="slide" data-title="7 个 Tab 详解">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">09</span>
+        <h1>7 个 Tab 详解</h1>
+        <span class="sub">书签套壳 · AI 对话 是核心差异化 Tab</span>
+      </div>
+
+      <div class="tab-row" style="font-weight:700; background:var(--primary); color:white; border-radius:6px;">
+        <div class="ico" style="color:white;">Tab</div>
+        <div>承载</div>
+        <div>关键说明</div>
+        <div>状态</div>
+      </div>
+      <div class="tab-row">
+        <div class="ico">📚 书签</div>
+        <div>网页 URL</div>
+        <div><strong>完全套壳书签管理器</strong>：树状结构 + 文件夹 + 拖拽 + 智能整理入口；双视图都有左侧树（可折叠）</div>
+        <div><span class="badge badge-mvp">MVP</span></div>
+      </div>
+      <div class="tab-row">
+        <div class="ico">📁 文件</div>
+        <div>从文件阵地晋升的文件</div>
+        <div>引用方式存储，原文件被删时显示"已被删除"提示</div>
+        <div><span class="badge badge-mvp">MVP</span></div>
+      </div>
+      <div class="tab-row">
+        <div class="ico">🖼 图片</div>
+        <div>网页右键 + 拖拽本地图</div>
+        <div>支持预览大图 / 一键问元宝 / 复制链接</div>
+        <div><span class="badge badge-mvp">MVP</span></div>
+      </div>
+      <div class="tab-row">
+        <div class="ico">🎬 视频</div>
+        <div>嗅探 / 视频片段</div>
+        <div>支持播放 / 时间戳标记 / 一键导出</div>
+        <div><span class="badge badge-mvp">MVP</span></div>
+      </div>
+      <div class="tab-row">
+        <div class="ico">📄 文档</div>
+        <div>PDF / Word / PPT</div>
+        <div>支持 QB 文档查看器打开 + 提问元宝</div>
+        <div><span class="badge badge-mvp">MVP</span></div>
+      </div>
+      <div class="tab-row">
+        <div class="ico">✂️ 摘录</div>
+        <div>网页划词的文字片段</div>
+        <div>保留原文 URL 和上下文，支持二次问元宝</div>
+        <div><span class="badge badge-mvp">MVP</span></div>
+      </div>
+      <div class="tab-row hl">
+        <div class="ico">🤖 AI 对话</div>
+        <div>元宝对话 + 常用 Prompt</div>
+        <div><strong>核心差异化 Tab</strong>。元宝对话内"沉淀此对话"按钮触发；常用 Prompt 库支持收藏 / 调用</div>
+        <div><span class="badge badge-key">关键</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10 · 快存 + 智能整理 + 元宝 -->
+  <div class="slide" data-title="快存 · 智能整理 · 元宝">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">10</span>
+        <h1>三件套 · 快存 + 智能整理 + 元宝调用</h1>
+        <span class="sub">从输入到处理到价值兑现</span>
+      </div>
+
+      <h2>📥 快存悬浮球（轻量化留痕）</h2>
+      <div class="grid-2">
+        <div class="card"><span class="label">触发</span>
+          <ul style="font-size:13px;">
+            <li><strong>常驻</strong>：浏览器右下角（可调）</li>
+            <li><strong>快捷键</strong>：Win <code>Ctrl+Space</code> / Mac <code>Cmd+Enter</code></li>
+            <li><strong>拖拽</strong>：拖文字/图/链/文件即存（默认 0s）</li>
+          </ul>
+        </div>
+        <div class="card"><span class="label">7 种存储方式</span>
+          <ul style="font-size:13px;">
+            <li>拖拽 / 右键菜单 / 划词收藏</li>
+            <li>截图 / 本地上传 / 地址栏 ⭐</li>
+            <li>元宝对话沉淀</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>🤖 智能整理（书签 Tab · 已与 vance 链路打通）</h2>
+      <div class="card blue">
+        <ol style="margin-bottom:0; font-size:14px;">
+          <li>用户勾选要整理的书签范围（base 文件夹）</li>
+          <li>已抽取的网页内容 → 模型 → tag_list（智能打标）</li>
+          <li>tag_list + 用户 path 偏好 → 启发式分组（base 之下最多 4 层 = L1~L4）</li>
+          <li>预览结果 → 用户确认 → 落地</li>
+        </ol>
+      </div>
+      <div class="alert warn">
+        <strong>约束</strong>：默认预览（不直接覆盖）+ 30 天回收兜底 + 单次上限 1000 条 + 用户原结构尊重（一期不做，二期接 path 复用）
+      </div>
+
+      <h2>💬 AI 能力 · 全部走元宝助手</h2>
+      <div class="card green">
+        <p style="font-size:14px; margin-bottom:8px;"><strong>不自造 AI 能力</strong> —— AI 收藏夹只负责"准备好资产"，AI 调用全部交给元宝。</p>
+        <ul style="font-size:13px;">
+          <li>右键单条 → "问元宝" / "总结" / "做 PPT"</li>
+          <li>多选 + 右键 → "对比 / 合并问元宝"</li>
+          <li>整组资产 → "整组发给元宝分析"</li>
+          <li><strong>反向</strong>：元宝问"我之前收藏的洗碗机对比" → 自动调出收藏夹相关资产</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11 · 风险 + 用户教育 -->
+  <div class="slide" data-title="风险 + 用户教育">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">11</span>
+        <h1>副作用 / 风险 &amp; 用户教育</h1>
+        <span class="sub">夺命问 + 创新功能必答题</span>
+      </div>
+
+      <h2>⚠️ 5 大风险 · 已有缓解</h2>
+      <table>
+        <thead><tr><th style="width:18%">风险</th><th>问题</th><th style="width:36%">缓解</th></tr></thead>
+        <tbody>
+          <tr><td><strong>隐私</strong></td><td>恒态资产（书签/历史/文件）涉及隐私</td><td>本地优先 + 用户授权 + 法务边界已对齐</td></tr>
+          <tr><td><strong>认知负担</strong></td><td>7 Tab + 工作台 + 悬浮球 = 用户懵</td><td>首次引导 + 默认列表 + 空 Tab 不强 push</td></tr>
+          <tr><td><strong>性能</strong></td><td>千+条资产时加载慢 / 同步压力</td><td>虚拟滚动 + 单次整理 ≤1000 条 + diff 同步</td></tr>
+          <tr><td><strong>数据耦合</strong></td><td>书签三位一体 = 一改影响三处</td><td>统一 Schema + 一致性自动校验 + 灰度</td></tr>
+          <tr><td><strong>友邻边界</strong></td><td>桌面整理也做"主动收纳"</td><td>桌面整理=系统层 / AI 收藏夹=浏览器内，协同入口</td></tr>
+        </tbody>
+      </table>
+
+      <h2>🎓 用户教育 · 一期轻量 A</h2>
+      <div class="grid-2">
+        <div class="card"><span class="label">A1 · 首次引导</span><p style="font-size:13px;">5 步交互式 Tour：工作台→左导航→拖拽体验→右键问元宝→完成</p></div>
+        <div class="card"><span class="label">A2 · Tooltip</span><p style="font-size:13px;">悬浮球 / 右键 / 快捷键 首次出现时 1 句提示</p></div>
+        <div class="card"><span class="label">A3 · 案例展示卡</span><p style="font-size:13px;">空状态时展示 4 个真实场景案例卡（买车 / 学习 / 跨端 / 临时清单），点击加载 demo 数据演示</p></div>
+        <div class="card"><span class="label">A4 · 入口运营位</span><p style="font-size:13px;">首页卡片 + 地址栏 hover + 元宝助手 → 加运营条引导</p></div>
+      </div>
+      <p class="hint">B 中度（视频教程 + 入门任务）和 C 重度（KOL + 社区）放二期 / 三期，待 MVP 数据验证后启动</p>
+    </div>
+  </div>
+
+  <!-- SLIDE 12 · 路线图 + 北极星 -->
+  <div class="slide" data-title="路线图 + 北极星">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">12</span>
+        <h1>路线图 &amp; 北极星指标</h1>
+        <span class="sub">三期演进 · 一期立刻可启动</span>
+      </div>
+
+      <h2>三期路线图</h2>
+      <div class="phase">
+        <div class="phase-col now">
+          <h5>🔥 一期 MVP · 立刻启动</h5>
+          <ul>
+            <li>三栏工作台 + 双视图</li>
+            <li>7 个 Tab（含 AI 对话）</li>
+            <li>快存悬浮球</li>
+            <li>智能打标 + 智能分组</li>
+            <li>元宝承接 AI 调用</li>
+            <li>多端同步（移动只读）</li>
+            <li>用户教育 · 轻量 A</li>
+            <li>30 天回收 + 撤销兜底</li>
+          </ul>
+        </div>
+        <div class="phase-col next">
+          <h5>🌟 二期 · 系统智能存证</h5>
+          <ul>
+            <li>资产关联图谱</li>
+            <li>系统智能存证（高价值行为自动标记）</li>
+            <li>重复访问推荐沉淀</li>
+            <li>用户原 path 复用（智能整理升级）</li>
+            <li>用户教育 · 中度 B</li>
+          </ul>
+        </div>
+        <div class="phase-col future">
+          <h5>🚀 三期 · 场景反向赋能</h5>
+          <ul>
+            <li>地址栏匹配（搜索时优先展示收藏）</li>
+            <li>主动推荐（基于资产画像）</li>
+            <li>千人千面（订阅助手）</li>
+            <li>跨应用资产收集（系统级）</li>
+            <li>用户教育 · 重度 C（KOL + 社区）</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>北极星指标</h2>
+      <div class="kpi-row">
+        <div class="kpi"><div class="num">DAU 渗透率</div><div class="name">PC 活跃中使用 AI 收藏夹比例 · 早期目标 ≥10%</div></div>
+        <div class="kpi"><div class="num">人均收藏量</div><div class="name">月新增 · 早期目标 ≥20 条</div></div>
+        <div class="kpi"><div class="num">7 天复访率</div><div class="name">收藏后 7 天被复访 / 调用 · 早期 ≥30%</div></div>
+        <div class="kpi"><div class="num">元宝调用率</div><div class="name">资产送元宝 / 总收藏数 · 早期 ≥15%</div></div>
+      </div>
+      <div class="alert info">
+        <div class="alert-title">📌 早期成功定义（一期上线后 3 个月）</div>
+        4 个指标都达 → 进二期；任一不达 → 触发"是不是产品定义错了"复盘，不是单纯优化。
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 13 · 收尾 -->
+  <div class="slide" data-title="一句话总结">
+    <div class="slide-inner">
+      <div class="slide-header">
+        <span class="slide-num">13</span>
+        <h1>一句话总结 &amp; 下一步</h1>
+        <span class="sub">立刻可启动</span>
+      </div>
+
+      <div class="final-card">
+        <h2>🦞 AI 收藏夹 = QB 在 Agent 时代的「用户记忆入口」地基</h2>
+        <p>主动收集 + AI 整理 + 元宝承接 三位一体<br>为浏览器和元宝矩阵贡献<strong>共享记忆系统</strong>的核心数据资产</p>
+        <p style="margin-top:18px; font-size:15px;"><strong>一期 MVP 立刻可启动</strong> —— 研发能力都已就位，元宝权限我自有，等拍板方向。</p>
+      </div>
+
+      <h2>下一步动作</h2>
+      <table>
+        <thead><tr><th style="width:8%">#</th><th>事</th><th style="width:18%">负责</th><th style="width:14%">时点</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>本方案过 <strong>汉博 / 陈颖</strong> review，拿原则同意</td><td>游杰</td><td>本周</td></tr>
+          <tr><td>2</td><td>设计稿 final（三栏 + 7 Tab 视觉稿）</td><td>设计师</td><td>下周</td></tr>
+          <tr><td>3</td><td>研发对齐：orange 工程 + vance 算法 + 浏览器调研背书</td><td>游杰主导</td><td>下周</td></tr>
+          <tr><td>4</td><td>评测准备：3000 条测评集 + 评测 agent ready</td><td>云光 + carbon</td><td>下周</td></tr>
+          <tr><td>5</td><td>灰度上线 5%-10% 用户 1-2 周</td><td>全员</td><td>2 周后</td></tr>
+          <tr><td>6</td><td>全量推广 + 用户教育 A 启动 + 数据看板</td><td>运营 + 游杰</td><td>1 月后</td></tr>
+        </tbody>
+      </table>
+
+      <div class="alert success" style="margin-top:18px;">
+        <div class="alert-title">🚀 关键资源已就位</div>
+        ✅ vance 算法链路一期 ready · ✅ orange 工程对齐中 · ✅ 浏览器 12 篇调研背书 · ✅ 元宝助手内容权限自有 · ✅ 评测平台 ricedeng 已对接
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn">← 上一页</button>
+  <div class="page-indicator">
+    <span class="current" id="curPage">1</span> / <span id="totalPage">2</span> · <span id="curTitle">封面</span>
+  </div>
+  <button class="nav-btn" id="nextBtn">下一页 →</button>
+</div>
+
+<script>
+  const deck = document.getElementById('deck');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+
+  document.getElementById('totalPage').textContent = total;
+
+  function show(idx) {
+    if (idx < 0 || idx >= total) return;
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add(idx > cur ? 'prev' : '');
+    setTimeout(() => slides.forEach(s => s.classList.remove('prev')), 50);
+    slides[idx].classList.add('active');
+    cur = idx;
+    document.getElementById('curPage').textContent = cur + 1;
+    document.getElementById('curTitle').textContent = slides[cur].dataset.title || '';
+    document.getElementById('progressBar').style.width = ((cur + 1) / total * 100) + '%';
+    document.getElementById('prevBtn').disabled = cur === 0;
+    document.getElementById('nextBtn').disabled = cur === total - 1;
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', () => show(cur - 1));
+  document.getElementById('nextBtn').addEventListener('click', () => show(cur + 1));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(cur + 1); }
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(cur - 1); }
+    if (e.key === 'Home') { e.preventDefault(); show(0); }
+    if (e.key === 'End') { e.preventDefault(); show(total - 1); }
+  });
+
+  show(0);
+</script>
+
+</body>
+</html>
