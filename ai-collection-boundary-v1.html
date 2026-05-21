@@ -310,10 +310,10 @@ td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
       <span class="tag">支持 · 核心差异化</span>
     </div>
     <div class="kv">
-      <span class="k">存什么</span><span class="v">元宝对话完整记录（QA + 引用 Source）+ 向量 / Prompt 模板（标题+内容+变量）</span>
-      <span class="k">上限</span><span class="v">单对话 ≤ 100K token / 用户 Prompt 库 ≤ 200 条</span>
-      <span class="k">不支持</span><span class="v warn">第三方 AI 产品（ChatGPT / Claude）的对话——只支持元宝</span>
-      <span class="k">特殊</span><span class="v good">对话沉淀时<strong>自动关联当时引用的 Source 资产</strong></span>
+      <span class="k">存什么</span><span class="v">完整对话文字（QA pair）+ AI 引用的 URL 列表 + 工具调用记录 + 向量 / Prompt 模板</span>
+      <span class="k">上限</span><span class="v">单对话 ≤ 100K token / 嵌套图 ≤ 5 张 / 嵌套文档 ≤ 3 个 / 总对话数 ≤ 500 / Prompt 库 ≤ 200 条</span>
+      <span class="k">不支持</span><span class="v warn">第三方 AI 产品（ChatGPT / Claude）的对话——只支持元宝 / 单嵌套文件 &gt; 50MB（引导走小云盘）</span>
+      <span class="k">特殊</span><span class="v good"><strong>① 沉淀 = 永久副本</strong>，与元宝侧完全独立（元宝删原对话 / 改对话 / 分享失效 → AI 收藏夹副本不受影响）<br><strong>② 嵌套资产自动分流</strong>：对话里的图片自动入「图片」Tab、文档入「文档」Tab、AI 生成 PPT 入「文档」Tab，互相关联标"来自 X 月 X 日的元宝对话"<br><strong>③ 主对话本身</strong>仍保留在「AI 对话」Tab，引用链接指向各 Tab 的嵌套资产</span>
     </div>
   </div>
 </div>
