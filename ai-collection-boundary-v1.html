@@ -320,7 +320,7 @@ td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
 
 <!-- 不收的类型 -->
 <div class="section">
-  <h2>❌ 明确不收的 7 类（红线）</h2>
+  <h2>❌ 明确不收的 6 类（红线）</h2>
   <div class="banned-grid">
     <div class="banned-item">
       <strong>大文件视频本体</strong>（&gt; 50MB）
@@ -335,14 +335,10 @@ td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
       <span class="reason">内容不可解析 = AI 用不了</span>
     </div>
     <div class="banned-item">
-      <strong>数据库 / 代码仓库整体</strong>（.db / .git）
-      <span class="reason">工程文件不是"知识资产"</span>
+      <strong>代码仓库整体</strong>（.git / 大型仓库压缩包）
+      <span class="reason">仓库整体非"知识资产"。<strong>单独代码片段</strong> / 单文件代码 → 走「摘录」Tab 收藏</span>
     </div>
-    <div class="banned-item">
-      <strong>私密性极高内容</strong>（密码 / 身份证扫描件）
-      <span class="reason">应走"私密空间"独立产品（1Password 模式）</span>
-    </div>
-    <div class="banned-item">
+<div class="banned-item">
       <strong>其他 AI 产品的对话</strong>（ChatGPT / Claude）
       <span class="reason">数据合规风险 + 元宝场景内闭环</span>
     </div>
