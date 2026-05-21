@@ -42,23 +42,24 @@ html, body {
 /* === SLIDE === */
 .slide {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: var(--bg);
   padding: 50px 70px 80px;
   overflow-y: auto;
-  opacity: 0;
-  visibility: hidden;
-  transform: translateX(40px);
-  transition: opacity 0.45s ease, transform 0.45s ease, visibility 0s 0.45s;
+  display: none;
+  z-index: 1;
 }
 .slide.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translateX(0);
-  transition: opacity 0.45s ease, transform 0.45s ease, visibility 0s;
+  display: block;
+  z-index: 2;
+  animation: fadeIn 0.35s ease;
 }
-.slide.prev {
-  transform: translateX(-40px);
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 .slide-inner {
@@ -1002,8 +1003,6 @@ tr.hot-row { background: var(--highlight-yellow) !important; font-weight: 600; }
   function show(idx) {
     if (idx < 0 || idx >= total) return;
     slides[cur].classList.remove('active');
-    slides[cur].classList.add(idx > cur ? 'prev' : '');
-    setTimeout(() => slides.forEach(s => s.classList.remove('prev')), 50);
     slides[idx].classList.add('active');
     cur = idx;
     document.getElementById('curPage').textContent = cur + 1;
@@ -1011,6 +1010,8 @@ tr.hot-row { background: var(--highlight-yellow) !important; font-weight: 600; }
     document.getElementById('progressBar').style.width = ((cur + 1) / total * 100) + '%';
     document.getElementById('prevBtn').disabled = cur === 0;
     document.getElementById('nextBtn').disabled = cur === total - 1;
+    window.scrollTo(0, 0);
+    slides[idx].scrollTop = 0;
   }
 
   document.getElementById('prevBtn').addEventListener('click', () => show(cur - 1));
