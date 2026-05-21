@@ -225,9 +225,8 @@ td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
       <span class="tag">支持</span>
     </div>
     <div class="kv">
-      <span class="k">存什么</span><span class="v">URL + 标题 + 抽取正文（≤ 50K 字）+ 向量 + 缩略图</span>
-      <span class="k">上限</span><span class="v">单条正文 ≤ 50K 字（超过截断）/ 总数 ≤ 1 万条</span>
-      <span class="k">不支持</span><span class="v warn">需登录态才能访问的内部网页（抽取失败时仅存 URL+标题）</span>
+      <span class="k">存什么</span><span class="v">URL + 标题 + 抽取正文 + <strong>摘要（≤ 200 字）</strong> + 向量 + 缩略图</span>
+      <span class="k">上限</span><span class="v">单条摘要 ≤ 200 字 / 总数 ≤ <strong>50,000 条</strong></span>
       <span class="k">特殊</span><span class="v good">与书签管理器双向同步，三位一体</span>
     </div>
   </div>
