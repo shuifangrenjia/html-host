@@ -238,10 +238,10 @@ td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
       <span class="tag">支持</span>
     </div>
     <div class="kv">
-      <span class="k">存什么</span><span class="v">网页图：URL 引用 + OCR + 视觉描述 + 向量；本地图：≤2MB 直接上云存副本</span>
-      <span class="k">上限</span><span class="v">单图 ≤ <strong>10MB</strong> / 格式 jpg/png/webp/gif/bmp / heic 自动转 jpg</span>
-      <span class="k">不支持</span><span class="v warn">> 10MB 大图（提示压缩）/ 动图 GIF 仅存首帧描述 / 加密相册图片</span>
-      <span class="k">特殊</span><span class="v good">网页图优先存 URL 引用，本地拖入存副本</span>
+      <span class="k">存什么</span><span class="v"><strong>本地图存本体</strong>；网页图存 URL + <strong>自动备份缩略图（防原图失效）</strong> + OCR + 视觉描述 + 向量</span>
+      <span class="k">上限</span><span class="v">单图 ≤ <strong>10MB</strong> / 格式 jpg / png / webp / gif / bmp / heic 自动转 jpg</span>
+      <span class="k">不支持</span><span class="v warn">&gt; 10MB 大图（提示压缩）/ 加密相册图片</span>
+      <span class="k">特殊</span><span class="v good">网页原图失效（404）时降级展示缩略图，标"原图已失效"</span>
     </div>
   </div>
 
@@ -266,10 +266,10 @@ td.hot { background: var(--highlight-yellow) !important; font-weight: 600; }
       <span class="tag">支持</span>
     </div>
     <div class="kv">
-      <span class="k">存什么</span><span class="v">文件名 + <strong>解析后的文本</strong>（≤ 200 页）+ 向量 + 缩略图</span>
-      <span class="k">上限</span><span class="v">单文件 ≤ <strong>50MB</strong>（参考 NotebookLM 单 Source 上限）/ 总文档数 ≤ 500</span>
-      <span class="k">不支持</span><span class="v warn">加密 PDF（提示输入密码或跳过）/ 扫描件无 OCR 时仅存图（标"图像版"）/ 嵌套压缩包</span>
-      <span class="k">特殊</span><span class="v good">文件本体不存（引用本地路径或来源 URL），原文件被删时显示"已不存在"</span>
+      <span class="k">存什么</span><span class="v"><strong>文件本体（云端副本）</strong> + 文件名 + 解析文本（≤ 200 页）+ 向量 + 缩略图</span>
+      <span class="k">上限</span><span class="v">单文件 ≤ <strong>50MB</strong> / 总文档数 ≤ 500 / 单用户文档总容量 ≤ <strong>5GB</strong></span>
+      <span class="k">不支持</span><span class="v warn">加密 PDF（提示输入密码或跳过）/ 嵌套压缩包</span>
+      <span class="k">特殊</span><span class="v good"><strong>跨设备同步可见</strong>，原文件被删 AI 收藏夹仍保留副本；超 50MB 引导走小云盘</span>
     </div>
   </div>
 
