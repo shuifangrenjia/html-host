@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 收藏夹 · 推进 TODO（5/21）</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f7fa;
+  color: #1a365d;
+  line-height: 1.6;
+  padding: 20px;
+}
+.container { max-width: 900px; margin: 0 auto; }
+
+header {
+  background: linear-gradient(135deg, #1a365d 0%, #2d4f7c 100%);
+  color: white;
+  padding: 24px 28px;
+  border-radius: 12px 12px 0 0;
+}
+header h1 { font-size: 22px; margin-bottom: 6px; }
+header .subtitle { font-size: 13px; opacity: 0.85; }
+
+.summary {
+  background: white;
+  padding: 16px 28px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.summary .item { font-size: 13px; color: #4a5568; }
+.summary .item strong { color: #c53030; font-size: 16px; }
+
+.section {
+  background: white;
+  padding: 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+.section:last-of-type { border-radius: 0 0 12px 12px; border-bottom: none; }
+
+.section-header {
+  padding: 16px 28px;
+  background: #fef3c7;
+  border-left: 4px solid #d69e2e;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-header.priority-1 { background: #fef3c7; border-left-color: #d69e2e; }
+.section-header.priority-2 { background: #f0fff4; border-left-color: #38a169; }
+.section-header.priority-3 { background: #ebf8ff; border-left-color: #3182ce; }
+
+.section-header .num {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a365d;
+  min-width: 36px;
+}
+.section-header .title { font-size: 17px; font-weight: 600; flex: 1; }
+.section-header .meta {
+  font-size: 12px;
+  background: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: #4a5568;
+}
+
+.section-body { padding: 18px 28px; }
+
+.task {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed #e2e8f0;
+}
+.task:last-child { border-bottom: none; }
+.task .checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #cbd5e0;
+  border-radius: 4px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.task .content { flex: 1; }
+.task .what { font-weight: 600; color: #1a365d; margin-bottom: 4px; }
+.task .how {
+  font-size: 13px;
+  color: #4a5568;
+  background: #f7fafc;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 6px;
+  border-left: 3px solid #3182ce;
+}
+.task .how strong { color: #2c5282; }
+.task .tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+}
+.tag-time { background: #fef3c7; color: #92400e; }
+.tag-target { background: #e6fffa; color: #234e52; }
+
+.message-card {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #2d3748;
+  white-space: pre-wrap;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.message-card .prefix {
+  color: #c53030;
+  font-weight: 600;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.closing {
+  background: #1a365d;
+  color: white;
+  padding: 18px 28px;
+  border-radius: 0 0 12px 12px;
+  text-align: center;
+  font-size: 13px;
+}
+.closing strong { color: #fef3c7; }
+
+.warn {
+  background: #fff5f5;
+  border-left: 4px solid #c53030;
+  padding: 12px 16px;
+  margin: 16px 28px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #742a2a;
+}
+.warn strong { color: #c53030; }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🦞 AI 收藏夹 · 推进 TODO</h1>
+    <div class="subtitle">2026-05-21 · 设计稿已出，下一步把它当弹药驱动其他人</div>
+  </header>
+
+  <div class="summary">
+    <div class="item">本周 TODO：<strong>3 件</strong></div>
+    <div class="item">顺序：<strong>串行</strong>（不并行）</div>
+    <div class="item">总投入：<strong>~1.5 小时</strong>（核心都是写 PRD）</div>
+  </div>
+
+  <!-- TASK 1 -->
+  <div class="section">
+    <div class="section-header priority-1">
+      <div class="num">1</div>
+      <div class="title">写 PRD v0.2（叠 4 章）</div>
+      <div class="meta">⏱ 30-45 分钟 · 你自己</div>
+    </div>
+    <div class="section-body">
+      <div class="task">
+        <div class="checkbox"></div>
+        <div class="content">
+          <div class="what">在 PRD v0.1 后面 append 4 章新内容</div>
+          <div class="how">
+            <strong>章节</strong>：① 产品定位（三句话+三阵地边界）<br>
+            ② 视觉与交互（默认列表/书签Tab套壳/其他Tab无树）<br>
+            ③ 数据源清单（4 类 + 来源动作）<br>
+            ④ 待决策事项（标红 4 个待对齐点）
+          </div>
+        </div>
+      </div>
+      <div class="task">
+        <div class="checkbox"></div>
+        <div class="content">
+          <div class="what">不动 v0.1 已有内容，只 append</div>
+          <div class="how">
+            模板我之前已经给你了，<strong>直接复制 markdown 粘进去就行，不用从头写</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 2 -->
+  <div class="section">
+    <div class="section-header priority-2">
+      <div class="num">2</div>
+      <div class="title">找 orange 约工程对齐会</div>
+      <div class="meta">⏱ 5 分钟 · PRD 写完后发</div>
+    </div>
+    <div class="section-body">
+      <div class="task">
+        <div class="checkbox"></div>
+        <div class="content">
+          <div class="what">飞书私聊 orange · 直接复制下面这条</div>
+          <div class="message-card">
+<span class="prefix">📤 发给 @orange黄伟滨</span>AI 收藏夹设计稿出了，这周想约 30 分钟过下工程实现，重点 3 个：
+
+1. 书签 Tab 套壳数据同步机制：AI 收藏夹「书签」Tab + 浏览器顶部书签栏 + 旧书签管理器，三个入口同一份数据，怎么落地？
+
+2. 文件阵地"加入 AI 收藏夹"按钮：从「我的文件」手动晋升到 AI 收藏夹，按钮放哪、走什么数据通路？
+
+3. AI 资产沉淀通路：元宝助手对话的"沉淀"按钮，怎么把对话写入 AI 收藏夹？
+
+这三个想周内对完拉个开发排期。你这周哪天方便？
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 3 -->
+  <div class="section">
+    <div class="section-header priority-3">
+      <div class="num">3</div>
+      <div class="title">找 vance 对 AI 能力衔接</div>
+      <div class="meta">⏱ 5 分钟 · vance prompt 出来后再发</div>
+    </div>
+    <div class="section-body">
+      <div class="task">
+        <div class="checkbox"></div>
+        <div class="content">
+          <div class="what">不要现在发，等 vance prompt 出来再发</div>
+          <div class="how">
+            <strong>原因</strong>：vance 还没东西，对不起来 = 浪费会议
+          </div>
+        </div>
+      </div>
+      <div class="task">
+        <div class="checkbox"></div>
+        <div class="content">
+          <div class="what">触发条件：vance 给你 prompt demo 后</div>
+          <div class="message-card">
+<span class="prefix">📤 发给 @vancezhao（先存着）</span>等你 prompt 出来后，咱们再约个 30 分钟对一下 AI 能力怎么衔接到 AI 收藏夹。
+
+重点 2 个：
+1. 智能整理结果 → AI 收藏夹分类视图：模型输出的 group_path 怎么落到 AI 收藏夹的左侧分类区？
+2. 智能打标 → 标签区：模型打的 tag 怎么映射到 AI 收藏夹底部的标签 chip？
+
+不急在这周，下周也行。
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn">
+    <strong>⚠️ 龙虾提醒</strong>：今天力竭了就别硬扛，先把 #1 PRD 写完（半小时左右），#2 顺手就发，#3 等触发条件。其他设计稿对齐、双导航边界这些<strong>明天再想</strong>。
+  </div>
+
+  <div class="closing">
+    <strong>顺序铁律</strong>：1 PRD → 2 orange → 3 vance · <strong>不并行</strong>
+  </div>
+</div>
+</body>
+</html>
