@@ -1,0 +1,188 @@
+<meta charset="utf-8">
+<style>
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 880px; margin: 0 auto; padding: 30px 40px;
+    background: #fafbfc; color: #2d3748; line-height: 1.7;
+  }
+  h1 { font-size: 22px; color: #1a365d; border-bottom: 3px solid #1a365d; padding-bottom: 10px; margin-bottom: 18px; }
+  h2 { font-size: 17px; color: #1a365d; border-left: 4px solid #c53030; padding-left: 10px; margin-top: 28px; }
+  h3 { font-size: 15px; color: #2c5282; margin-top: 22px; }
+  .core { background: linear-gradient(135deg,#1a365d,#2c5282); color:white; padding: 22px 26px; border-radius: 12px; margin: 20px 0 30px; }
+  .core h2 { color: #fbd38d; border:none; padding:0; margin-top:0; font-size: 16px; }
+  .core ol { padding-left: 22px; }
+  .core li { margin-bottom: 14px; font-size: 14px; line-height: 1.8; }
+  .core li strong { color: #fbd38d; }
+  .core li em { color: #fed7d7; font-style: normal; font-weight: 600; }
+  .core hr { border: none; border-top: 1px dashed rgba(255,255,255,0.3); margin: 14px 0; }
+  ul, ol { padding-left: 22px; }
+  li { margin-bottom: 6px; font-size: 14px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+  th { background: #1a365d; color: white; padding: 8px 10px; text-align: left; }
+  td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  tr:nth-child(even) td { background: #f7fafc; }
+  .star { color: #d69e2e; }
+  .red { color: #c53030; font-weight: 600; }
+  .badge { display:inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .b-high { background: #fed7d7; color: #c53030; }
+  .b-mid { background: #feebc8; color: #c05621; }
+  .b-low { background: #c6f6d5; color: #2f855a; }
+  .risk { background: #fff5f5; border-left: 3px solid #c53030; padding: 12px 16px; margin: 10px 0; border-radius: 4px; }
+  .risk b { color: #c53030; }
+  .links { background: #ebf8ff; padding: 14px 18px; border-radius: 6px; margin-top: 22px; }
+  .links a { color: #2c5282; }
+  .quote { background: #fffaf0; border-left: 3px solid #d69e2e; padding: 8px 14px; margin: 6px 0; font-size: 13px; color: #744210; }
+  .section-block { background: white; border-radius: 8px; padding: 16px 22px; margin: 14px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+</style>
+
+<h1>资产模块 · @geoffreyyou(游杰) · W21 周报（5/19 - 5/25）</h1>
+
+<div class="core">
+  <h2>📌 本周核心价值</h2>
+  <ol>
+    <li>
+      <strong>AI 收藏夹产品定义 V1 完成</strong> —— 三阵地边界 + 8 大类型 + 混合存储策略，扫清"AI 收藏夹和云盘 / 书签管理器有什么区别"老板级方向问题。
+      <em>→ 为下周方向 review + 设计 / 工程对齐扫清前置障碍；为数据基建战略提供首个端到端验证场景（多模态资产 → AI 自动打标 → 元宝 RAG 调用）。</em>
+    </li>
+    <li>
+      <strong>书签整理评测体系沉淀通用方法论</strong> ⭐ —— 与测评同学（@gyunzhang）多轮对齐，确立"用户视角 + 逼近客观"原则：评测本质是体验合理性判定（主观），通过"标红词"锚定为相对客观规则（agent 可自动执行）。同时一期链路全要素打通：评测标准 + 测评集 + 抽取 + 算法 全部 ready。
+      <em>→ 评测从"工程符合性测试"转向"体验合理性判定"，方法论可复用于后续标签中台 / AI 收藏夹 / 元宝 RAG 评测体系；本周内可拿到第一批基线评分数据。</em>
+    </li>
+    <li>
+      <strong>战略上探研发总参谋部</strong> —— 读完浏览器 12 篇调研材料，已联系 steven (D7 网页抽取) / damon (D4 端模型 P0) / ricedeng (D11 Web API + D12 Canvas 抽取)，把 AI 收藏夹列入研发落地路线图。
+      <em>→ 资产模块从"抢能力的下游业务方"上升为"驱动技术演进的 P0 业务方"，为数据基建战略获取研发资源支撑。</em>
+    </li>
+  </ol>
+</div>
+
+<h2>一、过去一周（5/19 - 5/23）</h2>
+
+<div class="section-block">
+  <h3>🌟 AI 收藏夹（0.4 主战场）</h3>
+  <ul>
+    <li><strong>整体方案 V1 完成</strong>：12 章产品方案（HTML 长版 + 13 张幻灯片版），按"夺命连环问"框架组织。已发汉博 + 陈颖 review，等待面对面同步。</li>
+    <li><strong>三阵地边界确立</strong>：书签管理器 / 文件阵地 / AI 收藏夹，明确"下载 ≠ 收藏"原则，与小云盘业务<b>共生不重叠</b>。</li>
+    <li><strong>8 大资产类型 + 混合存储</strong>：网页书签 / 图片（含截图）/ 视频 / 文档 / 摘录 / 代码 / 音频 / AI 对话；网页类轻量索引、文档/截图/AI 对话存本体，单用户总占用数百 MB（远小于云盘 GB 级）。</li>
+    <li><strong>AI 对话 Tab 三大硬约束</strong>：① 沉淀 = 永久副本（与元宝侧完全独立）② 嵌套资产自动分流到对应 Tab ③ 单对话 ≤ 100K token / 嵌套上限。</li>
+    <li><strong>设计稿 32-38 张分批清单</strong>：先 P0 6 张演示包 → 拿去汇报 → 再 P1 → 跟开发节奏 P2/P3。</li>
+    <li><strong>关键资源优势</strong>：拥有元宝助手内容权限，"沉淀此对话"按钮可自己提单加，<b>不依赖元宝团队 = MVP 强杠杆</b>。</li>
+  </ul>
+</div>
+
+<div class="section-block">
+  <h3>🔥 书签整理 · 死链清理</h3>
+  <ul>
+    <li><strong>终端扫描方案敲定</strong>（5/20，程杰拍板）：客户端单次扫描 + 提前扫描体验（用户进入整理入口即静默扫描，到点确认 0 等待）。</li>
+    <li><strong>一期清理范围明确</strong>：仅 HTTP 410 / 451 + DNS 多源 NXDOMAIN（永久信号 3 类）。其余 4xx / 5xx / 证书 / 超时进"嫌疑池"不强制处理。</li>
+    <li><strong>5/19 17:30 拉关键信息对齐会</strong>（7 人，腾讯大厦 1604）：统筹 vance / orange / ricedeng / 雷泽坤 / 云光 跨团队一次对齐多模型编排 / 评测平台 / 测试集 / 工程排期。</li>
+    <li><strong>误杀兜底</strong>：30 天回收 + 撤销 + 灰度 5%-10% 跑 1-2 周再放量。</li>
+  </ul>
+</div>
+
+<div class="section-block">
+  <h3>🤖 书签整理 · 智能分组</h3>
+  <ul>
+    <li><strong>评测标准 V2 final</strong>（与 @gyunzhang 多轮对齐）<span class="star">⭐ 关键认知升级</span>
+      <ul>
+        <li>拆穿"主观 vs 客观"的伪命题：评测本质是用户体验判定（主观），通过"标红词"锚定为相对客观规则，agent 可自动判定</li>
+        <li>3 维度 × 0/1/2 分制：分组名称合理性 / 分组浏览体验 / 书签分组准确性</li>
+        <li>标红锚点：「其他/备用」「&gt;4 层」「全部平铺」「&gt;80% 准确」「&gt;30% 错分」</li>
+        <li><b>核心方法论："逼近客观，而非强求绝对客观"</b> —— 可复用于标签中台 / AI 收藏夹 / 元宝 RAG 评测体系</li>
+      </ul>
+    </li>
+    <li><strong>测评集 ready</strong>：3000+ 条复杂全选 + 个人 1.6w 真实书签作样本</li>
+    <li><strong>抽取链路完成</strong>：carbon 跑出 aggregated.xlsx (1.19M)</li>
+    <li><strong>vance 算法链路一期 ready</strong>：标签整理流水线（切分 / 摘要 / 打标 / 合并）已搭建，启发式合并打标 + prompt 性能优化进行中</li>
+    <li><strong>资源调度闭环</strong>：DeepSeekV3.1-16k 全满 → 临时降级方案（DS3.0 60 qpm + HY3.0 20 qpm），链路稳定后扩到 HY3.0 100 qpm</li>
+    <li><strong>评测平台接入元宝</strong>：ricedeng + yansy + orange + carbon 链路打通，自动化评测可通过元宝平台跑</li>
+  </ul>
+</div>
+
+<div class="section-block">
+  <h3>🎯 战略上探（研发总参谋部）</h3>
+  <ul>
+    <li>读完浏览器 12 篇技术调研材料 + qb-strategy 战略页</li>
+    <li>私聊推进：
+      <ul>
+        <li><b>steven 苏磊</b>（D7 ReaderLM-v2 抽取）→ 把书签场景列为 D7 第一批落地业务</li>
+        <li><b>damon 阮宜德</b>（D4 端模型 P0：页面类型识别 / 正文抽取 / 本地语义索引）→ AI 收藏夹作为首批接入业务</li>
+        <li><b>ricedeng 邓磊</b>（D11 Chrome Web API、D12 Canvas 文档抽取）</li>
+      </ul>
+    </li>
+    <li>战略意义：从"抢能力的下游业务方" → "驱动技术演进的 P0 业务方"</li>
+  </ul>
+</div>
+
+<div class="section-block">
+  <h3>📊 用户反馈 V3 清洗</h3>
+  <ul>
+    <li>修正 V2 数据污染问题（同句话重复 100+ 次的恶意刷屏被错误纳入分布）</li>
+    <li>真实 P0 重排：智能整理 21.8% / 智能清理 15.0% / 导出 12.9%</li>
+    <li>数据丢失警报 5.4% 已 flag 给研发排查</li>
+  </ul>
+</div>
+
+<h2>二、下周计划（5/26 - 5/30）</h2>
+
+<div class="section-block">
+  <h3><span class="badge b-high">高优 · 必须完成</span></h3>
+  <table>
+    <thead><tr><th style="width:12%">时点</th><th style="width:48%">动作</th><th>验证产出</th></tr></thead>
+    <tbody>
+      <tr><td><b>5/27 前</b></td><td>推动汉博 + 陈颖 1v1 review AI 收藏夹方向</td><td>拿到原则同意 + 关键边界拍板</td></tr>
+      <tr><td><b>5/28 前</b></td><td>vance 链路跑出第一批基线 + 自动化评测打分</td><td>拿到模型评分实测数据，定优化方向</td></tr>
+      <tr><td><b>5/29 前</b></td><td>设计稿 P0 6 张完成（最小演示包）</td><td>可演示给老板的 demo 包</td></tr>
+    </tbody>
+  </table>
+
+  <h3><span class="badge b-mid">中优 · 推进中</span></h3>
+  <ul>
+    <li>找 orange 30 分钟会议，敲定 AI 收藏夹工程实现 3 件事（书签 Tab 套壳 / 文件晋升 / AI 沉淀通路）</li>
+    <li>vance prompt 稳定后启动二轮模型 PK</li>
+    <li>元宝助手"沉淀此对话"按钮自己提单上线</li>
+    <li>死链清理 PRD V1 终稿（终端扫描 + 嫌疑池 + 提前扫描）</li>
+  </ul>
+
+  <h3><span class="badge b-low">低优 · 持续跟进</span></h3>
+  <ul>
+    <li>D7/D4/D11 跟进研发排期</li>
+    <li>文件夹 vs 标签 双导航边界（待姝然 + 老板对齐）</li>
+  </ul>
+</div>
+
+<h2>三、风险 &amp; 待决策（需老板支持）</h2>
+
+<div class="risk">
+  <b>1. vance 算法侧自评"很多 case 无法覆盖" ⚠️</b><br>
+  <span style="font-size:13px;">原话："存在很多无法覆盖的 case，要出一个相对稳定的版本给到工程"</span><br>
+  <span style="font-size:13px;"><b>影响</b>：一期 baseline 数据可能不达预期 → 范围可能需要再裁剪</span><br>
+  <span style="font-size:13px;"><b>应对</b>：本周内拿到第一批数据后立即评估，必要时和算法侧重谈一期边界</span>
+</div>
+
+<div class="risk">
+  <b>2. AI 收藏夹 8 大类型工程量较大</b><br>
+  <span style="font-size:13px;">需评估排期 + 资源 → 等汉博 / 陈颖 review 后启动 orange 工程对接</span><br>
+  <span style="font-size:13px;">50,000 条书签向量索引存储成本待和工程算账</span>
+</div>
+
+<div class="risk">
+  <b>3. DeepSeekV3.1-16k 资源全满</b><br>
+  <span style="font-size:13px;">临时降级 V3.0（60 qpm）+ HY3.0（20 qpm），仅够链路跑通</span><br>
+  <span style="font-size:13px;">链路稳定后需复议 HY3.0 扩到 100 qpm</span>
+</div>
+
+<div class="risk">
+  <b>4. 文件夹 vs 标签 双导航边界</b><br>
+  <span style="font-size:13px;">AI 收藏夹左导航上半"书签收藏"（用户文件夹）+ 下半"标签区"（AI 打标），用户认知存在混淆风险</span><br>
+  <span style="font-size:13px;">待姝然 + 老板对齐</span>
+</div>
+
+<div class="links">
+  <b>📎 本周关键产出链接</b>
+  <ul style="margin: 8px 0;">
+    <li>AI 收藏夹方案幻灯片版：<a href="https://html-host-ash.pages.dev/ai-collection-slides-v1">https://html-host-ash.pages.dev/ai-collection-slides-v1</a></li>
+    <li>AI 收藏夹边界 V1：<a href="https://html-host-ash.pages.dev/ai-collection-boundary-v1">https://html-host-ash.pages.dev/ai-collection-boundary-v1</a></li>
+    <li>书签分组研发 review：<a href="https://html-host-ash.pages.dev/bookmark-grouping-dev-review-v1">https://html-host-ash.pages.dev/bookmark-grouping-dev-review-v1</a></li>
+    <li>用户反馈 V3 清洗：<a href="https://html-host-ash.pages.dev/qb-bookmark-feedback-v3-20260515">https://html-host-ash.pages.dev/qb-bookmark-feedback-v3-20260515</a></li>
+  </ul>
+</div>
