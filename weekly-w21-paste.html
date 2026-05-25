@@ -15,7 +15,6 @@
   ol, ul { margin: 8px 0; padding-left: 22px; }
   li { margin: 4px 0; }
   a { color: #2c5282; }
-  .tip { color: #888; font-size: 12px; }
 </style>
 
 <h1>2026.5.19-2026.5.25</h1>
@@ -24,39 +23,45 @@
 
 <h3>核心工作目标</h3>
 
-<p>5 月内推动 AI 收藏夹（0.4 主战场）方向定调与一期 MVP 启动；完成书签整理（智能打标 / 智能分组 / 死链清理）一期链路打通与基线评测；为标签中台 / 元宝矩阵共享记忆系统建立首个端到端验证场景。</p>
+<p>5 月内推进 AI 收藏夹（0.4 主战场）方向定调 + 一期 MVP 启动；同时把书签整理（智能打标 / 智能分组 / 死链清理）的一期链路跑通，给标签中台 / 元宝矩阵共享记忆系统留一个端到端验证场景。</p>
 
-<h3>上周核心进展</h3>
+<h3>本周核心进展</h3>
 
-<p><b>1、AI 收藏夹方案 V1</b>：完成整体产品方案 + 8 大类型边界 + 三阵地定义，已发汉博 / 陈颖 review，等待方向确认。</p>
+<p><b>1、〖AI 收藏夹〗——产品方案 V1 完成，已交汉博 / 陈颖 review</b></p>
 
-<p>详见：<a href="https://html-host-ash.pages.dev/ai-collection-slides-v1">📊 AI 收藏夹方案幻灯片版</a> ｜ <a href="https://html-host-ash.pages.dev/ai-collection-boundary-v1">📋 AI 收藏夹边界 V1</a></p>
+<p>本周把 AI 收藏夹的产品定义往前推了一大步，一次把"是什么、装什么、怎么存、和现有阵地什么关系"都讲清楚：</p>
 
-<p><b>2、AI 收藏夹核心定义</b>：本周明确三大边界 + 关键硬约束。</p>
+<ul>
+  <li>三阵地边界：书签管理器（仅 URL）/ 文件阵地（用户下载箱）/ AI 收藏夹（用户的知识箱）—— <b>明确"下载 ≠ 收藏"，和小云盘业务共生不打架</b></li>
+  <li>8 大资产类型：网页书签 / 图片(含截图) / 视频 / 文档 / 摘录 / 代码 / 音频 / AI 对话</li>
+  <li>存储策略：混合存储 —— 网页类轻量索引；文档 / 截图 / AI 对话存本体，单用户总占用控制在数百 MB（远低于云盘 GB 级）</li>
+  <li>AI 对话独立性：沉淀 = 永久副本，元宝侧删 / 改 / 分享失效都不影响 AI 收藏夹的副本</li>
+  <li>嵌套资产分流：对话里的图 / 文档 / PPT 自动入对应 Tab，互相关联</li>
+</ul>
 
-<table>
-  <thead><tr><th style="width:22%">维度</th><th>定义</th><th style="width:14%">状态</th></tr></thead>
-  <tbody>
-    <tr><td>三阵地边界</td><td>书签管理器 / 文件阵地 / AI 收藏夹（不重叠 / 共生）</td><td>已完成</td></tr>
-    <tr><td>8 大资产类型</td><td>网页书签 / 图片(含截图) / 视频 / 文档 / 摘录 / 代码 / 音频 / AI 对话</td><td>已完成</td></tr>
-    <tr><td>存储策略</td><td>混合：网页轻量索引 / 文档 + 截图 + AI 对话存本体</td><td>已完成</td></tr>
-    <tr><td>AI 对话独立性</td><td>沉淀 = 永久副本，与元宝侧完全独立</td><td>已完成</td></tr>
-    <tr><td>嵌套资产分流</td><td>对话内图 / 文档 / PPT 自动入对应 Tab</td><td>已完成</td></tr>
-    <tr><td>元宝沉淀按钮</td><td>自有权限提单加上</td><td>本周提单</td></tr>
-  </tbody>
-</table>
+<p>方案稿：<a href="https://html-host-ash.pages.dev/ai-collection-slides-v1">📊 幻灯片版</a> ｜ <a href="https://html-host-ash.pages.dev/ai-collection-boundary-v1">📋 边界 V1</a></p>
 
-<p><b>3、书签整理评测体系 final</b>：与测评同学 @gyunzhang 多轮对齐，确立"用户视角 + 逼近客观"原则——3 维度 × 0/1/2 分 + "标红词"客观锚点，agent 可自动判定。<b>核心方法论可复用于标签中台 / AI 收藏夹 / 元宝 RAG 评测体系</b>。</p>
+<p><b>2、〖书签整理〗——评测体系 final，一期链路全部 ready</b></p>
 
-<p>详见：<a href="https://html-host-ash.pages.dev/bookmark-grouping-dev-review-v1">📋 书签分组研发 review HTML</a></p>
+<p>本周把"评测怎么测"这件事彻底想清楚了。和测评同学 @gyunzhang 反复对齐后达成一个核心共识：</p>
 
-<p><b>4、书签整理一期链路全要素打通</b>：评测标准 / 测评集 / 抽取 / 算法 全部 ready。</p>
+<p style="padding-left: 18px;">
+🎯 评测的本质是"用户用着合不合理"（主观），不是"工程链路对不对"（客观）。<br>
+所以方向不是把主观变客观，而是<b>逼近客观</b>——<br>
+通过"标红词"锚点（如「其他/备用」「&gt;4 层」「&gt;80% 准确」）把主观判断写成 agent 能读的相对客观规则。
+</p>
+
+<p>这套思路后续标签中台 / AI 收藏夹 / 元宝 RAG 评测都能复用。</p>
+
+<p>评测标准 v2 final 详见：<a href="https://html-host-ash.pages.dev/bookmark-grouping-dev-review-v1">📋 书签分组研发 review</a></p>
+
+<p>一期链路要素全部到位：</p>
 
 <table>
   <thead><tr><th style="width:30%">模块</th><th>进展</th><th style="width:18%">负责</th></tr></thead>
   <tbody>
-    <tr><td>评测标准 V2 final</td><td>已上线</td><td>@gyunzhang</td></tr>
-    <tr><td>测评集（3000+ 条 + 个人 1.6w）</td><td>已 ready</td><td>@v_kunzlei</td></tr>
+    <tr><td>评测标准 v2 final</td><td>已上线</td><td>@gyunzhang</td></tr>
+    <tr><td>测评集（3000+ 复杂全选 + 个人 1.6w 真实书签）</td><td>已 ready</td><td>@v_kunzlei</td></tr>
     <tr><td>抽取链路（aggregated.xlsx 1.19M）</td><td>已产出</td><td>@carbonweng</td></tr>
     <tr><td>算法流水线（切分 / 摘要 / 打标 / 合并）</td><td>已搭建</td><td>@vancezhao</td></tr>
     <tr><td>评测平台接入元宝</td><td>通路打通</td><td>@ricedeng / @yansycao</td></tr>
@@ -64,18 +69,22 @@
   </tbody>
 </table>
 
-<p><b>5、死链清理方案敲定（终端扫描）</b>：5/19 拉关键信息对齐会（7 人）+ 5/20 程杰拍板技术方案。一期范围：HTTP 410 / 451 + DNS 多源 NXDOMAIN（永久信号 3 类）。</p>
+<p><b>3、〖书签整理 · 死链清理〗——终端扫描方案敲定</b></p>
+
+<p>5/19 拉了一次 7 人关键信息对齐会（vance / orange / ricedeng / 雷泽坤 / 云光），5/20 程杰拍板技术方案——死链检测放终端做，不走后台。</p>
 
 <table>
   <thead><tr><th style="width:22%">维度</th><th>设计</th></tr></thead>
   <tbody>
-    <tr><td>扫描位置</td><td>终端（不放后台）</td></tr>
-    <tr><td>体验设计</td><td>提前扫描（用户进入整理入口即静默扫，0 等待）</td></tr>
-    <tr><td>误杀兜底</td><td>30 天回收 + 撤销 + 灰度 5%-10%</td></tr>
+    <tr><td>一期范围</td><td>HTTP 410 / 451 + DNS 多源 NXDOMAIN（永久信号 3 类，宁可漏报不可误清）</td></tr>
+    <tr><td>体验设计</td><td>提前扫描 —— 用户进入整理入口即静默扫，到点确认 0 等待</td></tr>
+    <tr><td>误杀兜底</td><td>30 天回收 + 一键撤销 + 灰度 5%-10% 跑 1-2 周再放量</td></tr>
   </tbody>
 </table>
 
-<p><b>6、战略上探研发总参谋部</b>：读完浏览器 12 篇调研材料，把 AI 收藏夹挂入研发落地路线图。</p>
+<p><b>4、〖战略层面〗——把 AI 收藏夹塞进研发架构方的优先排期</b></p>
+
+<p>这周读完浏览器 12 篇技术调研，发现底层能力（抽取 / 端模型 / Web API）研发都在做，但他们没把"书签 / AI 收藏夹"作为落地场景——意味着能力做出来不一定优先服务我们。所以主动联系了 3 个核心方向负责人：</p>
 
 <table>
   <thead><tr><th style="width:18%">联系人</th><th style="width:38%">方向</th><th>进展</th></tr></thead>
@@ -86,16 +95,27 @@
   </tbody>
 </table>
 
-<p><b>7、用户反馈 V3 清洗</b>：修正 V2 数据污染问题，重排真实 P0：智能整理 21.8% / 智能清理 15.0% / 导出 12.9%。数据丢失警报 5.4% 已 flag 给研发排查。</p>
+<p>—— 把"我们要用什么能力"这件事提前锁定，避免能力做出来时被边缘化。</p>
+
+<p><b>5、〖用户反馈 V3〗——清洗 + 真 P0 重排</b></p>
+
+<p>上次 V2 报告被同事提醒里面混了大量同句话刷屏的污染数据，本周做了严格清洗：</p>
+<ul>
+  <li>原始 400 条 → 有效 147 条</li>
+  <li>真 P0 排序：智能整理 21.8% / 智能清理 15.0% / 导出 12.9%</li>
+  <li>修正了之前"导出书签 44.5%"的错误结论（被刷屏数据误导）</li>
+  <li>⚠️ 数据丢失 5.4% —— 警报级，已 flag 给研发排查</li>
+</ul>
 
 <p>详见：<a href="https://html-host-ash.pages.dev/qb-bookmark-feedback-v3-20260515">📊 用户反馈 V3</a></p>
 
-<p><b>8、合作 &amp; 交接</b>：</p>
-<p style="padding-left: 20px;">
-a) AI 收藏夹方案 review：已发汉博 / 陈颖，<b>等待面对面同步方向</b><br>
-b) 设计：与 @姝然 对齐 8 大类型主图 + 32-38 张设计稿分批清单，<b>先 P0 6 张演示包</b><br>
-c) 工程：与 @orange 对齐 AI 收藏夹工程实现 3 件事（书签套壳 / 文件晋升 / AI 沉淀），<b>本周内拉 30 分钟会</b><br>
-d) 算法：与 @vance 对接智能分组算法链路，<b>等一期基线数据</b>
+<p><b>6、合作 &amp; 交接</b></p>
+
+<p style="padding-left: 18px;">
+a) AI 收藏夹方案 review —— 已发汉博 / 陈颖，等面对面同步方向<br>
+b) 设计 —— 与 @姝然 对齐 8 大类型主图 + 32-38 张设计稿分批清单，先 P0 6 张演示包<br>
+c) 工程 —— 与 @orange 对齐 AI 收藏夹工程实现 3 件事（书签套壳 / 文件晋升 / AI 沉淀），本周内拉 30 分钟会<br>
+d) 算法 —— 与 @vance 对接智能分组算法链路，等一期基线数据
 </p>
 
 <h3>后续规划需求</h3>
@@ -104,7 +124,7 @@ d) 算法：与 @vance 对接智能分组算法链路，<b>等一期基线数据
   <thead>
     <tr>
       <th style="width:30%">功能描述</th>
-      <th style="width:32%">设计规划</th>
+      <th style="width:32%">设计 / 进展</th>
       <th style="width:18%">开发节奏</th>
       <th style="width:20%">协作方</th>
     </tr>
@@ -114,9 +134,9 @@ d) 算法：与 @vance 对接智能分组算法链路，<b>等一期基线数据
     <tr><td><b>AI 收藏夹设计稿 P0 包</b>（6 张）</td><td>主界面 / AI 对话 Tab / 拖拽快存 / 智能整理</td><td>5/29 前完成</td><td>姝然</td></tr>
     <tr><td><b>书签整理一期基线评测</b></td><td>vance 链路跑通 + 自动化评测打分</td><td>5/28 前出第一批数据</td><td>vance / 云光 / yansy / carbon</td></tr>
     <tr><td><b>AI 收藏夹工程实现 3 件事</b></td><td>书签 Tab 套壳 / 文件晋升 / AI 沉淀通路</td><td>本周内对齐排期</td><td>orange</td></tr>
-    <tr><td><b>元宝"沉淀此对话"按钮</b></td><td>自有权限自提单</td><td>本周提单上线</td><td>自驱</td></tr>
+    <tr><td><b>元宝"沉淀此对话"按钮</b></td><td>有元宝助手内容权限，自己提单加上</td><td>本周提单上线</td><td>自驱</td></tr>
     <tr><td><b>死链清理 PRD V1 终稿</b></td><td>终端扫描 + 嫌疑池 + 提前扫描</td><td>本周内出稿</td><td>orange / 程杰</td></tr>
-    <tr><td><b>vance 算法二轮 PK</b></td><td>prompt 稳定后启动模型 PK</td><td>一期基线后启动</td><td>vance</td></tr>
+    <tr><td><b>vance 算法二轮模型 PK</b></td><td>prompt 稳定后启动</td><td>一期基线后启动</td><td>vance</td></tr>
     <tr><td><b>D7 / D4 / D11 排期跟进</b></td><td>AI 收藏夹底层能力锁定</td><td>持续推进</td><td>steven / damon / ricedeng</td></tr>
     <tr><td><b>文件夹 vs 标签 双导航边界</b></td><td>用户认知边界对齐</td><td>待 review</td><td>姝然 / 老板</td></tr>
   </tbody>
@@ -128,7 +148,7 @@ d) 算法：与 @vance 对接智能分组算法链路，<b>等一期基线数据
   <thead>
     <tr>
       <th style="width:5%">#</th>
-      <th style="width:32%">风险</th>
+      <th style="width:30%">风险</th>
       <th style="width:28%">影响</th>
       <th>应对</th>
     </tr>
@@ -138,7 +158,7 @@ d) 算法：与 @vance 对接智能分组算法链路，<b>等一期基线数据
       <td>1</td>
       <td>vance 自评"很多 case 无法覆盖，要出稳定版本给工程"</td>
       <td>一期 baseline 可能不达预期</td>
-      <td>拿到第一批数据后立即评估，必要时重谈一期边界</td>
+      <td>拿到第一批数据后立即评估，必要时和算法侧重谈一期边界</td>
     </tr>
     <tr>
       <td>2</td>
@@ -148,14 +168,14 @@ d) 算法：与 @vance 对接智能分组算法链路，<b>等一期基线数据
     </tr>
     <tr>
       <td>3</td>
-      <td>DeepSeekV3.1-16k 资源全满</td>
+      <td>DeepSeek V3.1-16k 资源全满</td>
       <td>仅够链路跑通</td>
       <td>临时降级 V3.0 + HY3.0，链路稳定后扩 HY3.0 至 100 qpm</td>
     </tr>
     <tr>
       <td>4</td>
       <td>文件夹 vs 标签 双导航边界</td>
-      <td>用户认知混淆风险</td>
+      <td>用户认知容易混淆</td>
       <td>待姝然 + 老板对齐</td>
     </tr>
   </tbody>
