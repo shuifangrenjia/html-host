@@ -1,0 +1,162 @@
+<meta charset="utf-8">
+<style>
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    max-width: 900px; margin: 30px auto; padding: 20px 30px;
+    color: #2d3748; line-height: 1.7; font-size: 14px;
+  }
+  h1 { font-size: 18px; font-weight: bold; margin: 16px 0 12px; }
+  h2 { font-size: 16px; font-weight: bold; margin: 22px 0 10px; }
+  h3 { font-size: 15px; font-weight: bold; margin: 18px 0 8px; }
+  p { margin: 6px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  th { background: #f0f0f0; border: 1px solid #d0d0d0; padding: 6px 10px; text-align: left; font-weight: bold; }
+  td { border: 1px solid #d0d0d0; padding: 6px 10px; vertical-align: top; }
+  ol, ul { margin: 8px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  a { color: #2c5282; }
+  .tip { color: #888; font-size: 12px; }
+</style>
+
+<h1>2026.5.19-2026.5.25</h1>
+
+<h2>资产模块 @geoffreyyou(游杰)</h2>
+
+<h3>核心工作目标</h3>
+
+<p>5 月内推动 AI 收藏夹（0.4 主战场）方向定调与一期 MVP 启动；完成书签整理（智能打标 / 智能分组 / 死链清理）一期链路打通与基线评测；为标签中台 / 元宝矩阵共享记忆系统建立首个端到端验证场景。</p>
+
+<h3>上周核心进展</h3>
+
+<p><b>1、AI 收藏夹方案 V1</b>：完成整体产品方案 + 8 大类型边界 + 三阵地定义，已发汉博 / 陈颖 review，等待方向确认。</p>
+
+<p>详见：<a href="https://html-host-ash.pages.dev/ai-collection-slides-v1">📊 AI 收藏夹方案幻灯片版</a> ｜ <a href="https://html-host-ash.pages.dev/ai-collection-boundary-v1">📋 AI 收藏夹边界 V1</a></p>
+
+<p><b>2、AI 收藏夹核心定义</b>：本周明确三大边界 + 关键硬约束。</p>
+
+<table>
+  <thead><tr><th style="width:22%">维度</th><th>定义</th><th style="width:14%">状态</th></tr></thead>
+  <tbody>
+    <tr><td>三阵地边界</td><td>书签管理器 / 文件阵地 / AI 收藏夹（不重叠 / 共生）</td><td>已完成</td></tr>
+    <tr><td>8 大资产类型</td><td>网页书签 / 图片(含截图) / 视频 / 文档 / 摘录 / 代码 / 音频 / AI 对话</td><td>已完成</td></tr>
+    <tr><td>存储策略</td><td>混合：网页轻量索引 / 文档 + 截图 + AI 对话存本体</td><td>已完成</td></tr>
+    <tr><td>AI 对话独立性</td><td>沉淀 = 永久副本，与元宝侧完全独立</td><td>已完成</td></tr>
+    <tr><td>嵌套资产分流</td><td>对话内图 / 文档 / PPT 自动入对应 Tab</td><td>已完成</td></tr>
+    <tr><td>元宝沉淀按钮</td><td>自有权限提单加上</td><td>本周提单</td></tr>
+  </tbody>
+</table>
+
+<p><b>3、书签整理评测体系 final</b>：与测评同学 @gyunzhang 多轮对齐，确立"用户视角 + 逼近客观"原则——3 维度 × 0/1/2 分 + "标红词"客观锚点，agent 可自动判定。<b>核心方法论可复用于标签中台 / AI 收藏夹 / 元宝 RAG 评测体系</b>。</p>
+
+<p>详见：<a href="https://html-host-ash.pages.dev/bookmark-grouping-dev-review-v1">📋 书签分组研发 review HTML</a></p>
+
+<p><b>4、书签整理一期链路全要素打通</b>：评测标准 / 测评集 / 抽取 / 算法 全部 ready。</p>
+
+<table>
+  <thead><tr><th style="width:30%">模块</th><th>进展</th><th style="width:18%">负责</th></tr></thead>
+  <tbody>
+    <tr><td>评测标准 V2 final</td><td>已上线</td><td>@gyunzhang</td></tr>
+    <tr><td>测评集（3000+ 条 + 个人 1.6w）</td><td>已 ready</td><td>@v_kunzlei</td></tr>
+    <tr><td>抽取链路（aggregated.xlsx 1.19M）</td><td>已产出</td><td>@carbonweng</td></tr>
+    <tr><td>算法流水线（切分 / 摘要 / 打标 / 合并）</td><td>已搭建</td><td>@vancezhao</td></tr>
+    <tr><td>评测平台接入元宝</td><td>通路打通</td><td>@ricedeng / @yansycao</td></tr>
+    <tr><td>资源调度（DS3.0 60qpm + HY3.0 20qpm）</td><td>临时方案</td><td>@rangerzhang</td></tr>
+  </tbody>
+</table>
+
+<p><b>5、死链清理方案敲定（终端扫描）</b>：5/19 拉关键信息对齐会（7 人）+ 5/20 程杰拍板技术方案。一期范围：HTTP 410 / 451 + DNS 多源 NXDOMAIN（永久信号 3 类）。</p>
+
+<table>
+  <thead><tr><th style="width:22%">维度</th><th>设计</th></tr></thead>
+  <tbody>
+    <tr><td>扫描位置</td><td>终端（不放后台）</td></tr>
+    <tr><td>体验设计</td><td>提前扫描（用户进入整理入口即静默扫，0 等待）</td></tr>
+    <tr><td>误杀兜底</td><td>30 天回收 + 撤销 + 灰度 5%-10%</td></tr>
+  </tbody>
+</table>
+
+<p><b>6、战略上探研发总参谋部</b>：读完浏览器 12 篇调研材料，把 AI 收藏夹挂入研发落地路线图。</p>
+
+<table>
+  <thead><tr><th style="width:18%">联系人</th><th style="width:38%">方向</th><th>进展</th></tr></thead>
+  <tbody>
+    <tr><td>@stevenleisu</td><td>D7 ReaderLM-v2 网页抽取</td><td>把书签场景列为 D7 第一批落地业务</td></tr>
+    <tr><td>@damonruan</td><td>D4 端模型 P0（页面类型识别 / 正文抽取 / 本地语义索引）</td><td>AI 收藏夹作为首批接入业务</td></tr>
+    <tr><td>@ricedeng</td><td>D11 Chrome Web API、D12 Canvas 文档抽取</td><td>待后续对接</td></tr>
+  </tbody>
+</table>
+
+<p><b>7、用户反馈 V3 清洗</b>：修正 V2 数据污染问题，重排真实 P0：智能整理 21.8% / 智能清理 15.0% / 导出 12.9%。数据丢失警报 5.4% 已 flag 给研发排查。</p>
+
+<p>详见：<a href="https://html-host-ash.pages.dev/qb-bookmark-feedback-v3-20260515">📊 用户反馈 V3</a></p>
+
+<p><b>8、合作 &amp; 交接</b>：</p>
+<p style="padding-left: 20px;">
+a) AI 收藏夹方案 review：已发汉博 / 陈颖，<b>等待面对面同步方向</b><br>
+b) 设计：与 @姝然 对齐 8 大类型主图 + 32-38 张设计稿分批清单，<b>先 P0 6 张演示包</b><br>
+c) 工程：与 @orange 对齐 AI 收藏夹工程实现 3 件事（书签套壳 / 文件晋升 / AI 沉淀），<b>本周内拉 30 分钟会</b><br>
+d) 算法：与 @vance 对接智能分组算法链路，<b>等一期基线数据</b>
+</p>
+
+<h3>后续规划需求</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:30%">功能描述</th>
+      <th style="width:32%">设计规划</th>
+      <th style="width:18%">开发节奏</th>
+      <th style="width:20%">协作方</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><b>AI 收藏夹方案 review</b></td><td>方案 V1 已 ready，等老板拍板</td><td>5/27 前拿原则同意</td><td>汉博 / 陈颖</td></tr>
+    <tr><td><b>AI 收藏夹设计稿 P0 包</b>（6 张）</td><td>主界面 / AI 对话 Tab / 拖拽快存 / 智能整理</td><td>5/29 前完成</td><td>姝然</td></tr>
+    <tr><td><b>书签整理一期基线评测</b></td><td>vance 链路跑通 + 自动化评测打分</td><td>5/28 前出第一批数据</td><td>vance / 云光 / yansy / carbon</td></tr>
+    <tr><td><b>AI 收藏夹工程实现 3 件事</b></td><td>书签 Tab 套壳 / 文件晋升 / AI 沉淀通路</td><td>本周内对齐排期</td><td>orange</td></tr>
+    <tr><td><b>元宝"沉淀此对话"按钮</b></td><td>自有权限自提单</td><td>本周提单上线</td><td>自驱</td></tr>
+    <tr><td><b>死链清理 PRD V1 终稿</b></td><td>终端扫描 + 嫌疑池 + 提前扫描</td><td>本周内出稿</td><td>orange / 程杰</td></tr>
+    <tr><td><b>vance 算法二轮 PK</b></td><td>prompt 稳定后启动模型 PK</td><td>一期基线后启动</td><td>vance</td></tr>
+    <tr><td><b>D7 / D4 / D11 排期跟进</b></td><td>AI 收藏夹底层能力锁定</td><td>持续推进</td><td>steven / damon / ricedeng</td></tr>
+    <tr><td><b>文件夹 vs 标签 双导航边界</b></td><td>用户认知边界对齐</td><td>待 review</td><td>姝然 / 老板</td></tr>
+  </tbody>
+</table>
+
+<h3>风险 &amp; 待决策</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:5%">#</th>
+      <th style="width:32%">风险</th>
+      <th style="width:28%">影响</th>
+      <th>应对</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>vance 自评"很多 case 无法覆盖，要出稳定版本给工程"</td>
+      <td>一期 baseline 可能不达预期</td>
+      <td>拿到第一批数据后立即评估，必要时重谈一期边界</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>AI 收藏夹 8 大类型工程量大，50,000 条向量索引存储成本待算账</td>
+      <td>排期可能拉长</td>
+      <td>等汉博 / 陈颖 review 后启动 orange 工程对接</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>DeepSeekV3.1-16k 资源全满</td>
+      <td>仅够链路跑通</td>
+      <td>临时降级 V3.0 + HY3.0，链路稳定后扩 HY3.0 至 100 qpm</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>文件夹 vs 标签 双导航边界</td>
+      <td>用户认知混淆风险</td>
+      <td>待姝然 + 老板对齐</td>
+    </tr>
+  </tbody>
+</table>
