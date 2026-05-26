@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤫 自用小抄 · 不要投屏</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #1a202c;
+    color: #e2e8f0;
+    line-height: 1.7;
+    padding: 24px 16px;
+  }
+  .container { max-width: 880px; margin: 0 auto; }
+  .header {
+    background: linear-gradient(135deg, #742a2a 0%, #c53030 100%);
+    color: #fff;
+    padding: 28px 26px;
+    border-radius: 12px 12px 0 0;
+  }
+  .header .warn {
+    display: inline-block;
+    background: #fbd38d;
+    color: #742a2a;
+    padding: 4px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+  }
+  .header h1 { font-size: 24px; margin-bottom: 6px; }
+  .header .sub { font-size: 13px; opacity: 0.92; }
+
+  .section {
+    background: #2d3748;
+    padding: 26px;
+    border-bottom: 1px solid #4a5568;
+  }
+  .section:last-child { border-radius: 0 0 12px 12px; border-bottom: none; }
+
+  .section h2 {
+    color: #fbd38d;
+    font-size: 19px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #d69e2e;
+  }
+
+  .why-card {
+    background: #1a365d;
+    border-left: 4px solid #fbd38d;
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    margin: 10px 0;
+  }
+  .why-card .wt {
+    color: #fbd38d;
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  .why-card .wd {
+    color: #e2e8f0;
+    font-size: 14px;
+  }
+
+  .qa-pair {
+    background: #1a202c;
+    border: 1px solid #4a5568;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 12px 0;
+  }
+  .qa-pair .q {
+    color: #fc8181;
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .qa-pair .q::before { content: "❓ 他俩可能问："; color: #a0aec0; font-weight: 500; }
+  .qa-pair .a {
+    color: #9ae6b4;
+    font-size: 14px;
+    padding-left: 12px;
+    border-left: 3px solid #48bb78;
+  }
+  .qa-pair .a::before { content: "✅ 你这么答："; color: #a0aec0; font-weight: 600; display: block; margin-bottom: 4px; }
+
+  .check-item {
+    background: #2d3748;
+    border-left: 4px solid #fbd38d;
+    padding: 12px 16px;
+    margin: 10px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .check-item .cno {
+    color: #fbd38d;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .check-item .ct {
+    font-weight: 700;
+    margin: 4px 0;
+    color: #fff;
+  }
+  .check-item .cd {
+    font-size: 13px;
+    color: #cbd5e0;
+  }
+
+  .danger-box {
+    background: #742a2a;
+    border: 2px solid #fc8181;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 14px 0;
+  }
+  .danger-box .dt {
+    color: #fbd38d;
+    font-weight: 700;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  .danger-box .dd {
+    color: #fff;
+    font-size: 14px;
+  }
+
+  .open-script {
+    background: #1a365d;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin: 12px 0;
+  }
+  .open-script .ot {
+    color: #fbd38d;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+  .open-script .oline {
+    color: #fff;
+    font-size: 14.5px;
+    margin: 8px 0;
+    padding: 10px 14px;
+    background: rgba(0,0,0,0.25);
+    border-left: 3px solid #d69e2e;
+    border-radius: 4px;
+  }
+  .open-script .num {
+    color: #fbd38d;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+
+  .hl-y { color: #fbd38d; font-weight: 700; }
+  .hl-r { color: #fc8181; font-weight: 700; }
+  .hl-g { color: #9ae6b4; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="warn">🤫 自用小抄 · 不要投屏 · 揣兜里</span>
+    <h1>明日 4PM · 汉博 + 颖姐 · 战术备忘</h1>
+    <div class="sub">这份给你自己看，所有"为啥 / 防守问答 / 退路 / 自检"都在这里</div>
+  </div>
+
+  <!-- 1. 为啥 -->
+  <div class="section">
+    <h2>① 为啥要做 AI 收藏夹（脑子里的逻辑）</h2>
+
+    <div class="why-card">
+      <div class="wt">为啥现在做</div>
+      <div class="wd">Agent 时代，AI 要读懂用户必须有"记忆燃料"。浏览器是天然的高密度数据源，<span class="hl-y">不抢这个位，后面就被元宝 / ima / Notion 抢走</span>。</div>
+    </div>
+    <div class="why-card">
+      <div class="wt">为啥是我们做</div>
+      <div class="wd">只有浏览器侧能拿到"看过 / 收过"的原始行为数据，<span class="hl-y">ima 拿不到、Notion 拿不到、元宝自己也拿不到</span>——我们是数据上游，天然垄断位。</div>
+    </div>
+    <div class="why-card">
+      <div class="wt">为啥用 AI 做</div>
+      <div class="wd">传统书签让用户自己整理 → 78.3% 复访率说明<span class="hl-y">用户其实想回去看，但找不到</span>。AI 自动打标 + 摘要 + 检索是解开矛盾的唯一办法。</div>
+    </div>
+    <div class="why-card">
+      <div class="wt">为啥只做 5 类（一期）</div>
+      <div class="wd">单 PM 资源 + 8 月初硬窗口，<span class="hl-y">5 类已覆盖 95% 高频场景</span>（书签 / 图片 / 文件 / 摘录 / AI 对话）。视频放二期，因为视频理解链路重 + 一期资源不足 + AI 对话 Tab 可承接。</div>
+    </div>
+  </div>
+
+  <!-- 2. 防守问答 -->
+  <div class="section">
+    <h2>② 他俩可能问的问题（已备弹药）</h2>
+
+    <div class="qa-pair">
+      <div class="q">"为啥不直接把内容沉到元宝？"</div>
+      <div class="a">元宝侧资产沉淀是<span class="hl-y">明睿</span>在做。我聚焦浏览器原生 AI 收藏夹，作为元宝的<span class="hl-y">上游数据源</span>。两条线分工清晰，不重复建设。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"老板预期 8 类资产，你为啥只做 5 类？"</div>
+      <div class="a">一期 5 类（书签 / 图片 / 文件 / 摘录 / AI 对话）已覆盖 95% 高频场景。<span class="hl-y">视频放二期</span>，理由是视频理解链路重（关键帧 + 字幕 + 摘要），一期资源不足，且"AI 对话 Tab"可以承接用户和 AI 讨论视频的内容。<br><span class="hl-y">⚠️ 只在被问到资源时再报</span>：前端 1.5 / 算法 1.5 / 设计 0.5 / 测评 0.3。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"文件 Tab 包不包含在线文档（腾讯文档/飞书/Notion）？"</div>
+      <div class="a"><span class="hl-y">不包含</span>。在线文档本质是 URL，浏览器拿不到里面的内容，所以归"书签"Tab 处理。<br><span class="hl-y">"文件"Tab 只放能本地解析内容的实体文件</span>（PDF / Word / Excel / 本地笔记等）。这样两边不重复、能力边界清晰。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"文件类和 ima 怎么划清边界？"</div>
+      <div class="a">ima 是<span class="hl-y">主动创作 + 编辑</span>工具；AI 收藏夹的文件 Tab 是<span class="hl-y">被动沉淀 + 检索</span>——只管"用户在浏览器里下载或打开过"的文件，不做编辑、不做协作。两边不抢。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"和晓航的接口锁定了吗？"</div>
+      <div class="a"><span class="hl-r">本周已约 / 计划约（散会立刻发起）</span>。6 月 15 日前完成字段定义和触发时机锁定，已写进时间表节点。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"8 月初上的是灰度还是全量？"</div>
+      <div class="a"><span class="hl-y">直接上线</span>，PC 优先。MVP 重点验证核心链路（捕捉→沉淀→检索）跑通，不刻意做灰度切片。被问"会不会风险大"就答：法务评审 6 月上已过、7 月下旬有内部 showcase 收反馈，上线前底子已经磨过一遍。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"和 ima、Notion 的差异化是什么？"</div>
+      <div class="a">ima / Notion 是<span class="hl-y">主动创作</span>工具，AI 收藏夹是<span class="hl-y">被动沉淀</span>。我们不抢"用户主动写笔记"，抢"用户浏览中自然产生的资产"——这是浏览器独有数据。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"如果元宝自己也想做收藏怎么办？"</div>
+      <div class="a">已和明睿明确分工：他做元宝侧资产沉淀，我做浏览器侧 AI 收藏夹。<span class="hl-y">我的资产同步给他</span>，他不重复建。</div>
+    </div>
+
+    <div class="qa-pair">
+      <div class="q">"用户为啥要用？现在书签也能用啊"</div>
+      <div class="a">现在书签的复访率是 78.3%——说明用户回来了但<span class="hl-y">找不到东西</span>。AI 收藏夹解决"找不到"的问题：自动打标 + 摘要 + 一句话问 AI。</div>
+    </div>
+  </div>
+
+  <!-- 3. 底线和退路 -->
+  <div class="section">
+    <h2>③ 你的底线和退路（被逼到墙角时用）</h2>
+
+    <div class="danger-box">
+      <div class="dt">🚨 退路 A：被逼必须做 8 类（全类型）</div>
+      <div class="dd"><b>底线方案</b>：5 类全功能 + 视频做<span class="hl-y">只读引用列表</span>（用户能看到 + 能跳转，但不做 AI 摘要 / 帧抽取）。<br>这样老板觉得"全类型都有"，你实际成本可控。<br><span class="hl-r">⚠️ 不要主动抛，被逼到墙角再用</span>。</div>
+    </div>
+
+    <div class="danger-box">
+      <div class="dt">🚨 退路 B：被逼必须 7 月底上线</div>
+      <div class="dd"><b>底线方案</b>：砍到 <b>3 类（书签 + 图片 + 文件）</b>+ 不做元宝沉淀通道。7 月底能上灰度，但<span class="hl-r">明确告知 8 月补摘录 + AI 对话</span>。</div>
+    </div>
+
+    <div class="danger-box">
+      <div class="dt">🚨 退路 C：被逼分人去其他项目</div>
+      <div class="dd"><b>底线方案</b>：立刻 push 时间表后延，<span class="hl-y">"少 0.5 人 = 延 2 周"</span>。不能哑巴吃黄连，必须当场说。</div>
+    </div>
+  </div>
+
+  <!-- 4. 自检清单 -->
+  <div class="section">
+    <h2>④ 投屏前 30 秒自检（投屏页打开前过一遍）</h2>
+
+    <div class="check-item">
+      <div class="cno">CHECK 01</div>
+      <div class="ct">投屏标题是"AI 收藏夹 · 一期方向对齐 v1"，不是"明日 4PM 对齐稿"</div>
+      <div class="cd">已改 ✓ —— 别让他俩觉得你昨晚才赶的</div>
+    </div>
+
+    <div class="check-item">
+      <div class="cno">CHECK 02</div>
+      <div class="ct">"老板预期 8 类 vs 你做 5 类"——文档已合并进一期，差异缩小到只剩视频</div>
+      <div class="cd">现在风险点小很多。你只需要解释"为啥视频放二期"（链路重 + 资源 + AI 对话可承接）。</div>
+    </div>
+
+    <div class="check-item">
+      <div class="cno">CHECK 03</div>
+      <div class="ct">"捕捉=晓航/苏导"被问"接口锁了吗"必须答得上</div>
+      <div class="cd"><span class="hl-r">散会立刻约晓航</span>，明天前完成"已约时间"的最小承诺</div>
+    </div>
+
+    <div class="check-item">
+      <div class="cno">CHECK 04</div>
+      <div class="ct">不主动报资源 —— 等他俩看完方案兴奋了再让他们问</div>
+      <div class="cd">提前报资源 = 自己给自己设上限。让他们先认可方向，再问"你要多少人"，这时候你议价权才高。<span class="hl-r">被问起再给数字</span>。</div>
+    </div>
+
+    <div class="check-item">
+      <div class="cno">CHECK 05</div>
+      <div class="ct">明睿的边界已写进材料，B 路径完全不出现作为候选</div>
+      <div class="cd">如果他俩问起 B 路径，按防守问答 ① 那一条直接答。<span class="hl-r">不要主动提元宝沉淀方案</span>。</div>
+    </div>
+  </div>
+
+  <!-- 5. 开场白 -->
+  <div class="section">
+    <h2>⑤ 投屏前的 3 句开场白（背下来）</h2>
+
+    <div class="open-script">
+      <div class="ot">OPENING SCRIPT</div>
+      <div class="oline"><span class="num">①</span>AI 收藏夹一期 8 月初上，定位是浏览器里的资产管家——用户看过、收过的东西，它替用户记着、整好、随叫随到。</div>
+      <div class="oline"><span class="num">②</span>一期 5 类资产（书签 / 图片 / 文件 / 摘录 / AI 对话），捕捉能力接晓航，元宝沉淀对接明睿，我负责本体产品形态 + 阵地 + 打标摘要。</div>
+      <div class="oline"><span class="num">③</span>今天想对齐两件事：① 一期 5 类 + 视频二期是否 OK；② 与晓航 / 明睿的接口节奏是否能锁死在 6 月中。</div>
+    </div>
+
+    <div class="danger-box" style="margin-top:18px;">
+      <div class="dt">⚡ 心态准备</div>
+      <div class="dd">汉博喜欢野路子、讨厌墨迹——<span class="hl-y">先抛结论，被问再展开</span>。<br>颖姐 INTJ 吃逻辑——<span class="hl-y">每个"为啥"都要给清楚</span>，不能含糊。<br>你的目标：<span class="hl-r">让他俩当场拍板"5 类 OK"+ "接口节奏 OK"</span>，不要把决策拖到下周。</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
