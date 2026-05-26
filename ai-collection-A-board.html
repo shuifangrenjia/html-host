@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 收藏夹 · 一期方向对齐 v1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: #f5f6f8;
+    color: #1a202c;
+    line-height: 1.75;
+    padding: 28px 20px;
+  }
+  .container { max-width: 1040px; margin: 0 auto; }
+  .header {
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+    color: #fff;
+    padding: 36px 32px;
+    border-radius: 12px 12px 0 0;
+  }
+  .header .tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    padding: 5px 14px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-bottom: 14px;
+    letter-spacing: 1.5px;
+  }
+  .header h1 { font-size: 30px; margin-bottom: 10px; letter-spacing: 0.5px; }
+  .header .sub { font-size: 15px; opacity: 0.92; }
+  .header .meta {
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.22);
+    font-size: 13px;
+    opacity: 0.88;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .header .meta span b { color: #fbd38d; font-weight: 600; }
+
+  .section {
+    background: #fff;
+    padding: 32px;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .section:last-child { border-radius: 0 0 12px 12px; border-bottom: none; }
+
+  .qline {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #1a365d;
+  }
+  .qnum {
+    background: #1a365d;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 19px;
+    flex-shrink: 0;
+  }
+  .qtext { font-size: 22px; font-weight: 700; color: #1a365d; }
+
+  .answer-box {
+    background: #fff8e1;
+    border-left: 4px solid #d69e2e;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    border-radius: 0 6px 6px 0;
+  }
+  .answer-box .lbl {
+    font-weight: 700;
+    color: #975a16;
+    font-size: 12px;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .answer-box .core { font-size: 18px; font-weight: 600; color: #1a202c; }
+
+  h3.subtitle {
+    margin: 22px 0 12px;
+    color: #1a365d;
+    font-size: 17px;
+    padding-left: 10px;
+    border-left: 3px solid #d69e2e;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  th {
+    background: #1a365d;
+    color: #fff;
+    padding: 11px 14px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #f7fafc; }
+  .hot { background: #fed7d7 !important; font-weight: 600; color: #c53030; }
+  .cool { background: #e6fffa !important; color: #234e52; }
+
+  ul.clean { list-style: none; padding-left: 0; }
+  ul.clean li {
+    padding: 8px 0 8px 26px;
+    position: relative;
+  }
+  ul.clean li:before {
+    content: "▸";
+    position: absolute;
+    left: 6px;
+    color: #1a365d;
+    font-weight: bold;
+  }
+
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 18px 0;
+  }
+  .timeline:before {
+    content: "";
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: #1a365d;
+  }
+  .tnode {
+    position: relative;
+    padding: 14px 0 14px 18px;
+  }
+  .tnode:before {
+    content: "";
+    position: absolute;
+    left: -26px;
+    top: 18px;
+    width: 12px;
+    height: 12px;
+    background: #d69e2e;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px #1a365d;
+  }
+  .tnode .tdate {
+    font-weight: 700;
+    color: #c53030;
+    font-size: 14px;
+  }
+  .tnode .ttitle {
+    font-weight: 600;
+    margin: 3px 0;
+    font-size: 15px;
+  }
+  .tnode .tdesc {
+    font-size: 13px;
+    color: #4a5568;
+  }
+
+  .scope-card {
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    padding: 16px 18px;
+    margin: 10px 0;
+    background: #fafbfc;
+  }
+  .scope-card .stitle {
+    font-weight: 700;
+    color: #1a365d;
+    margin-bottom: 8px;
+    font-size: 15px;
+  }
+  .scope-card .stitle .tag-in {
+    background: #38a169;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    font-weight: 500;
+  }
+  .scope-card.in { border-left: 4px solid #38a169; background: #f0fff4; }
+  .scope-card.out { border-left: 4px solid #a0aec0; background: #f7fafc; }
+  .scope-card.out .stitle .tag-out {
+    background: #a0aec0;
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 8px;
+    font-weight: 500;
+  }
+
+  .highlight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 14px;
+  }
+  .h-card {
+    background: linear-gradient(135deg, #fff 0%, #fef3c7 100%);
+    border: 1px solid #d69e2e;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .h-card .hno {
+    font-size: 11px;
+    color: #975a16;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+  }
+  .h-card .ht {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a365d;
+    margin: 4px 0 8px;
+  }
+  .h-card .hd {
+    font-size: 13px;
+    color: #2d3748;
+  }
+
+  .resource-box {
+    background: #ebf8ff;
+    border: 1px solid #4299e1;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 14px;
+  }
+  .resource-box .rlbl {
+    font-weight: 700;
+    color: #2c5282;
+    margin-bottom: 6px;
+    display: block;
+    font-size: 13px;
+  }
+
+  .boundary {
+    background: #fffaf0;
+    border: 1px solid #d69e2e;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin: 16px 0;
+  }
+  .boundary .btitle {
+    font-weight: 700;
+    color: #975a16;
+    margin-bottom: 8px;
+  }
+
+  .memory-box {
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+    color: #fff;
+    padding: 22px 26px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 20px 0;
+  }
+  .memory-box .mlbl {
+    font-size: 12px;
+    letter-spacing: 2px;
+    opacity: 0.8;
+    margin-bottom: 8px;
+  }
+  .memory-box .mcore {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fbd38d;
+  }
+
+  .story-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-left: 4px solid #1a365d;
+    padding: 14px 16px;
+    border-radius: 6px;
+    margin: 10px 0;
+  }
+  .story-card .stag {
+    background: #1a365d;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .story-card .stxt {
+    font-size: 14px;
+    color: #2d3748;
+    line-height: 1.65;
+  }
+
+  .pending {
+    background: #fff5f5;
+    border: 2px dashed #c53030;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 18px 0;
+  }
+  .pending .ptitle {
+    font-weight: 700;
+    color: #c53030;
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .pending ul { padding-left: 20px; font-size: 14px; }
+  .pending ul li { margin: 4px 0; }
+
+  .hl-red { color: #c53030; font-weight: 700; }
+  .hl-blue { color: #1a365d; font-weight: 700; }
+  .hl-gold { background: #fef3c7; padding: 1px 6px; border-radius: 3px; font-weight: 600; }
+
+  @media (max-width: 768px) {
+    .highlight-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 22px; }
+    .qtext { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <span class="tag">AI 产品中心 · AI 组</span>
+    <h1>AI 收藏夹 · 一期方向对齐 v1</h1>
+    <div class="sub">浏览器侧用户资产管家 · 一期 MVP 范围与节奏</div>
+    <div class="meta">
+      <span>主负责：<b>游杰</b></span>
+      <span>上游：捕捉能力（晓航 / 苏导）</span>
+      <span>下游：元宝助手 RAG（明睿）</span>
+      <span>目标上线：<b>2026 年 8 月初</b></span>
+    </div>
+  </div>
+
+  <!-- ============ Q1 做啥 ============ -->
+  <div class="section">
+    <div class="qline">
+      <div class="qnum">1</div>
+      <div class="qtext">做啥</div>
+    </div>
+
+    <div class="answer-box">
+      <span class="lbl">产品定位</span>
+      <div class="core">AI 收藏夹 = 浏览器里的<span class="hl-gold">资产管家</span>——用户看过 / 收过的东西，它替用户<span class="hl-gold">记着</span>、<span class="hl-gold">整好</span>、<span class="hl-gold">随叫随到</span>。</div>
+    </div>
+
+    <h3 class="subtitle">承接老板的 3 个核心预期</h3>
+    <table>
+      <thead><tr><th style="width:34%">老板预期</th><th>产品落点</th></tr></thead>
+      <tbody>
+        <tr><td>① 用户感受到有个<b>数字管家</b>替自己舒舒服服</td><td>5 个 Tab 的统一阵地 + 自动打标摘要，看过即沉淀，用户无需手动整理</td></tr>
+        <tr><td>② 用户使用<b>门槛足够低</b></td><td>捕捉一键收（晓航能力接入）→ 收完无需任何动作 → 随时一句话问元宝助手</td></tr>
+        <tr><td>③ 这个管家<b>能干好多事</b></td><td>同一个收藏盒，既是收藏夹、也是灵感库、也是 AI 的记忆源——一鱼多吃</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subtitle">3 个产品亮点</h3>
+    <div class="highlight-grid">
+      <div class="h-card">
+        <div class="hno">HIGHLIGHT 01</div>
+        <div class="ht">捕捉即沉淀</div>
+        <div class="hd">看到什么、收什么、AI 立刻打标 + 摘要。用户不用归类、不用命名、不用想放哪儿。</div>
+      </div>
+      <div class="h-card">
+        <div class="hno">HIGHLIGHT 02</div>
+        <div class="ht">元宝记得</div>
+        <div class="hd">收过的东西自动成为元宝助手的记忆，用户问"上周看的那个买车视频"它能找到。</div>
+      </div>
+      <div class="h-card">
+        <div class="hno">HIGHLIGHT 03</div>
+        <div class="ht">一个盒子多种用法</div>
+        <div class="hd">书签 / 图片 / 文件 / 摘录 / AI 对话五类资产统一阵地，既是收藏、也是灵感库、也是 AI 燃料。</div>
+      </div>
+    </div>
+
+    <h3 class="subtitle">用户记忆点</h3>
+    <div class="memory-box">
+      <div class="mlbl">USER MEMORY POINT</div>
+      <div class="mcore">"我浏览器里看过的东西，AI 都记得。"</div>
+    </div>
+
+    <h3 class="subtitle">3 个典型用户故事</h3>
+    <div class="story-card">
+      <span class="stag">学生 · Python 学习</span>
+      <div class="stxt">小明在浏览器里看了 30 个 Python 教程页面 + 截了 20 张代码图。两周后写作业时，问元宝助手"我之前看过怎么写递归函数？"——AI 直接召回他看过的那篇 + 那张截图。</div>
+    </div>
+    <div class="story-card">
+      <span class="stag">白领 · 买车决策</span>
+      <div class="stxt">小李在浏览器里看了 50 个车评页、收了 10 张对比图、和 AI 聊了 5 轮购车对话。周末想总结时，AI 收藏夹自动把这些归类成"买车决策包"，一键问元宝"帮我对比一下我看过的这些车"。</div>
+    </div>
+    <div class="story-card">
+      <span class="stag">设计师 · 灵感收集</span>
+      <div class="stxt">小王捕捉了 200 张设计灵感图 + 摘录了 30 段文案。AI 自动按风格 / 色彩 / 主题打标，需要时一句话"找我收藏里所有日系极简风格的图"——直接给。</div>
+    </div>
+
+    <div class="boundary">
+      <div class="btitle">⚠️ 协作边界（避免重复建设）</div>
+      <ul class="clean" style="font-size:13.5px;">
+        <li><b>捕捉能力</b>（截屏 / 划选 / 网页抓取）= <span class="hl-red">晓航 + 苏导</span> 主导，AI 收藏夹是消费方</li>
+        <li><b>元宝侧资产沉淀</b>（B 路径）= <span class="hl-red">明睿</span> 主导，AI 收藏夹不涉及</li>
+        <li><b>本项目主战场</b> = 浏览器侧 AI 收藏夹本体（产品形态 + 5 Tab 阵地 + 打标摘要 + 同步元宝 RAG）</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ Q2 啥时候上 ============ -->
+  <div class="section">
+    <div class="qline">
+      <div class="qnum">2</div>
+      <div class="qtext">啥时候上</div>
+    </div>
+
+    <div class="answer-box">
+      <span class="lbl">总时间表</span>
+      <div class="core">2026 年 <span class="hl-red">8 月初</span> MVP 上线（PC 浏览器优先）</div>
+    </div>
+
+    <div class="timeline">
+      <div class="tnode">
+        <div class="tdate">6 月 上旬</div>
+        <div class="ttitle">方案确认 + 法务评审</div>
+        <div class="tdesc">PRD 定稿 × 4 份（P01 捕捉接入 / P02 5 Tab 阵地 / P03 打标摘要 / P04 元宝沉淀对接） + 法务评审通过</div>
+      </div>
+      <div class="tnode">
+        <div class="tdate">6 月中 — 7 月中</div>
+        <div class="ttitle">研发主开发期</div>
+        <div class="tdesc">前端 + 算法 + 设计并行；与晓航侧捕捉接口锁定（6 月中）</div>
+      </div>
+      <div class="tnode">
+        <div class="tdate">7 月 下旬</div>
+        <div class="ttitle">评测 + 内部 showcase + Bug 收尾</div>
+        <div class="tdesc">云光评测（分类准确率 ≥ 0.8、摘要可用性 ≥ 0.85）；内部 showcase 收反馈；并行修 Bug</div>
+      </div>
+      <div class="tnode">
+        <div class="tdate">8 月 初</div>
+        <div class="ttitle">🚀 MVP 上线</div>
+        <div class="tdesc">PC 浏览器优先</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ Q3 上的时候有啥 ============ -->
+  <div class="section">
+    <div class="qline">
+      <div class="qnum">3</div>
+      <div class="qtext">上的时候有啥</div>
+    </div>
+
+    <div class="answer-box">
+      <span class="lbl">一期范围</span>
+      <div class="core">5 类资产 + 1 套捕捉入口 + 1 套自动打标摘要 + 1 条元宝沉淀通道</div>
+    </div>
+
+    <h3 class="subtitle">✅ 一期包含的 5 类资产</h3>
+
+    <div class="scope-card in">
+      <div class="stitle">① 书签 Tab <span class="tag-in">一期</span></div>
+      <div>用户主动收藏的网页（含<b>在线文档</b>，如腾讯文档 / 飞书 / Notion 网页版——本质是 URL），自带树状层级（base + L1~L4），AI 自动归类 + 标签 + 摘要。承接老书签存量。</div>
+    </div>
+    <div class="scope-card in">
+      <div class="stitle">② 图片 Tab <span class="tag-in">一期</span></div>
+      <div>捕捉截屏 / 网页图自动入库，AI 识别内容打标。无树状结构，纯标签 + 全文检索。</div>
+    </div>
+    <div class="scope-card in">
+      <div class="stitle">③ 文件 Tab（PDF / Word / Excel / 本地笔记） <span class="tag-in">一期</span></div>
+      <div>用户在浏览器里下载或打开过的<b>本地文件</b>统一沉淀，AI 自动解析内容、提取标题 / 摘要 / 关键标签。<br><b>边界：只收能本地解析的实体文件；在线文档（URL 形态）归"书签"Tab</b>，不重复进文件 Tab。</div>
+    </div>
+    <div class="scope-card in">
+      <div class="stitle">④ 摘录 Tab <span class="tag-in">一期</span></div>
+      <div>用户划选文字片段沉淀，关联来源页 URL + 截图，AI 自动归主题。</div>
+    </div>
+    <div class="scope-card in">
+      <div class="stitle">⑤ AI 对话 Tab <span class="tag-in">一期</span></div>
+      <div>用户在元宝助手 / 浏览器内问 AI 的有价值对话，一键沉淀复用。</div>
+    </div>
+
+    <h3 class="subtitle">🔧 一期能力清单</h3>
+    <table>
+      <thead><tr><th style="width:22%">能力</th><th>说明</th><th style="width:24%">归属</th></tr></thead>
+      <tbody>
+        <tr><td>捕捉入口</td><td>截屏 / 划选 / 一键收藏 / 文件抓取</td><td class="cool">晓航 / 苏导（上游）</td></tr>
+        <tr><td>5 Tab 阵地</td><td>统一收藏盒，分类浏览 + 搜索 + 管理</td><td class="hot">游杰（本项目）</td></tr>
+        <tr><td>自动打标 + 摘要</td><td>入库即跑 AI 流水线，秒级出标签 + 摘要</td><td class="hot">游杰 + 程杰</td></tr>
+        <tr><td>元宝助手沉淀</td><td>5 类资产同步给元宝助手做 RAG</td><td class="hot">游杰 × 明睿对接</td></tr>
+      </tbody>
+    </table>
+
+    <h3 class="subtitle">⏸ 二期延后类型（含明确延后理由）</h3>
+
+    <div class="scope-card out">
+      <div class="stitle">⏸ 视频类 <span class="tag-out">二期</span></div>
+      <div><b>延后理由：</b>视频理解链路重（关键帧抽取 + 字幕识别 + 摘要），一期资源不足；先用"AI 对话 Tab"承接用户和 AI 讨论视频的内容。</div>
+    </div>
+
+    <div class="pending">
+      <div class="ptitle">🚨 今天需要拍板的两件事</div>
+      <ul>
+        <li><b>一期范围拍板：</b>当前规划 5 类资产（书签 / 图片 / 文件 / 摘录 / AI 对话）；视频类二期补齐。需就此范围达成共识。</li>
+        <li><b>跨团队接口锁定：</b>与晓航 / 苏导的捕捉接口、与明睿的元宝 RAG 通道，需明确<b>最晚 6 月 15 日前</b>完成字段 + 触发时机定义。</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
