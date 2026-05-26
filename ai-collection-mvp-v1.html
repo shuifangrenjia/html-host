@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AI 收藏夹 · MVP v1（一期范围）</title>
+</head>
+<body style="font-family:-apple-system,'PingFang SC',sans-serif;max-width:1100px;margin:0 auto;padding:30px;color:#1a1a1a;line-height:1.7">
+
+<h1 style="color:#1a365d;border-bottom:3px solid #1a365d;padding-bottom:10px">AI 收藏夹 · MVP v1</h1>
+
+<p style="background:#fef3c7;padding:14px 18px;border-left:4px solid #d69e2e;border-radius:4px;margin:20px 0">
+<strong>本文档定位</strong>：一期 MVP 范围 final。围绕一个用户心智锚 + 一条主链路展开，其他全部砍到二期。
+</p>
+
+<h2 style="color:#1a365d">一、产品定位（一句话）</h2>
+<p style="font-size:18px;background:#1a365d;color:#fff;padding:16px 22px;border-radius:6px">
+🎯 <strong>网页里看到的好东西，一键抓回来 ——</strong> 浏览器原生的元素级抓取 + 自动归类 + 可被找回。
+</p>
+
+<h2 style="color:#1a365d">二、用户主链路（唯一一条）</h2>
+<table border="1" cellspacing="0" cellpadding="10" style="border-collapse:collapse;width:100%;border-color:#cbd5e0">
+<thead>
+<tr style="background:#1a365d;color:#fff">
+<th style="text-align:left;padding:10px;width:8%">步骤</th>
+<th style="text-align:left;padding:10px;width:25%">用户动作</th>
+<th style="text-align:left;padding:10px;width:67%">系统响应</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><strong>1</strong></td><td>浏览网页时发现好内容</td><td>—</td></tr>
+<tr><td><strong>2</strong></td><td>点击地址栏「抓取」按钮 或 长按 C 键</td><td>页面进入抓取模式：蒙层 + 元素识别 + 工具条</td></tr>
+<tr><td><strong>3</strong></td><td>单选 / 多选要抓的元素（图 / 段 / 视频 / 标题）</td><td>被选中的元素加边框 + 工具条计数累加</td></tr>
+<tr><td><strong>4</strong></td><td>点「收藏选中」</td><td>资产按类型自动分流入 4 个 Tab，自动生成摘要 + AI 标签</td></tr>
+<tr><td><strong>5</strong></td><td>打开 AI 收藏夹找回</td><td>按 Tab / 标签 / 关键词检索（支持语义模糊匹配）</td></tr>
+</tbody>
+</table>
+
+<h2 style="color:#1a365d">三、一期范围（4 个 PRD 单元）</h2>
+
+<table border="1" cellspacing="0" cellpadding="10" style="border-collapse:collapse;width:100%;border-color:#cbd5e0">
+<thead>
+<tr style="background:#1a365d;color:#fff">
+<th style="text-align:left;padding:10px;width:8%">编号</th>
+<th style="text-align:left;padding:10px;width:22%">PRD 单元</th>
+<th style="text-align:left;padding:10px;width:50%">一期范围</th>
+<th style="text-align:left;padding:10px;width:20%">优先级</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><strong>P01</strong></td><td>抓取能力</td><td>地址栏按钮 + 长按 C 双入口；蒙层 + 元素识别（图 / 段 / 视频 / 标题）；单选 + 多选；自动分流入对应 Tab；ESC / 按钮退出；成功 toast + 跳转</td><td style="color:#c53030"><strong>P0 核心</strong></td></tr>
+<tr><td><strong>P02</strong></td><td>AI 收藏夹阵地</td><td>三栏工作台（左导航 + 中流 + 右详情简版）；4 个 Tab：书签 / 图片 / 摘录 / AI 对话；列表态（默认）；搜索 + 标签筛选</td><td style="color:#c53030"><strong>P0 核心</strong></td></tr>
+<tr><td><strong>P03</strong></td><td>自动打标 + 摘要</td><td>抓取后异步生成 200 字摘要 + AI 标签（≤5 个）；写入向量库；支持语义模糊检索</td><td style="color:#c53030"><strong>P0 核心</strong></td></tr>
+<tr><td><strong>P04</strong></td><td>书签 Tab 套壳 + AI 对话沉淀</td><td>书签 Tab 套壳现有书签管理器；元宝助手内"沉淀此对话"按钮（自己提单加）</td><td>P1</td></tr>
+</tbody>
+</table>
+
+<h2 style="color:#1a365d">四、明确砍掉（二期再说）</h2>
+
+<table border="1" cellspacing="0" cellpadding="10" style="border-collapse:collapse;width:100%;border-color:#cbd5e0">
+<thead>
+<tr style="background:#c53030;color:#fff">
+<th style="text-align:left;padding:10px;width:25%">砍掉项</th>
+<th style="text-align:left;padding:10px;width:75%">理由</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><strong>文件 Tab</strong></td><td>浏览器文件阵地已接得住，不抢自家业务</td></tr>
+<tr><td><strong>视频 Tab</strong></td><td>PC 端仅 B 站 / YouTube 能拿到进度缩略图，体验不闭环；二期等 PC 自有播放器建好</td></tr>
+<tr><td><strong>文档 / 代码 / 音频 Tab</strong></td><td>伪需求 / 工程量大 / 浏览器场景使用频率低</td></tr>
+<tr><td><strong>元宝助手调起抓取</strong></td><td>依赖元宝团队配合，二期再接</td></tr>
+<tr><td><strong>关联推荐 / 主题模式</strong></td><td>高级功能，无核心心智支撑，二期再做</td></tr>
+<tr><td><strong>多选购物车 / 批量复杂操作</strong></td><td>MVP 阶段单选足够，复杂操作二期</td></tr>
+<tr><td><strong>瀑布流视图 / 按来源视图</strong></td><td>列表态默认即可，多视图二期</td></tr>
+<tr><td><strong>右侧详情面板放大态 / 主题模式</strong></td><td>详情面板一期保留基础形态，复杂态二期</td></tr>
+<tr><td><strong>站点白名单</strong></td><td>不预设站点，按通用 DOM 规则做兜底；主流站点适配优先级二期评估</td></tr>
+</tbody>
+</table>
+
+<h2 style="color:#1a365d">五、4 个 Tab 详解（一期）</h2>
+
+<table border="1" cellspacing="0" cellpadding="10" style="border-collapse:collapse;width:100%;border-color:#cbd5e0">
+<thead>
+<tr style="background:#1a365d;color:#fff">
+<th style="text-align:left;padding:10px;width:14%">Tab</th>
+<th style="text-align:left;padding:10px;width:30%">来源</th>
+<th style="text-align:left;padding:10px;width:56%">展示内容</th>
+</tr>
+</thead>
+<tbody>
+<tr><td><strong>📚 书签</strong></td><td>地址栏 ⭐ / Ctrl+D / 抓取「标题」类型 / 旧书签管理器同步</td><td>套壳书签管理器树状结构；列表态展示标题 + 来源 + 标签 + 时间</td></tr>
+<tr><td><strong>🖼 图片</strong></td><td>抓取「图」（含卡片）类型 / 网页右键 / 本地拖入</td><td>缩略图 + 来源 URL + AI 标签；网页图存 URL + 缩略备份；本地存本体</td></tr>
+<tr><td><strong>✂️ 摘录</strong></td><td>抓取「段」类型 / 划词收藏</td><td>文字片段 + 来源 URL + 抓取时间 + AI 标签</td></tr>
+<tr><td><strong>🤖 AI 对话</strong></td><td>元宝助手「沉淀此对话」按钮</td><td>完整 QA + 引用 URL + AI 标签；沉淀即副本，元宝侧删除不影响</td></tr>
+</tbody>
+</table>
+
+<h2 style="color:#1a365d">六、关键技术依赖（给老板看资源）</h2>
+
+<table border="1" cellspacing="0" cellpadding="10" style="border-collapse:collapse;width:100%;border-color:#cbd5e0">
+<thead>
+<tr style="background:#1a365d;color:#fff">
+<th style="text-align:left;padding:10px;width:30%">能力</th>
+<th style="text-align:left;padding:10px;width:35%">研发归属</th>
+<th style="text-align:left;padding:10px;width:35%">现状</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>页面元素识别 + 蒙层抓取</td><td>浏览器内核团队（steven 苏导）</td><td><strong style="color:#c53030">待确认可行性（今晚已 ping）</strong></td></tr>
+<tr><td>正文抽取 + 摘要</td><td>D7 网页抓取（steven）</td><td>ReaderLM-v2 已可用</td></tr>
+<tr><td>AI 自动打标 + 向量</td><td>vance 算法 + damon 端模型</td><td>书签整理一期链路已 ready，可复用</td></tr>
+<tr><td>AI 收藏夹工程实现</td><td>orange 工程</td><td>待对齐排期</td></tr>
+<tr><td>书签 Tab 套壳</td><td>基础侧产品</td><td>需协调</td></tr>
+<tr><td>元宝「沉淀此对话」按钮</td><td>元宝助手（Geoffrey 自有权限）</td><td><strong style="color:#2c7a2c">自己提单加，不依赖外部</strong></td></tr>
+</tbody>
+</table>
+
+<h2 style="color:#1a365d">七、MVP 核心指标</h2>
+
+<table border="1" cellspacing="0" cellpadding="10" style="border-collapse:collapse;width:100%;border-color:#cbd5e0">
+<thead>
+<tr style="background:#1a365d;color:#fff">
+<th style="text-align:left;padding:10px;width:30%">指标</th>
+<th style="text-align:left;padding:10px;width:70%">目标 / 验证</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>抓取按钮点击率</td><td>≥ 5% PC DAU 至少触发过 1 次抓取（验证心智建立）</td></tr>
+<tr><td>抓取成功率</td><td>≥ 90%（抓取→入库→可见 全流程）</td></tr>
+<tr><td>7 天复访率</td><td>≥ 30%（抓取后 7 天内回 AI 收藏夹找过的占比）</td></tr>
+<tr><td>语义检索准确率</td><td>≥ 80%（用户能搜到自己抓过的内容）</td></tr>
+</tbody>
+</table>
+
+<h2 style="color:#1a365d">八、给老板的 3 句话（明天 4 点用）</h2>
+
+<div style="background:#1a365d;color:#fff;padding:20px;border-radius:6px;margin:20px 0">
+<p style="margin:8px 0"><strong>1. 我赌</strong>："网页里看到的好东西，一键抓回来" —— 用浏览器原生的元素级抓取，建立用户对 AI 收藏夹的第一记忆点。</p>
+<p style="margin:8px 0"><strong>2. MVP 只做 4 件事</strong>：抓取能力 + 基础阵地 + 自动打标摘要 + 书签套壳。其他全砍二期。</p>
+<p style="margin:8px 0"><strong>3. 资源 ask</strong>：浏览器内核（抓取核心，与 steven 苏导对接）+ 工程（orange）+ 算法（vance）+ 设计（姝然，目前 80%）+ 时间（3 个月）。请老板拍这个赌法 + 给数字。</p>
+</div>
+
+<h2 style="color:#1a365d">九、风险</h2>
+
+<table border="1" cellspacing="0" cellpadding="10" style="border-collapse:collapse;width:100%;border-color:#cbd5e0">
+<thead>
+<tr style="background:#c53030;color:#fff">
+<th style="text-align:left;padding:10px;width:30%">风险</th>
+<th style="text-align:left;padding:10px;width:70%">应对</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>抓取能力工程量大 / 浏览器内核改动深</td><td>已 ping steven 苏导确认可行性；如不能一期 ready，则一期降级为「书签 + 划词 + AI 对话」三个轻入口，抓取放二期</td></tr>
+<tr><td>网页改版导致抓取失效</td><td>不押站点白名单，走通用 DOM 规则 + 主流站点适配；抓取失败给清晰 toast 不强求</td></tr>
+<tr><td>用户认知没建立 / 不会用抓取</td><td>首次进入引导 + 案例卡 + 抓取按钮带 tooltip 提示</td></tr>
+</tbody>
+</table>
+
+<p style="margin-top:40px;padding:16px;background:#fef3c7;border-left:4px solid #d69e2e;border-radius:4px">
+<strong>📐 本文档原则</strong>：减法 > 加法。MVP = 1 个心智 + 1 条主链路 + 4 个 PRD 单元。其他二期再说。
+</p>
+
+</body>
+</html>
