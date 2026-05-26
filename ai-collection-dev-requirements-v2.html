@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>AI 收藏夹 · 研发需求清单 v2</title>
+<style>
+:root{
+  --primary:#1a365d;
+  --accent:#c53030;
+  --gold:#d69e2e;
+  --green:#2f855a;
+  --bg:#fafbfc;
+  --card:#fff;
+  --border:#e2e8f0;
+  --text:#1a202c;
+  --text-2:#4a5568;
+  --hl-yellow:#fef5e7;
+  --hl-red:#fed7d7;
+  --hl-blue:#e6f0ff;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.65}
+.wrap{max-width:1180px;margin:0 auto;padding:36px 32px}
+header{background:linear-gradient(135deg,#1a365d 0%,#2c5282 100%);color:#fff;padding:32px 36px;border-radius:14px;margin-bottom:28px;box-shadow:0 6px 20px rgba(26,54,93,.18)}
+header h1{margin:0 0 8px;font-size:26px}
+header .sub{opacity:.92;font-size:14px}
+header .meta{margin-top:14px;font-size:12.5px;opacity:.85;display:flex;gap:18px;flex-wrap:wrap}
+header .meta b{color:#ffe28a}
+
+.toc{background:#fff;border:1px solid var(--border);border-radius:10px;padding:18px 22px;margin-bottom:28px}
+.toc h3{margin:0 0 10px;color:var(--primary);font-size:15px}
+.toc ol{margin:0;padding-left:20px;columns:2;column-gap:24px}
+.toc li{margin-bottom:5px;font-size:13.5px;color:var(--text-2)}
+
+.req{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:24px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.04)}
+.req-head{background:linear-gradient(90deg,#1a365d 0%,#2c5282 100%);color:#fff;padding:14px 22px;display:flex;align-items:center;gap:12px}
+.req-head .num{background:rgba(255,255,255,.18);padding:3px 10px;border-radius:5px;font-weight:700;font-size:13px;letter-spacing:.5px}
+.req-head h2{margin:0;font-size:17px;flex:1}
+.req-head .tag{font-size:11.5px;padding:3px 9px;border-radius:4px;background:rgba(255,255,255,.18)}
+.req-desc{padding:12px 22px;background:#f7fafc;font-size:13.5px;color:var(--text-2);border-bottom:1px solid var(--border)}
+.req-desc b{color:var(--primary)}
+
+table{width:100%;border-collapse:collapse}
+th{background:#f1f5f9;color:var(--primary);font-weight:700;text-align:left;padding:11px 16px;font-size:13px;border-bottom:2px solid var(--primary)}
+td{padding:13px 16px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13.5px;line-height:1.7}
+tr:last-child td{border-bottom:none}
+td:first-child{font-weight:600;color:var(--primary);width:24%;min-width:180px}
+td b{color:var(--accent)}
+td i{color:var(--gold);font-style:normal;font-weight:600}
+td code{background:#edf2f7;padding:1px 6px;border-radius:3px;font-size:12.5px}
+td ul{margin:4px 0 0;padding-left:18px}
+td ul li{margin-bottom:3px}
+
+.note{background:var(--hl-yellow);border-left:3px solid var(--gold);padding:10px 14px;margin:10px 0;font-size:13px;border-radius:0 6px 6px 0}
+.note b{color:var(--accent)}
+
+.decision{background:linear-gradient(135deg,#c53030,#ed8936);color:#fff;padding:22px 26px;border-radius:12px;margin-top:28px}
+.decision h2{margin:0 0 14px;font-size:18px}
+.decision table{background:rgba(255,255,255,.1);border-radius:8px;overflow:hidden}
+.decision th{background:rgba(255,255,255,.18);color:#fff;border-bottom:2px solid rgba(255,255,255,.3)}
+.decision td{color:#fff;border-bottom:1px solid rgba(255,255,255,.15)}
+.decision td:first-child{color:#ffe28a}
+
+.foot{margin-top:40px;padding:18px 22px;background:#1a365d;color:#fff;border-radius:10px;text-align:center;font-size:13.5px}
+.foot b{color:#ffe28a}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>AI 收藏夹 · 研发需求清单 v2</h1>
+  <div class="sub">基于 shuran 体验包（Claude Vibe-Coding Demo）拆解 · 按"需求大单"组织 · 描述完整功能链路与逻辑</div>
+  <div class="meta">
+    <span><b>受众</b>：研发 / 产品老板（汉博 / 陈颖）</span>
+    <span><b>编写</b>：Geoffrey · 2026-05-26</span>
+    <span><b>说明</b>：每条只描述逻辑，视觉细节由设计稿承载（图配在右侧 / 下方）</span>
+  </div>
+</header>
+
+<!-- 目录 -->
+<div class="toc">
+  <h3>📋 9 个需求大单</h3>
+  <ol>
+    <li>抓取能力建设（重点）</li>
+    <li>快速收藏能力</li>
+    <li>AI 收藏夹工作台主界面</li>
+    <li>资产卡片体系（8 类）</li>
+    <li>多选与批量操作</li>
+    <li>资产详情与关联推荐</li>
+    <li>AI 助手对话面板</li>
+    <li>元宝对话沉淀链路</li>
+    <li>设置中心</li>
+  </ol>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 1 · 抓取能力建设 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 01</span>
+    <h2>抓取能力建设</h2>
+    <span class="tag">重点 / 核心差异化</span>
+  </div>
+  <div class="req-desc">
+    用户通过<b>"抓取模式"</b>进入网页元素粒度的精细化收藏 —— 把页面拆解成可识别的内容块（图片 / 视频 / 段落 / 标题等），用户可<b>单选 / 多选 / 框选</b>后一键入库。覆盖两类典型场景：① <b>Pinterest / 小红书等图片瀑布流</b>类网站；② <b>资讯文章 / 博客 / 知乎专栏</b>类长文。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>入口 1 · 地址栏「抓取」按钮</td>
+        <td>用户在任意网页地址栏右侧看到「抓取」按钮（图标 + 文字），点击 → 触发当前页进入抓取模式。<i>仅对网页生效，特殊页面（如设置页 / 浏览器内置页）不展示该按钮</i>。</td>
+      </tr>
+      <tr>
+        <td>入口 2 · 元宝助手内入口</td>
+        <td>元宝助手对话场景下，用户提问"帮我整理这个网页里的图" 类需求时，元宝可主动调起当前页的抓取模式（与上面同一套交互）。</td>
+      </tr>
+      <tr>
+        <td>入口 3 · 快捷键</td>
+        <td>用户在网页任意位置 <code>长按 C</code> 键 ≥ 0.3s → 直接进入抓取模式。<b>松开即退出</b>抓取模式（轻量瞬时模式）。</td>
+      </tr>
+      <tr>
+        <td>抓取模式触发后的页面表现</td>
+        <td>原网页内容上方覆盖一层<b>半透明蒙层</b>，<b>挖洞展示可抓取的内容块</b>（图、视频、段落、标题等）。蒙层顶部显示模式状态条（"已选 X 项 / 完成 / 取消"）。</td>
+      </tr>
+      <tr>
+        <td>页面内容块识别规则</td>
+        <td>系统自动识别网页内可抓取的"内容块" —— <b>D2 待决策</b>：识别哪些粒度？目前体验包里识别<i>图片 / 视频 / 段落 / 标题 / 卡片整体</i>共 5 种；不可抓取区域（导航 / 广告 / 页脚等）不识别。</td>
+      </tr>
+      <tr>
+        <td>单选交互</td>
+        <td>用户鼠标 hover 任一可抓取块 → <b>挖洞高亮</b>该块 + 显示"+ 收藏此项"小按钮；点击 → 该块进入"已选"状态（角标显示编号 1）。</td>
+      </tr>
+      <tr>
+        <td>多选交互</td>
+        <td>支持<b>连续点击多块</b>累计选中（每选中一块编号 +1）；支持<b>框选</b>（鼠标拖拽划定矩形区域，区域内的可抓取块全部进入已选）。</td>
+      </tr>
+      <tr>
+        <td>退选 / 全选 / 反选</td>
+        <td>已选中的块再次点击 → 退选（角标消失，编号重排）；蒙层顶部状态条提供「全选」「反选」「清空」按钮。</td>
+      </tr>
+      <tr>
+        <td>顶部工具条</td>
+        <td>抓取模式下页面顶部固定一条工具栏，包含：① 已选数量；② 「收藏选中」主按钮；③ 「全选 / 反选 / 清空」次按钮；④ 「ESC 退出」提示；⑤ 切换"图片优先 / 文字优先"识别模式。</td>
+      </tr>
+      <tr>
+        <td>"收藏选中"动作</td>
+        <td>用户点「收藏选中」 → 对所选每一块执行收藏 → 各块<b>按类型自动分流</b>到对应 Tab（图片 → 图片 Tab / 段落 → 摘录 Tab / 视频 → 视频 Tab）；每块自动带上<b>来源 URL + 抓取时间 + 网页标题</b>。</td>
+      </tr>
+      <tr>
+        <td>退出抓取模式</td>
+        <td>三种退出方式：① <code>ESC</code> 键；② 工具栏「退出」按钮；③ 收藏完成后 1.5s 自动退出。退出时蒙层渐隐消失，回到正常网页。</td>
+      </tr>
+      <tr>
+        <td>成功提示</td>
+        <td>收藏完成后右下角 toast：<b>"已收藏 X 项到 AI 收藏夹"</b>，附「查看」按钮（点击跳转到 AI 收藏夹相应 Tab）。Toast 3s 自动消失。</td>
+      </tr>
+      <tr>
+        <td>失败兜底</td>
+        <td>① 单块收藏失败 → toast"X 项收藏失败，已重试"，自动重试 1 次；② 全部失败 → 红色 toast"网络异常，请稍后再试"，已选状态保留 30s 内可点重试；③ 用户主动放弃 → 不入库。</td>
+      </tr>
+      <tr>
+        <td>边界规则</td>
+        <td>① 单次抓取上限 <b>50 项</b>，超过提示精选；② 跨页面拼接抓取<b>不支持</b>（单页内）；③ 抓取模式启动时若网页加载未完成 → 提示"等页面加载完再试"。</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <b>D2 待决策</b>：① 哪些 URL / 站点支持抓取？是否所有网页都支持，还是先锚定 Pinterest / 小红书 / 知乎 / B 站等核心站点？② 不支持的页面是否隐藏「抓取」按钮，还是按钮置灰？
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 2 · 快速收藏能力 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 02</span>
+    <h2>快速收藏能力</h2>
+    <span class="tag">高频入口</span>
+  </div>
+  <div class="req-desc">
+    用户在<b>不进入抓取模式</b>的常规浏览状态下，能用最低成本快速收藏当前页 / 网页元素 / 选中文字 / 拖拽内容到 AI 收藏夹。覆盖<b>整页收藏 + 局部收藏 + 拖拽收藏</b>三类。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>地址栏星标收藏（整页）</td>
+        <td>用户点击地址栏 ⭐ 按钮 → 当前页作为<b>网页书签</b>入库（类型 = 网页书签）→ 弹出小确认气泡，可改名 / 选标签 / 选文件夹。<b>与浏览器原生书签管理器双向同步</b>（同一份数据）。</td>
+      </tr>
+      <tr>
+        <td><code>Ctrl+D / Cmd+D</code> 快捷键</td>
+        <td>等同地址栏星标点击，触发整页收藏 + 弹气泡。</td>
+      </tr>
+      <tr>
+        <td>右键菜单 · 网页元素</td>
+        <td>用户在网页内右键<b>图片 / 视频 / 链接</b>，菜单中显示"收藏到 AI 收藏夹" → 单击直接收藏，对应类型自动入库（图 → 图片 Tab / 视频 → 视频 Tab / 链接 → 网页书签）。</td>
+      </tr>
+      <tr>
+        <td>划词收藏</td>
+        <td>用户选中网页正文文字 → 选区附近浮起小工具栏 → 点击「收藏摘录」 → 摘录入<b>摘录 Tab</b>，自动带来源 URL + 选区上下文锚点。</td>
+      </tr>
+      <tr>
+        <td>拖拽收藏</td>
+        <td>① <b>外部拖入</b>：从桌面 / Finder 拖文件进 AI 收藏夹页面 → 自动分流到对应 Tab（pdf → 文档 / jpg → 图片 / mp4 → 视频）；② <b>页内拖到悬浮球</b>：拖文字 / 图 / 链到右下角悬浮球 → 等同收藏。</td>
+      </tr>
+      <tr>
+        <td>悬浮球唤起</td>
+        <td>浏览器内右下角常驻悬浮球；快捷键 <code>Ctrl+Space / Cmd+Enter</code> 唤起一个轻量收藏面板（搜索 + 最近 5 条）。设置项可调位置 / 是否常驻。</td>
+      </tr>
+      <tr>
+        <td>收藏后反馈</td>
+        <td>所有快速收藏动作完成后，右下角统一 toast：<b>"已收藏 → 查看"</b>，3s 自动消失，可点击跳转。</td>
+      </tr>
+      <tr>
+        <td>重复收藏处理</td>
+        <td>同一 URL / 同一文件已存在 → toast 提示"已存在收藏夹中"，不重复入库；用户可点 toast 跳转到原条目。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 3 · 主界面 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 03</span>
+    <h2>AI 收藏夹工作台主界面</h2>
+    <span class="tag">主阵地</span>
+  </div>
+  <div class="req-desc">
+    AI 收藏夹的主界面 = <b>三栏工作台</b>：左侧导航 / 中间内容流 / 右侧详情或 AI 面板。覆盖<b>导航分类 / 视图切换 / 筛选排序 / 搜索</b>四大基础能力。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>主入口</td>
+        <td>① 浏览器顶部固定 Tab 入口"AI 收藏夹"；② 新标签页快捷入口；③ 浏览器侧边栏入口。</td>
+      </tr>
+      <tr>
+        <td>左侧栏 · 全部</td>
+        <td>展示用户所有资产（不分类型，按时间倒序）。<b>默认选中态</b>。</td>
+      </tr>
+      <tr>
+        <td>左侧栏 · 最近添加</td>
+        <td>展示用户近 30 天收藏内容（上限 50 条），按收藏时间倒序。</td>
+      </tr>
+      <tr>
+        <td>左侧栏 · 书签收藏树</td>
+        <td><b>完全套壳现有书签管理器</b>：树状结构 + 文件夹 + 拖拽 + 新建文件夹全部保留。<i>「AI 收藏夹书签 Tab」、「浏览器顶部书签栏」、「旧书签管理器」三位一体，同一份数据</i>。</td>
+      </tr>
+      <tr>
+        <td>左侧栏 · 标签区</td>
+        <td>显示 AI 自动打标 + 用户手动标签（如 #工作 #学习）。点击标签 → 中间内容区按该标签筛选。<b>与"书签收藏树"分两个区域并列</b>。</td>
+      </tr>
+      <tr>
+        <td>左侧栏 · 折叠</td>
+        <td>左侧栏顶部一个折叠按钮，可收起左侧栏 → 主内容区扩大铺满。再点展开。<i>偏好持久化</i>。</td>
+      </tr>
+      <tr>
+        <td>顶部栏 · 全局搜索</td>
+        <td>搜索框置顶，支持<b>全模态搜索</b>（同一关键词同时搜 8 类资产），结果按 Tab 分组展示，向量搜索 + 关键词搜索结合。</td>
+      </tr>
+      <tr>
+        <td>顶部栏 · 视图切换</td>
+        <td>两种视图：① <b>瀑布流</b>（默认）—— 按收藏时间倒序混排；② <b>按来源</b> —— 按域名 / 站点分组堆叠。<i>用户上次选择会被记住（账号级持久化）</i>。</td>
+      </tr>
+      <tr>
+        <td>顶部栏 · 排序</td>
+        <td>下拉提供：最近收藏 / 最近访问 / 最常打开 / 类型分组。默认"最近收藏"。</td>
+      </tr>
+      <tr>
+        <td>顶部栏 · Tab 筛选 Chip</td>
+        <td>顶部一行 Chip：全部 / 网页 / 图片 / 视频 / 文档 / 摘录 / 代码 / 音频 / AI 对话。点击单个 Chip → 中间内容区筛选该类型；可多选（Ctrl + 点击）。</td>
+      </tr>
+      <tr>
+        <td>顶部栏 · 右侧面板切换</td>
+        <td>顶部栏右侧两个图标：「详情」「AI 助手」。默认隐藏右侧面板；点击对应图标 → 右侧滑出面板（详情 / AI 助手二选一）。</td>
+      </tr>
+      <tr>
+        <td>主内容区 · 瀑布流</td>
+        <td>多列卡片瀑布流（响应式 3-5 列），按选中的导航 / 筛选条件渲染对应资产。<b>无限滚动加载</b>。</td>
+      </tr>
+      <tr>
+        <td>主内容区 · 按来源视图</td>
+        <td>同一来源（如 zhihu.com / xiaohongshu.com）的资产堆叠成"来源卡组"，点击展开看该来源下全部资产。</td>
+      </tr>
+      <tr>
+        <td>AI 建议条（顶部 Hero）</td>
+        <td>主内容区顶部一条<b>AI 建议横幅</b>，展示给用户的智能建议（如"你最近收藏了 12 条 AI 相关文章，要不要让我帮你整理成专题？"），可点采纳 / 关闭。<b>D3 待决策</b>：是否做开关支持关闭。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 4 · 资产卡片体系 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 04</span>
+    <h2>资产卡片体系（8 类）</h2>
+    <span class="tag">通用 + 特殊</span>
+  </div>
+  <div class="req-desc">
+    AI 收藏夹的"原子" = 资产卡片。<b>8 类资产共享通用卡片结构</b>，但每类有自己的特殊呈现和操作。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>通用卡片结构</td>
+        <td>每张卡片都包含：① 类型徽章（左上角标识 8 类）；② 标题；③ 摘要 / 缩略图；④ 来源（域名 / 文件名 / 元宝）；⑤ 收藏时间；⑥ AI 标签（可点）；⑦ 右上角"已加星"标记（如有）。</td>
+      </tr>
+      <tr>
+        <td>卡片快捷操作（hover 出现）</td>
+        <td>hover 卡片右上角浮出 4 个小按钮：⭐ 加星 / 🤖 问 AI / ⋯ 更多 / □ 多选。</td>
+      </tr>
+      <tr>
+        <td>单击卡片</td>
+        <td>① 默认 → 右侧滑出详情面板（不离开当前页）；② 双击 / 中键 → 在新标签页打开原始资源。</td>
+      </tr>
+      <tr>
+        <td>拖拽卡片</td>
+        <td>支持把卡片拖到左侧栏的<b>书签文件夹</b>或<b>标签</b>上，即批量改归属。</td>
+      </tr>
+      <tr>
+        <td>网页书签卡片</td>
+        <td>展示网页 favicon + 标题 + 200 字摘要 + 来源域名。点击 → 详情区显示网页正文摘要 + 关联推荐。</td>
+      </tr>
+      <tr>
+        <td>图片卡片</td>
+        <td>展示图片缩略图（瀑布流自适应高度）+ OCR 摘要标签。点击 → 详情区显示原图大图 + OCR 全文。</td>
+      </tr>
+      <tr>
+        <td>视频卡片</td>
+        <td>展示视频封面（B 站 / YouTube 抽帧；其他站点用 OG 图兜底）+ <b>视频标题（网页字段抽取）</b> + 来源站点。点击 → 详情区显示字幕摘要 + 跳转原页。<b>D1 待决策</b>：B 站 / YouTube 之外是否走"URL+标题"兜底。</td>
+      </tr>
+      <tr>
+        <td>文档卡片</td>
+        <td>展示文档图标（按格式区分 pdf/word/ppt）+ 文件名 + 解析后的首段摘要。点击 → 详情区调用 QB 文档查看器内嵌打开。</td>
+      </tr>
+      <tr>
+        <td>摘录卡片</td>
+        <td>展示选中文字（最多 3 行 + ellipsis）+ 来源 URL favicon。点击 → 详情区显示完整摘录 + "回到原文位置"按钮（带锚点跳转）。</td>
+      </tr>
+      <tr>
+        <td>代码卡片</td>
+        <td>展示语言标签（如 Python / JS）+ 代码片段（前 6 行 + 高亮）+ 来源。点击 → 详情区显示完整代码 + 一键复制 + 一键问元宝"这段代码做什么"。</td>
+      </tr>
+      <tr>
+        <td>音频卡片</td>
+        <td>展示音频图标 + 时长 + ASR 转录的首句。点击 → 详情区显示完整 ASR 转录 + 时间戳跳转 + 音频播放器。</td>
+      </tr>
+      <tr>
+        <td>AI 对话卡片</td>
+        <td>展示元宝头像 + 对话标题（用户首句问题）+ 对话摘要。点击 → 详情区展开完整 QA + 引用 Source + "继续问元宝"按钮。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 5 · 多选 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 05</span>
+    <h2>多选与批量操作</h2>
+    <span class="tag">效率工具</span>
+  </div>
+  <div class="req-desc">
+    用户可对收藏夹内的多条资产执行<b>批量动作</b>：批量加星 / 批量打标 / 批量移动 / 批量删除 / 批量发给元宝。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>进入多选模式</td>
+        <td>① 卡片 hover 时点击右上角"□"图标；② 顶部栏点击"多选"按钮。一旦选中第一张卡片，<b>所有卡片左上角自动出现 checkbox</b>。</td>
+      </tr>
+      <tr>
+        <td>选择交互</td>
+        <td>① 单击 checkbox 切换选中；② <code>Shift + 点击</code> 范围选择；③ <code>Cmd/Ctrl + A</code> 当前视图全选；④ ESC 退出多选。</td>
+      </tr>
+      <tr>
+        <td>底部批量操作栏</td>
+        <td>选中数量 ≥ 1 时，<b>底部弹出固定操作栏</b>，显示：① 已选 X 项；② 加星；③ 加标签；④ 移动到文件夹；⑤ 问 AI；⑥ 删除；⑦ 取消。</td>
+      </tr>
+      <tr>
+        <td>批量加星</td>
+        <td>所选项全部标星 / 全部取消星（按当前主选项状态切换）。</td>
+      </tr>
+      <tr>
+        <td>批量加标签</td>
+        <td>弹出小窗，可选已有标签或输入新标签 → 应用到所有选中项。</td>
+      </tr>
+      <tr>
+        <td>批量移动到文件夹</td>
+        <td>弹出文件夹树选择 → 应用到所有选中项（仅对网页书签生效，其他类型不参与）。</td>
+      </tr>
+      <tr>
+        <td>批量问 AI</td>
+        <td>选中资产作为 context 发送给元宝 → 右侧 AI 面板自动展开 + 上下文已绑定 → 用户输入问题（如"对比这 3 篇"/"汇总观点"）。</td>
+      </tr>
+      <tr>
+        <td>批量删除</td>
+        <td>二次确认弹窗"确认删除 X 项？"→ 删除后进入<b>30 天回收站</b>，顶部 toast 提供"撤销"按钮（5 秒内可点）。</td>
+      </tr>
+      <tr>
+        <td>退出多选</td>
+        <td>① 点取消；② ESC 键；③ 操作完成自动退出。退出后 checkbox 全部隐藏。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 6 · 详情 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 06</span>
+    <h2>资产详情与关联推荐</h2>
+    <span class="tag">消费阵地</span>
+  </div>
+  <div class="req-desc">
+    用户点击单条资产后，右侧滑出<b>详情面板</b>。详情面板承担<b>深度消费 + 关联探索 + AI 处理</b>三件事 —— 这是 AI 收藏夹"资产飞轮"的核心场景。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>触发详情面板</td>
+        <td>用户单击主内容区任一卡片 → 右侧详情面板从右侧滑入（占屏 30%-40%），主内容区不消失（仍可继续点别的卡片切换）。</td>
+      </tr>
+      <tr>
+        <td>详情面板顶栏</td>
+        <td>① 资产标题；② 类型徽章；③ 来源；④ 操作按钮（加星 / 问 AI / 编辑标签 / 删除 / 在新标签打开）；⑤ 关闭按钮。</td>
+      </tr>
+      <tr>
+        <td>详情主体内容</td>
+        <td>按资产类型展示对应主体（见<b>需求 04</b>各类卡片的"点击后详情"）：网页 → 摘要 + 正文锚点；图片 → 大图 + OCR；文档 → 内嵌查看器；摘录 → 全文 + 回原文按钮；AI 对话 → 完整 QA。</td>
+      </tr>
+      <tr>
+        <td>详情区放大态</td>
+        <td>详情面板顶部一个"放大"按钮 → 详情区扩展至 70% 宽度，<b>左侧导航折叠不消失</b>（保持上下文）。再点恢复正常宽度。</td>
+      </tr>
+      <tr>
+        <td>关联推荐区</td>
+        <td>详情主体下方一块"关联推荐"区，展示与当前资产相关的<b>已收藏过的</b>资产（向量相似 + 同标签 + 同来源）。<b>不引入全网新内容</b>（避免变 feed 流）。</td>
+      </tr>
+      <tr>
+        <td>关联推荐开关</td>
+        <td><b>D3 待决策</b>：是否给推荐区一个折叠 / 关闭按钮。倾向：默认展开 + 折叠按钮。用户偏好持久化。</td>
+      </tr>
+      <tr>
+        <td>主题模式</td>
+        <td>详情面板可切到<b>主题模式</b> —— 围绕当前资产，展开同主题相关的所有资产（图谱式聚合视图），适合"研究某个话题"的深度场景。</td>
+      </tr>
+      <tr>
+        <td>标签编辑</td>
+        <td>详情区可点击标签 → 编辑 / 删除；可新增标签（自动联想已有 + 输入新建）。</td>
+      </tr>
+      <tr>
+        <td>退出详情</td>
+        <td>① 点关闭按钮；② 再次单击同一卡片；③ ESC 键。退出时面板向右滑出。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 7 · AI 助手 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 07</span>
+    <h2>AI 助手对话面板</h2>
+    <span class="tag">元宝承接</span>
+  </div>
+  <div class="req-desc">
+    AI 收藏夹<b>不自造 AI 能力</b> —— 所有 AI 调用走<b>元宝助手</b>承接。右侧 AI 面板 = 元宝助手的内嵌入口，可基于资产做问答 / 总结 / 对比 / 生成。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>触发 AI 面板</td>
+        <td>① 顶部栏右侧"AI 助手"图标；② 卡片快捷操作"问 AI"；③ 多选后批量"问 AI"；④ 详情面板"问元宝"按钮。任一触发 → 右侧 AI 面板滑入。</td>
+      </tr>
+      <tr>
+        <td>AI 面板与详情面板关系</td>
+        <td><b>互斥 / 二选一</b>。同一时刻右侧只展示其中一个。从详情切到 AI 时，详情自动收起；反之亦然。</td>
+      </tr>
+      <tr>
+        <td>对话主体</td>
+        <td>标准对话流（QA pair）+ 输入框。所有交互沿用元宝助手现有规范（不另起一套）。</td>
+      </tr>
+      <tr>
+        <td>上下文绑定（核心差异化）</td>
+        <td>用户从某资产 / 多选资产触发的对话，<b>该批资产自动作为对话 context</b>，AI 面板顶部以小卡片形式展示已绑定的 context（"基于这 3 项资产"），可点 X 移除单个。</td>
+      </tr>
+      <tr>
+        <td>AI 引用 Source</td>
+        <td>AI 回答中如果引用了 AI 收藏夹的资产，回答中以<b>角标 [1] [2]</b> 形式标注，鼠标 hover 显示来源摘要，点击跳转到主内容区高亮该资产。</td>
+      </tr>
+      <tr>
+        <td>反向调用</td>
+        <td>用户在元宝助手主入口（不是 AI 收藏夹内）问"我之前收藏的 XX" → 元宝自动从 AI 收藏夹检索 + 引用资产作答（即 AI 收藏夹 = 元宝的记忆库）。</td>
+      </tr>
+      <tr>
+        <td>对话历史</td>
+        <td>AI 面板支持查看历史对话（按时间倒序），可继续接历史对话提问。</td>
+      </tr>
+      <tr>
+        <td>退出 AI 面板</td>
+        <td>① 关闭按钮；② 切到详情面板；③ ESC 键。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 8 · 元宝沉淀 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 08</span>
+    <h2>元宝对话沉淀链路</h2>
+    <span class="tag">独占差异化</span>
+  </div>
+  <div class="req-desc">
+    用户在<b>元宝助手</b>里产生的优质对话 → 一键沉淀回 AI 收藏夹的「AI 对话」Tab，永久保留 + 嵌套资产自动分流。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>沉淀入口</td>
+        <td>元宝助手单条对话右上角加「沉淀此对话」按钮（由 Geoffrey 在元宝助手侧自己提单加，<b>不依赖元宝团队排期</b>）。</td>
+      </tr>
+      <tr>
+        <td>沉淀确认弹窗</td>
+        <td>用户点按钮 → 弹出小确认窗：① 对话标题（默认用首句问题，可改）；② 标签（自动推荐 + 可改）；③ "沉淀"主按钮 / "取消"。</td>
+      </tr>
+      <tr>
+        <td>沉淀主对话</td>
+        <td>主对话（QA pair + AI 引用的 URL 列表 + 工具调用记录）入<b>「AI 对话」Tab</b>，作为<b>永久副本</b>，与元宝侧原对话完全独立。</td>
+      </tr>
+      <tr>
+        <td>嵌套资产自动分流</td>
+        <td>对话里嵌套的资产<b>自动分流到对应 Tab</b>：<br>① 用户上传 / AI 引用的图片 → 图片 Tab；<br>② 用户上传 / AI 生成的文档（PPT / Word / 长文档）→ 文档 Tab；<br>③ AI 引用的网页 URL → 网页书签 Tab。<br>每条嵌套资产自动加标签<i>"来自 X 月 X 日的元宝对话"</i>，可点击回跳主对话。</td>
+      </tr>
+      <tr>
+        <td>独立性保证</td>
+        <td><b>元宝侧删除原对话 / 修改原对话 / 分享链接失效 → AI 收藏夹副本不受影响</b>（沉淀 = 永久副本）。</td>
+      </tr>
+      <tr>
+        <td>反向：AI 收藏夹删对话</td>
+        <td>用户在 AI 收藏夹内删除已沉淀的对话 → 仅删 AI 收藏夹副本 + 解除嵌套资产关联。元宝侧原对话不动。</td>
+      </tr>
+      <tr>
+        <td>边界规则</td>
+        <td>① 单对话 ≤ 100K token；② 嵌套图 ≤ 5 / 嵌套文档 ≤ 3；③ 单嵌套文件 > 50MB → 提示"建议存到小云盘后再沉淀"；④ 总对话数 ≤ 500 条。</td>
+      </tr>
+      <tr>
+        <td>常用 Prompt 库</td>
+        <td>「AI 对话」Tab 第二区域 = 用户常用 Prompt 库，支持收藏 / 分类 / 一键填充到元宝。上限 200 条。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════ -->
+<!-- 9 · 设置 -->
+<!-- ═══════════════════════════════════════ -->
+<div class="req">
+  <div class="req-head">
+    <span class="num">需求 09</span>
+    <h2>设置中心</h2>
+    <span class="tag">用户偏好</span>
+  </div>
+  <div class="req-desc">
+    集中管理用户对 AI 收藏夹的所有偏好设置。
+  </div>
+  <table>
+    <thead><tr><th>功能点</th><th>逻辑说明</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>入口</td>
+        <td>左侧栏底部齿轮图标 → 弹出设置面板（屏中部居中弹层）。</td>
+      </tr>
+      <tr>
+        <td>主题色</td>
+        <td>4-6 个预设色块 + 一个"跟随系统"。开关式选择，立即生效。</td>
+      </tr>
+      <tr>
+        <td>密度切换</td>
+        <td>三档：紧凑 / 标准 / 舒适。控制卡片间距 + 字号缩放。</td>
+      </tr>
+      <tr>
+        <td>默认视图</td>
+        <td>下拉选择：瀑布流 / 按来源。决定打开 AI 收藏夹时的初始视图。</td>
+      </tr>
+      <tr>
+        <td>悬浮球</td>
+        <td>① 是否常驻（开关）；② 位置（右下 / 左下 / 自定义）；③ 拖拽触发延迟（0 / 0.3 / 0.5 / 0.7 / 1 / 3 秒）；④ 唤起快捷键（默认 Ctrl+Space，可改）。</td>
+      </tr>
+      <tr>
+        <td>关联推荐</td>
+        <td>开关 —— 关闭后所有详情面板不显示关联推荐区。<b>D3 待决策</b>。</td>
+      </tr>
+      <tr>
+        <td>AI 建议条</td>
+        <td>开关 —— 关闭后主内容区顶部 Hero 横幅不显示。</td>
+      </tr>
+      <tr>
+        <td>自动打标</td>
+        <td>开关 —— 默认开。关闭后新收藏的资产仅保留摘要不打 AI 标签。</td>
+      </tr>
+      <tr>
+        <td>抓取模式</td>
+        <td>① 长按 C 触发开关；② 是否在不支持的页面隐藏「抓取」按钮（vs 置灰）。</td>
+      </tr>
+      <tr>
+        <td>同步设置</td>
+        <td>① 跨设备同步（开关，默认开）；② 移动端可见性（默认只读）。</td>
+      </tr>
+      <tr>
+        <td>回收站</td>
+        <td>入口跳转到 30 天回收站；显示当前已删除条数 + "立即清空"按钮（二次确认）。</td>
+      </tr>
+      <tr>
+        <td>关于 / 反馈</td>
+        <td>显示版本号 / 反馈入口（跳到内部反馈通道）/ 隐私政策。</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 待决策点 -->
+<div class="decision">
+  <h2>🚨 待决策点（需 Geoffrey 在 review 前拍板）</h2>
+  <table>
+    <thead>
+      <tr><th style="width:8%">编号</th><th style="width:30%">问题</th><th>影响范围</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>D1</b></td>
+        <td>视频卡片：B 站 / YouTube 之外的站点是否走"URL+网页标题"兜底？</td>
+        <td>需求 04 视频卡片 / 需求 02 拖拽收藏</td>
+      </tr>
+      <tr>
+        <td><b>D2</b></td>
+        <td>抓取模式：哪些 URL / 站点支持抓取？不支持的页面是隐藏按钮还是置灰？</td>
+        <td>需求 01 抓取能力建设</td>
+      </tr>
+      <tr>
+        <td><b>D3</b></td>
+        <td>关联推荐 / AI 建议条是否给开关让用户关闭？</td>
+        <td>需求 03 主界面 / 需求 06 详情 / 需求 09 设置</td>
+      </tr>
+      <tr>
+        <td><b>D4</b></td>
+        <td>左侧"书签收藏树"和"标签区"双导航边界 —— 用户认知如何区分？</td>
+        <td>需求 03 左侧栏</td>
+      </tr>
+      <tr>
+        <td><b>D5</b></td>
+        <td>"已加星"是否单独成 Tab / 视图？还是仅作为筛选条件？</td>
+        <td>需求 03 主界面</td>
+      </tr>
+      <tr>
+        <td><b>D6</b></td>
+        <td>嵌套资产分流时：用户上传的文件副本是否计入用户 5GB 总容量？</td>
+        <td>需求 08 元宝沉淀</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="foot">
+  📐 <b>说明</b>：每条需求只描述<b>逻辑</b>，视觉细节由设计稿承载（图配在右侧 / 下方）。
+  <br>表格只列功能点 + 逻辑说明两列，方便研发理解 + 老板快读。
+</div>
+
+</div>
+</body>
+</html>
