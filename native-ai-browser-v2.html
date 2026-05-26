@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>原生AI浏览器思考 · Fred</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f7f8fc;
+  --bg-card: #ffffff;
+  --text: #1a1d29;
+  --text-soft: #4a5068;
+  --text-mute: #8088a0;
+  --line: #e8eaf3;
+  --line-soft: #f0f2f8;
+  --grad: linear-gradient(120deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
+  --grad-soft: linear-gradient(120deg, rgba(99,102,241,.10) 0%, rgba(139,92,246,.10) 50%, rgba(168,85,247,.10) 100%);
+  --grad-pale: linear-gradient(120deg, rgba(99,102,241,.06) 0%, rgba(168,85,247,.06) 100%);
+  --indigo: #6366f1;
+  --violet: #8b5cf6;
+  --purple: #a855f7;
+  --shadow: 0 1px 2px rgba(20,30,80,.04), 0 6px 24px rgba(80,60,180,.06);
+  --shadow-hover: 0 4px 12px rgba(20,30,80,.06), 0 12px 36px rgba(80,60,180,.10);
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 96px 32px 80px;
+}
+
+/* ===== Top Nav ===== */
+.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
+  border-bottom: 1px solid var(--line);
+  transition: box-shadow .2s ease;
+}
+.topnav.scrolled {
+  box-shadow: 0 4px 24px rgba(80,60,180,.06);
+}
+.topnav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.topnav-brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700;
+  color: var(--text);
+  letter-spacing: .02em;
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+.topnav-brand .logo {
+  width: 22px; height: 22px;
+  border-radius: 6px;
+  background: var(--grad);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  font-family: "SF Mono", Menlo, monospace;
+}
+.topnav-brand .sep {
+  color: var(--line);
+  margin: 0 4px;
+}
+.topnav-brand .ttl {
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.topnav-list {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 2px 0;
+}
+.topnav-list::-webkit-scrollbar { display: none; }
+.nav-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  color: var(--text-soft);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all .18s ease;
+  border: 1px solid transparent;
+}
+.nav-link .nav-num {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-mute);
+  background: var(--bg-soft);
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: all .18s ease;
+}
+.nav-link:hover {
+  background: var(--grad-pale);
+  color: var(--text);
+}
+.nav-link:hover .nav-num {
+  background: #fff;
+  color: var(--violet);
+}
+.nav-link.active {
+  background: var(--grad);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(139,92,246,.25);
+}
+.nav-link.active .nav-num {
+  background: rgba(255,255,255,.22);
+  color: #fff;
+}
+.topnav-progress {
+  position: absolute;
+  left: 0; bottom: 0;
+  height: 2px;
+  width: 0;
+  background: var(--grad);
+  transition: width .15s ease;
+}
+
+@media (max-width: 800px) {
+  .topnav-brand .ttl { display: none; }
+  .topnav-inner { padding: 8px 14px; gap: 10px; }
+  .nav-link { padding: 6px 10px; font-size: 12px; }
+}
+
+/* ===== Header ===== */
+.hero {
+  position: relative;
+  padding: 28px 0 36px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.hero .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; letter-spacing: .12em;
+  color: var(--violet); font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.hero .eyebrow::before {
+  content: ""; width: 28px; height: 2px;
+  background: var(--grad); border-radius: 2px;
+}
+.hero h1 {
+  font-size: 38px; line-height: 1.25; font-weight: 800;
+  margin: 0 0 12px;
+  letter-spacing: -.5px;
+}
+.hero h1 .grad {
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero .sub {
+  font-size: 15px; color: var(--text-soft);
+  max-width: 720px;
+}
+.hero .meta {
+  display: flex; gap: 18px; margin-top: 16px;
+  font-size: 12px; color: var(--text-mute);
+}
+.hero .meta span::before {
+  content: "·"; margin-right: 8px; color: var(--line);
+}
+.hero .meta span:first-child::before { content: ""; margin: 0; }
+
+/* ===== TOC / 核心脉络 ===== */
+.toc {
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin-bottom: 40px;
+}
+.toc-title {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 14px;
+  letter-spacing: .04em;
+}
+.toc-title .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--grad);
+  box-shadow: 0 0 0 4px rgba(139,92,246,.12);
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+.toc-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #fff;
+  border: 1px solid var(--line-soft);
+  text-decoration: none;
+  color: var(--text-soft);
+  transition: all .2s ease;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.toc-item:hover {
+  border-color: rgba(139,92,246,.4);
+  background: var(--grad-pale);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+.toc-item .num {
+  flex: 0 0 auto;
+  width: 22px; height: 22px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--grad);
+  color: #fff;
+  border-radius: 6px;
+  font-size: 11px; font-weight: 700;
+  font-family: "SF Mono", Menlo, monospace;
+}
+
+/* ===== Section ===== */
+.section {
+  margin-bottom: 36px;
+  scroll-margin-top: 80px;
+}
+.section-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 16px;
+  padding: 16px 20px;
+  background: linear-gradient(to right, var(--grad-soft), transparent 80%);
+  border-left: 4px solid;
+  border-image: var(--grad) 1;
+  border-radius: 0 10px 10px 0;
+}
+.section-head .num {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 13px; font-weight: 700;
+  color: #fff;
+  background: var(--grad);
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: .04em;
+}
+.section-head .tag {
+  font-size: 11px; color: var(--violet);
+  font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border: 1px solid rgba(139,92,246,.3);
+  border-radius: 4px;
+}
+.section-head h2 {
+  margin: 0; font-size: 19px; font-weight: 700;
+  color: var(--text); letter-spacing: -.2px;
+  flex: 1;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 24px 28px;
+  box-shadow: var(--shadow);
+}
+.card p {
+  margin: 0 0 12px;
+  color: var(--text-soft);
+  line-height: 1.85;
+}
+.card p:last-child { margin-bottom: 0; }
+.card .lead {
+  font-size: 16px; color: var(--text);
+  font-weight: 500;
+}
+
+/* highlights */
+.hl {
+  background: linear-gradient(120deg, rgba(99,102,241,.16) 0%, rgba(168,85,247,.16) 100%);
+  color: var(--text);
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border-bottom: 1.5px solid rgba(139,92,246,.5);
+}
+.hl-strong {
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+.hl-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: var(--grad);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  margin: 0 2px;
+}
+.muted-strong {
+  color: var(--text);
+  font-weight: 600;
+  border-bottom: 1px dashed rgba(139,92,246,.5);
+  padding-bottom: 1px;
+}
+
+/* slogan card */
+.slogan {
+  position: relative;
+  padding: 36px 32px;
+  text-align: center;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(99,102,241,.10) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(168,85,247,.10) 0%, transparent 50%),
+    #fff;
+}
+.slogan .quote {
+  font-size: 13px; color: var(--violet);
+  letter-spacing: .2em; font-weight: 600;
+  margin-bottom: 10px;
+}
+.slogan .big {
+  font-size: 34px;
+  font-weight: 800;
+  letter-spacing: 4px;
+  background: var(--grad);
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.slogan .desc {
+  margin-top: 14px;
+  font-size: 15px;
+  color: var(--text-soft);
+  max-width: 640px;
+  margin-left: auto; margin-right: auto;
+  line-height: 1.85;
+}
+
+/* lists */
+.num-list {
+  margin: 4px 0 0; padding: 0;
+  list-style: none;
+  counter-reset: cli;
+}
+.num-list li {
+  position: relative;
+  padding: 12px 14px 12px 48px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: var(--bg-soft);
+  color: var(--text-soft);
+  line-height: 1.75;
+  counter-increment: cli;
+  border: 1px solid transparent;
+  transition: all .2s ease;
+}
+.num-list li:hover {
+  border-color: rgba(139,92,246,.2);
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+.num-list li::before {
+  content: counter(cli);
+  position: absolute;
+  left: 14px; top: 50%; transform: translateY(-50%);
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px; font-weight: 700;
+  color: var(--violet);
+  background: #fff;
+  border: 1px solid rgba(139,92,246,.3);
+  border-radius: 6px;
+}
+
+/* user types */
+.user-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+.user-card {
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: var(--bg-soft);
+  border: 1px solid var(--line);
+}
+.user-card.focus {
+  background: var(--grad-pale);
+  border-color: rgba(139,92,246,.3);
+  position: relative;
+}
+.user-card.focus::after {
+  content: "重点";
+  position: absolute; top: -10px; right: 16px;
+  background: var(--grad); color: #fff;
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 4px;
+  letter-spacing: .08em;
+}
+.user-card .label {
+  font-size: 12px; font-weight: 700; letter-spacing: .12em;
+  color: var(--violet); text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.user-card .title {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px;
+}
+.user-card .body {
+  font-size: 14px; color: var(--text-soft); line-height: 1.7;
+}
+
+/* before/after compare */
+.compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+.compare-col {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+.compare-head {
+  padding: 12px 18px;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: .04em;
+  display: flex; align-items: center; gap: 8px;
+}
+.compare-col.before .compare-head {
+  background: #fafafa; color: var(--text-soft);
+  border-bottom: 1px solid var(--line);
+}
+.compare-col.after .compare-head {
+  background: var(--grad);
+  color: #fff;
+}
+.compare-body {
+  padding: 14px 18px;
+  background: #fff;
+}
+.compare-body ol {
+  margin: 0; padding-left: 22px;
+}
+.compare-body li {
+  margin-bottom: 6px;
+  color: var(--text-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.compare-col.after .compare-body li::marker {
+  color: var(--violet); font-weight: 700;
+}
+
+/* reasons */
+.reasons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 4px;
+}
+.reason {
+  padding: 18px 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+  transition: all .25s ease;
+}
+.reason::before {
+  content: ""; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--grad);
+}
+.reason:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+.reason .ico {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--grad-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.reason .name {
+  font-size: 15px; font-weight: 700; color: var(--text);
+  margin-bottom: 8px;
+}
+.reason .body {
+  font-size: 13.5px; color: var(--text-soft); line-height: 1.7;
+}
+.reason-figure {
+  margin-top: 14px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background: #fafbff;
+  cursor: zoom-in;
+  position: relative;
+  transition: all .25s ease;
+}
+.reason-figure:hover {
+  border-color: rgba(139,92,246,.4);
+  box-shadow: 0 6px 20px rgba(80,60,180,.10);
+}
+.reason-figure::after {
+  content: "🔍 点击放大";
+  position: absolute;
+  right: 10px; bottom: 10px;
+  font-size: 11px;
+  color: #fff;
+  background: rgba(20,30,80,.55);
+  padding: 4px 8px;
+  border-radius: 6px;
+  opacity: 0;
+  transition: opacity .2s ease;
+  pointer-events: none;
+}
+.reason-figure:hover::after { opacity: 1; }
+.reason-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,18,32,.88);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 32px;
+  cursor: zoom-out;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: lbFade .25s ease;
+}
+.lightbox.show { display: flex; }
+.lightbox img {
+  max-width: 96vw;
+  max-height: 92vh;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  object-fit: contain;
+}
+.lightbox-close {
+  position: fixed;
+  top: 22px; right: 28px;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  font-size: 20px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.lightbox-close:hover {
+  background: rgba(255,255,255,.22);
+  transform: rotate(90deg);
+}
+@keyframes lbFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* diff list */
+.diff-list { margin: 0; padding: 0; list-style: none; }
+.diff-list > li {
+  padding: 14px 18px 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  background: var(--bg-soft);
+  border-left: 3px solid var(--violet);
+}
+.diff-list > li:last-child { margin-bottom: 0; }
+.diff-list .diff-title {
+  font-weight: 700; color: var(--text);
+  margin-bottom: 4px; font-size: 14.5px;
+}
+.diff-list .diff-body {
+  color: var(--text-soft); font-size: 14px; line-height: 1.75;
+}
+
+/* good vs bad */
+.gb-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-bottom: 18px;
+}
+.gb {
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.gb-head {
+  padding: 12px 18px;
+  font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; gap: 8px;
+}
+.gb.good .gb-head {
+  background: var(--grad-pale);
+  color: var(--violet);
+  border-bottom: 1px solid var(--line);
+}
+.gb.bad .gb-head {
+  background: #fafafa;
+  color: var(--text-mute);
+  border-bottom: 1px solid var(--line);
+}
+.gb-body { padding: 14px 18px; background: #fff; }
+.gb-body ol { margin: 0; padding-left: 22px; }
+.gb-body li {
+  margin-bottom: 6px;
+  color: var(--text-soft);
+  font-size: 13.5px; line-height: 1.7;
+}
+.gb.bad .gb-body li { color: var(--text-mute); }
+
+/* mapping arrow */
+.mapping {
+  margin-top: 6px;
+  padding: 18px 22px;
+  background: var(--grad-pale);
+  border-radius: 12px;
+  border: 1px dashed rgba(139,92,246,.4);
+}
+.mapping .mtitle {
+  font-size: 13px; font-weight: 700; letter-spacing: .12em;
+  color: var(--violet); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.mapping ol {
+  margin: 0; padding-left: 22px;
+}
+.mapping li {
+  margin-bottom: 6px;
+  color: var(--text-soft); font-size: 14.5px; line-height: 1.75;
+}
+
+/* footer */
+.footer {
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 12px; color: var(--text-mute);
+}
+
+@media (max-width: 800px) {
+  .toc-grid { grid-template-columns: repeat(2, 1fr); }
+  .user-grid, .compare, .reasons, .gb-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 28px; }
+  .slogan .big { font-size: 24px; letter-spacing: 2px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Nav -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <a class="topnav-brand" href="#top">
+      <span class="logo">F</span>
+      <span class="ttl">原生AI浏览器思考</span>
+    </a>
+    <div class="topnav-list" id="topnav-list">
+      <a class="nav-link" href="#s1" data-target="s1"><span class="nav-num">01</span><span>核心卖点</span></a>
+      <a class="nav-link" href="#s2" data-target="s2"><span class="nav-num">02</span><span>是什么</span></a>
+      <a class="nav-link" href="#s3" data-target="s3"><span class="nav-num">03</span><span>能力体系</span></a>
+      <a class="nav-link" href="#s4" data-target="s4"><span class="nav-num">04</span><span>目标用户</span></a>
+      <a class="nav-link" href="#s5" data-target="s5"><span class="nav-num">05</span><span>方向价值</span></a>
+      <a class="nav-link" href="#s6" data-target="s6"><span class="nav-num">06</span><span>差异优势</span></a>
+      <a class="nav-link" href="#s7" data-target="s7"><span class="nav-num">07</span><span>差异做法</span></a>
+      <a class="nav-link" href="#s8" data-target="s8"><span class="nav-num">08</span><span>评价标准</span></a>
+    </div>
+  </div>
+  <div class="topnav-progress" id="topnav-progress"></div>
+</nav>
+
+<div class="page" id="top">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="eyebrow">FRED · 浏览器行业从业者思考</div>
+    <h1>AI时代，<span class="grad">原生AI浏览器</span>的产品思考</h1>
+    <div class="sub">
+      围绕「<span class="hl">所想即所得</span>」的核心卖点，从产品定义、能力体系、目标用户、场景价值、竞争壁垒，到差异化做法与最终评价标准，构建一款 AI 时代的原生浏览器。
+    </div>
+    <div class="meta">
+      <span>8 个核心论点</span>
+      <span>聚焦 AI 原生浏览器</span>
+      <span>面向效率型用户</span>
+    </div>
+  </div>
+
+  <!-- TOC: 核心脉络 -->
+  <div class="toc">
+    <div class="toc-title"><span class="dot"></span>核心脉络 · 8 个【核心点】</div>
+    <div class="toc-grid">
+      <a class="toc-item" href="#s1"><span class="num">01</span><span>核心主题与产品核心卖点</span></a>
+      <a class="toc-item" href="#s2"><span class="num">02</span><span>AI 原生浏览器是什么</span></a>
+      <a class="toc-item" href="#s3"><span class="num">03</span><span>拥有什么能力</span></a>
+      <a class="toc-item" href="#s4"><span class="num">04</span><span>面向什么用户</span></a>
+      <a class="toc-item" href="#s5"><span class="num">05</span><span>方向合理性与用户价值</span></a>
+      <a class="toc-item" href="#s6"><span class="num">06</span><span>为什么我们能做得更好</span></a>
+      <a class="toc-item" href="#s7"><span class="num">07</span><span>与场景化 AI 的不同</span></a>
+      <a class="toc-item" href="#s8"><span class="num">08</span><span>如何评价做得好</span></a>
+    </div>
+  </div>
+
+  <!-- 1 -->
+  <section class="section" id="s1">
+    <div class="section-head">
+      <span class="num">01</span>
+      <span class="tag">核心点</span>
+      <h2>核心主题和产品核心卖点</h2>
+    </div>
+    <div class="card slogan">
+      <div class="quote">— 产品愿景 —</div>
+      <div class="big">所 想 即 所 得</div>
+      <div class="desc">
+        我想做出一款在这个时代<span class="hl">最强的 AI 原生浏览器</span>，这个浏览器核心卖点是：<span class="hl-tag">所想即所得</span>。
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="section" id="s2">
+    <div class="section-head">
+      <span class="num">02</span>
+      <span class="tag">核心点</span>
+      <h2>我们的 AI 原生浏览器是什么</h2>
+    </div>
+    <div class="card">
+      <p class="lead">
+        <span class="hl-strong">帮助用户思考和执行的浏览器</span>，即<span class="hl">用户给我们浏览器提需求，用户定义好要求和定义交付标准，我们来执行，用户进行验收和修改微调</span>；
+        且基于<span class="hl">抽取和解析的能力</span>，实现<span class="hl">我们浏览器主动看着用户做的事儿或者看的东西，我们就能帮助用户完成类似的任务</span>，
+        同时拥有<span class="hl-strong">举一反三的自进化能力</span>。
+      </p>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="section" id="s3">
+    <div class="section-head">
+      <span class="num">03</span>
+      <span class="tag">核心点</span>
+      <h2>我们的 AI 原生浏览器拥有什么能力</h2>
+    </div>
+    <div class="card">
+      <ol class="num-list">
+        <li><span class="hl-strong">沉淀资产给 AI 的能力（我们的命门）</span>——以 <span class="hl-tag">AI 收藏夹</span> 为统一阵地，承接用户在浏览器里看过、收过、标过的一切（书签 / 图片 / 文件 / 摘录 / AI 对话），<span class="hl">用户轻点即收</span>，由 AI 完成<span class="muted-strong">自动打标、摘要、聚类、整理</span>，<span class="hl-strong">可被 AI 直接引用，不依赖人类二次组织</span>。这一层做不好，下面所有 Agent 能力都是无源之水。</li>
+        <li><span class="hl">AI 时代的浏览器框架容器</span>，实现 AI 与人类之间的<span class="muted-strong">信息展示的清晰</span>与<span class="muted-strong">交互的丝滑</span>；</li>
+        <li><span class="hl">强有力的抽取和解析能力</span>，确保人类能看到且被人脑理解为上下文的信息能够<span class="muted-strong">完整地投喂给模型</span>。</li>
+        <li><span class="hl">完整且有拓展性的 Agent 架构</span>，<span class="hl-tag">One agent</span></li>
+        <li>执行任务所需的<span class="hl">工具、技能、知识</span>；</li>
+        <li>符合人脑习惯<span class="hl">指哪改哪</span>的工具能力；</li>
+        <li><span class="hl">自动化任务执行能力</span>；</li>
+        <li><span class="hl">被 AI 理解和操作的能力</span>；</li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="section" id="s4">
+    <div class="section-head">
+      <span class="num">04</span>
+      <span class="tag">核心点</span>
+      <h2>我们的 AI 浏览器面向的用户</h2>
+    </div>
+    <div class="card">
+      <p class="lead">一共两类<span class="hl">效率型用户</span>：</p>
+      <div class="user-grid">
+        <div class="user-card">
+          <div class="label">第一类 · AI 时代浅用户</div>
+          <div class="title">轻量获取与执行</div>
+          <div class="body">
+            AI 搜索问答的用户，或者能用上一些<span class="muted-strong">低门槛 AI 工具</span>的用户，获取知识或需要<span class="muted-strong">相对简单的工具执行</span>的用户。
+          </div>
+        </div>
+        <div class="user-card focus">
+          <div class="label">第二类 · AI 时代深用户</div>
+          <div class="title">数字员工 · 持续用透 AI 服务</div>
+          <div class="body">
+            <span class="hl">对模型能力有一定了解</span>，可以与我们产品之间<span class="hl">用自然语言交互</span>，解决其日常事务的<span class="muted-strong">效率问题和创意问题</span>，
+            <span class="hl">持续用透我们的 AI 服务</span>，且我们可以<span class="hl-strong">帮助或代替用户交付，成为用户的数字员工</span>。
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="section" id="s5">
+    <div class="section-head">
+      <span class="num">05</span>
+      <span class="tag">核心点</span>
+      <h2>浏览器做这个方向是有明确合理性和用户价值的</h2>
+    </div>
+    <div class="card">
+      <p class="lead">
+        每个职场人士都需要<span class="hl-strong">汇报信息</span>，这个工作流中有两个明显特征：
+        <span class="hl">① 用户原始就在浏览器里收集信息</span>；
+        <span class="hl">② 用户的操作思考和加工，在 AI 的加持下能够显著提升效率</span>。
+      </p>
+
+      <div class="compare">
+        <!-- before -->
+        <div class="compare-col before">
+          <div class="compare-head">📋 实际工作流（现状）</div>
+          <div class="compare-body">
+            <ol>
+              <li>用户需要在浏览器里 <span class="muted-strong">查数据、收集过往项目资料</span>；</li>
+              <li>数据处理，定义数据分析点并进行数据加工和图表制作并表达观点；</li>
+              <li>汇报脉络撰写及计划进展同步，需基于过往项目资料做<span class="muted-strong">复制、提取和重写编排</span>；</li>
+              <li>文档格式调整及版式美化；</li>
+              <li>与上级汇报听取修改建议并<span class="muted-strong">手动改写</span>；</li>
+              <li>最后一轮汇报后拆解。</li>
+            </ol>
+          </div>
+        </div>
+        <!-- after -->
+        <div class="compare-col after">
+          <div class="compare-head">✨ 有了我们 AI 浏览器之后</div>
+          <div class="compare-body">
+            <ol>
+              <li>项目原始物料，基于<span class="hl">用户过去带着我们 AI 看的信息</span>或给我们标记的信息，可以给我们说一个任务目的，由 AI 基于<span class="hl">各行业叙事框架</span>制定汇报框架，并去自主收集所需的数据和选择过往项目资料。</li>
+              <li>结合汇报目标，由 AI <span class="hl">分析数据点并给出结论</span>，同时以图表形式呈现；</li>
+              <li>结合汇报目标，由 AI 提取项目背景及关键进展信息，并以<span class="hl">精简扼要的图示</span>呈现；</li>
+              <li>汇总数据及事项，由 AI 基于<span class="hl">优质绘制 skills</span> 集中美化和输出；</li>
+              <li>用户查阅并基于所见<span class="hl">直接自然语言输入修改指令</span>由 AI 并执行最终输出；</li>
+              <li>打通会议记录由 AI 明确外部角色的建议点和修改点自动优化为最终版本，即我们 AI 浏览器拥有了<span class="hl-strong">自进化能力</span>；</li>
+              <li>基于最终版本由 AI 拆解 To do 事项及负责人；</li>
+              <li>如果是例行汇报（如双周会、月会），则可按照上述流程和固定约束自主执行，即我们的 AI 浏览器有了<span class="hl-strong">主观能动性</span>。</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="section" id="s6">
+    <div class="section-head">
+      <span class="num">06</span>
+      <span class="tag">核心点</span>
+      <h2>为什么我们能比其他产品做的更好</h2>
+    </div>
+    <div class="card">
+      <div class="reasons">
+        <div class="reason">
+          <div class="ico">🧠</div>
+          <div class="name">1. 记忆</div>
+          <div class="body">
+            传统 AI 产品的记忆<span class="muted-strong">由会话产生</span>——用户和 AI 聊得越多，AI 才记得越多，本质是<span class="muted-strong">被动残留</span>，噪声大、上下文丢失、新会话即清零。
+            <br><br>
+            我们走的是另一条路：记忆来自<span class="hl-strong">用户在浏览器里的真实行为 + 主动标记</span>。用户看的过程中<span class="hl">轻点即收</span>，AI 自动完成<span class="muted-strong">打标、摘要、聚类、整理</span>——这是浏览器独有的能力，因为只有浏览器能拿到三件事：<br>
+            <span class="hl">① 用户看了什么（内容）</span>　
+            <span class="hl">② 用户怎么看的（停留时长 / 跳转链路 / 复访模式）</span>　
+            <span class="hl">③ 用户主动标了什么（最高信噪比的 ground truth）</span>。
+            <br><br>
+            这三层叠加，让我们的记忆<span class="hl-strong">不是"AI 猜你想要什么"，而是"AI 知道你已经决定了什么"</span>——这就是 <span class="hl-tag">AI 收藏夹</span> 的底层逻辑，也是元宝 / 输入法 / ima 都拿不到的位。
+          </div>
+        </div>
+        <div class="reason">
+          <div class="ico">🌐</div>
+          <div class="name">2. 场景优势</div>
+          <div class="body">
+            用户原生的习惯，即<span class="hl">浏览器独有的"打开一切"的优势</span>，包含<span class="muted-strong">网页和文件</span>以及其里面的<span class="muted-strong">文字、图片、视频</span>。
+            <br><br>
+            这意味着 AI 收藏夹一开始就承接 <span class="hl">5 类资产</span>：书签 / 图片 / 文件 / 摘录 / AI 对话——<span class="muted-strong">一个盒子覆盖用户 95% 的"看过、收过"行为</span>，下游 AI 想用什么类型的上下文都有。
+          </div>
+        </div>
+        <div class="reason reason-img">
+          <div class="ico">⚡</div>
+          <div class="name">3. 抽取能力</div>
+          <div class="body">
+            <span class="hl-strong">抽取全 · 执行稳定 · 成本低</span>。
+            <br><br>
+            配合 AI 收藏夹的<span class="hl">自动打标 + 摘要 + 整理</span> 流水线，用户收一个就懂一个，<span class="muted-strong">沉淀即可用</span>——这是把"抽取能力"从一次性消费，变成了<span class="hl-strong">长期可被复用的资产</span>。
+          </div>
+          <div class="reason-figure" data-zoom>
+            <img src="assets/extract-illustration.png" alt="抽取能力示意图（来自原始文档）" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 新增：AI 收藏夹的核心闭环图示（用纯 CSS 块画，不依赖外部图） -->
+      <div style="margin-top:22px;padding:24px 22px;background:var(--bg-soft);border:1px dashed rgba(139,92,246,.4);border-radius:14px;">
+        <div style="font-size:12.5px;font-weight:700;letter-spacing:.12em;color:var(--violet);text-transform:uppercase;margin-bottom:14px;">↓ AI 收藏夹 · 核心闭环</div>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;">
+          <div style="padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-mute);letter-spacing:.1em;margin-bottom:4px;">INPUT</div>
+            <div style="font-weight:700;color:var(--text);font-size:14px;">用户主动标记<br>+ 浏览行为</div>
+            <div style="font-size:12px;color:var(--text-soft);margin-top:6px;">书签 / 图片 / 文件<br>摘录 / AI 对话</div>
+          </div>
+          <div style="font-size:20px;color:var(--violet);">→</div>
+          <div style="padding:14px;background:var(--grad-pale);border:1px solid rgba(139,92,246,.3);border-radius:10px;text-align:center;">
+            <div style="font-size:11px;color:var(--violet);letter-spacing:.1em;margin-bottom:4px;">AI 加工</div>
+            <div style="font-weight:700;color:var(--text);font-size:14px;">打标 / 摘要<br>聚类 / 整理</div>
+            <div style="font-size:12px;color:var(--text-soft);margin-top:6px;">入库即可用<br>不依赖人类二次组织</div>
+          </div>
+          <div style="font-size:20px;color:var(--violet);">→</div>
+          <div style="padding:14px;background:#fff;border:1px solid var(--line);border-radius:10px;text-align:center;">
+            <div style="font-size:11px;color:var(--text-mute);letter-spacing:.1em;margin-bottom:4px;">OUTPUT</div>
+            <div style="font-weight:700;color:var(--text);font-size:14px;">可被 AI 引用的<br>用户资产层</div>
+            <div style="font-size:12px;color:var(--text-soft);margin-top:6px;">浏览器 Agent / 元宝<br>未来其他 Agent 共用</div>
+          </div>
+        </div>
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:13px;color:var(--text-soft);line-height:1.7;">
+          <span class="hl-strong">关键差异</span>：用户主动标记 = <span class="hl">高信噪比 ground truth</span>；AI 自动加工 = <span class="hl">规模化</span>；浏览器原生数据 = <span class="hl">独占性</span>。
+          三者缺一不可，<span class="muted-strong">缺主动标记就是噪声、缺 AI 加工就是死库、缺浏览器原生就和元宝/ima 一样没差异</span>。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="section" id="s7">
+    <div class="section-head">
+      <span class="num">07</span>
+      <span class="tag">核心点</span>
+      <h2>与过往做场景化 AI 需求的不同之处</h2>
+    </div>
+    <div class="card">
+      <ul class="diff-list">
+        <li>
+          <div class="diff-title">1 · 解决用户需求的程度不同</div>
+          <div class="diff-body">
+            场景化 AI 我们做的是<span class="muted-strong">功能的封装</span>，满足这个场景下<span class="hl">覆盖 60% 的大众需求</span>，
+            但<span class="hl-strong">无法运用好完整的模型能力</span>，去解决剩余 <span class="hl">40% 的个性化需求</span>。
+          </div>
+        </li>
+        <li>
+          <div class="diff-title">2 · 做产品的方式的不同</div>
+          <div class="diff-body">
+            场景化 AI 的做法是：产品挖掘用户需求，再由设计师画稿子，产品与设计一起讨论并修改稿子，工程与算法研发团队进行落地，<span class="muted-strong">单需求的迭代周期长</span>。
+            而 AI 原生浏览器的做法是：去看模型实现过程中需要<span class="hl">任务执行所需的原子能力</span>及<span class="hl">帮助模型更好执行的 skills</span>，
+            同时<span class="muted-strong">简化前端界面的设计</span>，重点在<span class="hl-strong">会话里完善与用户意图澄清或交互的体验</span>。
+          </div>
+        </li>
+        <li>
+          <div class="diff-title">3 · AI 侧边栏的定位是不同的</div>
+          <div class="diff-body">
+            传统浏览器的侧边栏：<span class="muted-strong">主窗口是给人类看的，侧边栏是给 AI 用的</span>。
+            但 AI 原生浏览器：<span class="hl-strong">主窗口是给 AI 用于本地抽取和理解用的，右侧是给人类输入要求和操作指令用的</span>。
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="section" id="s8">
+    <div class="section-head">
+      <span class="num">08</span>
+      <span class="tag">核心点</span>
+      <h2>我们的 AI 浏览器如何评价做的好</h2>
+    </div>
+    <div class="card">
+      <p class="lead">
+        可以按实际人类工作的<span class="hl">员工好坏去做映射</span>方便理解，通盘来说是
+        <span class="hl-tag">专业能力</span>
+        <span class="hl-tag">业绩</span>
+        <span class="hl-tag">态度</span>
+        <span class="hl-tag">成长</span>
+        四个方面。
+      </p>
+
+      <div class="gb-grid">
+        <div class="gb good">
+          <div class="gb-head">✅ 好员工的定义</div>
+          <div class="gb-body">
+            <ol>
+              <li><span class="muted-strong">专业能力出色</span>，在接收任务的时候可以保证产出；</li>
+              <li><span class="muted-strong">爱学习有想法</span>，无需额外教导，能自主学习并找出解决团队任务的方法；</li>
+              <li><span class="muted-strong">主观能动性</span>，主动与团队负责人与核心骨干共脑，无论是否与自己相关，都能提出好的想法或者一些工作问题的解决建议，甚至可以实现出来；</li>
+              <li><span class="muted-strong">扬长补短</span>，看到别人做的好的点，可以学习并内化为自己的长板，看到别人踩了坑或犯了错，自己也能够自省确保不踩同样的坑。</li>
+            </ol>
+          </div>
+        </div>
+        <div class="gb bad">
+          <div class="gb-head">❌ 坏员工的定义</div>
+          <div class="gb-body">
+            <ol>
+              <li>不会做事儿或做不好事儿，专业能力差，也不会主动学习；</li>
+              <li>思考和认知跟不上团队，无法理解团队的核心目标，以及团队所需的专业角色，即使在自己负责的工作领域也永远固步自封，用不再高效或者有效的方法做事；</li>
+              <li>等着被安排工作，不会结合目标自己去找活儿，与自己不相关的事儿永远不过问；</li>
+              <li>无自省能力，同一个错误一直犯，其他人做的好的地方不学习。</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="mapping">
+        <div class="mtitle">↓ 映射到 AI 浏览器</div>
+        <ol>
+          <li><span class="hl-strong">理解和记忆用户的好（地基）</span> —— AI 收藏夹的<span class="hl">资产沉淀密度</span>、<span class="hl">打标摘要准确率</span>、<span class="hl">用户主动标记规模</span>持续上涨；越来越懂用户不是口号，是<span class="muted-strong">可量化的资产层指标</span>。这一层不立，下面两条都是空中楼阁。</li>
+          <li><span class="hl-strong">执行完成的好</span> —— 即面对用户任务，通过<span class="hl">能力层持续建设</span>和<span class="hl">后训练</span>，能够<span class="muted-strong">完成且超出用户预期</span>；</li>
+          <li><span class="hl-strong">自动运行的好</span> —— 用户的日常工作流可以<span class="hl">全天候辅助用户或代替用户执行</span>。</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    本文档基于 Fred 原稿《原生 AI 浏览器思考》整理 · 由游杰结合 AI 资产中心讨论补强「资产沉淀 / 记忆 / 评价标准」三处
+  </div>
+
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightbox-close" aria-label="关闭">×</button>
+  <img id="lightbox-img" src="" alt="放大预览" />
+</div>
+
+<script>
+(function(){
+  // ===== Lightbox =====
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  var lbClose = document.getElementById('lightbox-close');
+
+  document.querySelectorAll('[data-zoom] img').forEach(function(img){
+    img.addEventListener('click', function(e){
+      e.stopPropagation();
+      lbImg.src = img.src;
+      lb.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeLb(){
+    lb.classList.remove('show');
+    lbImg.src = '';
+    document.body.style.overflow = '';
+  }
+  lb.addEventListener('click', closeLb);
+  lbClose.addEventListener('click', function(e){ e.stopPropagation(); closeLb(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeLb();
+  });
+
+  // ===== Top Nav: scroll spy + progress bar =====
+  var topnav = document.getElementById('topnav');
+  var progress = document.getElementById('topnav-progress');
+  var navList = document.getElementById('topnav-list');
+  var navLinks = document.querySelectorAll('.nav-link');
+  var sections = Array.prototype.map.call(navLinks, function(a){
+    return document.getElementById(a.dataset.target);
+  });
+
+  function setActive(id){
+    navLinks.forEach(function(a){
+      var on = a.dataset.target === id;
+      a.classList.toggle('active', on);
+      if (on) {
+        // keep active link visible in horizontal scroll
+        var rectA = a.getBoundingClientRect();
+        var rectL = navList.getBoundingClientRect();
+        if (rectA.left < rectL.left || rectA.right > rectL.right) {
+          navList.scrollTo({
+            left: a.offsetLeft - navList.clientWidth/2 + a.clientWidth/2,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  }
+
+  function onScroll(){
+    var y = window.scrollY || document.documentElement.scrollTop;
+    topnav.classList.toggle('scrolled', y > 8);
+
+    // progress
+    var doc = document.documentElement;
+    var max = (doc.scrollHeight - doc.clientHeight);
+    var pct = max > 0 ? Math.min(100, (y / max) * 100) : 0;
+    progress.style.width = pct + '%';
+
+    // scroll spy
+    var anchor = y + 120;
+    var current = sections[0] ? sections[0].id : null;
+    for (var i = 0; i < sections.length; i++) {
+      var el = sections[i];
+      if (!el) continue;
+      if (el.offsetTop <= anchor) current = el.id;
+    }
+    if (current) setActive(current);
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // smooth click
+  navLinks.forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.dataset.target;
+      var el = document.getElementById(id);
+      if (!el) return;
+      e.preventDefault();
+      var top = el.getBoundingClientRect().top + window.scrollY - 76;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+      history.replaceState(null, '', '#' + id);
+    });
+  });
+})();
+</script>
+</body>
+</html>
