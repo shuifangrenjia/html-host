@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 收藏夹 · 研发需求清单 v1（基于姝然交互稿）</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+    margin: 0; padding: 32px 28px;
+    background: #f7f8fa;
+    color: #1a1a1a;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+  h1 { font-size: 28px; margin: 0 0 6px; color: #1a365d; font-weight: 800; letter-spacing: 0.5px; }
+  .sub { color: #666; font-size: 13px; margin-bottom: 24px; }
+  .meta { background: #fff; border: 1px solid #e6e8ec; padding: 14px 18px; border-radius: 10px; margin-bottom: 24px; font-size: 13px; }
+  .meta b { color: #c53030; }
+  .module-block { margin-bottom: 28px; }
+  .module-title {
+    background: linear-gradient(90deg, #1a365d 0%, #2c5282 100%);
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.4px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    border: 1px solid #e6e8ec;
+    border-top: none;
+  }
+  th, td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #ecedef;
+    text-align: left;
+    vertical-align: top;
+    font-size: 13px;
+  }
+  th {
+    background: #f4f5f7;
+    font-weight: 600;
+    color: #444;
+    font-size: 12.5px;
+    border-bottom: 1.5px solid #d6d8dd;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.col-name { width: 18%; font-weight: 600; color: #1a365d; }
+  td.col-desc { width: 82%; color: #2a2a2a; line-height: 1.7; }
+  td.col-desc b { color: #c53030; }
+  td.col-desc em { color: #d69e2e; font-style: normal; font-weight: 600; }
+  .legend {
+    background: #fffbeb;
+    border-left: 3px solid #d69e2e;
+    padding: 10px 14px;
+    margin: 16px 0 22px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: #6b5418;
+  }
+  .total { background: #e9f1ff; padding: 8px 12px; border-radius: 6px; display: inline-block; font-size: 12px; color: #1a365d; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>AI 收藏夹 · 研发需求清单 v1</h1>
+<div class="sub">基于姝然交互稿（Claude-Design-Project 体验包）拆解 · @geoffreyyou 给研发对齐用</div>
+
+<div class="meta">
+  <b>说明</b>：本清单聚焦"做什么 + 关键约束 + 交互逻辑"，不写接口/代码细节。每条都按"用户视角的交互流"描述，研发可基于此定接口与实现方式。<br>
+  <b>红字</b>=关键约束 / 边界规则；<b style="color:#d69e2e;">橙字</b>=可决策点（待定/可调）。<br>
+  <span class="total">共 13 模块 · 78 条需求</span>
+</div>
+
+<!-- 模块 1：浏览器外壳 -->
+<div class="module-block">
+  <div class="module-title">1 · 浏览器外壳（顶部容器）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">收藏夹 Tab 入口</td><td class="col-desc">浏览器顶部 tab 区固定入口"收藏夹"，黄色书签 favicon。点击切到收藏夹主页（默认 Tab）。<b>该 Tab 默认开启，用户不可关闭</b>（避免用户误关后找不到入口）。</td></tr>
+      <tr><td class="col-name">地址栏「加入收藏」按钮</td><td class="col-desc">地址栏右侧固定 ⭐ 按钮，点击 → 把当前网页加入 AI 收藏夹「书签 Tab」。已收藏的网页 ⭐ 高亮。</td></tr>
+      <tr><td class="col-name">地址栏「抓取」按钮</td><td class="col-desc">仅在<b>当前页面是可抓取页面（非收藏夹自身）</b>时显示。点击或<b>长按 C 键</b>触发抓取模式。<em>"可抓取页面"由前端基于 URL/页面类型识别，待与研发确认识别规则</em>。</td></tr>
+      <tr><td class="col-name">元宝助手入口</td><td class="col-desc">浏览器顶部右侧元宝助手按钮 → 唤起元宝。元宝可调用 AI 收藏夹的资产作为上下文（与「右侧 AI 面板」共享同一对话能力）。</td></tr>
+      <tr><td class="col-name">书签栏</td><td class="col-desc">浏览器顶部书签栏：「全部书签 / 主页快链 / 手机书签 / 用户文件夹」。<b>与 AI 收藏夹「书签 Tab」共享同一份数据</b>（增/删/改/拖拽实时双向同步）。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 2：左侧栏 -->
+<div class="module-block">
+  <div class="module-title">2 · 左侧栏（导航）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">全部</td><td class="col-desc">展示用户所有已收藏内容（不分类型、不分文件夹），按时间倒序。右侧角标显示总数（如 326）。</td></tr>
+      <tr><td class="col-name">最近添加</td><td class="col-desc">展示<b>用户近 30 天</b>收藏内容，<b>上限 50 条</b>，按时间倒序。</td></tr>
+      <tr><td class="col-name">书签收藏（树状）</td><td class="col-desc">仅在用户点选顶部「书签」类型 Chip 时显示。3 级树状结构：<br>· 一级「书签收藏」（可整体折叠）<br>· 二级「普通书签 / 常用书签」（可独立展开折叠，文件夹图标）<br>· 三级具体文件夹（如：科技资讯 / 设计资源 / 生活 / 文献资源 / 常用视频网站 / 直达快链 / 腾讯）<br><b>三级树与浏览器原书签管理器完全套壳同步</b>。</td></tr>
+      <tr><td class="col-name">用户标签区</td><td class="col-desc">展示用户的所有 AI 标签 + 用户手动标签（混合展示，<em>是否区分待定</em>）。每个标签右侧显示该标签下资产数量。点击进入该标签筛选态。<b>顶部"+"按钮支持新建标签</b>。</td></tr>
+      <tr><td class="col-name">导航项 · 选中态</td><td class="col-desc">点击任意导航项 → 主内容区按该范围筛选。同时切换时<b>清空当前选中条目（详情面板）</b>。</td></tr>
+      <tr><td class="col-name">导航项 · 拖拽接收</td><td class="col-desc">支持把主内容区的卡片<b>拖拽到</b>左侧文件夹/标签上完成移动/打标。系统类（全部/最近添加）不支持拖入。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 3：顶部操作栏 -->
+<div class="module-block">
+  <div class="module-title">3 · 顶部操作栏（搜索 / 视图 / 排序 / 面板切换）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">搜索框</td><td class="col-desc">支持自然语言搜索（例如"关于设计哲学的文章"）。匹配字段：标题 / 描述 / 摘要 / 来源 / 用户标签 / AI 标签 / 摘录原文。<b>Cmd+K 全局快捷键聚焦搜索</b>。回车后若有内容 → 同时唤起右侧 AI 面板，把搜索词作为对话起点。</td></tr>
+      <tr><td class="col-name">视图切换 · 瀑布流</td><td class="col-desc">默认视图。多列卡片瀑布流（默认 4 列，紧凑模式 5 列；详情面板打开时减 1 列）。</td></tr>
+      <tr><td class="col-name">视图切换 · 按来源</td><td class="col-desc">按 source.name 分组，每组显示来源头像 + 数量 + 时间，组内卡片横向排列。组按数量倒序。</td></tr>
+      <tr><td class="col-name">视图偏好持久化</td><td class="col-desc">用户最后选择的视图 / 紧凑度 / 强调色 / 是否显示 AI 建议条 等偏好<b>账号级保存</b>，跨设备一致。</td></tr>
+      <tr><td class="col-name">排序菜单</td><td class="col-desc">下拉菜单 2 个选项：<br>· <b>按时间</b>（默认，最新添加优先）<br>· <b>按类型</b>（同类聚集，类型顺序：图片 → 视频 → 网页 → AI 对话 → 摘录 → 代码 → 文件 → 音频；同类型内仍按时间倒序）</td></tr>
+      <tr><td class="col-name">右侧面板切换</td><td class="col-desc">两个独立按钮控制右侧面板：<br>· ✨ AI 对话面板（与收藏对话）<br>· ▮ 详情面板（条目详情）<br>同一时刻最多打开一个，<b>切换时另一个自动关闭</b>。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 4：主内容区 - 瀑布流 -->
+<div class="module-block">
+  <div class="module-title">4 · 主内容区（瀑布流默认态）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">Hero 标题区</td><td class="col-desc">页面顶部显示当前作用域名称（如"全部 / 最近添加 / 京都旅行 / #设计 标签"）+ 该范围的总条数（"共 X 条收藏"）。可在设置面板关闭。</td></tr>
+      <tr><td class="col-name">类型 Chip 筛选条</td><td class="col-desc">Hero 区右侧横向 Chip 行，<b>8 个类型 + 全部</b>：全部 / 书签 / 图片 / 视频 / 文档 / AI 对话 / 摘录 / 代码 / 音频。点击切换类型筛选。<b>仅"书签"Chip 选中时</b>，左侧栏才显示书签收藏树状结构。</td></tr>
+      <tr><td class="col-name">AI 建议条</td><td class="col-desc">无搜索词且当前作用域有内容时显示。包含 1 行标题（动态生成，如"让 AI 重新整理京都旅行这 12 条收藏"）+ 3 个推荐 prompt 按钮。<b>标题 / prompt 都根据当前 chip / 文件夹 / 标签 动态生成</b>（每个文件夹各有 3 条贴切 prompt，详见数据约定）。点击 prompt 直接进入右侧 AI 面板并自动发送。</td></tr>
+      <tr><td class="col-name">瀑布流卡片区</td><td class="col-desc">所有筛选后的资产以卡片形式渲染。卡片宽度自适应列数，高度根据内容（图片宽高比 / 文字行数）。<b>滚动加载 / 列高度均衡布局</b>。</td></tr>
+      <tr><td class="col-name">空态</td><td class="col-desc">当前筛选无内容时显示空态提示文案（"该范围暂无收藏" + 引导操作）。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 5：主内容区 - 按来源 -->
+<div class="module-block">
+  <div class="module-title">5 · 主内容区（按来源分组态）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">来源分组头</td><td class="col-desc">每组顶部显示：来源色块头像（首字母）+ 来源名称 + 该组条数 + 最新一条时间 + ⋯ 操作按钮。</td></tr>
+      <tr><td class="col-name">来源组内排列</td><td class="col-desc">同一来源的卡片在该组下<b>横向排列</b>（不再瀑布流）。</td></tr>
+      <tr><td class="col-name">分组顺序</td><td class="col-desc">按各组条数倒序（最多的来源排最前）。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 6：资产卡片 -->
+<div class="module-block">
+  <div class="module-title">6 · 资产卡片（通用结构 + 8 类差异化）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">通用结构</td><td class="col-desc">每张卡片包含：类型徽章 + 主体内容（图/标题/摘录文字/对话首条等）+ 标题 + 描述 + 标签行 + 元信息（来源 favicon + 来源名 + 时间）。<b>所有卡片可拖拽</b>。</td></tr>
+      <tr><td class="col-name">类型徽章</td><td class="col-desc">卡片左上角显示：图片/视频/书签/文档/AI 对话/代码/摘录/音频 8 类徽章（图标+文字）。</td></tr>
+      <tr><td class="col-name">快捷操作浮层</td><td class="col-desc">hover 卡片时右上角浮出 4 个按钮：⭐ 收藏（已收藏=填充）/ ✨ 问 AI / 🔗 分享 / 🗑 删除。多选模式下隐藏快捷操作。</td></tr>
+      <tr><td class="col-name">标签行</td><td class="col-desc">卡片底部显示标签：<b>用户标签（深色）</b> + <b>AI 推荐标签（带 ✨ 图标，浅色，含"采纳"+按钮）</b>。<b>仅当用户没有手动打过标签时</b>才展示 AI 推荐；用户采纳一个 AI 标签 → 该标签变成用户标签（深色），剩余 AI 标签继续展示直到全部被采纳。<b>最多展示 4 个</b>，超出折叠。</td></tr>
+      <tr><td class="col-name">单击卡片</td><td class="col-desc">单选模式下：单击 → 打开右侧详情面板，定位到该条。再次点击同一条 → 不变；点击其他条 → 切换详情。</td></tr>
+      <tr><td class="col-name">多选模式触发</td><td class="col-desc">通过 hover 卡片复选框/Shift+点击 进入多选。<b>选中第一条后底部出现批量操作栏</b>。</td></tr>
+      <tr><td class="col-name">图片卡</td><td class="col-desc">主体为图片（保留原图宽高比）。无图时显示骨架占位。</td></tr>
+      <tr><td class="col-name">视频卡</td><td class="col-desc">主体为视频封面图 + 时长徽章 + 播放按钮 hover 态。<b>仅 B 站/YouTube 等支持源</b>能拿到封面，其他视频网站<em>仅显示 URL + 视频标题（依赖网页文本抽取）</em>。</td></tr>
+      <tr><td class="col-name">书签卡（网页）</td><td class="col-desc">主体为网页 OG 图（如有）+ 标题 + 摘要（≤200 字）。无 OG 图时显示纯文本卡。</td></tr>
+      <tr><td class="col-name">文档卡</td><td class="col-desc">主体为文档缩略图 + 文件名 + 页数/大小信息（如 PDF · 12 页 · 2.4MB）。</td></tr>
+      <tr><td class="col-name">AI 对话卡</td><td class="col-desc">主体为对话第一轮 QA 摘要 + ✨ 徽章。点击 → 详情面板展示完整对话。</td></tr>
+      <tr><td class="col-name">代码卡</td><td class="col-desc">主体为代码片段（带语法高亮）+ 语言标签。</td></tr>
+      <tr><td class="col-name">摘录卡</td><td class="col-desc">主体为引号样式包裹的摘录文字，浅黄底渐变。下方显示来源页面标题 + URL。</td></tr>
+      <tr><td class="col-name">音频卡</td><td class="col-desc">主体为音频封面 + 标题 + 时长 + 播放按钮。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 7：多选操作栏 -->
+<div class="module-block">
+  <div class="module-title">7 · 多选批量操作栏</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">浮动操作栏</td><td class="col-desc">选中 ≥1 条时浮出主内容区底部。显示"已选 X 项"+ 5 个操作按钮 + ✕ 退出多选。</td></tr>
+      <tr><td class="col-name">加星</td><td class="col-desc">把选中所有条目加入"已加星"集合。<b>已加星与"全部/最近添加"等系统集合并列展示</b>，<em>左侧栏是否独立 Tab 待定</em>。</td></tr>
+      <tr><td class="col-name">移动到…</td><td class="col-desc">下拉菜单选择一个用户文件夹 → 批量更新归属。系统类（all / recent / ai）禁止移入。</td></tr>
+      <tr><td class="col-name">添加标签</td><td class="col-desc">下拉/输入框选已有标签或新建标签 → 批量加上。</td></tr>
+      <tr><td class="col-name">问 AI</td><td class="col-desc">把选中条目作为上下文一次性发给元宝。右侧 AI 面板自动打开，AI 收到 N 条上下文。</td></tr>
+      <tr><td class="col-name">删除</td><td class="col-desc">把选中条目删除。<b>需走 30 天回收站机制</b>（与"已清理书签"文件夹一致），用户可在回收站恢复。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 8：右侧详情面板 -->
+<div class="module-block">
+  <div class="module-title">8 · 右侧详情面板</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">面板头</td><td class="col-desc">展示当前条目类型徽章 + "类型 · 详情" 标题。右侧 3 个按钮：⛶ 全屏 / ✕ 关闭。</td></tr>
+      <tr><td class="col-name">书签详情</td><td class="col-desc">显示标题（可点击跳转原网址）+ 来源 favicon + 时间 + 标签行 + 操作按钮（与这条对话 / 收藏 / 分享）+ <b>完整正文（小标题 + 段落结构）</b>。无正文时<em>由前端基于 desc/title 生成 fallback 长文展示</em>，需<b>由后端预生成或预存正文摘要+段落结构</b>。</td></tr>
+      <tr><td class="col-name">图片详情</td><td class="col-desc">显示原图 + 标题 + 来源 + 时间 + 标签 + 操作按钮 + <b>主题推荐区</b>（最多 6 个 tag 主题代表图，每个图叠加白色加粗主题名）。点击主题图 → 进入"主题模式"。</td></tr>
+      <tr><td class="col-name">非书签/非图片详情</td><td class="col-desc">摘录/AI 对话/文件/代码/音频的详情：差异化展示主体（引号摘录/对话气泡/文件信息/代码块/音频播放器）+ 摘要 + 标签 + 操作按钮 + <b>「你可能感兴趣的内容」推荐区</b>。</td></tr>
+      <tr><td class="col-name">关联推荐区</td><td class="col-desc"><b>仅推荐用户已收藏的资产</b>（不引入全网新内容，避免变 feed 流）。<br>推荐挑选规则（按优先级）：<br>① <b>共享标签</b> > ② 同文件夹 > ③ 全局兜底<br><b>最多 6 条</b>。<em>是否需要"关闭/折叠推荐"开关待定</em>。</td></tr>
+      <tr><td class="col-name">主题模式（仅图片详情）</td><td class="col-desc">点击主题代表图 → 切换为"推荐 · {主题}"模式。展示该 tag 下所有其他图片的瀑布流。顶部"← 返回"按钮 + ⛶ 全屏 + ✕ 关闭 + 黑色"聊聊「主题」"按钮（点击 → 切到 AI 面板，自动发送 prompt）。</td></tr>
+      <tr><td class="col-name">删除主题</td><td class="col-desc">用户可"删除"某个主题不再推荐（局部记住，不影响其他详情）。</td></tr>
+      <tr><td class="col-name">放大态</td><td class="col-desc">⛶ 按钮触发全屏 overlay：左侧大图 / 右侧标题 + 来源 + 时间 + 描述 + 3 个操作（与这条对话 / 分享 / 打开原页）。<b>点击 overlay 背景或 ✕ 关闭</b>。</td></tr>
+      <tr><td class="col-name">空态</td><td class="col-desc">未选中条目时显示"选择一条收藏以查看详情"提示。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 9：右侧 AI 对话面板 -->
+<div class="module-block">
+  <div class="module-title">9 · 右侧 AI 对话面板</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">面板头</td><td class="col-desc">显示"与收藏对话"标题 + 当前上下文范围（"基于 N 条收藏" 或 "基于 1 条上下文"）+ ✕ 关闭。</td></tr>
+      <tr><td class="col-name">空态欢迎语</td><td class="col-desc">无对话且无上下文条目时，展示 1 段欢迎语 + 推荐 prompt 列表（来自全局 AI_PROMPTS）。</td></tr>
+      <tr><td class="col-name">上下文模式</td><td class="col-desc">从卡片"问 AI"或多选"问 AI"进入时，AI 自动打第一句招呼"我已经看到你保存的「{标题}」..."，绑定该条/该集合作为上下文。</td></tr>
+      <tr><td class="col-name">对话气泡</td><td class="col-desc">用户消息 = 强调色实底；AI 消息 = 白底带边框。AI 回复内容由元宝助手基于"用户提问 + 上下文资产"生成。</td></tr>
+      <tr><td class="col-name">引用 chip（cite）</td><td class="col-desc">AI 回复底部展示"引用了 N 条收藏"chip 列表。每个 chip 显示标题 + 来源。<b>点击 chip → 切到详情面板，定位到该条</b>。</td></tr>
+      <tr><td class="col-name">输入框</td><td class="col-desc">底部输入框（"问问你的收藏库吧…"）+ 发送按钮。回车发送 / Shift+回车换行。</td></tr>
+      <tr><td class="col-name">外部触发对话</td><td class="col-desc">支持 AI 建议条 / 主题模式按钮 等外部入口<b>预填一段 prompt 自动发送</b>。</td></tr>
+      <tr><td class="col-name">输入中提示</td><td class="col-desc">AI 回复期间展示三点 loading 动画。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 10：抓取模式 - Pinterest 类 -->
+<div class="module-block">
+  <div class="module-title">10 · 抓取模式 - 图片网站类（Pinterest）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">触发方式</td><td class="col-desc">2 种触发：<br>· 点击地址栏「抓取」按钮 → 进入<br>· <b>长按 C 键</b> → 进入；松开 C → 退出（除非已选中至少 1 项）<br><b>正在输入文本时不响应快捷键</b>。</td></tr>
+      <tr><td class="col-name">蒙层</td><td class="col-desc">页面叠半透明黑色蒙层 + 边缘蒂芙尼蓝→紫色渐变光晕。</td></tr>
+      <tr><td class="col-name">元素 hover 高亮</td><td class="col-desc">鼠标 hover 网页元素 → 在蒙层上"挖洞"高亮该元素 + 描边。</td></tr>
+      <tr><td class="col-name">单选</td><td class="col-desc">单击元素 = 选中。再次单击 = 取消。</td></tr>
+      <tr><td class="col-name">多选</td><td class="col-desc">⌘ + 点击 = 多选。<b>多选元素自动连成一片采集区域</b>（包围盒）。</td></tr>
+      <tr><td class="col-name">采集工具条</td><td class="col-desc">选中后元素附近浮出工具条：<br>· 左侧：标签下拉（默认显示 LocalStorage 上次选择，记忆机制）<br>· 右侧（仅 picked 时）：⭐ 收藏按钮</td></tr>
+      <tr><td class="col-name">多选数量徽章</td><td class="col-desc">多选时左上角徽章显示数量"X 张/X 条"（图片显"张"，其他显"条"）。</td></tr>
+      <tr><td class="col-name">收藏入库</td><td class="col-desc">点击 ⭐ → 把选中元素入库到当前选择的标签/文件夹。Toast 提示"已收藏 X 张到「{文件夹}」"。<b>抓取模式自动退出 + 清空选中</b>。</td></tr>
+      <tr><td class="col-name">退出方式</td><td class="col-desc">3 种退出：<br>· ESC<br>· 收藏完成自动退出<br>· 关闭按钮<br>有选中项时<b>松开 C 键不退出</b>，必须主动操作。</td></tr>
+      <tr><td class="col-name">提示语</td><td class="col-desc">蒙层顶部固定提示"长按C 抓取 · 单击选中 · ⌘+点击 多选 · ESC 退出"。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 11：抓取模式 - 资讯文章类 -->
+<div class="module-block">
+  <div class="module-title">11 · 抓取模式 - 文章网页类（资讯/博客）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">页面元素分块</td><td class="col-desc">前端识别页面正文块：<b>标题 / 段落 / 图片 / 小标题</b> 4 种粒度。<em>识别规则待和工程对（基于 DOM 结构 / 语义标签）</em>。</td></tr>
+      <tr><td class="col-name">分块抓取</td><td class="col-desc">同 Pinterest 触发/单选/多选机制。可单独抓 1 个段落、1 个标题、1 张图，或多块组合。</td></tr>
+      <tr><td class="col-name">类型自动判定</td><td class="col-desc">根据选中块类型自动判定收藏类型：<br>· 仅含文字（段落/标题）→ 入库为<b>「摘录」</b><br>· 含至少 1 张图 → 入库为<b>「图片」</b>（同时保留原文上下文）<br>Toast 提示对应类型："已保存 1 个段落到「{文件夹}」"</td></tr>
+      <tr><td class="col-name">原文锚点</td><td class="col-desc">摘录入库时<b>自动记录来源 URL + 段落锚点</b>，用户回访详情时可定位到原文位置。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 12：设置面板 -->
+<div class="module-block">
+  <div class="module-title">12 · 设置面板（左下 ⚙️ 入口）</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">主视图切换</td><td class="col-desc">瀑布流 / 按来源 二选一。</td></tr>
+      <tr><td class="col-name">信息密度</td><td class="col-desc">宽松（默认 4 列）/ 紧凑（5 列）。</td></tr>
+      <tr><td class="col-name">右侧面板默认</td><td class="col-desc">默认开启 AI 对话 / 详情 / 隐藏（无）三选一。</td></tr>
+      <tr><td class="col-name">强调色</td><td class="col-desc">5 种主题色（蓝 / 紫 / 黑 / 绿 / 橙）。<em>是否提供自定义色值待定</em>。</td></tr>
+      <tr><td class="col-name">显示开关</td><td class="col-desc">2 个独立开关：<br>· 显示页面标题（Hero）<br>· 显示 AI 建议条</td></tr>
+      <tr><td class="col-name">配置持久化</td><td class="col-desc">所有设置项<b>账号级保存，跨设备一致</b>。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 模块 13：通用交互 -->
+<div class="module-block">
+  <div class="module-title">13 · 通用交互</div>
+  <table>
+    <thead><tr><th class="col-name">需求名称</th><th class="col-desc">需求概述</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">拖拽到文件夹</td><td class="col-desc">主内容区任意卡片可拖到左侧栏的用户文件夹/标签。拖入时左侧目标项<b>高亮反馈</b>。释放 → 移动归属 + Toast 提示"已移动 X 条到「{文件夹}」"。<br>· 单条拖拽：仅移动该条<br>· 多选状态下拖拽其中一条：移动选中全部</td></tr>
+      <tr><td class="col-name">拖拽到加星</td><td class="col-desc">拖到"已加星"系统类 → 加星全部（不移动归属）。</td></tr>
+      <tr><td class="col-name">Toast 提示</td><td class="col-desc">所有写操作（删除/移动/加星/收藏入库）<b>1.8 秒消失的 Toast 反馈</b>。同时只显示一个，新 Toast 覆盖旧的。</td></tr>
+      <tr><td class="col-name">删除回收</td><td class="col-desc">所有删除走 30 天回收机制（与死链清理"待清理书签"文件夹一致）：先进回收站不直接物理删，30 天后自动清空，用户可在回收站恢复。</td></tr>
+      <tr><td class="col-name">键盘快捷键</td><td class="col-desc">· Cmd+K 聚焦搜索框<br>· 长按 C 进入抓取模式（仅可抓取页面）<br>· ESC 退出抓取模式 / 关闭 overlay<br>· Shift+点击 多选<br>· Cmd+点击 多选（抓取模式）</td></tr>
+      <tr><td class="col-name">空态/错误态</td><td class="col-desc">所有数据加载失败 / 抽取失败时显示降级文案 + 重试按钮，不阻塞主流程。</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 待决策 -->
+<div class="module-block">
+  <div class="module-title" style="background: linear-gradient(90deg, #c53030 0%, #d69e2e 100%);">⚠️ 待决策点（需要 PM/工程一起拍）</div>
+  <table>
+    <thead><tr><th class="col-name">点</th><th class="col-desc">决策内容</th></tr></thead>
+    <tbody>
+      <tr><td class="col-name">D1 · 视频源支持</td><td class="col-desc">PC 端非 B 站/YouTube 的视频网站，是否走"网址 + 视频标题"兜底（仅文本抽取）？还是一期不收？</td></tr>
+      <tr><td class="col-name">D2 · 抓取页面识别</td><td class="col-desc">"哪些页面支持地址栏抓取按钮"——基于 URL 模式 / DOM 结构 / 用户白名单？</td></tr>
+      <tr><td class="col-name">D3 · 关联推荐开关</td><td class="col-desc">是否给关联推荐增加"折叠/关闭"开关？姝然方案默认常驻。</td></tr>
+      <tr><td class="col-name">D4 · 双导航边界</td><td class="col-desc">左侧栏"书签收藏树状"与"用户标签区"在用户认知上的区分（一对一文件夹 vs 一对多标签）—— 需视觉/交互上明确区分。</td></tr>
+      <tr><td class="col-name">D5 · 已加星位置</td><td class="col-desc">"已加星"作为系统集合，是否在左侧栏独立 Tab 展示？</td></tr>
+      <tr><td class="col-name">D6 · 文档卡承载</td><td class="col-desc">文件 Tab 在体验稿中显示 PDF/Word/PPT 等。是否一期就支持文档本体云端存储（≤50MB）？</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</div>
+</body>
+</html>
