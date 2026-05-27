@@ -15,7 +15,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 body { padding: 32px 16px 80px; }
-.page { max-width: 820px; margin: 0 auto; }
+.page { max-width: 880px; margin: 0 auto; }
 
 /* ===== Hero ===== */
 .hero {
@@ -37,12 +37,12 @@ body { padding: 32px 16px 80px; }
   background: linear-gradient(90deg, #d4a017, #1a365d);
 }
 .hero h1 {
-  font-size: 34px;
+  font-size: 36px;
   font-weight: 800;
   line-height: 1.3;
   letter-spacing: -.5px;
   color: #1a365d;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .hero .sub-title {
   font-size: 18px;
@@ -52,14 +52,14 @@ body { padding: 32px 16px 80px; }
   margin-bottom: 8px;
 }
 .hero .ack {
-  margin-top: 18px;
-  padding: 14px 18px;
+  margin-top: 22px;
+  padding: 18px 22px;
   background: #fff8e1;
-  border-left: 3px solid #d4a017;
-  border-radius: 0 6px 6px 0;
-  font-size: 14.5px;
+  border-left: 4px solid #d4a017;
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
   color: #4a5068;
-  line-height: 1.75;
+  line-height: 1.85;
 }
 .hero .ack b { color: #1a365d; }
 .hero .meta {
@@ -71,10 +71,10 @@ body { padding: 32px 16px 80px; }
 .hero .meta span:first-child::before { content: ""; margin: 0; }
 
 /* ===== Section ===== */
-.section { margin: 64px 0; }
+.section { margin: 72px 0; }
 .section .step {
   display: flex; align-items: center; gap: 12px;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 .step-num {
   font-family: "SF Mono", Menlo, monospace;
@@ -91,24 +91,24 @@ body { padding: 32px 16px 80px; }
   text-transform: uppercase;
 }
 .section h2 {
-  font-size: 26px;
+  font-size: 28px;
   line-height: 1.4;
   font-weight: 800;
   color: #1a365d;
   letter-spacing: -.3px;
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 .section p {
   font-size: 16px;
   color: #2d3748;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 .section .lead {
-  font-size: 17.5px;
+  font-size: 18px;
   font-weight: 500;
   color: #1a1d29;
   line-height: 1.75;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 /* ===== Highlights ===== */
@@ -125,6 +125,13 @@ body { padding: 32px 16px 80px; }
   color: #c53030;
   font-weight: 700;
 }
+.hl-big {
+  background: linear-gradient(180deg, transparent 50%, #fef3c7 50%);
+  font-weight: 800;
+  color: #c53030;
+  padding: 0 3px;
+  font-size: 1.05em;
+}
 .tag-pill {
   display: inline-block;
   background: #1a365d; color: #fff;
@@ -136,11 +143,11 @@ body { padding: 32px 16px 80px; }
 /* ===== Punchline ===== */
 .punch {
   margin: 32px 0;
-  padding: 30px 36px 28px;
+  padding: 32px 36px 28px;
   background: linear-gradient(135deg, #fef3c7 0%, #fefae0 100%);
   border-left: 5px solid #d4a017;
   border-radius: 0 10px 10px 0;
-  font-size: 19px;
+  font-size: 20px;
   line-height: 1.75;
   font-weight: 600;
   color: #1a1d29;
@@ -149,29 +156,110 @@ body { padding: 32px 16px 80px; }
 .punch::before {
   content: """;
   position: absolute;
-  top: 8px; left: 18px;
-  font-size: 56px;
+  top: 6px; left: 18px;
+  font-size: 60px;
   color: #d4a017;
   font-family: Georgia, serif;
   line-height: 1;
   opacity: 0.4;
 }
 .punch .small {
-  font-size: 13px; color: #888; font-weight: 500;
+  font-size: 13.5px; color: #888; font-weight: 500;
   margin-top: 14px; display: block;
   font-style: italic;
 }
 
-/* ===== L1/L2/L3 Tier Table（重做） ===== */
+/* ===== 反刍链流程图 ===== */
+.chain {
+  margin: 30px 0;
+  padding: 28px 24px;
+  background: #fff;
+  border: 1px solid #e2e3e0;
+  border-radius: 12px;
+}
+.chain-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #888;
+  letter-spacing: .12em;
+  margin-bottom: 18px;
+  text-align: center;
+  text-transform: uppercase;
+}
+.chain-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.chain-node {
+  flex: 1;
+  min-width: 100px;
+  padding: 14px 10px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.chain-node .lvl {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  font-weight: 700;
+  margin-bottom: 4px;
+  opacity: 0.65;
+}
+.chain-node .name {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.chain-node .info {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-top: 4px;
+  line-height: 1.4;
+}
+.chain-arrow {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  color: #cbd5e0;
+  flex: 0 0 auto;
+  padding: 0 2px;
+}
+/* 信息纯度递减颜色 */
+.cn-0 { background: #f0fff4; color: #22543d; border: 2px solid #68d391; }
+.cn-1 { background: #fefae0; color: #744210; border: 2px solid #ecc94b; }
+.cn-2 { background: #fff5e6; color: #7b341e; border: 2px solid #ed8936; }
+.cn-3 { background: #fff0eb; color: #9b2c2c; border: 2px solid #f56565; }
+.cn-4 { background: #fff5f5; color: #c53030; border: 2px solid #fc8181; }
+.cn-5 { background: #fafafa; color: #4a5568; border: 2px dashed #a0aec0; }
+.chain-caption {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed #e2e3e0;
+  font-size: 13.5px;
+  color: #4a5068;
+  text-align: center;
+  font-style: italic;
+}
+.chain-caption b { color: #c53030; font-style: normal; }
+
+/* ===== L1/L2/L3 Tier ===== */
 .tiers {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 14px;
-  margin: 24px 0 16px;
+  gap: 16px;
+  margin: 28px 0 18px;
 }
 .tier {
   border-radius: 12px;
-  padding: 22px 20px;
+  padding: 24px 22px;
   border: 2px solid;
   position: relative;
 }
@@ -181,26 +269,26 @@ body { padding: 32px 16px 80px; }
 .tier .lvl {
   display: inline-flex;
   align-items: center; justify-content: center;
-  width: 36px; height: 36px;
+  width: 38px; height: 38px;
   border-radius: 50%;
   background: #fff;
   font-family: "SF Mono", Menlo, monospace;
   font-size: 14px; font-weight: 800;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .tier.l1 .lvl { color: #c53030; border: 2px solid #fc8181; }
 .tier.l2 .lvl { color: #c05621; border: 2px solid #f6ad55; }
 .tier.l3 .lvl { color: #22543d; border: 2px solid #68d391; }
 .tier h4 {
-  font-size: 18px; font-weight: 800;
+  font-size: 19px; font-weight: 800;
   margin-bottom: 8px;
 }
 .tier.l1 h4 { color: #c53030; }
 .tier.l2 h4 { color: #c05621; }
 .tier.l3 h4 { color: #22543d; }
 .tier .usage, .tier .feel {
-  font-size: 13.5px;
-  line-height: 1.65;
+  font-size: 14px;
+  line-height: 1.7;
   color: #2d3748;
   margin-top: 10px;
 }
@@ -214,10 +302,10 @@ body { padding: 32px 16px 80px; }
 .tier.l3 .label { color: #22543d; }
 .tier .feel b {
   display: block; margin-top: 4px;
-  font-size: 14px;
+  font-size: 14.5px;
 }
 
-/* ===== Stepper（6步流程重做） ===== */
+/* ===== Stepper（6步流程） ===== */
 .stepper {
   margin: 24px 0;
   position: relative;
@@ -232,17 +320,17 @@ body { padding: 32px 16px 80px; }
 }
 .stepper .stp {
   position: relative;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
   background: #fff;
   border: 1px solid #e2e3e0;
   border-radius: 10px;
-  padding: 16px 20px;
+  padding: 18px 22px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.03);
 }
 .stepper .stp::before {
   content: "";
   position: absolute;
-  left: -33px; top: 18px;
+  left: -33px; top: 22px;
   width: 14px; height: 14px;
   border-radius: 50%;
   background: #d4a017;
@@ -258,31 +346,31 @@ body { padding: 32px 16px 80px; }
   margin-bottom: 4px;
 }
 .stepper .stp .t {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 700;
   color: #1a365d;
   margin-bottom: 6px;
 }
 .stepper .stp .d {
-  font-size: 14px;
+  font-size: 14.5px;
   color: #4a5068;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 .stepper .stp .d b { color: #1a365d; }
 
-/* ===== Two prerequisites grid ===== */
+/* ===== Two prereq ===== */
 .prereq {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin: 24px 0;
+  gap: 16px;
+  margin: 26px 0;
 }
 .prereq .p {
   background: #fff;
   border: 1px solid #e2e3e0;
   border-top: 4px solid #1a365d;
   border-radius: 10px;
-  padding: 22px 22px;
+  padding: 24px 24px;
 }
 .prereq .p .lbl {
   font-size: 11px;
@@ -293,30 +381,95 @@ body { padding: 32px 16px 80px; }
   text-transform: uppercase;
 }
 .prereq .p h4 {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 800;
   color: #1a365d;
   margin-bottom: 10px;
   line-height: 1.5;
 }
 .prereq .p p {
-  font-size: 14px;
+  font-size: 14.5px;
   color: #4a5068;
   line-height: 1.75;
   margin: 0;
 }
 
-/* ===== Closing 三卡片 ===== */
+/* ===== 升华段：1+1>2 ===== */
+.uplift {
+  margin: 32px 0;
+  padding: 30px 32px;
+  background: linear-gradient(135deg, #ebf8ff 0%, #f0fff4 100%);
+  border: 2px solid #4299e1;
+  border-radius: 14px;
+  position: relative;
+}
+.uplift .lbl {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: .15em;
+  font-weight: 700;
+  color: #fff;
+  background: #2c5282;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin-bottom: 14px;
+}
+.uplift h4 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #1a365d;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+.uplift p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #2d3748;
+  margin-bottom: 12px;
+}
+.uplift .formula {
+  margin: 18px 0 10px;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 600;
+  color: #1a365d;
+  line-height: 1.8;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+.uplift .formula .plus, .uplift .formula .eq {
+  color: #c53030; font-weight: 800;
+  margin: 0 8px;
+}
+.uplift .formula .term {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #fef3c7;
+  border-radius: 4px;
+  margin: 2px;
+}
+.uplift .formula .result {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #1a365d;
+  color: #fff;
+  border-radius: 4px;
+  margin: 2px;
+}
+
+/* ===== Closing cards ===== */
 .closing-cards {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 14px;
-  margin: 24px 0;
+  margin: 26px 0;
 }
 .cc {
   background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
   color: #fff;
-  padding: 24px 22px;
+  padding: 26px 22px;
   border-radius: 12px;
 }
 .cc .num {
@@ -324,20 +477,20 @@ body { padding: 32px 16px 80px; }
   font-size: 12px;
   color: #fbd38d;
   font-weight: 700;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   letter-spacing: .12em;
 }
 .cc .title {
   font-size: 16px;
   font-weight: 700;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 .cc .title b { color: #fbd38d; }
 
-/* ===== Final closing ===== */
+/* ===== Final seal ===== */
 .final-seal {
   margin-top: 40px;
-  padding: 32px 36px;
+  padding: 36px 40px;
   background: #1a365d;
   color: #fff;
   border-radius: 12px;
@@ -347,18 +500,18 @@ body { padding: 32px 16px 80px; }
   font-size: 11px; letter-spacing: .25em;
   color: #fbd38d;
   font-weight: 700;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 .final-seal h3 {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
   line-height: 1.5;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 .final-seal h3 .accent { color: #fbd38d; }
 .final-seal .by {
-  margin-top: 22px;
-  padding-top: 16px;
+  margin-top: 24px;
+  padding-top: 18px;
   border-top: 1px solid rgba(255,255,255,0.18);
   font-size: 13px;
   color: #fbd38d;
@@ -369,17 +522,30 @@ body { padding: 32px 16px 80px; }
 @media (max-width: 700px) {
   body { padding: 24px 14px 60px; font-size: 15px; }
   .hero { padding: 24px 0 24px; margin-bottom: 32px; }
-  .hero h1 { font-size: 24px; }
+  .hero h1 { font-size: 26px; }
   .hero .sub-title { font-size: 15px; }
-  .section { margin: 44px 0; }
-  .section h2 { font-size: 21px; }
+  .section { margin: 48px 0; }
+  .section h2 { font-size: 22px; }
   .section .lead { font-size: 16px; }
-  .punch { padding: 22px 24px; font-size: 16px; }
+  .punch { padding: 24px 26px; font-size: 17px; }
   .tiers { grid-template-columns: 1fr; }
   .prereq { grid-template-columns: 1fr; }
   .closing-cards { grid-template-columns: 1fr; }
-  .final-seal { padding: 24px 22px; }
-  .final-seal h3 { font-size: 19px; }
+  .final-seal { padding: 26px 22px; }
+  .final-seal h3 { font-size: 20px; }
+  .uplift { padding: 22px 22px; }
+  .uplift h4 { font-size: 18px; }
+  .uplift .formula { font-size: 14px; padding: 14px 16px; }
+  .chain-flow {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .chain-arrow {
+    transform: rotate(90deg);
+    justify-content: center;
+    padding: 0;
+  }
+  .chain-node { min-width: 100%; }
 }
 </style>
 </head>
@@ -388,16 +554,16 @@ body { padding: 32px 16px 80px; }
 
   <!-- ========== Hero ========== -->
   <div class="hero">
-    <div class="eyebrow">明日早会 · 给汉博 + 颖姐</div>
+    <div class="eyebrow">所想即所得 · 延伸思考</div>
     <h1>所想即所得 · 一个延伸思考</h1>
     <div class="sub-title">
       AI 焦虑的本质 · 用 AI 的三层境界 · 浏览器作为「共脑场」的形态判断
     </div>
     <div class="ack">
-      <b>📌 缘起</b>　这两周我反复在想"所想即所得"这个判断——它命中了 AI 时代产品的核心。这次想沿着这个方向再往前推一步：<b>所想即所得的"前提"到底是什么</b>。本文不是替代，是<b>同一个北极星下的展开</b>。
+      <b>📌 缘起</b>　"所想即所得"这个判断，命中了 AI 时代产品的核心。<b>沿着这个方向往前推一步</b>，本文要回答的是：所想即所得真正成立的<b>前提</b>是什么？以及，浏览器作为承接载体，能把"所得"做到哪一种高度？<br><br>本文不是替代，而是<b>同一个北极星下的展开</b>。
     </div>
     <div class="meta">
-      <span>主讲：游杰</span>
+      <span>AI 产品中心 · AI 组</span>
       <span>2026-05-28</span>
       <span>承接《AI 收藏夹 / 资产中心》</span>
     </div>
@@ -409,34 +575,87 @@ body { padding: 32px 16px 80px; }
     <h2>为什么这么多人感受到 AI 焦虑？</h2>
 
     <p class="lead">
-      过去半年我观察到一件事：DeepSeek 那波热潮之前，所有人都在着急——怕跟不上 AI 的节奏。但热潮过后，很多人反而摆烂了，<span class="hl">"AI 不过如此"</span>。表面上看是 AI 不够强，<span class="hl-blue">但我的判断是：多数人在用 AI 的方式不对</span>。
+      过去半年有一个值得注意的现象：<b>龙虾那波热潮之前</b>，几乎所有人都在着急——怕跟不上 AI 的节奏，疯狂学 prompt、订阅各种 AI newsletter、追每一个新模型发布。
     </p>
 
     <p>
-      他们处在一个我称之为<span class="hl">"信息反刍链"</span>的最末端：原始信息（一本书、一份报告、一段经历）→ 公众号嚼一遍 → 标题党再嚼一遍 → AI 总结 → 又被另一个 AI 总结 → 最后到用户面前。
+      但热潮过后，舆论场出现了明显的逆转：很多人反而摆烂了，私下里说<span class="hl">"AI 不过如此"</span>、"反正迭代这么快学了也白学"、"普通人用不上"。表面上看，是 AI 不够强、迭代太快导致用户失去信心。
     </p>
 
+    <p>
+      但深入观察会发现一个更值得思考的结论——<br>
+      <span class="hl-big">多数人在用 AI 的方式不对。</span>
+    </p>
+
+    <p>
+      他们处在一个我称之为"<b>信息反刍链</b>"的最末端：原始信息经过一层又一层的加工、转述、压缩、AI 总结，最终到达用户面前时，已经不再是原始信号，而是<span class="hl-red">嚼了 N 遍的渣</span>。
+    </p>
+
+    <div class="chain">
+      <div class="chain-title">📉 信息反刍链 · 一篇原始信息到用户手里的衰减路径</div>
+      <div class="chain-flow">
+        <div class="chain-node cn-0">
+          <div class="lvl">L0</div>
+          <div class="name">原始信息</div>
+          <div class="info">书 / 报告 / 经历<br>含副文本</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-1">
+          <div class="lvl">L1</div>
+          <div class="name">作者撰文</div>
+          <div class="info">第一次抽象</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-2">
+          <div class="lvl">L2</div>
+          <div class="name">公众号转述</div>
+          <div class="info">第二次压缩</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-3">
+          <div class="lvl">L3</div>
+          <div class="name">标题党</div>
+          <div class="info">突出爆点<br>丢失语境</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-4">
+          <div class="lvl">L4</div>
+          <div class="name">AI 一键总结</div>
+          <div class="info">再次嚼烂</div>
+        </div>
+        <div class="chain-arrow">→</div>
+        <div class="chain-node cn-5">
+          <div class="lvl">L5</div>
+          <div class="name">用户消费</div>
+          <div class="info">信息渣<br>无营养</div>
+        </div>
+      </div>
+      <div class="chain-caption">
+        每经过一层加工，<b>信息纯度都在下降</b>——副文本丢失、上下文丢失、个性化丢失。<br>到用户手里时，只剩 very general、可被任何 AI 替换生成的"信息垃圾"。
+      </div>
+    </div>
+
     <div class="punch">
-      你以为你在快速消化信息，其实你是在吃别人嚼过 N 遍的渣。
+      你以为你在快速消化信息，<br>其实你是在吃别人嚼过 N 遍的渣。
       <span class="small">—— 这就是 AI 焦虑的根源：用得越多，感知越钝</span>
     </div>
 
     <p>
-      在这条反刍链上，<span class="hl-red">用户的"感知力"被 AI 加工链路一层层剥掉了</span>。原始信息里的副文本（作者背景、序言、营销文案、读者与作者的潜在联系）全部丢失，留下的只有一个 very general、毫无风格、可以被任何 AI 替换生成的"信息垃圾"。
+      原始信息里那些<span class="hl">真正有价值的"副文本"</span>——作者的生平背景、前面的序言、出版的时代、读者与作者之间的潜在联系、营销文案藏的弦外之音——在反刍链上被一层层剥掉了。留给用户的，是一个 very general、没有任何风格、可以被任何 AI 替换生成的产物。
     </p>
 
     <p>
-      所以，不是 AI 没用——<span class="hl-blue">是用户用 AI 的姿势让自己变蠢了</span>。
+      <b>所以，不是 AI 没用，是用户用 AI 的姿势让自己变蠢了。</b>当一个人长期吃这些"信息渣"，他不仅没有变得更高效，反而<span class="hl-red">连判断"什么是好信息"的能力都在退化</span>——这才是 AI 焦虑的真正来源。
     </p>
   </section>
 
   <!-- ========== Step 2 · 三类人群 ========== -->
   <section class="section">
     <div class="step"><span class="step-num">STEP 02</span><span class="step-tag">分层</span></div>
-    <h2>用 AI 的人，分三个层级</h2>
+    <h2>用 AI 的人，可以分三个层级</h2>
 
     <p class="lead">
-      用 AI 的方式不同，体验和回报就完全不同。我把现实中的用户分成三类：
+      用 AI 的方式不同，体验和回报就完全不同。现实中用户大致分成三类——
     </p>
 
     <div class="tiers">
@@ -468,10 +687,14 @@ body { padding: 32px 16px 80px; }
       </div>
     </div>
 
-    <p style="margin-top:24px;">
-      <b>L1</b> 是大多数人，他们就是 AI 焦虑的来源。<br>
-      <b>L2</b> 是少数人（包括我自己），效果好但<span class="hl">过得很痛苦</span>。<br>
-      <b>L3</b> 几乎不存在——<span class="hl-blue">不是用户不想，是工具做不到</span>。
+    <p style="margin-top:26px;">
+      <b>L1</b> 是大多数人——他们既是 AI 焦虑的来源，也是 AI 红利的最大错过者。<br>
+      <b>L2</b> 是少数实际效果好的用户——但过得很痛苦，每次为了喂上下文耗大量精力。<br>
+      <b>L3</b> 几乎不存在——<span class="hl-blue">不是用户不想，是过去的工具做不到</span>。
+    </p>
+
+    <p>
+      这三层之间的差距，不是"会不会用 AI"，而是<span class="hl">"用 AI 时还愿不愿意自己思考"</span>。L1 把思考全部外包给 AI，结果是垃圾输入垃圾输出；L2 把思考留给自己，但被上下文喂养压垮；L3 让人和 AI 共同思考——这一步在过去的工具形态下是技术不可能。
     </p>
   </section>
 
@@ -485,11 +708,15 @@ body { padding: 32px 16px 80px; }
     </p>
 
     <p>
-      你只丢一句话或一个文件给 AI，它没有你看到的屏幕、听到的语境、感受到的<span class="hl">副文本</span>。它只能基于 5% 的信息来"猜"你要的 95%。
+      用户每次启动 AI，只是丢一句话或一个文件给它。AI 没有用户看到的整个屏幕、没有用户听到的语境、没有用户感受到的<span class="hl">副文本</span>。它只能基于 5% 的信息来"猜"用户要的 95%——猜对了用户觉得 AI 强，猜不对用户觉得 AI 蠢。
     </p>
 
     <p>
-      你以为有"记忆"就能解决——<span class="hl-red">不能</span>。记忆一定是被压缩过的，是反刍链的中间产物。真正能让 AI 想得比你还好的那些"判断之外的细节"——你随手划的重点、你没说出来的偏好、你看到这一段时眼睛停留 3 秒那种微妙——记忆系统抓不住。
+      有人会说："那记忆系统不就解决了？" —— <span class="hl-red">不能解决</span>。记忆一定是被压缩过的，本质上是反刍链中间的另一个产物。记忆能存"你说过你叫小明"，但存不下你昨天看那篇文章时，眼睛在第三段停留了 8 秒、皱了一下眉、又划回第一段重看一次——<span class="hl">这些才是让 AI 想得比你还好的关键细节</span>，记忆抓不住。
+    </p>
+
+    <p>
+      所以过去的 AI 工具，本质上都在解决"如何更高效地把上下文喂给 AI"，而不是"如何让 AI 天然就和我处在同一个语境里"。前者越优化越累，后者才是真正的破局点。
     </p>
 
     <div class="punch">
@@ -503,11 +730,15 @@ body { padding: 32px 16px 80px; }
     <h2>思考可以外包，那「洞察」呢？</h2>
 
     <p class="lead">
-      Andrej Karpathy 有一个流传很广的观点：<span class="hl">"AI 可以替人思考，但替代不了人的洞察"</span>。
+      Andrej Karpathy 有一个流传很广的观点：<span class="hl">"AI 可以替人思考，但替代不了人的洞察"</span>。这句话在 AI 圈被广泛引用，几乎成了一种共识。
     </p>
 
     <p>
-      这句话听起来有道理，但<span class="hl-blue">我想追问一句</span>——
+      但这个判断有一个隐含前提：<span class="hl-blue">AI 拿到的上下文 &lt; 人拿到的上下文</span>。在这种信息差下，AI 当然没法洞察——它看到的不是全貌，怎么可能比人更准？
+    </p>
+
+    <p>
+      但如果这个前提反过来——
     </p>
 
     <div class="punch">
@@ -517,15 +748,39 @@ body { padding: 32px 16px 80px; }
     </div>
 
     <p>
-      这就是 L3「共脑」的真正威力：<br>
-      不是用 AI <span class="hl-red">替代</span>你的思考，<br>
-      而是让 AI 和你<span class="hl-blue">同步思考</span>，然后<span class="hl">把它的洞察反过来喂给你</span>，让你想得比独自思考时更好。
+      这就是 L3「共脑」真正的威力：<br>
+      不是 AI <span class="hl-red">替代</span>人的思考，<br>
+      而是让 AI 和人<span class="hl-blue">同步思考</span>，然后<span class="hl">把 AI 的洞察反过来喂回给人</span>，让人想得比独自思考时更好。
     </p>
 
     <p>
-      我对 Karpathy 那句话的修正版：<br>
+      对 Karpathy 那句话的<b>延伸判断</b>是：<br>
       <span class="tag-pill">洞察可以外包</span> —— 只要上下文等价。
     </p>
+
+    <!-- 升华段：1+1>2 -->
+    <div class="uplift">
+      <div class="lbl">⚡ 更进一步</div>
+      <h4>当 AI 不仅有你的当下上下文，<br>还有你过往看过、收过、标记过的一切——</h4>
+      <p>
+        这就是 AI 收藏夹 + 长期记忆真正的价值所在。
+      </p>
+      <p>
+        当 AI 共脑时，它不只是"和你看到一样的屏幕"，它还<b>记得你三周前看过那篇 paper、上个月你为了某个决策收藏的 12 个网页、你在某段文字下重点划过 3 次的那句话</b>。这些是你的认知积淀——独自思考时，它们在你脑子里也未必能瞬时调取。
+      </p>
+
+      <div class="formula">
+        <span class="term">同等当下上下文</span>
+        <span class="plus">+</span>
+        <span class="term">你过往积淀的资产</span>
+        <span class="eq">=</span>
+        <span class="result">想得比你更长远</span>
+      </div>
+
+      <p style="margin-top:14px;">
+        这才是真正意义上的 <b>1 + 1 &gt; 2</b>——AI 用<span class="hl">你的当下认知</span>和<span class="hl">你的长期记忆</span>，给你一个超越你独自能想到的最远处。<span class="hl-blue">所想即所得，因此能"得"到比你自己想得更远的地方</span>。
+      </p>
+    </div>
   </section>
 
   <!-- ========== Step 5 · 所想即所得的两个前提 ========== -->
@@ -534,11 +789,7 @@ body { padding: 32px 16px 80px; }
     <h2>所想即所得，真正成立的两个前提</h2>
 
     <p class="lead">
-      讲到这里，我想回到最初那个判断——<span class="hl-blue">"所想即所得"</span>是 AI 时代产品的本质。
-    </p>
-
-    <p>
-      但顺着上面的论证链下来，我想<span class="hl">把它的前提补上</span>：
+      回到最初那个判断——<span class="hl-blue">"所想即所得"是 AI 时代产品的本质</span>。沿着上面的论证链，可以<span class="hl">把它的前提补上</span>：
     </p>
 
     <div class="prereq">
@@ -546,13 +797,15 @@ body { padding: 32px 16px 80px; }
         <div class="lbl">前提一</div>
         <h4>用户必须真的「想清楚」</h4>
         <p>
-          如果用户都没想清楚自己要什么，"所想即所得"得到的就是用户半成型的、模糊的、甚至错误的"想"。AI 给得越快，用户错得越快。
+          如果用户都没想清楚自己要什么，"所想即所得"得到的就是用户半成型的、模糊的、甚至错误的"想"。AI 给得越快，用户错得越快。<br><br>
+          所以好的 AI 产品，不应该上来就替用户做，<b>而是先 push 用户想得更清楚</b>。
         </p>
       </div>
       <div class="p">
         <div class="lbl">前提二</div>
         <h4>AI 要拥有和用户等价的上下文</h4>
         <p>
+          这个"等价"包含两层：<b>当下等价</b>（看同一个屏幕、听同样的话）+ <b>长期等价</b>（拥有用户过往的记忆和资产沉淀）。<br><br>
           只有这样，AI 给出的"得"才不是基于 5% 猜测的产物，而是基于和用户同样的语境、同样的副文本、同样的判断空间。
         </p>
       </div>
@@ -574,11 +827,11 @@ body { padding: 32px 16px 80px; }
     <h2>那这件事，浏览器怎么承接？</h2>
 
     <p class="lead">
-      浏览器是承接 L3「共脑」的天然载体——因为只有它能让 AI 和用户共享<span class="hl">同一个屏幕、同一个时间、同一个语境</span>。
+      浏览器是承接 L3「共脑」的天然载体——因为只有它能让 AI 和用户共享<span class="hl">同一个屏幕、同一个时间、同一个语境</span>，并且天然连接着用户过往沉淀的<span class="hl">AI 收藏夹</span>。
     </p>
 
     <p>
-      参考 Gemini Live 的形态，但场景压在「<span class="hl">浏览器内的工作流</span>」：
+      参考 Gemini Live 的形态，但场景压在「<b>浏览器内的工作流</b>」：
     </p>
 
     <div class="stepper">
@@ -589,7 +842,7 @@ body { padding: 32px 16px 80px; }
       </div>
       <div class="stp">
         <div class="n">STEP 2</div>
-        <div class="t">共享屏幕 · 同语境</div>
+        <div class="t">共享屏幕 · 同当下语境</div>
         <div class="d">用户授权浏览器内容共享给 AI（类似腾讯会议屏幕共享）。AI 看到用户看到的一切——文档、网页、图表。</div>
       </div>
       <div class="stp">
@@ -604,47 +857,59 @@ body { padding: 32px 16px 80px; }
       </div>
       <div class="stp">
         <div class="n">STEP 5</div>
+        <div class="t">调取过往 · 长期记忆 + AI 收藏夹</div>
+        <div class="d">AI 自动调取用户过往收藏夹中的相关资产，<b>把当下和长期记忆串起来</b>，给用户一个独自思考时调不出来的视角。</div>
+      </div>
+      <div class="stp">
+        <div class="n">STEP 6</div>
         <div class="t">反向 push · 让用户想更好</div>
         <div class="d">AI 不只是被动答，会<b>主动反问、补盲点、给一个用户没想到的角度</b>——让用户在共脑中想得更好。</div>
       </div>
       <div class="stp">
-        <div class="n">STEP 6</div>
+        <div class="n">STEP 7</div>
         <div class="t">沉淀 · 流回 AI 收藏夹</div>
-        <div class="d">这次对话本身、用户划过的重点、AI 的洞察——全部进入 <span class="tag-pill">AI 收藏夹</span>，下一次共脑时 AI 已经记得。</div>
+        <div class="d">这次对话本身、用户划过的重点、AI 的洞察——全部进入 <span class="tag-pill">AI 收藏夹</span>，下一次共脑时 AI 已经记得，长期记忆持续累积。</div>
       </div>
     </div>
 
-    <p style="margin-top:18px;">
+    <p style="margin-top:20px;">
       <span class="hl-blue">这件事和 AI 收藏夹的关系</span>：<br>
-      AI 收藏夹是<span class="hl">长期上下文层</span>（用户主动收的、看过的），共脑助手是<span class="hl">即时上下文层</span>（用户当下在做什么）。两者叠加，AI 才真的"懂用户在干嘛"。
+      AI 收藏夹 = <span class="hl">长期上下文层</span>（用户主动收的、看过的、标记过的）<br>
+      共脑助手 = <span class="hl">即时上下文层</span>（用户当下在做什么、在看什么）<br>
+      两者叠加，才是真正"懂用户"的 AI——<b>当下 + 长期 = 1+1&gt;2</b>。
     </p>
   </section>
 
   <!-- ========== Closing 三卡片 ========== -->
   <section class="section">
     <div class="step"><span class="step-num">CLOSING</span><span class="step-tag">三个补充观察</span></div>
-    <h2>沿着「所想即所得」，我想补充三件事</h2>
+    <h2>沿着「所想即所得」，三个补充观察</h2>
 
     <div class="closing-cards">
       <div class="cc">
         <div class="num">补充 ①</div>
-        <div class="title">多数人的 AI 焦虑，<br>来自他们在<b>反刍链尾端</b>，吃的不是信息，是渣。</div>
+        <div class="title">多数人的 AI 焦虑，来自他们在<b>反刍链尾端</b>，吃的不是信息，是渣。</div>
       </div>
       <div class="cc">
         <div class="num">补充 ②</div>
-        <div class="title">L3「<b>共脑</b>」是真正的破局点——<br>但前提是 AI 要拥有和用户<b>等价的上下文</b>。</div>
+        <div class="title">L3「<b>共脑</b>」是真正的破局点——前提是 AI 要拥有和用户<b>等价的上下文</b>（当下 + 长期）。</div>
       </div>
       <div class="cc">
         <div class="num">补充 ③</div>
-        <div class="title">浏览器是承接「共脑」的最佳载体——<br>长期用 <b>AI 收藏夹</b>，即时用<b>语音 + 屏幕共享</b>。</div>
+        <div class="title">浏览器是承接「共脑」的最佳载体——长期用 <b>AI 收藏夹</b>，即时用<b>语音 + 屏幕共享</b>。</div>
       </div>
     </div>
 
     <div class="final-seal">
       <div class="lbl">A FINAL THOUGHT</div>
-      <h3>所想即所得真正的力量，<br>不只是<span class="accent">替你做</span>，更是<span class="accent">陪你想</span>。</h3>
-      <p style="opacity:0.92;font-size:15px;line-height:1.8;">用户每用一次，自己也变得更好——<br>这是 AI 真正能给到普通人的礼物。</p>
-      <div class="by">游杰 · 2026-05-28 · 给汉博 + 颖姐</div>
+      <h3>所想即所得真正的力量，<br>不只是<span class="accent">替你做</span>，<br>更是<span class="accent">陪你想得更远</span>。</h3>
+      <p style="opacity:0.92;font-size:15px;line-height:1.85;">
+        当 AI 拥有你的当下语境，又拥有你过往的认知积淀——<br>
+        它能带你抵达<span style="color:#fbd38d;font-weight:700">独自思考时想不到的地方</span>。<br><br>
+        用户每用一次，自己也变得更好。<br>
+        这是 AI 真正能给到普通人的礼物。
+      </p>
+      <div class="by">游杰 · 2026-05-28</div>
     </div>
   </section>
 
