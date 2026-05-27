@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>移动端 AI 工具调研 · 2026-05-27</title>
+<title>移动端 AI 工具调研（小众垂直爆款）· 2026-05-27</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -13,7 +13,7 @@
     line-height: 1.7;
     padding: 28px 20px;
   }
-  .container { max-width: 1200px; margin: 0 auto; }
+  .container { max-width: 1240px; margin: 0 auto; }
   .header {
     background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
     color: #fff;
@@ -100,33 +100,37 @@
     white-space: nowrap;
   }
   td {
-    padding: 11px 10px;
+    padding: 12px 10px;
     border-bottom: 1px solid #e2e8f0;
     vertical-align: top;
     font-size: 13px;
   }
   tr:nth-child(even) td { background: #f7fafc; }
   td.app { font-weight: 700; color: #1a365d; white-space: nowrap; }
-  td.region { white-space: nowrap; font-size: 12px; }
-  td.type { white-space: nowrap; font-size: 12px; }
 
-  .tag-cn { background: #fed7d7; color: #c53030; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .tag-os { background: #c6f6d5; color: #22543d; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .tag-both { background: #feebc8; color: #7b341e; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .reg-us { background: #fed7d7; color: #c53030; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .reg-cn { background: #c6f6d5; color: #22543d; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .reg-gl { background: #bee3f8; color: #2c5282; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; }
 
-  .ai-fit-3 { background: #c53030; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
-  .ai-fit-2 { background: #d69e2e; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
-  .ai-fit-1 { background: #4299e1; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
+  .hot { background: #c53030; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
+  .new { background: #d69e2e; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
+  .pick { background: #38a169; color: #fff; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 700; }
 
-  .freq-5 { color: #c53030; font-weight: 700; }
-  .freq-4 { color: #dd6b20; font-weight: 700; }
-  .freq-3 { color: #4a5568; }
+  .highlight {
+    background: #fef3c7;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+    color: #1a202c;
+  }
 
   .judge {
     color: #2d3748;
     font-size: 12.5px;
     line-height: 1.55;
     font-style: italic;
+    margin-top: 4px;
+    display: block;
   }
   .judge::before { content: "▸ "; color: #d69e2e; font-weight: 700; font-style: normal; }
 
@@ -162,8 +166,6 @@
   }
   .closing .reco b { color: #fbd38d; }
 
-  .hl { background: #fef3c7; padding: 1px 5px; border-radius: 3px; font-weight: 600; color: #1a202c; }
-
   @media (max-width: 768px) {
     table { font-size: 11px; }
     th, td { padding: 6px 6px; }
@@ -174,258 +176,225 @@
 <div class="container">
 
   <div class="header">
-    <span class="tag">AI 产品中心 · 调研 v1</span>
-    <h1>移动端 AI 工具市场调研</h1>
-    <div class="sub">面向「独立 AI 工具 App / 出海方向」的前置输入清单 · 国内外双视角</div>
+    <span class="tag">AI 产品中心 · 调研 v2</span>
+    <h1>移动端 AI 工具市场调研 · 小众垂直爆款 15 款</h1>
+    <div class="sub">面向「独立 AI 工具 App / 出海方向」的前置输入 · 砍掉大众款，聚焦有产品亮点的垂直创新</div>
     <div class="meta">
       <span>调研：<b>游杰</b></span>
       <span>面向：<b>陈颖</b></span>
       <span>日期：<b>2026-05-27</b></span>
-      <span>版本：<b>v1 总览版</b></span>
+      <span>版本：<b>v2 · 小众垂直</b></span>
     </div>
   </div>
 
-  <!-- ========== Part 1: 总览表 ========== -->
+  <!-- ========== Part 1: 总览 ========== -->
   <div class="section">
-    <h2 class="title"><span class="num">1</span>移动端 AI 工具总览（15 款）</h2>
+    <h2 class="title"><span class="num">1</span>小众垂直爆款 15 款（按产品亮点强度排序）</h2>
 
     <div class="lead">
-      <b>筛选标准</b>：① 工具需求高频刚需 ② AI 结合空间大（替代 / 增强 / 重构）③ 移动端使用场景成立。<br>
-      <b>覆盖逻辑</b>：每个赛道选 1 个国内代表 + 1 个海外代表（如赛道极不均衡则取主导地区）；标注用户量级 / AI 适配度 / 一句判断。
+      <b>本次筛选标准</b>：① 不要大众款（Otter / CapCut / DeepL / 多邻国 / Notion 这类已饱和的不收）② 必须有<b>产品形态创新</b>或<b>反直觉的设计哲学</b> ③ 用户量不一定大，但有"被记住"的钩子。<br>
+      <b>地区标签</b>：🇺🇸 美区独占（需美区 ID）／🇨🇳 国内可下／🌍 全球通用。
     </div>
 
     <div class="legend">
-      <div><span class="tag-cn">CN</span> 国内</div>
-      <div><span class="tag-os">海外</span> 海外</div>
-      <div><span class="tag-both">双端</span> 国内+出海</div>
-      <div><span class="ai-fit-3">重构</span> AI 让本不可能的工具变可能</div>
-      <div><span class="ai-fit-2">增强</span> AI 让原工具显著提效</div>
-      <div><span class="ai-fit-1">替代</span> AI 直接做掉用户原本要做的活</div>
-      <div><b>刚需 ⭐</b> 1-5 ⭐ 越多越刚需</div>
+      <div><span class="reg-us">🇺🇸 美区</span> 需美区 Apple ID</div>
+      <div><span class="reg-cn">🇨🇳 国内</span> 应用宝/App Store 直下</div>
+      <div><span class="reg-gl">🌍 全球</span> 国区也能下</div>
+      <div><span class="hot">爆款</span> 行业现象级</div>
+      <div><span class="new">新兴</span> 半年内冒头</div>
+      <div><span class="pick">必体验</span> Geoffrey 必看</div>
     </div>
 
     <table>
       <thead>
         <tr>
           <th style="width:4%">#</th>
-          <th style="width:11%">App</th>
-          <th style="width:9%">类型</th>
-          <th style="width:7%">地区</th>
-          <th style="width:8%">用户量级</th>
-          <th style="width:6%">刚需度</th>
-          <th style="width:7%">AI 适配</th>
-          <th>核心功能 + 一句判断</th>
+          <th style="width:13%">App</th>
+          <th style="width:8%">地区</th>
+          <th style="width:11%">类型</th>
+          <th style="width:8%">标签</th>
+          <th>核心亮点 + 一句判断</th>
         </tr>
       </thead>
       <tbody>
 
         <tr>
           <td>01</td>
-          <td class="app">Otter.ai</td>
-          <td class="type">AI 会议转写</td>
-          <td class="region"><span class="tag-os">海外</span></td>
-          <td>2500w MAU+</td>
-          <td><span class="freq-5">⭐⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Granola</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>AI 会议笔记</td>
+          <td><span class="hot">爆款</span><br><span class="pick">必体验</span></td>
           <td>
-            录音→实时转写→说话人区分→AI 摘要→To-do 抽取。<br>
-            <span class="judge">移动端独立 app 跑得通的标杆——会议/课堂场景天然在浏览器外，移动设备就是录音终端，且"录完即用"路径短。出海首选赛道之一。</span>
+            <span class="highlight">你边开会边写自己的潦草笔记，会后 AI 把你的笔记 + 录音对齐，补全成完整 meeting note</span>。AI 不抢笔记权，AI 帮你升级烂笔记。
+            <span class="judge">硅谷 PM/VC 圈 2025 现象级，YC 估值 2.5 亿美元。整个产品哲学 = "人机协作而非 AI 替代"——和我们 AI 收藏夹"AI 帮你看不替你决定"完全同源。</span>
           </td>
         </tr>
 
         <tr>
           <td>02</td>
-          <td class="app">通义听悟 / 飞书妙记</td>
-          <td class="type">AI 会议转写</td>
-          <td class="region"><span class="tag-cn">CN</span></td>
-          <td>千万级</td>
-          <td><span class="freq-5">⭐⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Voicenotes</td>
+          <td><span class="reg-gl">🌍 全球</span></td>
+          <td>AI 语音备忘</td>
+          <td><span class="hot">爆款</span><br><span class="pick">必体验</span></td>
           <td>
-            实时转写 + 摘要 + 多端同步。妙记绑定飞书生态。<br>
-            <span class="judge">国内已成红海，但"个人会议神器"细分（不绑组织）仍空白；如果做要避开飞书/钉钉的生态护城河，独立做反而有机会。</span>
+            <span class="highlight">对手机说话 → AI 立刻转成笔记 / 邮件 / 推文 / 博客</span>。零设置、零分类、零文件夹，一个按钮搞定。
+            <span class="judge">印度独立开发者做的，全球 500w+ 用户。AI-first 产品样板——看完会反思"为啥我们做产品总加 N 个功能"。</span>
           </td>
         </tr>
 
         <tr>
           <td>03</td>
-          <td class="app">Plaud Note</td>
-          <td class="type">AI 录音笔记 + 硬件</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>百万级 + 硬件</td>
-          <td><span class="freq-4">⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Cove</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>AI 视觉化思考</td>
+          <td><span class="new">新兴</span><br><span class="pick">必体验</span></td>
           <td>
-            硬件 AI 录音卡 + app 转写摘要。<br>
-            <span class="judge">硬件+软件组合是新爆款形态，2025 出海跑通的样板（深圳团队）。如果腾讯做不上硬件，纯 app 也成立但需找差异化（如多语言/多场景）。</span>
+            <span class="highlight">输入一个问题，AI 自动在画布上生成"卡片+连线"的视觉化思路图</span>。把 LLM 输出从对话框解放成可拖拽画布。
+            <span class="judge">重新定义"AI 怎么帮人思考"。LLM 输出形态创新的代表作，对我们做 AI 收藏夹的卡片化呈现极有参考。</span>
           </td>
         </tr>
 
         <tr>
           <td>04</td>
-          <td class="app">沉浸式翻译 / DeepL</td>
-          <td class="type">AI 翻译</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>DeepL 1 亿+ MAU</td>
-          <td><span class="freq-5">⭐⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-2">增强</span></td>
+          <td class="app">Day One AI</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>AI 日记 + 时光机</td>
+          <td><span class="hot">爆款</span></td>
           <td>
-            上下文翻译、网页/PDF 翻译、对话翻译。<br>
-            <span class="judge">最经典的"上下文输入少 + 移动端高频"赛道。但全球已是红海，纯翻译突围难，要做需绑场景（出行 / 留学 / 跨境工作）。</span>
+            <span class="highlight">你每天发几张照片 + 一两句话，AI 自动整理成日记，一年后突然推送"你去年今日"的 AI 回顾视频</span>。情绪触发点设计极致。
+            <span class="judge">把日记从"工具"变成"情感产品"。付费转化率行业前三——是"AI 让冷工具变暖"的样板。</span>
           </td>
         </tr>
 
         <tr>
           <td>05</td>
-          <td class="app">Remini</td>
-          <td class="type">AI 修图 / 照片增强</td>
-          <td class="region"><span class="tag-os">海外</span></td>
-          <td>1 亿+ 下载</td>
-          <td><span class="freq-4">⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">林间疗愈室</td>
+          <td><span class="reg-cn">🇨🇳 国内</span></td>
+          <td>AI 情绪陪伴</td>
+          <td><span class="new">新兴</span><br><span class="pick">必体验</span></td>
           <td>
-            老照片修复、AI 写真、人像增强。订阅模式赚钱。<br>
-            <span class="judge">移动端独立工具的终极形态——单点能力极致 + 订阅变现清晰。出海超能打。国内类似有美图 AI / 美颜相机，但 Remini 海外更聚焦"修复"心智。</span>
+            <span class="highlight">不是"AI 心理咨询师"，而是 AI 扮演温柔的森林精灵陪你聊</span>。人设极度具体，"逃避现实"做成了正向情绪价值。
+            <span class="judge">国内做 AI 陪伴最克制的一款，没堆能力只把"陪伴感"做到极致。证明"小赛道+强人设+高频对话"在国内也能成。</span>
           </td>
         </tr>
 
         <tr>
           <td>06</td>
-          <td class="app">妙鸭相机</td>
-          <td class="type">AI 写真</td>
-          <td class="region"><span class="tag-cn">CN</span></td>
-          <td>千万级（爆发期）</td>
-          <td><span class="freq-3">⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Bezel</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>AI 录音 + 卡片化</td>
+          <td><span class="new">新兴</span></td>
           <td>
-            上传几张自拍 → 生成各种风格写真。<br>
-            <span class="judge">2024 现象级爆款，但留存差，已证伪"纯 AI 写真"是一次性消费。要做这类要规划"复购钩子"——比如 AI 头像月更、节日主题。</span>
+            <span class="highlight">录完音不是给你转写文字，AI 把内容拆成可滑动的"知识卡片"——金句卡 / To-do 卡 / 人物卡 / 决策卡</span>。
+            <span class="judge">解决了 Otter 最大痛点（转写完根本不想看长文）。AI 输出形态创新比堆模型更重要。</span>
           </td>
         </tr>
 
         <tr>
           <td>07</td>
-          <td class="app">CapCut（剪映海外版）</td>
-          <td class="type">AI 视频剪辑</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>4.27 亿 MAU</td>
-          <td><span class="freq-5">⭐⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-2">增强</span></td>
+          <td class="app">Saner.ai</td>
+          <td><span class="reg-gl">🌍 全球</span></td>
+          <td>AI 第二大脑</td>
+          <td><span class="new">新兴</span></td>
           <td>
-            智能字幕、人声分离、AI 转场、文生视频。<br>
-            <span class="judge">移动端 AI 工具王者级别，字节标杆。但赛道已饱和，新进入者除非细分（短播客视频/直播切片/教育视频），否则没机会。</span>
+            <span class="highlight">你只跟 AI 说"明天有空和小王吃饭吗"，它自动查日历、看邮件历史里有没有小王、判断推荐时间</span>。一个对话框搞定日程/邮件/笔记。
+            <span class="judge">印度小团队 Product Hunt 月度第一。"用 AI 对话替代多 app 切换"的样板——这是 LLM 时代真正的超级助手原型。</span>
           </td>
         </tr>
 
         <tr>
           <td>08</td>
-          <td class="app">PixVerse / 即梦 AI</td>
-          <td class="type">AI 视频生成</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>900w+ MAU（PixVerse）</td>
-          <td><span class="freq-3">⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Friend</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>AI 项链 / 永久陪伴</td>
+          <td><span class="new">新兴</span></td>
           <td>
-            文字/图片→AI 短视频。<br>
-            <span class="judge">2025 爆发赛道，但底层模型决定上限。我们如果不做模型只做产品壳，很难超越 PixVerse / 可灵 / 即梦。建议关注但不下场。</span>
+            <span class="highlight">$99 一个挂脖项链，24 小时听你周围的对话，AI 给你发消息陪你聊天</span>。"AI 是你脖子上的朋友"。
+            <span class="judge">争议巨大但出圈到爆——上线一周全球科技媒体头版。证明"硬件 + AI 陪伴"还有大量未开发空间。值得知道，未必要学。</span>
           </td>
         </tr>
 
         <tr>
           <td>09</td>
-          <td class="app">Cubox / Heptabase</td>
-          <td class="type">AI 阅读 / 知识管理</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>百万级</td>
-          <td><span class="freq-3">⭐⭐⭐</span></td>
-          <td><span class="ai-fit-2">增强</span></td>
+          <td class="app">Glimpse</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>AI 拍照知物</td>
+          <td><span class="new">新兴</span></td>
           <td>
-            稍后读 + AI 摘要 + 跨设备同步 + 智能标签。<br>
-            <span class="judge">和我们 AI 收藏夹高度重叠——这块"做在浏览器里"才是更优解，<b>不建议做独立 app</b>，否则左右互搏。</span>
+            <span class="highlight">拍任何东西 → AI 告诉你这是什么 + 怎么用 + 哪里买 + 类似选择</span>。比 Google Lens 更"答案导向"，少了搜索的中间步骤。
+            <span class="judge">把"识图"从功能变成产品。垂直在"购物+生活百科"，比通用搜索更深。</span>
           </td>
         </tr>
 
         <tr>
           <td>10</td>
-          <td class="app">Speak / 多邻国</td>
-          <td class="type">AI 语言学习</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>多邻国 1 亿+ MAU</td>
-          <td><span class="freq-5">⭐⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Shortwave</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>AI 邮箱</td>
+          <td><span class="hot">爆款</span></td>
           <td>
-            AI 口语对练、个性化课程。Speak 在 OpenAI 投资后增长极快。<br>
-            <span class="judge">"AI 老师"是 LLM 杀手级场景之一——上下文需求适中、移动碎片化场景完美、付费意愿强（家长/留学生）。强力推荐方向。</span>
+            <span class="highlight">收件箱按"对话/AI 分类/优先级"重新组织，写邮件 AI 自动起草，长邮件一键摘要</span>。Gmail 团队前员工做的。
+            <span class="judge">证明"老品类用 AI 重做"在 2025 依然有机会。邮件这种烂熟的赛道还能跑出新爆款，对我们重做"书签"是强信心。</span>
           </td>
         </tr>
 
         <tr>
           <td>11</td>
-          <td class="app">Gauth / 作业帮</td>
-          <td class="type">AI 拍照解题</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>Gauth 千万级 MAU</td>
-          <td><span class="freq-5">⭐⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-2">增强</span></td>
+          <td class="app">轻舟（Lighthouse）</td>
+          <td><span class="reg-cn">🇨🇳 国内</span></td>
+          <td>AI 看播客 / 长视频</td>
+          <td><span class="new">新兴</span></td>
           <td>
-            拍照→OCR 题目→AI 步骤讲解。Gauth 字节出海代表。<br>
-            <span class="judge">教育 AI 在出海赛道极强（家长付费意愿）。国内被作业帮/猿辅导垄断，但海外印度/东南亚/中东仍有大量空白。</span>
+            <span class="highlight">B站/YouTube 长视频 URL 一贴 → AI 给你结构化大纲 + 金句卡片 + 可问答</span>。"用 AI 把视频降维成可消费的文本"。
+            <span class="judge">国内独立开发者作品，做了细分极致。和 AI 收藏夹的"AI 对话 Tab"理念相通，值得对标产品形态。</span>
           </td>
         </tr>
 
         <tr>
           <td>12</td>
-          <td class="app">Replika / 星野</td>
-          <td class="type">AI 陪伴 / 情感</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>1000w+ MAU</td>
-          <td><span class="freq-4">⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Recraft</td>
+          <td><span class="reg-gl">🌍 全球</span></td>
+          <td>AI 矢量图生成</td>
+          <td><span class="hot">爆款</span></td>
           <td>
-            AI 虚拟伴侣、深度对话、情感陪伴。<br>
-            <span class="judge">移动端 AI 杀手级品类，付费极强（订阅 + 内购）。但内容合规风险高，国内难做大；出海是腾讯系少有不擅长的赛道。</span>
+            <span class="highlight">不是文生图，是 AI 直接生成可二次编辑的 SVG 矢量图</span>——logo、插画、icon 直接出，导出可用。
+            <span class="judge">绕开了 Midjourney/即梦的红海，做了"设计师专用"的窄门。垂直深耕 = 高客单价 + 强专业心智。</span>
           </td>
         </tr>
 
         <tr>
           <td>13</td>
-          <td class="app">Gamma / 美图设计室</td>
-          <td class="type">AI PPT / 图文设计</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>Gamma 千万级</td>
-          <td><span class="freq-4">⭐⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Suno</td>
+          <td><span class="reg-gl">🌍 全球</span></td>
+          <td>AI 音乐生成</td>
+          <td><span class="hot">爆款</span></td>
           <td>
-            一句话生成 PPT / 图文卡 / 网页。<br>
-            <span class="judge">需求刚需但移动端不是主场景——PPT 还是 PC 重。建议<b>不做独立 app</b>，要做就做"PC + 移动同步"产品。</span>
+            <span class="highlight">写一段歌词或一句话 → AI 直接生成完整带人声的歌曲</span>。从作词到演唱一条龙。
+            <span class="judge">"AI 让人人都能当音乐人"的杀手级品类，海外已经 1000w+ 月活。但底层模型决定上限——做产品壳的玩家很难超。值得知道但不下场。</span>
           </td>
         </tr>
 
         <tr>
           <td>14</td>
-          <td class="app">林间疗愈室 / Pi</td>
-          <td class="type">AI 心理 / 倾诉</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>百万级</td>
-          <td><span class="freq-3">⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Tana</td>
+          <td><span class="reg-gl">🌍 全球</span></td>
+          <td>AI 大纲笔记</td>
+          <td><span class="new">新兴</span></td>
           <td>
-            AI 心理咨询、CBT 疗愈、情绪日记。<br>
-            <span class="judge">细分爆款机会——AI 让"普通人也能用得起心理咨询"成立。需绕开"医疗"红线，做成"自我对话工具"更稳。</span>
+            <span class="highlight">每条笔记自带"AI 节点"——你写一行，AI 自动帮你打标签、关联到已有笔记、补充背景信息</span>。
+            <span class="judge">PKM（知识管理）小众爆款，挑战 Roam/Obsidian。证明"AI 嵌入工作流细粒度"比"AI 大对话框"更打动专业用户。</span>
           </td>
         </tr>
 
         <tr>
           <td>15</td>
-          <td class="app">DoNotPay / 法行宝</td>
-          <td class="type">AI 法律 / 合同</td>
-          <td class="region"><span class="tag-both">双端</span></td>
-          <td>百万级</td>
-          <td><span class="freq-3">⭐⭐⭐</span></td>
-          <td><span class="ai-fit-3">重构</span></td>
+          <td class="app">Replit Agent</td>
+          <td><span class="reg-gl">🌍 全球</span></td>
+          <td>AI 手机端写代码 / 建网站</td>
+          <td><span class="hot">爆款</span></td>
           <td>
-            AI 帮你起草合同 / 投诉信 / 法律咨询 / 退订订阅。<br>
-            <span class="judge">DoNotPay 海外曾估值 2 亿美元，证明"AI 帮普通人对抗生活摩擦"是真需求。但客单价低 + 用户 LTV 短，要做要想清楚商业模型。</span>
+            <span class="highlight">在手机上对 AI 说"给我做个网站"，AI 直接写代码 + 部署 + 给你 URL</span>。手机端真·AI Agent。
+            <span class="judge">非程序员也能造网站/小工具。Vibe coding 的移动端样板——预示"AI 让长尾创造工具变可能"，对我们做"AI 提示词卡片"有参考。</span>
           </td>
         </tr>
 
@@ -433,88 +402,92 @@
     </table>
   </div>
 
-  <!-- ========== Part 2: 我的判断 ========== -->
+  <!-- ========== Part 2: 5 个立刻体验 ========== -->
   <div class="section">
-    <h2 class="title"><span class="num">2</span>我的初步判断（建议聚焦方向）</h2>
-
-    <div class="closing">
-      <h3>📌 综合"刚需 + AI 重构空间 + 移动端场景成立 + 出海可行性"</h3>
-
-      <div class="reco">
-        <b>① 强烈推荐 · AI 语言学习（Speak 路线）</b><br>
-        理由：移动碎片化场景完美 / LLM 杀手级品类 / 付费意愿极强 / 出海有龙头但不绝对。可以做"针对中国学生英语口语"或"针对东南亚学英语"细分，避开多邻国 + Speak 正面。
-      </div>
-
-      <div class="reco">
-        <b>② 推荐 · AI 录音笔记（Otter / Plaud 路线）</b><br>
-        理由：使用场景天然在浏览器外（开会/上课/灵感记录），移动设备就是终端。出海有 Otter / Granola 标杆但市场远未饱和。腾讯有"会议"基因（腾讯会议），可联动出生态。
-      </div>
-
-      <div class="reco">
-        <b>③ 关注 · AI 教育拍照解题出海（Gauth 路线）</b><br>
-        理由：字节 Gauth 已经验证可行性 + 印度/中东/东南亚仍有大空白。但腾讯做这个要看是否愿意打"重运营 + 重本地化"的活儿。
-      </div>
-
-      <div class="reco">
-        <b>④ 慎做 · AI 阅读笔记（Cubox 路线）</b><br>
-        理由：和我们 AI 收藏夹左右互搏。这块"做在浏览器里"才是优解，独立做反而稀释主战场资源。
-      </div>
-
-      <div class="reco">
-        <b>⑤ 慎做 · AI 视频生成（PixVerse 路线）</b><br>
-        理由：底层模型决定上限。我们如果不做模型只做产品壳，很难超越 PixVerse / 可灵 / 即梦。建议关注不下场。
-      </div>
-
-    </div>
-  </div>
-
-  <!-- ========== Part 3: 决策框架 ========== -->
-  <div class="section">
-    <h2 class="title"><span class="num">3</span>判断"是否适合做独立 app"的 4 个 Lens</h2>
+    <h2 class="title"><span class="num">2</span>必体验 5 款（按产品冲击力 + 时间成本排）</h2>
 
     <div class="lead">
-      老板原话提到"上下文输入少的更适合独立 app"，<b>这个判断不完全准确</b>——Cubox/Notion 上下文都很大，照样独立 app 跑得好。真正决定的是下面 4 件事：
+      Geoffrey 30 分钟内可亲自体验的优先级。<b>美区款如果切换麻烦，先看官网视频也能 get 到产品哲学</b>。
     </div>
 
     <table>
       <thead>
         <tr>
-          <th style="width:18%">维度</th>
-          <th style="width:32%">适合独立 app</th>
-          <th style="width:32%">适合做在浏览器里</th>
-          <th>典型例子</th>
+          <th style="width:5%">优先</th>
+          <th style="width:14%">App</th>
+          <th style="width:10%">地区</th>
+          <th style="width:8%">时间</th>
+          <th style="width:18%">官网（看视频也行）</th>
+          <th>体验重点</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><b>① 使用场景</b></td>
-          <td class="judge" style="font-style:normal">用户在浏览器外（开会/出门/拍照/录音/课堂）</td>
-          <td class="judge" style="font-style:normal">用户已经在网页里浏览/阅读/查资料</td>
-          <td>Otter（独立）vs 沉浸式翻译（浏览器内）</td>
+          <td><b>①</b></td>
+          <td class="app">Granola</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>5 分钟</td>
+          <td>granola.ai</td>
+          <td>看它怎么"补全用户烂笔记"——重点感受"AI 不替代你"的产品哲学</td>
         </tr>
         <tr>
-          <td><b>② 输入来源</b></td>
-          <td class="judge" style="font-style:normal">麦克风 / 摄像头 / 传感器 / 单条文本</td>
-          <td class="judge" style="font-style:normal">网页内容 / 浏览历史 / 多页跨标签上下文</td>
-          <td>Plaud（独立）vs AI 收藏夹（浏览器内）</td>
+          <td><b>②</b></td>
+          <td class="app">Voicenotes</td>
+          <td><span class="reg-gl">🌍 全球</span></td>
+          <td>3 分钟</td>
+          <td>voicenotes.com</td>
+          <td>对着手机随便说一段话，看 AI 输出怎么"零设置即结构化"</td>
         </tr>
         <tr>
-          <td><b>③ 使用频次</b></td>
-          <td class="judge" style="font-style:normal">每天主动打开 1+ 次（强心智占用）</td>
-          <td class="judge" style="font-style:normal">浏览中顺手用，不需要单独心智位</td>
-          <td>多邻国（独立）vs 网页摘要（浏览器内）</td>
+          <td><b>③</b></td>
+          <td class="app">Cove</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>5 分钟</td>
+          <td>cove.ai</td>
+          <td>问 AI 一个开放问题，看它怎么在画布上画思路图——LLM 输出形态创新</td>
         </tr>
         <tr>
-          <td><b>④ 商业模型</b></td>
-          <td class="judge" style="font-style:normal">独立订阅 / 内购清晰（用户愿为它单独付费）</td>
-          <td class="judge" style="font-style:normal">作为浏览器留存放大器，不单独收费</td>
-          <td>Replika（独立 $7/月）vs 智能书签（免费）</td>
+          <td><b>④</b></td>
+          <td class="app">林间疗愈室</td>
+          <td><span class="reg-cn">🇨🇳 国内</span></td>
+          <td>10 分钟</td>
+          <td>App Store / 应用宝</td>
+          <td>必须真聊几轮才有感觉——感受国内合规边界下怎么做 AI 陪伴</td>
+        </tr>
+        <tr>
+          <td><b>⑤</b></td>
+          <td class="app">Day One AI</td>
+          <td><span class="reg-us">🇺🇸 美区</span></td>
+          <td>5 分钟</td>
+          <td>dayoneapp.com</td>
+          <td>看它的"On This Day" AI 回顾视频功能——情感触发点设计</td>
         </tr>
       </tbody>
     </table>
+  </div>
 
-    <div class="lead" style="margin-top:18px;background:#f0fff4;border-left-color:#38a169;">
-      <b>结论</b>：判断"该不该做独立 app"，问 4 个问题——使用场景在哪？输入来自哪？用户每天会主动打开吗？愿意单独付费吗？四个都是 yes 才值得做独立 app；只要有 2 个偏向"浏览器内"，就老老实实做在浏览器里。
+  <!-- ========== Part 3: 判断 ========== -->
+  <div class="section">
+    <h2 class="title"><span class="num">3</span>从 15 款里看出的 3 个产品规律</h2>
+
+    <div class="closing">
+      <h3>📌 这 15 款的共性，比单个 app 更值得带给老板</h3>
+
+      <div class="reco">
+        <b>规律 ① · 产品形态创新 &gt; 模型能力</b><br>
+        Granola 反 Otter、Bezel 卡片化、Cove 画布化、Tana 大纲化——胜出的都不是"模型更强"，而是<b>"AI 输出怎么被用户消费"的形态创新</b>。底层模型大家都能调用，<b>真正的差异化在 UX 范式</b>。
+      </div>
+
+      <div class="reco">
+        <b>规律 ② · 反直觉的克制比堆能力更打动用户</b><br>
+        Voicenotes "零设置"、林间疗愈室"只做陪伴不做咨询"、Recraft "只做矢量不做位图"——<b>这一代 AI 工具的赢家普遍是"做少+做深"</b>。腾讯做独立 app 的本能是"多功能"，需要警惕。
+      </div>
+
+      <div class="reco">
+        <b>规律 ③ · 情感钩子比效率钩子更让人付费</b><br>
+        Day One AI 的"一年后回顾"、Friend 项链的"24h 陪伴"、林间疗愈室的"森林精灵"——付费转化最高的不是"提效率"，是<b>"AI 让用户和工具/数据之间有情感连接"</b>。这是腾讯天然擅长但在 AI 工具上还没玩透的。
+      </div>
+
     </div>
   </div>
 
