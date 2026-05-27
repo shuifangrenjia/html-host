@@ -6,6 +6,13 @@
 <title>所想即所得 · 一个延伸思考</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+/* ===== 全局保险：深色背景容器内的所有文字默认白色 ===== */
+.cc, .cc *,
+.final-seal, .final-seal *,
+[data-dark-bg], [data-dark-bg] * {
+  color: inherit;
+}
 html, body {
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
   background: #fafaf7;
@@ -468,10 +475,11 @@ body { padding: 32px 16px 80px; }
 }
 .cc {
   background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
-  color: #fff;
+  color: #ffffff;
   padding: 26px 22px;
   border-radius: 12px;
 }
+.cc *, .cc p, .cc span, .cc b { color: inherit; }
 .cc .num {
   font-family: "SF Mono", Menlo, monospace;
   font-size: 12px;
@@ -484,6 +492,7 @@ body { padding: 32px 16px 80px; }
   font-size: 16px;
   font-weight: 700;
   line-height: 1.65;
+  color: #ffffff;
 }
 .cc .title b { color: #fbd38d; }
 
@@ -492,10 +501,11 @@ body { padding: 32px 16px 80px; }
   margin-top: 40px;
   padding: 36px 40px;
   background: #1a365d;
-  color: #fff;
+  color: #ffffff;
   border-radius: 12px;
   text-align: center;
 }
+.final-seal *, .final-seal p, .final-seal span { color: inherit; }
 .final-seal .lbl {
   font-size: 11px; letter-spacing: .25em;
   color: #fbd38d;
@@ -507,8 +517,18 @@ body { padding: 32px 16px 80px; }
   font-weight: 800;
   line-height: 1.5;
   margin-bottom: 12px;
+  color: #ffffff;
 }
 .final-seal h3 .accent { color: #fbd38d; }
+.final-seal p {
+  color: #e2e8f0;
+  font-size: 15px;
+  line-height: 1.85;
+}
+.final-seal p .light-accent {
+  color: #fbd38d;
+  font-weight: 700;
+}
 .final-seal .by {
   margin-top: 24px;
   padding-top: 18px;
@@ -903,9 +923,9 @@ body { padding: 32px 16px 80px; }
     <div class="final-seal">
       <div class="lbl">A FINAL THOUGHT</div>
       <h3>所想即所得真正的力量，<br>不只是<span class="accent">替你做</span>，<br>更是<span class="accent">陪你想得更远</span>。</h3>
-      <p style="opacity:0.92;font-size:15px;line-height:1.85;">
+      <p>
         当 AI 拥有你的当下语境，又拥有你过往的认知积淀——<br>
-        它能带你抵达<span style="color:#fbd38d;font-weight:700">独自思考时想不到的地方</span>。<br><br>
+        它能带你抵达<span class="light-accent">独自思考时想不到的地方</span>。<br><br>
         用户每用一次，自己也变得更好。<br>
         这是 AI 真正能给到普通人的礼物。
       </p>
