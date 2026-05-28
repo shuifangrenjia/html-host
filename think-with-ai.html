@@ -257,6 +257,129 @@ body { padding: 32px 16px 80px; }
 }
 .chain-caption b { color: #c53030; font-style: normal; }
 
+/* ===== 学习闭环 vs 焦虑闭环 双图对比 ===== */
+.loop-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin: 32px 0;
+}
+.loop-card {
+  padding: 22px 20px;
+  border-radius: 12px;
+  border: 2px solid;
+  background: #fff;
+}
+.loop-card.good { border-color: #68d391; background: linear-gradient(180deg,#f0fff4 0%, #fff 60%); }
+.loop-card.bad  { border-color: #fc8181; background: linear-gradient(180deg,#fff5f5 0%, #fff 60%); }
+.loop-head {
+  font-size: 11px; letter-spacing: .18em; font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.loop-card.good .loop-head { color: #22543d; }
+.loop-card.bad  .loop-head { color: #9b2c2c; }
+.loop-title {
+  font-size: 17px; font-weight: 800; color: #1a365d; margin-bottom: 14px;
+  line-height: 1.4;
+}
+.loop-flow {
+  display: flex; flex-direction: column; gap: 6px;
+  font-size: 13px; color: #2d3748; line-height: 1.5;
+}
+.loop-step {
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #e2e3e0;
+  border-radius: 6px;
+  position: relative;
+}
+.loop-card.good .loop-step.key {
+  background: #fefae0;
+  border-color: #ecc94b;
+  font-weight: 700;
+  color: #744210;
+}
+.loop-card.bad .loop-step.empty {
+  background: #fafafa;
+  color: #a0aec0;
+  font-style: italic;
+  border-style: dashed;
+}
+.loop-arrow {
+  text-align: center; color: #a0aec0; font-size: 12px; line-height: 1;
+  padding: 1px 0;
+}
+.loop-verdict {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed #e2e3e0;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.loop-card.good .loop-verdict { color: #22543d; }
+.loop-card.bad  .loop-verdict { color: #9b2c2c; }
+.loop-card .loop-verdict b { color: inherit; }
+
+/* ===== 简洁的"反转洞察"块 ===== */
+.flip {
+  margin: 28px 0;
+  padding: 22px 26px;
+  background: #1a365d;
+  color: #fff;
+  border-radius: 10px;
+  position: relative;
+}
+.flip *, .flip span, .flip b { color: inherit; }
+.flip .flip-lbl {
+  font-size: 11px; letter-spacing: .22em; font-weight: 700;
+  color: #fbd38d; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.flip .flip-body {
+  font-size: 16px; line-height: 1.85; color: #ffffff;
+}
+.flip .flip-body .accent { color: #fbd38d; font-weight: 700; }
+.flip .flip-body .strike { color: #a0aec0; text-decoration: line-through; }
+
+/* ===== 知识管理警示卡（紧凑） ===== */
+.km-warn {
+  margin: 28px 0;
+  padding: 20px 22px;
+  background: #fff;
+  border: 1px solid #e2e3e0;
+  border-left: 4px solid #c53030;
+  border-radius: 0 10px 10px 0;
+}
+.km-warn .km-title {
+  font-size: 15px; font-weight: 800; color: #1a365d;
+  margin-bottom: 10px;
+}
+.km-warn .km-title .red { color: #c53030; }
+.km-warn .km-row {
+  display: flex; gap: 14px;
+  font-size: 13.5px; line-height: 1.7;
+  padding: 8px 0;
+  border-bottom: 1px dashed #e2e3e0;
+}
+.km-warn .km-row:last-child { border-bottom: none; padding-bottom: 0; }
+.km-warn .km-row .km-k {
+  flex: 0 0 100px;
+  font-weight: 700; color: #4a5068;
+  font-size: 12.5px;
+}
+.km-warn .km-row .km-v { flex: 1; color: #2d3748; }
+.km-warn .km-row .km-v b { color: #c53030; }
+.km-warn .km-foot {
+  margin-top: 12px; padding-top: 10px;
+  border-top: 1px solid #e2e3e0;
+  font-size: 13px; color: #4a5068; font-style: italic;
+}
+
+@media (max-width: 720px) {
+  .loop-compare { grid-template-columns: 1fr; }
+}
+
 /* ===== L1/L2/L3 Tier ===== */
 .tiers {
   display: grid;
@@ -664,8 +787,111 @@ body { padding: 32px 16px 80px; }
       原始信息里那些<span class="hl">真正有价值的"副文本"</span>——作者的生平背景、前面的序言、出版的时代、读者与作者之间的潜在联系、营销文案藏的弦外之音——在反刍链上被一层层剥掉了。留给用户的，是一个 very general、没有任何风格、可以被任何 AI 替换生成的产物。
     </p>
 
+    <!-- 反转洞察：反刍链的真实设计目标 -->
+    <div class="flip">
+      <div class="flip-lbl">⚡ 一个反直觉的事实</div>
+      <div class="flip-body">
+        反刍链上的每一层，<span class="strike">设计目标不是传递信息</span>——<br>
+        而是 <span class="accent">留住注意力</span>。
+        <br><br>
+        <span style="font-size:14px;line-height:1.75;display:inline-block;">
+        定义、条件、反例、不确定性——这些"让人真正能用"的内容，<br>
+        在注意力经济里是<b>负资产</b>（降低流畅度、增加认知负担），<br>
+        所以会被<span class="accent">系统性地删掉</span>。
+        </span>
+        <br><br>
+        <span style="font-size:14px;color:#fbd38d;font-weight:700;">→ 这意味着：再认真读这些内容，也学不到东西。</span>
+      </div>
+    </div>
+
+    <!-- 学习闭环 vs 焦虑闭环 -->
+    <h3 style="font-size:18px;color:#1a365d;font-weight:800;margin:36px 0 8px;">焦虑的真相 · 大部分人做的不是学习，是另一件机制完全相反的事</h3>
+    <p style="color:#4a5068;font-size:14.5px;margin-bottom:12px;">
+      它们看起来很像——都在"消费信息"。但闭环的机制，截然不同。
+    </p>
+
+    <div class="loop-compare">
+      <!-- 学习闭环 -->
+      <div class="loop-card good">
+        <div class="loop-head">✓ 学习闭环</div>
+        <div class="loop-title">遇到不明白的事 → 内化为自己的理解</div>
+        <div class="loop-flow">
+          <div class="loop-step">遇到不明白的事</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step key">先形成一个初步判断</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step">带着具体问题去找信息</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step key">用信息校准判断</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step">形成新的、自己拥有的理解</div>
+        </div>
+        <div class="loop-verdict">
+          <b>核心动作：前置判断 + 校准。</b>这是整个学习的发动机。
+        </div>
+      </div>
+
+      <!-- 焦虑闭环 -->
+      <div class="loop-card bad">
+        <div class="loop-head">✗ 焦虑管理闭环</div>
+        <div class="loop-title">感到落后 → 短暂缓解 → 再次落后</div>
+        <div class="loop-flow">
+          <div class="loop-step">感到落后</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step">消费信息</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step">产生"我在跟上"的感觉</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step empty">（无前置判断 · 无校准 · 无内化）</div>
+          <div class="loop-arrow">↓</div>
+          <div class="loop-step">焦虑短暂缓解 → 再次落后 → 再次消费</div>
+        </div>
+        <div class="loop-verdict">
+          <b>缺失的是：判断、校准、内化。</b>没有任何东西被真正记住。
+        </div>
+      </div>
+    </div>
+
+    <div class="punch" style="margin-top:8px;">
+      大脑无法区分<br>
+      「读到一个结论」和「自己想到一个结论」。
+      <span class="small">—— 这就是为什么吃再多反刍内容，也学不到东西</span>
+    </div>
+
     <p>
-      <b>所以，不是 AI 没用，是用户用 AI 的姿势让自己变蠢了。</b>当一个人长期吃这些"信息渣"，他不仅没有变得更高效，反而<span class="hl-red">连判断"什么是好信息"的能力都在退化</span>——这才是 AI 焦虑的真正来源。
+      真正在做 AI 工作的人，反而不消费这些反刍内容——<span class="hl">因为每天手上的实验、模型反馈、代码调试，已经在提供远高于任何二手总结的信息密度</span>。他们对一个模型能做什么的判断，来自昨天自己让它做失败的一件事，而不是别人写的评测。
+    </p>
+
+    <p>
+      <span class="hl-blue">消费反刍的人越消费越感觉落后；做事的人越做越感觉清晰。</span>
+    </p>
+
+    <!-- 知识管理伪命题 警示卡 -->
+    <div class="km-warn">
+      <div class="km-title">⚠️ 顺带说一个相关的"伪命题"——<span class="red">知识管理</span></div>
+      <div class="km-row">
+        <div class="km-k">旧时代假设</div>
+        <div class="km-v">知识 = 一种可以被静态管理的对象。<b>整理笔记 = 最高级的焦虑管理</b>。</div>
+      </div>
+      <div class="km-row">
+        <div class="km-k">真实情况</div>
+        <div class="km-v">脑子里的"知识"是一张不断重构的关系网络。<b>"理解" ≠ "记住"，"能用" ≠ "能找到"</b>。</div>
+      </div>
+      <div class="km-row">
+        <div class="km-k">检索问题</div>
+        <div class="km-v">已被 AI 解决——为检索而整理的传统目的，<b>80% 不再成立</b>。</div>
+      </div>
+      <div class="km-row">
+        <div class="km-k">Google effect</div>
+        <div class="km-v">当大脑知道"信息被保存了"，会更少真的记住它。<b>笔记里有 ≠ 脑子里有</b>。</div>
+      </div>
+      <div class="km-foot">
+        整理笔记和形成判断是两件不同的活动。前者会替代后者——<b>认知活动反而被整理动作本身替代</b>。
+      </div>
+    </div>
+
+    <p>
+      <b>所以，不是 AI 没用，是用户用 AI 的姿势让自己变蠢了。</b>当一个人长期吃这些"信息渣"、长期用"整理"代替"思考"，他不仅没有变得更高效，反而<span class="hl-red">连判断"什么是好信息"的能力都在退化</span>——这才是 AI 焦虑的真正来源。
     </p>
   </section>
 
