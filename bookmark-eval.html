@@ -126,9 +126,10 @@ html, body {
 /* ===== 双栏 ===== */
 .dual-pane {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   border-bottom: 1px solid #e2e8f0;
 }
+.pane { min-width: 0; overflow: hidden; }
 .pane.left { border-right: 1px solid #e2e8f0; }
 .pane-head {
   background: #f7fafc;
@@ -149,7 +150,14 @@ html, body {
   padding: 12px 14px;
   height: 480px;
   overflow-y: auto;
+  overflow-x: auto;
   font-size: 13px;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+.pane-body a, .pane-body span {
+  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 
 /* ===== 树形 + 折叠 ===== */
@@ -1712,14 +1720,12 @@ function showUser(idx) {
   if (idx < 1 || idx > TOTAL) return;
   currentIdx = idx;
   document.querySelectorAll('.user-card').forEach(c => c.style.display = 'none');
-  document.getElementById('user-' + idx).style.display = '';
+  const target = document.getElementById('user-' + idx);
+  if (target) target.style.display = 'block';
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', parseInt(t.dataset.idx)===idx));
-  // 更新 url hash 不滚屏
   history.replaceState(null, '', '#user-' + idx);
-  // 滚动 tab 到可见
   const tab = document.querySelector(`.tab[data-idx="${idx}"]`);
   if (tab) tab.scrollIntoView({behavior:'smooth', block:'nearest', inline:'center'});
-  // prev/next 按钮
   document.querySelectorAll('.nav-btn.prev').forEach(b => b.disabled = idx<=1);
   document.querySelectorAll('.nav-btn.next').forEach(b => b.disabled = idx>=TOTAL);
 }
@@ -1833,10 +1839,22 @@ function showTip(el, key) {
     <div class="tip-line tip-2"><b>2 分</b> · ${r['2']}</div>
     <div class="tip-line tip-1"><b>1 分</b> · ${r['1']}</div>
     <div class="tip-line tip-0"><b>0 分</b> · ${r['0']}</div>`;
-  const rect = el.getBoundingClientRect();
-  tip.style.left = Math.max(8, Math.min(window.innerWidth - 380, rect.left)) + 'px';
-  tip.style.top = (rect.bottom + 6) + 'px';
+  // 先显示量尺寸
   tip.classList.add('show');
+  const rect = el.getBoundingClientRect();
+  const tipW = tip.offsetWidth;
+  const tipH = tip.offsetHeight;
+  // 横向：尽量左对齐到 ?，但不超出右边界
+  let left = rect.left;
+  if (left + tipW > window.innerWidth - 8) left = window.innerWidth - tipW - 8;
+  if (left < 8) left = 8;
+  // 纵向：优先向上展示（避开问号上方），不够就向下
+  let top = rect.top - tipH - 8;
+  if (top < 8) top = rect.bottom + 8;
+  // 保底（再不够就贴顶）
+  if (top + tipH > window.innerHeight - 8) top = Math.max(8, window.innerHeight - tipH - 8);
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
 }
 function hideTip() { tip.classList.remove('show'); }
 document.querySelectorAll('.qmark').forEach(q => {
@@ -1854,8 +1872,9 @@ document.addEventListener('keydown', e => {
 // 初始化
 for (let i=1;i<=TOTAL;i++) refreshCase(i);
 refreshGlobal();
-const hashIdx = parseInt((location.hash.match(/user-(\d+)/) || [])[1]) || 1;
-showUser(hashIdx);
+const m = location.hash.match(/user-(\d+)/);
+const hashIdx = m ? parseInt(m[1]) : 1;
+showUser(hashIdx >= 1 && hashIdx <= TOTAL ? hashIdx : 1);
 </script>
 </body>
 </html>
