@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5:30 对齐会 · 逐字稿</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Songti SC", "Microsoft YaHei", serif;
+  background: #faf9f5;
+  color: #1a202c;
+  line-height: 2.0;
+  font-size: 17px;
+}
+body { padding: 32px 18px 80px; }
+.page { max-width: 800px; margin: 0 auto; }
+
+.warn {
+  background: #fff8e1;
+  border-left: 4px solid #d69e2e;
+  padding: 12px 18px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 28px;
+  font-size: 14px;
+  color: #744210;
+  text-align: center;
+  line-height: 1.65;
+}
+.warn b { color: #c53030; }
+
+.hero { padding: 8px 0 24px; border-bottom: 1px solid #d4d2cb; margin-bottom: 32px; }
+.hero .eyebrow { font-size: 11px; letter-spacing: .22em; color: #b08800; font-weight: 700; margin-bottom: 8px; }
+.hero h1 { font-size: 26px; color: #1a365d; line-height: 1.4; margin-bottom: 6px; }
+.hero .meta { color: #718096; font-size: 13px; margin-top: 10px; display: flex; gap: 18px; flex-wrap: wrap; }
+.hero .meta b { color: #1a365d; }
+
+.act {
+  margin: 36px 0;
+  padding-left: 20px;
+  border-left: 4px solid #1a365d;
+}
+.act .act-tag { font-size: 11px; letter-spacing: .2em; color: #1a365d; font-weight: 800; margin-bottom: 4px; }
+.act h2 { font-size: 22px; color: #1a365d; margin-bottom: 4px; line-height: 1.4; }
+.act .est { color: #718096; font-size: 13px; font-style: italic; }
+
+.beat {
+  background: #fff;
+  border: 1px solid #e2e3e0;
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin-bottom: 18px;
+  position: relative;
+}
+.beat-head {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #e2e3e0;
+}
+.beat-num {
+  font-size: 11px; letter-spacing: .15em; color: #b08800; font-weight: 800;
+}
+.beat-title {
+  font-size: 14px; color: #4a5068; font-weight: 600;
+}
+.beat-body p {
+  margin-bottom: 14px;
+  color: #1a202c;
+  font-family: "PingFang SC", "Songti SC", -apple-system, sans-serif;
+}
+.beat-body p:last-child { margin-bottom: 0; }
+.beat-body .pause {
+  display: inline-block;
+  color: #c05621;
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  background: #fef5e7;
+  padding: 1px 7px;
+  border-radius: 3px;
+  margin: 0 2px;
+}
+.beat-body .stress {
+  background: linear-gradient(180deg, transparent 60%, #fef3c7 60%);
+  font-weight: 700;
+  padding: 0 2px;
+}
+.beat-body .very {
+  background: #fff5f5;
+  border-bottom: 2px solid #c53030;
+  font-weight: 800;
+  color: #1a365d;
+  padding: 0 2px;
+}
+.beat-body .quote {
+  display: block;
+  margin: 14px 0;
+  padding: 14px 18px;
+  background: #f7fafc;
+  border-left: 3px solid #1a365d;
+  font-style: italic;
+  color: #2d3748;
+  border-radius: 0 6px 6px 0;
+  font-family: "Songti SC", "PingFang SC", serif;
+  font-size: 17px;
+}
+.beat-body .stage {
+  display: block;
+  margin: 12px 0;
+  padding: 10px 14px;
+  background: #f0fff4;
+  border: 1px dashed #9ae6b4;
+  border-radius: 6px;
+  color: #22543d;
+  font-size: 13.5px;
+  font-style: italic;
+  font-family: "PingFang SC", -apple-system, sans-serif;
+  line-height: 1.7;
+}
+.beat-body .stage::before { content: "🎬 "; }
+
+.transition {
+  text-align: center;
+  margin: 24px 0;
+  color: #b08800;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: .1em;
+}
+.transition::before, .transition::after { content: " — — "; opacity: 0.5; }
+
+.demo-cue {
+  background: #fff5f5;
+  border: 2px dashed #fc8181;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin: 22px 0;
+}
+.demo-cue .dt {
+  font-weight: 800; color: #c53030; margin-bottom: 8px;
+  font-size: 14px; letter-spacing: .08em;
+}
+.demo-cue ol { padding-left: 22px; color: #2d3748; font-family: "PingFang SC", -apple-system, sans-serif; }
+.demo-cue li { margin-bottom: 6px; }
+.demo-cue li b { color: #c53030; }
+
+.closing {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  color: #fff;
+  padding: 28px 32px;
+  border-radius: 12px;
+  margin: 32px 0 0;
+}
+.closing *, .closing p, .closing span, .closing b { color: inherit; }
+.closing h3 { color: #fbd38d; font-size: 16px; margin-bottom: 12px; letter-spacing: .1em; }
+.closing p { color: #e2e8f0; line-height: 1.85; font-size: 15px; }
+.closing p .gold { color: #fbd38d; font-weight: 700; }
+
+.toc {
+  background: #fff;
+  border: 1px solid #e2e3e0;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 36px;
+}
+.toc .tt { font-size: 12px; letter-spacing: .14em; color: #1a365d; font-weight: 800; margin-bottom: 10px; }
+.toc ul { list-style: none; padding-left: 0; }
+.toc li {
+  padding: 6px 0;
+  font-size: 14px; color: #4a5068;
+  border-bottom: 1px dashed #e2e3e0;
+  display: flex; justify-content: space-between;
+}
+.toc li:last-child { border-bottom: none; }
+.toc li b { color: #1a365d; }
+.toc li .t { color: #b08800; font-family: "SF Mono", monospace; font-size: 12px; }
+
+@media print {
+  .warn { display: none; }
+  body { background: #fff; padding: 24px; }
+  .beat { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="warn">📜 这是<b>逐字稿</b>，不是投屏稿——会议时翻在手机/iPad 上偷瞄即可。<b>不要投屏</b>。</div>
+
+<div class="hero">
+  <div class="eyebrow">SCRIPT · 17:30 对齐会逐字稿</div>
+  <h1>所想即所得 · 一个延伸思考 + AI 收藏夹 Demo</h1>
+  <div class="meta">
+    <span>参会：<b>刘汉博 · 陈颖</b></span>
+    <span>时长目标：<b>15 分钟讲完，留 45 分钟讨论</b></span>
+    <span>讲者：<b>游杰</b></span>
+  </div>
+</div>
+
+<div class="toc">
+  <div class="tt">📋 节奏总览</div>
+  <ul>
+    <li><span><b>① 开场 · 今天的两个目标</b></span><span class="t">~ 1 min</span></li>
+    <li><span><b>② AI 焦虑现象 · 你也可以一起想想</b></span><span class="t">~ 1.5 min</span></li>
+    <li><span><b>③ 反刍链 · 用户吃的不是信息是渣</b></span><span class="t">~ 2 min</span></li>
+    <li><span><b>④ 学习 vs 焦虑 · 大脑无法区分</b></span><span class="t">~ 1.5 min</span></li>
+    <li><span><b>⑤ 用 AI 的 3 类人 · L1/L2/L3</b></span><span class="t">~ 2 min</span></li>
+    <li><span><b>⑥ L3 共脑 · 真正的破局点</b></span><span class="t">~ 2 min</span></li>
+    <li><span><b>⑦ 浏览器是承接 L3 的最佳载体</b></span><span class="t">~ 1.5 min</span></li>
+    <li><span><b>⑧ AI 收藏夹 Demo 演示</b></span><span class="t">~ 3 min</span></li>
+    <li><span><b>⑨ 收尾 · 沿着所想即所得想做的事</b></span><span class="t">~ 0.5 min</span></li>
+  </ul>
+</div>
+
+<!-- ===================== ACT 1 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 01</div>
+  <h2>开场 · 今天想和你们对齐两件事</h2>
+  <div class="est">⏱ 约 1 分钟 · 站着说，不看屏幕</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 1.1</span>
+    <span class="beat-title">开门见山 · 不铺垫</span>
+  </div>
+  <div class="beat-body">
+    <p>汉博、颖姐，今天我想和你们对齐<span class="stress">两件事</span>。</p>
+    <p><span class="stress">第一件</span>，是针对汉博之前提到的"<span class="very">所想即所得</span>"，我这两周一直在想——它真正成立的<span class="stress">前提是什么</span>。我做了一些延伸思考，希望今天能给你们一些后续可能用得上的信息和观点。</p>
+    <p><span class="stress">第二件</span>，是 AI 收藏夹的方案。我们有一个 Demo，今天想现场演示一下，<span class="stress">确认我们这个项目后续推进的方向是对的、是符合你们预期的</span>。</p>
+    <p>这是<span class="very">今年最关键的两件事</span>。</p>
+    <p><span class="pause">[停 1 秒]</span> 我们先看第一个。</p>
+  </div>
+</div>
+
+<!-- ===================== ACT 2 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 02</div>
+  <h2>从一个现象开始 · AI 焦虑</h2>
+  <div class="est">⏱ 约 1.5 分钟 · 邀请他俩"一起想"</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 2.1</span>
+    <span class="beat-title">把现象抛出来，让他俩参与</span>
+  </div>
+  <div class="beat-body">
+    <p>我想从一个现象开始。<span class="pause">[看着汉博、颖姐]</span> 你们也可以一起想一想——</p>
+    <p><span class="stress">为什么这段时间，大众</span>——也就是我们的目标用户们——<span class="stress">都陷入到一种 AI 焦虑里？</span></p>
+    <p>他们想努力追赶 AI，却发现总是赶不上；AI 工具太多太杂，选择成本太高，<span class="stress">干脆不用、干脆不学</span>。出现一种摆烂的心态。</p>
+    <p>表面上看，是因为 AI 迭代太快、用户跟不上。但我深度剖析之后，<span class="very">发现根本原因不是这个</span>——而是更底层的东西。</p>
+    <p>这个底层原因，对我们后续做浏览器、做 AI 收藏夹，<span class="stress">有非常直接的指导意义</span>。所以我想把它讲清楚。</p>
+  </div>
+</div>
+
+<div class="transition">让我先抽丝剥茧</div>
+
+<!-- ===================== ACT 3 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 03</div>
+  <h2>反刍链 · 用户吃的不是信息，是渣</h2>
+  <div class="est">⏱ 约 2 分钟 · 切到 think-with-ai 反刍链图</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 3.1</span>
+    <span class="beat-title">反刍链是什么</span>
+  </div>
+  <div class="beat-body">
+    <p class="stage">投屏切到 think-with-ai · Step 1 · 反刍链图</p>
+    <p>我把这条链路，叫做<span class="very">"信息反刍链"</span>。</p>
+    <p>原始信息——一本书、一份报告、一段经历——里面有大量"副文本"：作者的生平背景、出版的时代、读者与作者之间的潜在联系、营销文案藏的弦外之音。这些是真正让一个人"理解"一件事的东西。</p>
+    <p>但<span class="stress">现实是这样的</span>：原始信息 → 作者写出文章 → 公众号转述 → 标题党再嚼一遍 → AI 一键总结 → 又被另一个 AI 总结 → 最后到用户面前。</p>
+    <p>每经过一层加工，<span class="very">信息纯度都在下降</span>。到用户手里时，只剩 very general、可被任何 AI 替换生成的"信息渣"。</p>
+  </div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 3.2</span>
+    <span class="beat-title">反转洞察（这一段一定要重）</span>
+  </div>
+  <div class="beat-body">
+    <p>这里有一个<span class="very">反直觉的事实</span>——</p>
+    <p><span class="pause">[放慢 · 一字一字]</span></p>
+    <p>反刍链上每一层加工，<span class="very">设计目标不是传递信息，而是留住注意力</span>。</p>
+    <p>定义、条件、反例、不确定性——这些"让人真正能用"的内容，在注意力经济里是<span class="stress">负资产</span>，所以会被系统性地删掉。</p>
+    <p class="quote">这意味着——再认真读这些内容，也学不到东西。</p>
+  </div>
+</div>
+
+<div class="transition">那为什么，他们觉得自己学了？</div>
+
+<!-- ===================== ACT 4 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 04</div>
+  <h2>焦虑的真相 · 大脑无法区分</h2>
+  <div class="est">⏱ 约 1.5 分钟 · 切到双闭环对比图</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 4.1</span>
+    <span class="beat-title">学习 ≠ 焦虑管理</span>
+  </div>
+  <div class="beat-body">
+    <p class="stage">投屏切到 · 学习闭环 vs 焦虑闭环 双图对比</p>
+    <p>表面上看，"消费信息"是在学习。但<span class="stress">学习</span>和<span class="stress">焦虑管理</span>，是两个机制完全相反的闭环。</p>
+    <p><span class="stress">真正的学习</span>是这样的：遇到不明白的事 → <span class="very">先形成一个初步判断</span> → 带着具体问题去找信息 → <span class="very">用信息校准判断</span> → 形成新的、自己拥有的理解。</p>
+    <p>关键动作是<span class="stress">前置判断 + 校准</span>。这是学习的发动机。</p>
+    <p><span class="pause">[停 1 秒]</span> 但<span class="stress">焦虑管理</span>是这样的：感到落后 → 消费信息 → 产生"我在跟上"的感觉 → 焦虑短暂缓解 → 因为没有任何东西被内化，过段时间再次落后 → 再次消费。</p>
+    <p>这个循环里，<span class="very">没有前置判断、没有校准、没有内化</span>。</p>
+  </div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 4.2</span>
+    <span class="beat-title">Punchline · 慢、重</span>
+  </div>
+  <div class="beat-body">
+    <p><span class="pause">[这一句要慢]</span></p>
+    <p class="quote">大脑无法区分「读到一个结论」和「自己想到一个结论」。</p>
+    <p>这就是为什么，<span class="stress">吃再多反刍内容，也学不到东西</span>。</p>
+    <p>反过来说——真正在做 AI 工作的人，<span class="stress">几乎不消费这些反刍</span>。因为他们每天手上的实验、模型反馈、代码调试，已经在提供远高于任何二手总结的信息密度。</p>
+    <p class="quote">消费反刍的人越消费越觉得落后。<br>做事的人越做越觉得清晰。</p>
+  </div>
+</div>
+
+<!-- ===================== ACT 5 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 05</div>
+  <h2>用 AI 的 3 类人 · L1/L2/L3</h2>
+  <div class="est">⏱ 约 2 分钟 · 切到三类人对比卡片</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 5.1</span>
+    <span class="beat-title">L1 / L2 / L3 一气呵成</span>
+  </div>
+  <div class="beat-body">
+    <p class="stage">投屏切到 · 三类人对比卡片</p>
+    <p>顺着这个逻辑，我把现实中用 AI 的人，分成<span class="stress">三类</span>。</p>
+    <p><span class="very">L1 · 无脑用</span>——自己不思考，也不让 AI 思考。直接派任务："帮我写一份"。AI 输出垃圾，他得出结论"AI 不过如此"。<span class="stress">这是大多数人</span>。</p>
+    <p><span class="very">L2 · 喂上下文</span>——这群人懂得 AI 需要上下文，每次任务前喂大量信息、多轮追问。<span class="stress">效果好，但人累死</span>。每次新任务都要重新喂一遍。我自己以前就是这样。</p>
+    <p><span class="very">L3 · 共脑</span>——人和 AI 同时思考，共享同等上下文。<span class="stress">这是理想态</span>。<span class="pause">[停一下]</span> 但过去几乎做不到——因为工具形态做不到。</p>
+  </div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 5.2</span>
+    <span class="beat-title">三层差距是什么</span>
+  </div>
+  <div class="beat-body">
+    <p>这三层之间的差距，<span class="stress">不是"会不会用 AI"</span>，而是——</p>
+    <p class="quote">用 AI 时还<span class="very">愿不愿意自己思考</span>。</p>
+    <p>L1 把思考全部外包给 AI，垃圾输入垃圾输出。<br>L2 把思考留给自己，但被上下文喂养压垮。<br>L3 让人和 AI 共同思考——这一层在过去的工具形态下<span class="stress">是技术不可能</span>。</p>
+  </div>
+</div>
+
+<div class="transition">那现在能不能做到？</div>
+
+<!-- ===================== ACT 6 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 06</div>
+  <h2>L3 共脑 · 真正的破局点</h2>
+  <div class="est">⏱ 约 2 分钟 · 切到核心判断 + 升华段</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 6.1</span>
+    <span class="beat-title">承接汉博的"所想即所得"</span>
+  </div>
+  <div class="beat-body">
+    <p>这里我想正式承接汉博的<span class="stress">"所想即所得"</span>这个判断。</p>
+    <p>这个判断我反复想过很多次——它的本质，其实就是<span class="stress">让 AI 替用户达成目标，而不是让用户去够 AI</span>。这是产品观上的根本对齐。</p>
+    <p>但我想再往前推一步——<span class="very">所想即所得，真正成立的前提是什么？</span></p>
+    <p>是两个前提：</p>
+    <p><span class="stress">前提一</span>：用户得有"想"——他自己的判断、他对一个问题的初步理解。完全不思考的用户，AI 替他做出来的东西，他自己也判断不出好坏。</p>
+    <p><span class="stress">前提二</span>：AI 要拥有<span class="very">和用户等价的上下文</span>——你看的屏幕它也看到，你听的语境它也懂得，你划的重点它也加权。</p>
+    <p>这两个前提满足，所想即所得才不是空话。</p>
+  </div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 6.2</span>
+    <span class="beat-title">升华 · 1+1>2</span>
+  </div>
+  <div class="beat-body">
+    <p class="stage">投屏切到 · 升华段（uplift 块）</p>
+    <p>更进一步——</p>
+    <p>当 AI 不仅有你的<span class="stress">当下上下文</span>，<span class="very">还有你过往看过、收过、标记过的一切</span>——那这才是真正意义上的 1+1>2。</p>
+    <p class="quote">[当下等价上下文] + [过往积淀的资产]<br>= AI 想得比你更长远。</p>
+    <p>用户每用一次，自己也变得更好。<span class="stress">这是 AI 真正能给到普通人的礼物</span>。</p>
+  </div>
+</div>
+
+<!-- ===================== ACT 7 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 07</div>
+  <h2>浏览器 · 承接 L3 的最佳载体</h2>
+  <div class="est">⏱ 约 1.5 分钟 · 切到"浏览器独占三层信号"</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 7.1</span>
+    <span class="beat-title">为什么是浏览器</span>
+  </div>
+  <div class="beat-body">
+    <p>那么——<span class="stress">谁来承接这个 L3 共脑？</span></p>
+    <p>我的判断是——<span class="very">浏览器</span>。理由是浏览器独占三层信号：</p>
+    <p><span class="stress">① 看了什么</span>——网页、文件、图片，所有内容浏览器都能拿到。<br><span class="stress">② 怎么看的</span>——停留时长、跳转链路、复访模式，这些是用户兴趣的真实证据。<br><span class="stress">③ 主动标记了什么</span>——用户主动点收藏、捕捉、划选的那些内容。</p>
+    <p>这三层信号，<span class="stress">元宝拿不到</span>（它只有对话残留）；<span class="stress">输入法拿不到</span>（它没有完整网页内容）；<span class="stress">ima 拿不到</span>（它是创作不是浏览）。</p>
+    <p class="quote">只有浏览器，是被动沉淀型 + 全场景的载体。</p>
+  </div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 7.2</span>
+    <span class="beat-title">两层落地（自然过渡到 demo）</span>
+  </div>
+  <div class="beat-body">
+    <p>具体在浏览器里怎么做？分两层落地：</p>
+    <p><span class="stress">长期层 = AI 收藏夹</span>。承接用户过往的所有资产沉淀。<span class="stress">这就是我们今年正在做的事</span>，8 月初上线。</p>
+    <p><span class="stress">当下层 = 共脑助手</span>。形态参考 Gemini Live：浏览器内右上角悬浮，语音对话 + 屏幕共享 + 副文本通道。这一层是下一步的事。</p>
+    <p>两层加起来，<span class="very">才是浏览器在 AI 时代真正的差异化</span>。</p>
+    <p><span class="pause">[停一下，转身切 demo]</span> 接下来——我现场演示 AI 收藏夹的 demo，确认我们方向对。</p>
+  </div>
+</div>
+
+<!-- ===================== ACT 8 · DEMO ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 08 · DEMO</div>
+  <h2>AI 收藏夹现场演示</h2>
+  <div class="est">⏱ 约 3 分钟 · 真正打开 demo 链接</div>
+</div>
+
+<div class="demo-cue">
+  <div class="dt">🎬 投屏切到 AI 收藏夹 demo · 边操作边讲</div>
+  <ol>
+    <li><b>开场一句</b>："这是 AI 收藏夹，对应'长期层'——用户过往看过、收过、标过的一切，被 AI 自动打标、摘要、聚类，可被 AI 直接引用。"</li>
+    <li><b>演示节点 1 · 5 类资产</b>："5 个 Tab：书签 / 图片 / 文件 / 摘录 / AI 对话——一个统一的资产阵地，覆盖用户在浏览器里 95% 的'看过、收过'行为。"</li>
+    <li><b>演示节点 2 · 自动整理</b>："AI 后台跑打标、摘要、聚类。但<b>整理成组的最终确认权在用户手上</b>——AI 帮你看，但不替你决定。"</li>
+    <li><b>演示节点 3 · 元宝调用</b>："这层资产可以被元宝助手直接引用——这就是'AI 拥有用户长期上下文'的具体落地。"</li>
+    <li><b>收尾一句</b>："这就是我们今年最重要的项目，8 月初 MVP 上线。今天想确认两件事：① 这个方向你们认可吗？② 哪里还需要再讨论？"</li>
+  </ol>
+</div>
+
+<!-- ===================== ACT 9 · 收尾 ===================== -->
+<div class="act">
+  <div class="act-tag">ACT 09</div>
+  <h2>收尾 · 把球抛回去</h2>
+  <div class="est">⏱ 约 30 秒 · 站直，看着他俩说</div>
+</div>
+
+<div class="beat">
+  <div class="beat-head">
+    <span class="beat-num">BEAT 9.1</span>
+    <span class="beat-title">总结 + 等反馈</span>
+  </div>
+  <div class="beat-body">
+    <p>今天讲完两件事：</p>
+    <p><span class="stress">第一</span>，我对"所想即所得"的延伸思考——<span class="stress">不是另一个产品观，是同一个产品观再往前一步</span>。AI 不只是替你做，更是陪你想得更远。</p>
+    <p><span class="stress">第二</span>，AI 收藏夹是这个产品观的<span class="stress">长期层落地</span>，今年 8 月初上线。共脑助手是当下层，下一步可以做。</p>
+    <p class="quote">两个加起来，才是腾讯做 AI 真正的差异化。</p>
+    <p>今天想听你们的反馈——<span class="stress">哪里立不住、哪里你们也想过、下一步往哪走</span>。</p>
+    <p><span class="pause">[停 · 等他俩说话]</span></p>
+  </div>
+</div>
+
+<div class="closing">
+  <h3>🎯 你赢的标志</h3>
+  <p>不是当场拍板，<span class="gold">是会议结束时他俩中至少一个说"我想再读一遍那份材料"</span>。</p>
+  <p>不是讲完所有内容，<span class="gold">是讲到他俩开始反问 / 接话就停</span>。</p>
+  <p style="margin-top:14px;">汉博喜欢野路子 + 讨厌墨迹——<b>结论先行</b>。<br>颖姐 INTJ 吃逻辑——<b>每个"为什么"都给清楚</b>。</p>
+</div>
+
+</div>
+</body>
+</html>
