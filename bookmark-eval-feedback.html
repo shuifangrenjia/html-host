@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>书签整理 · 算法策略问题清单 · 给 vance + 翁建通</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f6f8; color: #1a202c;
+  font-size: 15px; line-height: 1.7;
+}
+body { padding: 28px 16px 60px; }
+.page { max-width: 980px; margin: 0 auto; }
+
+.header {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  color: #fff; padding: 28px 32px;
+  border-radius: 12px 12px 0 0;
+}
+.header .tag { display: inline-block; background: rgba(255,255,255,0.18); padding: 4px 12px; border-radius: 4px; font-size: 12px; letter-spacing: 1.5px; margin-bottom: 12px; }
+.header h1 { font-size: 24px; margin-bottom: 8px; }
+.header .sub { font-size: 14px; opacity: 0.85; }
+.header .meta { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.18); display: flex; gap: 22px; flex-wrap: wrap; font-size: 13px; opacity: 0.88; }
+.header .meta b { color: #fbd38d; }
+
+.body {
+  background: #fff;
+  padding: 28px 32px;
+  border-radius: 0 0 12px 12px;
+}
+
+h2 {
+  font-size: 19px; color: #1a365d; margin: 28px 0 12px;
+  padding-bottom: 6px; border-bottom: 2px solid #1a365d;
+  display: flex; align-items: center; gap: 10px;
+}
+h2 .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: #1a365d; color: #fff; font-size: 14px; font-weight: 800;
+}
+
+p { margin-bottom: 12px; color: #2d3748; }
+.hl-r { color: #c53030; font-weight: 700; }
+.hl-y { background: #fef3c7; padding: 1px 4px; border-radius: 3px; }
+.hl-g { color: #22543d; font-weight: 700; }
+
+.tldr {
+  background: linear-gradient(to right, #fff8e1, #fff);
+  border-left: 4px solid #d69e2e;
+  padding: 16px 22px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 24px;
+}
+.tldr h3 { font-size: 13px; letter-spacing: .14em; color: #975a16; margin-bottom: 8px; font-weight: 700; }
+.tldr ul { padding-left: 22px; }
+.tldr li { margin-bottom: 6px; color: #2d3748; }
+.tldr li b { color: #1a365d; }
+
+table {
+  width: 100%; border-collapse: collapse;
+  margin: 12px 0 18px;
+  font-size: 13.5px;
+}
+th { background: #1a365d; color: #fff; padding: 9px 10px; text-align: left; font-weight: 600; }
+td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; }
+td.hot { color: #c53030; font-weight: 700; }
+td.cool { color: #22543d; font-weight: 700; }
+tr:hover td { background: #f7fafc; }
+
+.issue {
+  background: #fff5f5;
+  border: 1px solid #fed7d7;
+  border-left: 4px solid #c53030;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 14px 0;
+}
+.issue .it { font-weight: 700; color: #c53030; margin-bottom: 6px; font-size: 14px; }
+.issue .id { font-size: 13.5px; line-height: 1.7; color: #4a5568; }
+.issue .id b { color: #1a365d; }
+.issue code {
+  background: #edf2f7; padding: 1px 6px; border-radius: 3px;
+  font-family: "SF Mono", Menlo, monospace; font-size: 12px;
+}
+.issue .case-list {
+  margin-top: 8px; padding: 10px 12px;
+  background: #fff; border-radius: 6px;
+  font-size: 12.5px; color: #4a5568;
+}
+.issue .case-list b { color: #1a365d; }
+
+.fix {
+  background: #f0fff4;
+  border: 1px solid #c6f6d5;
+  border-left: 4px solid #38a169;
+  border-radius: 0 8px 8px 0;
+  padding: 14px 18px;
+  margin: 8px 0 18px;
+}
+.fix .ft { font-weight: 700; color: #22543d; margin-bottom: 4px; font-size: 13px; }
+.fix .fd { font-size: 13.5px; color: #2d3748; }
+.fix .fd b { color: #22543d; }
+
+.closing {
+  margin-top: 28px;
+  padding: 22px 26px;
+  background: #1a365d;
+  color: #fff;
+  border-radius: 10px;
+}
+.closing *, .closing p, .closing span, .closing b { color: inherit; }
+.closing h3 { font-size: 17px; color: #fbd38d; margin-bottom: 10px; }
+.closing p { color: #e2e8f0; }
+.closing .acc { color: #fbd38d; font-weight: 700; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <span class="tag">AI 资产 · 书签整理 · 测评观察</span>
+  <h1>算法策略问题清单 · 给 vance / 翁建通</h1>
+  <div class="sub">基于前 5 个用户 final.json 的客观数据观察 · 不是主观打分，是结构性问题</div>
+  <div class="meta">
+    <span>样本：<b>5 用户</b></span>
+    <span>整理来源：<b>翁建通 v1 服务输出</b></span>
+    <span>整理人：<b>游杰</b></span>
+    <span>日期：<b>2026-05-28</b></span>
+  </div>
+</div>
+
+<div class="body">
+
+<div class="tldr">
+  <h3>📌 TL;DR · 4 个最严重问题</h3>
+  <ul>
+    <li><b>① 单书签叶组占比过高</b>（5 个用户平均 70%）—— 模型在过度细分而非聚类，违反「整理 = 收敛」的核心目标</li>
+    <li><b>② L1 出现大量语义重叠的兄弟组</b>（"搜索"/"搜索引擎"、"娱乐"/"影视娱乐"、"新闻"/"新闻资讯"）—— 命名空间没有去重</li>
+    <li><b>③ 同一书签被重复分到多个组</b>（21 项重复 / 52 总书签 = 30%+）—— 应该是单一归属，不该一条多挂</li>
+    <li><b>④ L1 数量爆炸</b>（52 个书签输出 21 个 L1 / 217 个书签输出 14 个 L1）—— 原则应该是 5-10 个 L1，多了等于没整理</li>
+  </ul>
+</div>
+
+<h2><span class="num">1</span>样本数据概览</h2>
+
+<table>
+  <thead>
+    <tr><th>qbid（前 8 位）</th><th>输入 N</th><th>输出 L1 数</th><th>输出书签总数（重复）</th><th>叶组数</th><th>单书签叶组占比</th><th>最大深度</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>110ccacd</td><td>52</td><td class="hot">21</td><td>52 (含 16 重复)</td><td>31</td><td class="hot">83%</td><td>4</td></tr>
+    <tr><td>1121d1a1</td><td>564</td><td class="hot">26</td><td>235 (含 28 重复)</td><td>144</td><td class="hot">72%</td><td>4</td></tr>
+    <tr><td>1123df6b</td><td>217</td><td>14</td><td>217 (含 23 重复)</td><td>128</td><td class="hot">67%</td><td>4</td></tr>
+    <tr><td>1135b72f</td><td>60</td><td class="cool">4</td><td>57 (含 3 重复)</td><td>25</td><td class="hot">72%</td><td>4</td></tr>
+    <tr><td>1185ea99</td><td>51</td><td class="cool">3</td><td>51 (含 2 重复)</td><td>32</td><td>56%</td><td>3</td></tr>
+  </tbody>
+</table>
+
+<p style="font-size:13px;color:#718096;font-style:italic;">注：「输入 N」是原始书签 + 文件夹总数；「重复」指同一书签被分到多个叶组（应严格单一归属）；「单书签叶组占比」越高代表整理粒度越细碎。</p>
+
+<h2><span class="num">2</span>问题 1 · 过度细分 · 单书签叶组占比 70%</h2>
+
+<div class="issue">
+  <div class="it">🚨 现象：71% 的叶组里只有一个书签</div>
+  <div class="id">
+    5 个样本平均 <b>70% 的最深一级分组只挂着 1 个书签</b>。这意味着模型在做"为每个书签造一个分组"，而不是"把书签聚到同类组"。
+    <div class="case-list">
+      <b>具体例子（qbid=110ccacd04cec47b）</b>：<br>
+      • <code>上网导航 > AI 工具 > 游戏阅读</code> → 只有 1 个书签「上网导航」<br>
+      • <code>上网导航 > 资源导航 > AI 工具游戏</code> → 只有 1 个「上网导航 - 轻快上网」<br>
+      • <code>上网导航 > 资源导航 > AI 游戏阅读</code> → 只有 1 个「上网导航 - 轻快上网」<br>
+      <span style="color:#c53030;font-weight:700;">→ 一个"上网导航"网站被同时分到 3 条 L3 路径，且每条都自成一组。</span>
+    </div>
+  </div>
+</div>
+
+<div class="fix">
+  <div class="ft">💡 vance 的策略改进方向</div>
+  <div class="fd">叶组应有<b>最小书签数阈值</b>（建议 ≥ 2）。如果某叶组只有 1 个书签：① 上提到父级合并 ② 或者归入"其他/杂项"；不要为孤儿造一个分组。</div>
+</div>
+
+<h2><span class="num">2</span>问题 2 · L1 命名重复 · 模型没有"已见过的命名"记忆</h2>
+
+<div class="issue">
+  <div class="it">🚨 现象：同义/近义词在 L1 兄弟节点同时出现</div>
+  <div class="id">
+    模型在生成 L1 时<b>没做去重</b>，导致用户看到"两个看起来差不多但其实拆开的"分组——这是用户最容易吐槽"AI 整理还不如不整理"的点。
+    <div class="case-list">
+      <b>真实样例</b>：<br>
+      • qbid=110ccacd：<code>上网导航</code> vs <code>网站导航</code>、<code>搜索</code> vs <code>搜索引擎</code>、<code>新闻</code> vs <code>新闻资讯</code>、<code>金融</code> vs <code>金融服务</code>、<code>电商业</code> vs <code>电商购物</code><br>
+      • qbid=1121d1a1：<code>IT服务</code> vs <code>信息服务</code> vs <code>网络服务</code>、<code>电商</code> vs <code>电商平台</code> vs <code>电商购物</code> vs <code>购物</code>、<code>视频</code> vs <code>视频平台</code><br>
+      • qbid=1123df6b：<code>娱乐</code> vs <code>影视娱乐</code>、<code>影视</code> vs <code>影视娱乐</code>
+    </div>
+  </div>
+</div>
+
+<div class="fix">
+  <div class="ft">💡 vance 的策略改进方向</div>
+  <div class="fd">L1 生成需要<b>同义词归一</b>步骤：① 生成候选 L1 后，用 embedding 相似度做聚合 ② 或者预设一个"标准 L1 词典"（购物 / 资讯 / 娱乐 / 工具 / 学习 / 影视 / 游戏 / 金融 / 系统等），强制对齐。</div>
+</div>
+
+<h2><span class="num">3</span>问题 3 · 同一书签出现在多个分组</h2>
+
+<div class="issue">
+  <div class="it">🚨 现象：1 个书签 → N 个不同 L1 / L2 / L3 路径</div>
+  <div class="id">
+    qbid=110ccacd 的 52 个书签中，<b>有 16 项是重复出现</b>（重复率 30%+）。整理的本质是"给每个书签找一个家"，不是"复制粘贴到所有可能匹配的家"。
+    <div class="case-list">
+      <b>具体例子</b>：<br>
+      • 「上网导航」被分到 4 条不同路径（搜索 / 上网导航 / 资源导航 / 网站导航）<br>
+      • 「百度搜索」被分到「搜索 > 搜索引擎 > 百度搜索」和「搜索引擎 > 在线服务 > 资讯门户」<br>
+      • 「头条新闻」被分到「新闻 > 头条新闻」和「新闻资讯 > 综合新闻」
+    </div>
+  </div>
+</div>
+
+<div class="fix">
+  <div class="ft">💡 vance 的策略改进方向</div>
+  <div class="fd">硬约束：<b>每个书签输入 ID 在输出树中只能出现 1 次</b>。如果模型给了多个候选路径，取相似度最高的那条；其余路径不输出。</div>
+</div>
+
+<h2><span class="num">4</span>问题 4 · L1 数量爆炸（用户看着像没整理）</h2>
+
+<div class="issue">
+  <div class="it">🚨 现象：52 个书签产出 21 个 L1，564 个书签产出 26 个 L1</div>
+  <div class="id">
+    用户视角的"整理"= 把多变少。但模型输出 L1 数和输入书签数<b>几乎成正比</b>，说明模型在"分而不聚"。这个体感上的失败比单点错误更致命——<b>用户打开看到 21 个组，第一反应是"我自己整理也是这样啊"</b>。
+    <div class="case-list">
+      <b>建议的合理 L1 数</b>：<br>
+      • 输入 &lt; 50 → L1 应在 3-5 个<br>
+      • 输入 50-200 → L1 应在 5-8 个<br>
+      • 输入 200-500 → L1 应在 6-10 个<br>
+      • 输入 &gt; 500 → L1 不应超过 10-12 个（需要 L2 / L3 承接细分）
+    </div>
+  </div>
+</div>
+
+<div class="fix">
+  <div class="ft">💡 vance 的策略改进方向</div>
+  <div class="fd">L1 数量上限应该是<b>软约束</b>：① 模型先生成所有候选 L1 ② 按相似度合并到 ≤ 10 个 ③ 剩下的次优组下沉到 L2。不要让模型"想到一个新角度就开一个 L1"。</div>
+</div>
+
+<h2><span class="num">5</span>给 vance 的优化优先级建议</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:8%">优先级</th><th>策略改进</th><th>预期效果</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="hot">P0</td><td>叶组最小书签数 ≥ 2（孤儿上提或归"其他"）</td><td>单书签叶组占比 70% → 20% 以内</td></tr>
+    <tr><td class="hot">P0</td><td>书签输出唯一性约束（一个书签只挂一处）</td><td>重复率 30% → 0%</td></tr>
+    <tr><td>P1</td><td>L1 同义词归一（embedding 聚合 / 标准词典）</td><td>语义重叠 L1 消失</td></tr>
+    <tr><td>P1</td><td>L1 数量软上限（≤ 10）</td><td>用户体感"AI 真的整理过"</td></tr>
+    <tr><td>P2</td><td>层级深度上限 ≤ 3（base + L1 + L2 + 书签）</td><td>不要 L4，浏览路径过深</td></tr>
+  </tbody>
+</table>
+
+<div class="closing">
+  <h3>📋 写在最后</h3>
+  <p>这份观察基于 5 个样本的客观数据。<span class="acc">P0 两条（孤儿组 + 重复书签）是结构性硬伤</span>——人工评测时大概率拿 0 分。建议先解 P0，再迭代。</p>
+  <p style="margin-top:10px;">完整的人工评测会在 20 个样本全跑完后给——目前已经搭了评测页面（<a href="https://html-host-ash.pages.dev/bookmark-eval" style="color:#fbd38d;">bookmark-eval</a>），3 维度评分、自动算分布。</p>
+</div>
+
+</div>
+</div>
+</body>
+</html>
