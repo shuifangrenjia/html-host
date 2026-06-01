@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Native 浏览器 · 本周交付清单</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f8;color:#1a202c;line-height:1.7;padding:24px 16px}
+.wrap{max-width:1100px;margin:0 auto}
+.header{background:linear-gradient(135deg,#1a365d 0%,#2c5282 100%);color:#fff;padding:28px 32px;border-radius:14px 14px 0 0}
+.header *{color:inherit}
+.tag{display:inline-block;background:rgba(255,255,255,.18);padding:4px 12px;border-radius:4px;font-size:11px;letter-spacing:1.5px;margin-bottom:10px}
+.header h1{font-size:24px;margin-bottom:8px}
+.header .sub{font-size:14px;opacity:.92}
+.section{background:#fff;padding:24px 32px;border-bottom:1px solid #e2e8f0}
+.section:last-child{border-radius:0 0 14px 14px;border-bottom:none}
+.h2{font-size:18px;color:#1a365d;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.h2::before{content:"";width:4px;height:18px;background:#d69e2e;border-radius:2px}
+.lead{background:#fff8e1;border-left:3px solid #d69e2e;padding:12px 16px;border-radius:0 6px 6px 0;font-size:14px;line-height:1.75;margin-bottom:18px}
+.lead b{color:#c53030}
+
+/* 设计稿区 */
+.canvas{background:#f7fafc;border:1px dashed #cbd5e0;border-radius:10px;padding:18px;margin-bottom:14px}
+.canvas-title{font-size:13px;color:#718096;letter-spacing:.15em;margin-bottom:10px;font-weight:700;text-transform:uppercase}
+.mock{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:18px;text-align:center;font-family:"SF Mono",Menlo,monospace;font-size:12px;color:#4a5068;line-height:1.8;min-height:140px;display:flex;flex-direction:column;justify-content:center}
+.mock .url{background:#edf2f7;color:#a0aec0;padding:6px 12px;border-radius:20px;font-size:11px;display:inline-block;margin-bottom:14px}
+.mock .input-box{border:2px solid #1a365d;border-radius:12px;padding:14px 18px;font-size:14px;color:#1a365d;font-weight:600;max-width:420px;margin:0 auto;background:#fff}
+.mock .hint{color:#a0aec0;font-size:11px;margin-top:10px}
+.mock-2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.mock-2 .card{background:#f7fafc;padding:10px 8px;border-radius:6px;border:1px solid #e2e8f0;font-size:11px;color:#4a5068}
+
+/* 交付清单 */
+.deliv{display:grid;grid-template-columns:60px 1fr 120px 100px;gap:14px;padding:14px 16px;border:1px solid #e2e8f0;border-radius:10px;margin-bottom:10px;align-items:center;font-size:13.5px}
+.deliv .id{background:#1a365d;color:#fff;padding:6px 0;text-align:center;border-radius:6px;font-weight:800;font-size:13px}
+.deliv .body b{color:#1a365d}
+.deliv .who{font-size:12px;color:#4a5068}
+.deliv .who b{color:#c53030}
+.deliv .due{font-size:12px;text-align:center;padding:6px;border-radius:5px;font-weight:700}
+.due.now{background:#fed7d7;color:#822727}
+.due.week{background:#fefcbf;color:#744210}
+.due.next{background:#c6f6d5;color:#22543d}
+
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+th{background:#1a365d;color:#fff;padding:10px;text-align:left;font-weight:600}
+td{padding:10px;border-bottom:1px solid #e2e8f0;vertical-align:top}
+tr:nth-child(even) td{background:#f7fafc}
+td b{color:#c53030}
+
+.note{background:#fff;border:1px solid #e2e8f0;border-left:4px solid #c53030;border-radius:0 8px 8px 0;padding:14px 18px;margin-top:14px;font-size:13.5px;line-height:1.75;color:#2d3748}
+.note b{color:#c53030}
+
+.core{background:#1a365d;color:#fff;padding:20px 24px;border-radius:10px;margin:14px 0}
+.core *{color:inherit}
+.core .lbl{font-size:11px;letter-spacing:.25em;color:#fbd38d;font-weight:700;margin-bottom:6px}
+.core .txt{font-size:15px;line-height:1.7;color:#fff}
+.core .txt em{color:#fbd38d;font-style:normal;font-weight:700}
+
+@media(max-width:680px){.deliv{grid-template-columns:1fr}.mock-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="header">
+  <span class="tag">本周交付物 · DELIVERABLES</span>
+  <h1>AI Native 浏览器 · 设计稿 + 方案该输出什么</h1>
+  <div class="sub">从"讨论方向"收敛到"周二可交付的具体物料" · 游杰 · 2026-06-01</div>
+</div>
+
+<!-- 立旗 -->
+<div class="section">
+  <div class="h2">先回答一个问题</div>
+  <div class="lead">
+    汉博给的 deadline 是<b>下周给老板汇报</b>，伟航说<b>周二出完整方案</b>。<br>
+    所以本周内，我们必须从"概念讨论"落到三件具体物料：<b>核心场景设计稿 + 框架方案文档 + 用户感知 demo</b>。
+  </div>
+
+  <div class="core">
+    <div class="lbl">DESIGN PRINCIPLE</div>
+    <div class="txt">
+      老板要看到的不是"我们想做什么"，是<em>"打开这个浏览器，用户的第一秒、第十秒、第三十秒，分别看到什么"</em>。<br>
+      <span style="font-size:13px;font-weight:400;opacity:.9;">所以设计稿不是 UI 探索，是<em>用户旅程的 3 个关键时刻定格</em>。</span>
+    </div>
+  </div>
+</div>
+
+<!-- 设计稿 · 3 张 -->
+<div class="section">
+  <div class="h2">📐 设计稿 · 必须出的 3 张图</div>
+
+  <div class="canvas">
+    <div class="canvas-title">图 1 · 首屏（第 1 秒看到的）</div>
+    <div class="mock">
+      <div class="url">browser://newtab</div>
+      <div style="font-size:18px;color:#1a365d;font-weight:600;margin-bottom:8px;">你想干嘛？</div>
+      <div class="input-box">⌘ 输入网址 · 提问 · 召唤过往...</div>
+      <div class="hint">— 没有 tab 栏 · 没有书签栏 · 没有搜索框 —</div>
+    </div>
+    <div style="font-size:12.5px;color:#4a5068;margin-top:10px;line-height:1.7;">
+      <b style="color:#1a365d">设计要点</b>：极简首屏。一个对话框 + 一句欢迎语。新用户 0 学习成本，3 秒 get「这是和 AI 说话的浏览器」。<br>
+      <b style="color:#c53030">必须画出来的细节</b>：① 输入框的 placeholder 怎么写 ② 输入框聚焦/未聚焦的状态对比 ③ 右上角是否有用户头像/设置入口
+    </div>
+  </div>
+
+  <div class="canvas">
+    <div class="canvas-title">图 2 · 意图响应（第 10 秒看到的）</div>
+    <div class="mock">
+      <div style="background:#1a365d;color:#fff;padding:8px 14px;border-radius:8px;display:inline-block;font-size:12px;margin-bottom:10px;">用户输入：「Notion 和 Obsidian 选哪个？」</div>
+      <div style="font-size:11px;color:#a0aec0;">↓ AI 识别为「决策辅助」类意图</div>
+      <div class="mock-2">
+        <div class="card">📊 自动对比表<br><span style="color:#a0aec0">3 维度</span></div>
+        <div class="card">🤔 反向问 1 句<br><span style="color:#a0aec0">"你最在意哪点"</span></div>
+        <div class="card">🔗 引用来源<br><span style="color:#a0aec0">3 个原文链接</span></div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;color:#4a5068;margin-top:10px;line-height:1.7;">
+      <b style="color:#1a365d">设计要点</b>：AI 主动给出"对比 + 反问 + 引用"三件套，不是单纯问答。<br>
+      <b style="color:#c53030">必须画出来的细节</b>：① AI 回答和用户输入的视觉关系 ② 反问的呈现方式（卡片？气泡？）③ 引用链接是悬停展开还是常驻
+    </div>
+  </div>
+
+  <div class="canvas">
+    <div class="canvas-title">图 3 · 召唤过往（第 30 秒看到的 · 最关键）</div>
+    <div class="mock">
+      <div style="background:#fff8e1;color:#975a16;padding:8px 14px;border-radius:8px;display:inline-block;font-size:12px;margin-bottom:10px;border:1px solid #d69e2e;">用户输入：「我上周看的那个买车视频」</div>
+      <div style="font-size:11px;color:#a0aec0;">↓ AI 从用户长期记忆中召回</div>
+      <div class="mock-2">
+        <div class="card" style="background:#1a365d;color:#fff;border-color:#1a365d">📺 视频卡片<br><span style="opacity:.8">5/26 22:14 看过</span></div>
+        <div class="card">📝 当时划过的重点<br><span style="color:#a0aec0">3 段</span></div>
+        <div class="card">🧠 AI 摘要<br><span style="color:#a0aec0">"你关注的是续航"</span></div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;color:#4a5068;margin-top:10px;line-height:1.7;">
+      <b style="color:#c53030">这一张是产品的灵魂</b>——元宝 / 输入法 / ima 都做不出来这一刻。<br>
+      <b style="color:#c53030">必须画出来的细节</b>：① 召回的视觉冲击（"AI 真的记得"）② 召回结果是单个还是多个的层次 ③ 这一刻能延伸到什么操作（继续看 / 总结 / 沉淀）
+    </div>
+  </div>
+</div>
+
+<!-- 方案文档 -->
+<div class="section">
+  <div class="h2">📄 方案文档 · 5 个必须写清楚的章节</div>
+  <table>
+    <thead>
+      <tr><th style="width:6%">#</th><th style="width:24%">章节</th><th>内容要点</th><th style="width:14%">字数</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>01</td>
+        <td><b>产品定位 · 一句话</b></td>
+        <td>这不是浏览器 + AI，是 AI Native 浏览器。新用户记忆点：<b>"和 AI 说话的浏览器"</b>。</td>
+        <td>200 字</td>
+      </tr>
+      <tr>
+        <td>02</td>
+        <td><b>意图分流 · 6 类</b></td>
+        <td>寻址 / 求知 / 决策 / 执行 / 召唤 / 沉淀。每类用一个真实用户场景说清楚后续服务。<b>明确召唤+沉淀是 P0★，是浏览器独占的位</b>。</td>
+        <td>800 字</td>
+      </tr>
+      <tr>
+        <td>03</td>
+        <td><b>三大模块 · 看 / 手脚 / 记忆</b></td>
+        <td>对接汉博昨天电话里的三模块。每模块一段：要解决什么问题、做到什么标准、谁负责。</td>
+        <td>800 字</td>
+      </tr>
+      <tr>
+        <td>04</td>
+        <td><b>用户旅程 · 3 个时刻</b></td>
+        <td>嵌入上面 3 张设计稿。每张图配 100 字旁白，让老板能"读图"理解产品。</td>
+        <td>500 字</td>
+      </tr>
+      <tr>
+        <td>05</td>
+        <td><b>路径 · 第一版做什么</b></td>
+        <td>P0 4 类（寻址 + 求知 + 召唤 + 沉淀），P1 后置（决策 + 执行）。<b>不写时间表</b>——汉博明确不要落地路径。</td>
+        <td>400 字</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <b>format 注意</b>：汉博明确说"不再用 HTML，用旧文档形式"。所以方案文档 = <b>腾讯文档（Word 风）+ 嵌图</b>，不要做花哨的 HTML 站点。
+  </div>
+</div>
+
+<!-- 用户感知 demo -->
+<div class="section">
+  <div class="h2">🎬 用户感知 demo · 解决"实足冲击感"</div>
+
+  <div class="lead">
+    汉博录音里说："过去讨论很久都是关于记忆的<b>意义和价值</b>，但其实没有一个<b>实足的冲击感</b>"——这是这次方案最该补的空。<br>
+    所以除了文档 + 设计稿，要做一个<b>30 秒可演示的小动画/原型</b>，让老板"看到"那一刻。
+  </div>
+
+  <table>
+    <thead>
+      <tr><th style="width:14%">类型</th><th>内容</th><th style="width:18%">实现方式</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>方案 A · 静态分镜</b></td>
+        <td>3-5 张分镜图，模拟"用户输入 → AI 召回过往 → 展示视频/划线/AI 总结"的流程。配文字解说。</td>
+        <td>姝然 Figma · 1 天</td>
+      </tr>
+      <tr>
+        <td><b>方案 B · 可点击原型</b></td>
+        <td>Figma 原型，老板自己点一下就能跑完整个意图响应过程。<b>体感 ×10</b>。</td>
+        <td>姝然 + 你 · 2 天</td>
+      </tr>
+      <tr>
+        <td><b>方案 C · HTML 真 demo</b></td>
+        <td>能跑的 HTML，预置假数据，输入回车有反应。最有冲击力。</td>
+        <td>你 · 半天</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <b>推荐组合</b>：A（必做兜底）+ C（你半天能搞定）。<b>B 太重</b>，本周做不完。
+  </div>
+</div>
+
+<!-- 交付清单 -->
+<div class="section">
+  <div class="h2">✅ 本周分工清单（建议在会上拍板）</div>
+
+  <div class="deliv">
+    <div class="id">D1</div>
+    <div class="body"><b>3 张核心设计稿</b>（首屏 / 意图响应 / 召唤过往）</div>
+    <div class="who"><b>姝然</b> 主稿 + 古天龙 review</div>
+    <div class="due now">周三前</div>
+  </div>
+
+  <div class="deliv">
+    <div class="id">D2</div>
+    <div class="body"><b>方案文档 5 章</b>（腾讯文档形式）</div>
+    <div class="who"><b>游杰</b> 主笔 + 古天龙合写</div>
+    <div class="due now">周三前</div>
+  </div>
+
+  <div class="deliv">
+    <div class="id">D3</div>
+    <div class="body"><b>召唤记忆 demo</b>（HTML 可跑版）</div>
+    <div class="who"><b>游杰</b> 独立完成</div>
+    <div class="due week">周四前</div>
+  </div>
+
+  <div class="deliv">
+    <div class="id">D4</div>
+    <div class="body"><b>意图分类 → 后端架构落点</b>（6 类意图各自调哪些能力）</div>
+    <div class="who"><b>伟航</b> 主答 + 古天龙</div>
+    <div class="due week">周四前</div>
+  </div>
+
+  <div class="deliv">
+    <div class="id">D5</div>
+    <div class="body"><b>合并 review 会</b>（整体过一遍 · 收敛口径）</div>
+    <div class="who">古天龙组织 · 全员参加</div>
+    <div class="due week">周四下午</div>
+  </div>
+
+  <div class="deliv">
+    <div class="id">D6</div>
+    <div class="body"><b>陈颖 / 汉博内审</b>（提前过一轮，给老板汇报前再调）</div>
+    <div class="who">古天龙 + 游杰</div>
+    <div class="due next">周五</div>
+  </div>
+
+  <div class="deliv">
+    <div class="id">D7</div>
+    <div class="body"><b>给老板汇报</b></div>
+    <div class="who">古天龙主讲（含意图框架 + 设计稿） · 游杰补充记忆/召唤模块</div>
+    <div class="due next">下周</div>
+  </div>
+</div>
+
+<!-- 关键判断 -->
+<div class="section">
+  <div class="h2">⚠️ 3 个会上必须拍板的硬问题</div>
+
+  <div class="note">
+    <b>问题 1 · 设计稿是「3 张关键时刻」还是「完整产品 UI 设计」？</b><br>
+    我推荐前者——3 张精炼分镜比 30 张 UI 稿更有冲击。<b>本周时间不够画完整 UI</b>。
+  </div>
+
+  <div class="note">
+    <b>问题 2 · 我（游杰）的位是「记忆模块 owner」还是「整体方案合写人」？</b><br>
+    需要陈颖明确。<b>整体合写 = 拉满精力但增加曝光</b>；只做记忆 = 聚焦但可能被边缘化。
+  </div>
+
+  <div class="note">
+    <b>问题 3 · 汇报对象是 Lori 还是更上层？</b><br>
+    决定了方案文档的猛度——给 Lori 可以写得野一点；给更上层要保守一些。<b>汉博昨天没说清</b>。
+  </div>
+</div>
+
+<!-- 收尾 -->
+<div class="section">
+  <div class="core" style="margin:0">
+    <div class="lbl">A FINAL THOUGHT</div>
+    <div class="txt">
+      不要再讨论"AI 浏览器是什么"。<br>
+      <em>把"用户打开它的第一秒、第十秒、第三十秒"画出来</em>——产品就清楚了。
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
