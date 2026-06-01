@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>李子安 · Product Manager Portfolio</title>
+<style>
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f5f5f7;
+  --bg-card: #fbfbfd;
+  --text-primary: #1d1d1f;
+  --text-secondary: #515154;
+  --text-muted: #86868b;
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+  --line: #d2d2d7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, "SF Pro Display", "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.5;
+  font-size: 17px;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.003em;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== 顶部导航（sticky · Apple 风） ===== */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.nav-inner {
+  max-width: 980px; margin: 0 auto;
+  padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 48px;
+}
+.nav-logo {
+  font-size: 17px; font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+.nav-tabs {
+  display: flex; gap: 28px;
+}
+.nav-tab {
+  background: transparent; border: none;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 4px 0;
+  letter-spacing: 0;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
+.nav-tab:hover { opacity: 1; }
+.nav-tab.active {
+  opacity: 1;
+  font-weight: 500;
+}
+
+/* ===== 通用 page 容器 ===== */
+.page { display: none; min-height: calc(100vh - 48px); }
+.page.active { display: block; animation: fadeIn 0.4s ease; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== HOME 页 ===== */
+.hero {
+  text-align: center;
+  padding: 100px 22px 80px;
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%);
+}
+.hero-eyebrow {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 14px;
+}
+.hero-title {
+  font-size: 80px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+}
+.hero-subtitle {
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 22px;
+  letter-spacing: -0.02em;
+}
+.hero-tagline {
+  font-size: 19px;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto 34px;
+  line-height: 1.5;
+}
+.cta-group { display: inline-flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.cta {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 10px 22px;
+  border-radius: 980px;
+  font-size: 15px;
+  font-weight: 400;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all 0.2s;
+  letter-spacing: 0;
+}
+.cta-primary {
+  background: var(--accent);
+  color: #fff;
+}
+.cta-primary:hover { background: var(--accent-hover); }
+.cta-secondary {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+.cta-secondary:hover { background: rgba(0, 113, 227, 0.06); }
+
+/* Home 滚动后的精选项目预览 */
+.featured {
+  padding: 100px 22px;
+  background: var(--bg-soft);
+  text-align: center;
+}
+.featured-eyebrow {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+.featured h2 {
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  margin-bottom: 50px;
+  color: var(--text-primary);
+}
+.featured-grid {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
+}
+.feat-card {
+  background: var(--bg);
+  border-radius: 22px;
+  padding: 38px 32px;
+  text-align: left;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+.feat-card:hover { transform: translateY(-4px); }
+.feat-tag {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+.feat-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.feat-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* ===== PROJECTS 页 ===== */
+.section-hero {
+  padding: 80px 22px 50px;
+  text-align: center;
+  background: var(--bg);
+}
+.section-hero h1 {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  margin-bottom: 14px;
+}
+.section-hero p {
+  font-size: 21px;
+  color: var(--text-secondary);
+  max-width: 620px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+.projects-grid {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 30px 22px 100px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+.project-card {
+  background: var(--bg-soft);
+  border-radius: 22px;
+  padding: 50px 56px;
+  transition: transform 0.3s;
+}
+.project-card:hover { transform: translateY(-2px); }
+.project-eyebrow {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 14px;
+}
+.project-title {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.15;
+}
+.project-meta {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.project-desc {
+  font-size: 17px;
+  color: var(--text-secondary);
+  line-height: 1.65;
+  max-width: 720px;
+}
+.project-desc b { color: var(--text-primary); font-weight: 500; }
+.project-stats {
+  display: flex; flex-wrap: wrap; gap: 32px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.project-stat .num {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.project-stat .lbl {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ===== ABOUT 页 ===== */
+.about-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 80px 22px 100px;
+}
+.about-h1 {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 22px;
+  color: var(--text-primary);
+}
+.about-lead {
+  font-size: 21px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 40px;
+}
+.about-section {
+  margin-bottom: 44px;
+}
+.about-section h3 {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+.about-section p {
+  font-size: 17px;
+  color: var(--text-primary);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+/* Timeline */
+.timeline {
+  border-left: 2px solid var(--line);
+  padding-left: 22px;
+}
+.tl-item {
+  margin-bottom: 26px;
+  position: relative;
+}
+.tl-item::before {
+  content: ""; position: absolute;
+  left: -28px; top: 6px;
+  width: 10px; height: 10px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.tl-time {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.tl-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.tl-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Skills 行 */
+.skills-row {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.skill-pill {
+  padding: 8px 16px;
+  background: var(--bg-soft);
+  border-radius: 980px;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+/* ===== CONTACT 页 ===== */
+.contact-wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 100px 22px;
+  text-align: center;
+}
+.contact-h1 {
+  font-size: 64px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 14px;
+  color: var(--text-primary);
+}
+.contact-lead {
+  font-size: 21px;
+  color: var(--text-secondary);
+  margin-bottom: 50px;
+  line-height: 1.5;
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+.contact-card {
+  background: var(--bg-soft);
+  padding: 32px 28px;
+  border-radius: 22px;
+  text-align: center;
+  transition: transform 0.3s;
+}
+.contact-card:hover { transform: translateY(-2px); }
+.contact-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+.contact-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.contact-value {
+  font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 500;
+  word-break: break-all;
+}
+
+/* ===== Footer ===== */
+.footer {
+  border-top: 1px solid var(--line);
+  padding: 30px 22px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.footer a { color: var(--text-muted); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 740px) {
+  .hero-title { font-size: 48px; }
+  .hero-subtitle { font-size: 21px; }
+  .hero-tagline { font-size: 17px; }
+  .featured h2 { font-size: 32px; }
+  .section-hero h1 { font-size: 40px; }
+  .section-hero p { font-size: 17px; }
+  .project-card { padding: 36px 28px; }
+  .project-title { font-size: 26px; }
+  .about-h1 { font-size: 40px; }
+  .about-lead { font-size: 17px; }
+  .contact-h1 { font-size: 44px; }
+  .nav-tabs { gap: 18px; }
+  .nav-tab { font-size: 12px; }
+  .project-stats { gap: 18px; }
+  .project-stat .num { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ========== 导航 ========== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo">李子安</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-tab="home">首页</button>
+      <button class="nav-tab" data-tab="projects">项目</button>
+      <button class="nav-tab" data-tab="about">关于</button>
+      <button class="nav-tab" data-tab="contact">联系</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HOME ========== -->
+<div class="page active" id="page-home">
+
+  <section class="hero">
+    <div class="hero-eyebrow">PRODUCT MANAGER · 25 届秋招</div>
+    <h1 class="hero-title">李子安</h1>
+    <div class="hero-subtitle">C 端社区方向 PM</div>
+    <p class="hero-tagline">用语言学的方法做产品。做过 100+ 用户访谈，主导过一个 0→1 AI 工具上线，让用户操作时长从 12s 降到 5.6s。</p>
+    <div class="cta-group">
+      <button class="cta cta-primary" onclick="switchTab('projects')">看我的项目 &rsaquo;</button>
+      <button class="cta cta-secondary" onclick="switchTab('contact')">联系我</button>
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="featured-eyebrow">FEATURED · 精选项目</div>
+    <h2>把抽象的判断<br>翻译成可衡量的结果</h2>
+    <div class="featured-grid">
+      <div class="feat-card" onclick="switchTab('projects')">
+        <div class="feat-tag">AI · 0→1</div>
+        <div class="feat-title">AI 标签智能分组</div>
+        <div class="feat-desc">聚类成功率 99%，操作时长降 53%。从一个被否的方案，做到团队季度最佳。</div>
+      </div>
+      <div class="feat-card" onclick="switchTab('projects')">
+        <div class="feat-tag">增长 · A/B</div>
+        <div class="feat-title">新人留存提升</div>
+        <div class="feat-desc">5 轮 A/B 测试找到关键变量，新人 D7 留存 +18%。复盘文档成为团队 onboarding 教材。</div>
+      </div>
+      <div class="feat-card" onclick="switchTab('projects')">
+        <div class="feat-tag">社群 · 0→500</div>
+        <div class="feat-title">校园 AI 社群</div>
+        <div class="feat-desc">跨 3 校 500+ 成员，30+ 次活动。把社群运营做成了我的差异化标签。</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ========== PROJECTS ========== -->
+<div class="page" id="page-projects">
+
+  <section class="section-hero">
+    <h1>项目</h1>
+    <p>三个项目，覆盖 0→1、增长、社群三种 PM 能力——不是堆数量，是讲清楚每个项目我做了什么决策。</p>
+  </section>
+
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-eyebrow">AI 工具 · 0→1 主导</div>
+      <h2 class="project-title">AI 标签智能分组</h2>
+      <div class="project-meta">腾讯 QQ 浏览器 · 2024 Q3 · 跨 5 人团队</div>
+      <p class="project-desc">用户日均打开 30+ 标签，找信息困难。<b>关键决策：弃用"按域名分组"，主推"按主题分组"</b>。第一版指标好但取消率高 30%——反思后改用"AI 候选 + 用户一键确认"模式。最终上线获得团队季度最佳，并被多个浏览器产品复用此交互范式。</p>
+      <div class="project-stats">
+        <div class="project-stat">
+          <div class="num">99%</div>
+          <div class="lbl">聚类成功率</div>
+        </div>
+        <div class="project-stat">
+          <div class="num">12s → 5.6s</div>
+          <div class="lbl">用户操作时长</div>
+        </div>
+        <div class="project-stat">
+          <div class="num">+33%</div>
+          <div class="lbl">任务完成率</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-eyebrow">用户增长 · A/B</div>
+      <h2 class="project-title">新人引导流程优化</h2>
+      <div class="project-meta">字节跳动 · 抖音电商 · 2024 H2</div>
+      <p class="project-desc">在新主播留存场景中，发现"开播第 3 天找不到货源"是核心痛点。通过 30+ 用户访谈识别问题，联动招商团队推出"新人专属选品池"功能，<b>新主播 7 日留存从 12% 提升至 31%</b>，团队季度 OKR 超额完成。</p>
+      <div class="project-stats">
+        <div class="project-stat">
+          <div class="num">12% → 31%</div>
+          <div class="lbl">7 日留存</div>
+        </div>
+        <div class="project-stat">
+          <div class="num">30+</div>
+          <div class="lbl">用户访谈</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-eyebrow">社群运营 · 联创</div>
+      <h2 class="project-title">校园 AI 工具实践社群</h2>
+      <div class="project-meta">联合创始人 · 2024 至今 · 跨 3 校</div>
+      <p class="project-desc">创建跨校 AI 工具实践社群，每周组织 1 次线上分享。<b>累计 500+ 成员，30+ 次活动</b>。这件事让我证明了自己能做内容产品——不是因为我懂内容，是因为我愿意每周花 5 小时陪用户。</p>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ========== ABOUT ========== -->
+<div class="page" id="page-about">
+
+  <div class="about-wrap">
+    <h1 class="about-h1">关于我</h1>
+    <p class="about-lead">我是李子安。学口译出身的产品经理，相信好产品的本质是让对的人在对的时刻被理解。</p>
+
+    <div class="about-section">
+      <h3>STORY</h3>
+      <p>口译训练给了我两个奇怪的能力：在巨量信息流里快速抓主干，把复杂概念翻译成普通人能懂的话。这两件事正好是 PM 每天在做的事。</p>
+      <p>我擅长把抽象的产品判断翻译成可衡量的结果。3 段 PM 实习里，每段都至少有一个可量化的留存或完成率提升。我相信数据不是结果，是验证判断的方式。</p>
+    </div>
+
+    <div class="about-section">
+      <h3>EDUCATION</h3>
+      <p><b>香港中文大学（深圳）</b> · 翻译与口译硕士</p>
+      <p style="color: var(--text-secondary); font-size: 15px;">2023.09 - 2025.06 · GPA 3.7/4.0 · 连续 2 年研究生奖学金 · 校园 AI 产品社团联合创始人</p>
+    </div>
+
+    <div class="about-section">
+      <h3>EXPERIENCE</h3>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-time">2024.07 - 2024.11</div>
+          <div class="tl-title">字节跳动 · 抖音电商 · PM 实习生</div>
+          <div class="tl-desc">新主播留存方向。主导新人选品池功能上线，7 日留存 +19pp。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">2024.01 - 2024.05</div>
+          <div class="tl-title">腾讯 · QQ 浏览器 · PM 实习生</div>
+          <div class="tl-desc">用户增长方向。负责新人引导 A/B 测试，D7 留存 +18%。</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-time">2023.06 - 2023.09</div>
+          <div class="tl-title">某创业公司 · 产品助理</div>
+          <div class="tl-desc">做了 100+ 用户访谈，整理出 3 个核心产品方向假设。</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <h3>SKILLS</h3>
+      <div class="skills-row">
+        <div class="skill-pill">用户访谈 (100+)</div>
+        <div class="skill-pill">数据分析 SQL</div>
+        <div class="skill-pill">Figma 原型</div>
+        <div class="skill-pill">A/B 测试设计</div>
+        <div class="skill-pill">AI 工具实战</div>
+        <div class="skill-pill">中英双语口译</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== CONTACT ========== -->
+<div class="page" id="page-contact">
+
+  <div class="contact-wrap">
+    <h1 class="contact-h1">让我们聊聊</h1>
+    <p class="contact-lead">如果你看完觉得有趣，欢迎随时找我聊产品、聊 AI、聊任何让你觉得不安的事。</p>
+
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-label">EMAIL</div>
+        <div class="contact-value">lzian@example.com</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">💬</div>
+        <div class="contact-label">WECHAT</div>
+        <div class="contact-value">lzian_pm</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-icon">🔗</div>
+        <div class="contact-label">LINKEDIN</div>
+        <div class="contact-value">linkedin.com/in/lzian</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  © 2026 李子安 · 用 AI 一小时搭建 · <a href="https://html-host-ash.pages.dev" target="_blank">了解这个工具</a>
+</footer>
+
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+document.querySelectorAll('.nav-tab').forEach(t => {
+  t.addEventListener('click', () => switchTab(t.dataset.tab));
+});
+</script>
+
+</body>
+</html>
