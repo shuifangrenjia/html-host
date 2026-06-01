@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>妈妈保险 · 4 姐弟平摊测算</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#fff5f0 0%,#f5f6f8 240px);color:#1a202c;line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
+body{padding:18px 14px 40px;min-height:100vh}
+.wrap{max-width:520px;margin:0 auto}
+
+/* Header */
+.header{background:linear-gradient(135deg,#c53030 0%,#9b2c2c 100%);color:#fff;padding:24px 22px;border-radius:18px;box-shadow:0 8px 24px rgba(197,48,48,.18);margin-bottom:18px}
+.header *{color:inherit}
+.tag{display:inline-block;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:980px;font-size:11px;letter-spacing:.1em;margin-bottom:10px}
+.header h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;line-height:1.3}
+.header .sub{font-size:13px;opacity:.92;line-height:1.6}
+.meta-row{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12.5px}
+.meta-row b{color:#fed7aa}
+
+/* Hero · 单人月费 */
+.hero-cost{background:#fff;border-radius:18px;padding:24px 22px;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,.04);text-align:center;border:1px solid #fed7d7}
+.hero-cost .lbl{font-size:12px;letter-spacing:.15em;color:#c53030;font-weight:700;margin-bottom:8px}
+.hero-cost .num{font-size:54px;font-weight:800;color:#1a365d;letter-spacing:-.03em;line-height:1.05}
+.hero-cost .num .unit{font-size:20px;color:#4a5068;font-weight:600;margin-left:4px}
+.hero-cost .desc{font-size:13px;color:#718096;margin-top:8px}
+.hero-cost .annual{margin-top:14px;padding-top:12px;border-top:1px dashed #e2e8f0;font-size:13px;color:#2d3748}
+.hero-cost .annual b{color:#c53030;font-size:15px;font-weight:700}
+
+/* Section */
+.section{background:#fff;border-radius:16px;padding:20px 22px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
+.h2{font-size:15px;font-weight:700;color:#1a365d;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.h2::before{content:"";width:4px;height:16px;background:#c53030;border-radius:2px}
+.h2 .badge{margin-left:auto;font-size:11px;background:#fff5f5;color:#c53030;padding:3px 10px;border-radius:980px;font-weight:600;letter-spacing:.05em}
+
+/* 表格卡片 */
+.row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-bottom:1px dashed #edf2f7;font-size:13.5px;align-items:baseline}
+.row:last-child{border-bottom:none}
+.row .k{color:#4a5068}
+.row .v{color:#1a365d;font-weight:600;font-family:"SF Mono",Menlo,monospace}
+.row .v.hot{color:#c53030;font-weight:700}
+
+/* 大数字行（年/月） */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.split .cell{background:#fff5f5;border:1px solid #fed7d7;padding:14px;border-radius:10px;text-align:center}
+.split .cell.year{background:#edf2f7;border-color:#cbd5e0}
+.split .cell .l{font-size:11px;color:#718096;letter-spacing:.08em;margin-bottom:4px}
+.split .cell .n{font-size:22px;font-weight:800;color:#1a365d;letter-spacing:-.02em}
+.split .cell .n .u{font-size:12px;color:#718096;font-weight:500;margin-left:2px}
+.split .cell.year .n{color:#1a365d}
+.split .cell.month .n{color:#c53030}
+
+/* tabs · 首年 vs 续保 */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;background:#edf2f7;padding:4px;border-radius:12px}
+.tab{padding:10px 0;border-radius:8px;text-align:center;font-size:13.5px;font-weight:600;color:#4a5068;cursor:pointer;border:none;background:transparent;font-family:inherit;transition:all .2s}
+.tab.active{background:#fff;color:#1a365d;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+/* 备选方案 */
+.alt{background:#fffaf0;border:1px dashed #d69e2e;border-radius:12px;padding:14px 16px;margin-top:10px;font-size:13px;color:#744210;line-height:1.7}
+.alt b{color:#9b2c2c;font-weight:700}
+
+/* 备注 */
+.note{font-size:12.5px;color:#4a5068;line-height:1.75;padding-left:20px;position:relative;margin-bottom:8px}
+.note::before{content:"💡";position:absolute;left:0;top:0;font-size:13px}
+
+/* 4 人示意 */
+.family{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 4px}
+.family .p{background:#fff5f5;border:1px solid #fed7d7;border-radius:10px;padding:10px 4px;text-align:center;font-size:11px;color:#9b2c2c;font-weight:600}
+.family .p .emoji{font-size:22px;display:block;margin-bottom:3px}
+
+footer{text-align:center;font-size:11px;color:#a0aec0;margin-top:24px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Header -->
+<div class="header">
+  <span class="tag">家庭医疗险 · 平摊方案</span>
+  <h1>妈妈保费分摊测算</h1>
+  <div class="sub">A Plus + 6 年保证续保 · 首次投保 · 4 姐弟平摊</div>
+  <div class="meta-row">
+    <div>👵 被保人：<b>57 周岁</b></div>
+    <div>👥 出资人：<b>你 + 3 姐</b></div>
+    <div>📦 主险：<b>A Plus + 续保</b></div>
+    <div>➕ 附加：<b>意外医疗</b></div>
+  </div>
+</div>
+
+<!-- 4 姐弟可视化 -->
+<div class="section">
+  <div class="h2">谁来出钱 <span class="badge">人均 1/4</span></div>
+  <div class="family">
+    <div class="p"><span class="emoji">👩</span>大姐</div>
+    <div class="p"><span class="emoji">👩</span>二姐</div>
+    <div class="p"><span class="emoji">👩</span>三姐</div>
+    <div class="p"><span class="emoji">🧑</span>你</div>
+  </div>
+</div>
+
+<!-- Hero · 关键数字 -->
+<div class="section" style="padding:0;background:transparent;box-shadow:none">
+  <div class="tabs">
+    <button class="tab active" data-tab="year1">首年（含等待期）</button>
+    <button class="tab" data-tab="year2">续保年度</button>
+  </div>
+
+  <!-- 首年面板 -->
+  <div class="panel active" id="year1">
+    <div class="hero-cost">
+      <div class="lbl">首年 · 单人每月只需</div>
+      <div class="num">¥38.90<span class="unit">/月</span></div>
+      <div class="desc">医疗险 33.48 + 意外险 5.42</div>
+      <div class="annual">单人全年合计 <b>¥466.75</b></div>
+    </div>
+
+    <div class="section" style="margin-top:14px">
+      <div class="h2">费用拆解 · 首年</div>
+      <div class="row"><div class="k">A Plus 医疗险（保证续保）</div><div class="v">¥1,379</div></div>
+      <div class="row"><div class="k">附加责任</div><div class="v">¥228</div></div>
+      <div class="row"><div class="k">医疗险首年总保费</div><div class="v hot">¥1,607 / 年</div></div>
+      <div class="row"><div class="k">中老年意外险（参考市价）</div><div class="v">¥260 / 年</div></div>
+      <div class="row" style="border-top:2px solid #fed7d7;margin-top:6px;padding-top:12px"><div class="k"><b>全家全年合计</b></div><div class="v hot" style="font-size:15px">¥1,867</div></div>
+
+      <div class="split">
+        <div class="cell year">
+          <div class="l">单人 / 全年</div>
+          <div class="n">¥466.75<span class="u">/年</span></div>
+        </div>
+        <div class="cell month">
+          <div class="l">单人 / 每月</div>
+          <div class="n">¥38.90<span class="u">/月</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 续保面板 -->
+  <div class="panel" id="year2">
+    <div class="hero-cost">
+      <div class="lbl">续保年度 · 单人每月只需</div>
+      <div class="num">¥41.82<span class="unit">/月</span></div>
+      <div class="desc">医疗险 36.40 + 意外险 5.42</div>
+      <div class="annual">单人全年合计 <b>¥501.75</b></div>
+    </div>
+
+    <div class="section" style="margin-top:14px">
+      <div class="h2">费用拆解 · 续保年度</div>
+      <div class="row"><div class="k">A Plus + 6 年保证续保</div><div class="v hot">¥1,747 / 年</div></div>
+      <div class="row"><div class="k">中老年意外险</div><div class="v">¥260 / 年</div></div>
+      <div class="row" style="border-top:2px solid #fed7d7;margin-top:6px;padding-top:12px"><div class="k"><b>全家全年合计</b></div><div class="v hot" style="font-size:15px">¥2,007</div></div>
+
+      <div class="split">
+        <div class="cell year">
+          <div class="l">单人 / 全年</div>
+          <div class="n">¥501.75<span class="u">/年</span></div>
+        </div>
+        <div class="cell month">
+          <div class="l">单人 / 每月</div>
+          <div class="n">¥41.82<span class="u">/月</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 费率依据 -->
+<div class="section">
+  <div class="h2">费率依据 <span class="badge">官方表</span></div>
+  <div class="row"><div class="k">51~55 周岁（A Plus 不带续保）</div><div class="v">¥1,066 / 年</div></div>
+  <div class="row"><div class="k">56~60 周岁（A Plus 不带续保）</div><div class="v">¥1,398 / 年</div></div>
+  <div class="row"><div class="k">妈妈 57 岁 → 落 56-60 档</div><div class="v hot">应用 56-60 档</div></div>
+</div>
+
+<!-- 备选方案 -->
+<div class="section">
+  <div class="h2">备选 · 仅保留基础版（不带续保）</div>
+  <div class="alt">
+    如果不附加 6 年保证续保，<b>A Plus 基础版 57 岁 ¥1,398/年</b>。<br><br>
+    单人平摊 <b>¥349.5/年</b> + 意外险 <b>¥65/年</b> = <b>¥414.5/人/年</b>（约 <b>¥34.5/人/月</b>）。<br><br>
+    省下 ¥52.25/人/年，但失去 6 年保费锁价 + 续保确定性——<b>不推荐</b>。
+  </div>
+</div>
+
+<!-- 补充说明 -->
+<div class="section">
+  <div class="h2">📌 补充说明</div>
+  <p class="note">居民医保需<b>单独缴</b>（各地 ¥380~500/年），不在以上商业险内，可同样 4 人分摊。</p>
+  <p class="note"><b>6 年保证续保期内首年锁价</b>，6 年内不会随意涨价；期满后按当年年龄费率重新核保。</p>
+  <p class="note">意外险按市价 ¥260/年估算，最终以实际产品为准；意外+医疗双保障是 57 岁人群标配。</p>
+  <p class="note"><b>建议</b>：4 人按月微信红包 / 月初固定转账，每人 <b>¥38.90 → ¥41.82</b>，长期无感。</p>
+</div>
+
+<footer>测算日期：2026-06-02 · 仅供家庭内部分摊参考</footer>
+
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
+    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===t.dataset.tab));
+  });
+});
+</script>
+</body>
+</html>
