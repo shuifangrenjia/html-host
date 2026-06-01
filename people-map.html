@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geoffrey 职场人物关系图</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f6f8;
+  color: #1a202c;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+body { padding: 20px 14px 60px; }
+.container { max-width: 980px; margin: 0 auto; }
+
+.header {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  color: #ffffff;
+  padding: 26px 28px;
+  border-radius: 14px 14px 0 0;
+}
+.header *, .header p, .header span, .header b { color: inherit; }
+.header .tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11.5px;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+.header h1 { font-size: 22px; margin-bottom: 8px; color: #ffffff; }
+.header .sub { font-size: 13.5px; color: #e2e8f0; line-height: 1.65; }
+.header .meta {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  display: flex; gap: 18px; flex-wrap: wrap;
+  font-size: 12.5px;
+}
+.header .meta b { color: #fbd38d; }
+
+.body {
+  background: #fff; padding: 28px 24px;
+  border-radius: 0 0 14px 14px;
+  border: 1px solid #e2e8f0; border-top: none;
+}
+
+/* 汇报链路 */
+.h2 {
+  font-size: 16px; font-weight: 800; color: #1a365d;
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #fbd38d;
+}
+.h2 .small { font-size: 12.5px; color: #4a5068; font-weight: 500; margin-left: 8px; }
+
+.chain { display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+.chain-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+.chain-tag {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; letter-spacing: .12em; font-weight: 700;
+  padding: 6px 8px; text-align: center;
+  border-radius: 6px; line-height: 1.4;
+}
+.chain-tag.l0 { background: #f1efe8; color: #5f5e5a; }
+.chain-tag.l1 { background: #faeeda; color: #854f0b; }
+.chain-tag.l2 { background: #e6f1fb; color: #0c447c; }
+.chain-tag.l3 { background: #eeedfe; color: #3c3489; }
+.chain-tag.l4 { background: #eaf3de; color: #27500a; }
+
+.chain-card {
+  background: #fff; border: 1px solid #e2e8f0;
+  border-left: 4px solid;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.chain-card.l0 { border-left-color: #5f5e5a; }
+.chain-card.l1 { border-left-color: #d69e2e; }
+.chain-card.l2 { border-left-color: #2c5282; }
+.chain-card.l3 { border-left-color: #6b46c1; }
+.chain-card.l4 { border-left-color: #3b6d11; }
+
+.chain-card .name {
+  font-size: 15.5px; font-weight: 800; color: #1a365d;
+  margin-bottom: 4px;
+}
+.chain-card .role {
+  font-size: 12.5px; color: #4a5068; margin-bottom: 8px;
+  font-weight: 500;
+}
+.chain-card .desc {
+  font-size: 13px; color: #2d3748; line-height: 1.65;
+}
+.chain-card .desc b { color: #c53030; }
+.chain-card .desc .y { background: #fefae0; padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+
+.arrow-down {
+  text-align: center; color: #cbd5e0; font-size: 18px;
+  margin: -4px 0;
+}
+
+/* 横向关系区 */
+.h-section { margin-top: 30px; }
+.h-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px; margin-top: 12px;
+}
+.p-card {
+  background: #fff; border: 1px solid #e2e8f0;
+  border-top: 3px solid;
+  border-radius: 8px; padding: 14px 16px;
+}
+.p-card.danger { border-top-color: #c53030; background: #fff5f5; }
+.p-card.warn { border-top-color: #d69e2e; background: #fffaf0; }
+.p-card.neutral { border-top-color: #888780; }
+.p-card.healthy { border-top-color: #38a169; background: #f0fff4; }
+.p-card .pname {
+  font-size: 14.5px; font-weight: 800; color: #1a365d;
+  margin-bottom: 3px;
+}
+.p-card .prole {
+  font-size: 12px; color: #4a5068; font-weight: 500;
+  margin-bottom: 8px;
+}
+.p-card ul {
+  list-style: none; padding: 0;
+  font-size: 12.5px; color: #2d3748;
+  line-height: 1.65;
+}
+.p-card li {
+  padding-left: 12px; position: relative;
+  margin-bottom: 3px;
+}
+.p-card li::before {
+  content: "·"; position: absolute; left: 2px; top: -2px;
+  color: #888780; font-weight: 700; font-size: 16px;
+}
+.p-card li b { color: #c53030; }
+
+.section-tag {
+  display: inline-block; padding: 3px 10px; border-radius: 4px;
+  font-size: 11.5px; font-weight: 700; letter-spacing: .08em;
+  margin-bottom: 4px;
+}
+.section-tag.danger { background: #fed7d7; color: #c53030; }
+.section-tag.warn { background: #feebc8; color: #c05621; }
+.section-tag.neutral { background: #e2e8f0; color: #4a5068; }
+.section-tag.healthy { background: #c6f6d5; color: #276749; }
+
+/* 行动指南 */
+.tips {
+  margin-top: 36px;
+  background: #1a365d; color: #ffffff;
+  padding: 24px 26px; border-radius: 12px;
+}
+.tips *, .tips p, .tips span, .tips b { color: inherit; }
+.tips .tt {
+  font-size: 11.5px; letter-spacing: .22em; color: #fbd38d;
+  font-weight: 700; margin-bottom: 12px;
+}
+.tips h3 {
+  font-size: 18px; font-weight: 800; margin-bottom: 16px;
+  color: #ffffff;
+}
+.tips .item {
+  background: rgba(255,255,255,0.06);
+  border-left: 3px solid #fbd38d;
+  padding: 12px 14px; margin-bottom: 10px;
+  border-radius: 0 6px 6px 0;
+}
+.tips .item .num {
+  font-size: 11px; letter-spacing: .15em; color: #fbd38d;
+  font-weight: 700; margin-bottom: 4px;
+}
+.tips .item .h {
+  font-size: 14.5px; font-weight: 700; color: #ffffff;
+  margin-bottom: 6px;
+}
+.tips .item .d {
+  font-size: 13px; color: #e2e8f0; line-height: 1.7;
+}
+.tips .item .d b { color: #fbd38d; }
+
+@media (max-width: 600px) {
+  body { padding: 12px 8px 40px; }
+  .header { padding: 20px 18px; }
+  .header h1 { font-size: 18px; }
+  .body { padding: 20px 16px; }
+  .chain-row { grid-template-columns: 64px 1fr; gap: 10px; }
+  .chain-tag { font-size: 10px; padding: 5px 4px; }
+  .chain-card .name { font-size: 14.5px; }
+  .h-grid { grid-template-columns: 1fr; }
+  .tips { padding: 20px 18px; }
+  .tips h3 { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <span class="tag">PERSONAL · STRATEGY MAP</span>
+  <h1>Geoffrey 的职场人物关系图</h1>
+  <div class="sub">汇报链路 · 关键合作方 · 关系温度 · 行动指南</div>
+  <div class="meta">
+    <span>主体：<b>游杰（Geoffrey）</b></span>
+    <span>位置：<b>QQ 浏览器 · AI 产品中心 · AI 组</b></span>
+    <span>更新：<b>2026-06-01</b></span>
+  </div>
+</div>
+
+<div class="body">
+
+<h2 class="h2">1. 汇报链路 <span class="small">从顶层到我（垂直 5 层）</span></h2>
+
+<div class="chain">
+
+  <div class="chain-row">
+    <div class="chain-tag l0">L0<br>顶层</div>
+    <div class="chain-card l0">
+      <div class="name">Dowson</div>
+      <div class="role">CSIG 负责人 · 总办</div>
+      <div class="desc">腾讯顶层。<span class="y">短期不在你的关注半径内</span>——但这是腾讯 AI 战略的最高决策点，宏观信号需要你长期观察。</div>
+    </div>
+  </div>
+  <div class="arrow-down">↓</div>
+
+  <div class="chain-row">
+    <div class="chain-tag l1">L1<br>终极锚点</div>
+    <div class="chain-card l1">
+      <div class="name">Lori（吴祖榕）</div>
+      <div class="role">事业部老大 · 腾讯云副总裁 · 腾讯会议负责人</div>
+      <div class="desc">
+        <b>腾讯非常古典的产品经理</b>。2025-01 起接管元宝，自己也在自证期。<br>
+        管 <span class="y">元宝 / 会议 / QQ 浏览器 / 输入法 / ima</span> ——这 5 个产品都需要"用户记忆"。<br>
+        <b>这是你 12 个月里要让他记住"游杰"两个字的最终目标。</b>
+      </div>
+    </div>
+  </div>
+  <div class="arrow-down">↓</div>
+
+  <div class="chain-row">
+    <div class="chain-tag l2">L2<br>总监</div>
+    <div class="chain-card l2">
+      <div class="name">刘汉博</div>
+      <div class="role">总监 · 北京 · 路子野 · 讨厌墨迹</div>
+      <div class="desc">
+        产品出身、做过用户增长，<b>非常年轻的总监</b>，一路直升。<br>
+        鲁爷班底里"非嫡系但能力强"，从配角变主角中。<br>
+        <span class="y">几乎所有精力压在 AI 组</span>——他的下一步晋升也押在这里。<br>
+        <b>凌晨 1 点会找你 = 把你当"自己人"</b>。最近认证你为"记忆这块的脑子"。<br>
+        <b>是你最大的助推手。</b> 平时只在大汇报会出差来深圳，触达频率低。
+      </div>
+    </div>
+  </div>
+  <div class="arrow-down">↓</div>
+
+  <div class="chain-row">
+    <div class="chain-tag l3">L3<br>直接老板</div>
+    <div class="chain-card l3">
+      <div class="name">陈颖（颖姐）</div>
+      <div class="role">浏览器 AI 负责人 · INTJ · 温柔逻辑型</div>
+      <div class="desc">
+        私下和你关系很好（"好姐妹"），可以聊瓜不反感。<br>
+        <b>战场上吃逻辑不吃情绪</b>——开场要结构化、议价数字别先报。<br>
+        <span class="y">温柔 ≠ 好说话</span>。INTJ 一旦判定你不行，<b>翻盘极难</b>。<br>
+        别用她当"情感支援"，留她当"逻辑共振者"。
+      </div>
+    </div>
+  </div>
+  <div class="arrow-down">↓</div>
+
+  <div class="chain-row">
+    <div class="chain-tag l4">L4<br>你</div>
+    <div class="chain-card l4">
+      <div class="name">Geoffrey（游杰）</div>
+      <div class="role">AI 资产 owner · 数据基建主负责人 · 5 星目标</div>
+      <div class="desc">
+        Agent 时代用户记忆入口的<b>地基工程师</b>。<br>
+        强项：<span class="y">Tier-3 技术架构思考</span>（T-Memory 设计深度在线）<br>
+        盲区：<span class="y">Tier-1「该不该做」的判断力</span>——容易精致化模糊方向<br>
+        当前主战场：AI 收藏夹（5 类资产 · 8 月初 MVP）+ 给汉博装弹下周打 Lori。
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 横向关系 -->
+<h2 class="h2">2. 横向关系 <span class="small">按风险/关系温度分层</span></h2>
+
+<div class="h-section">
+  <span class="section-tag danger">🚨 高敏感 · 慎触动</span>
+  <div class="h-grid">
+
+    <div class="p-card danger">
+      <div class="pname">xizhi</div>
+      <div class="prole">前 Mentor · PC 浏览器 owner</div>
+      <ul>
+        <li><b>强势 + 重逻辑 + 超级 J 人</b></li>
+        <li>关心你，但带评估视角</li>
+        <li>找他 = 他评估你的判断力</li>
+        <li>每 2-3 周主动同步进展（不问意见，只同步）</li>
+      </ul>
+    </div>
+
+    <div class="p-card danger">
+      <div class="pname">琛哥（王琛）</div>
+      <div class="prole">移动端资产产品 owner</div>
+      <ul>
+        <li>同 PC 线，<b>习惯把活儿甩出去</b></li>
+        <li>5/27 让你提单 → 你已校准角色 = 我已调到 Agent 组，球还给她</li>
+        <li>关系账重于速度账</li>
+        <li>所有交互<b>留证据</b>，不抢她地盘</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="h-section">
+  <span class="section-tag warn">🔴 别人地盘 · 永久不碰</span>
+  <div class="h-grid">
+
+    <div class="p-card warn">
+      <div class="pname">明睿</div>
+      <div class="prole">元宝侧资产沉淀 owner</div>
+      <ul>
+        <li>是你的<b>下游接口</b>（元宝 RAG 通道）</li>
+        <li>本周内必须主动约 30min 对接</li>
+        <li><b>6/15 锁死接口</b>，不锁就翻车</li>
+        <li>边界清晰：他做元宝侧，你做浏览器侧</li>
+      </ul>
+    </div>
+
+    <div class="p-card warn">
+      <div class="pname">晓航 / 苏导</div>
+      <div class="prole">捕捉能力 owner</div>
+      <ul>
+        <li>是你的<b>上游接口</b>（AI 收藏夹的"采集"层）</li>
+        <li>已主动私聊送了译员视角弹药 = 关系正面</li>
+        <li><b>6/15 前锁字段 + 触发时机</b></li>
+        <li>晓航做事的需求归他，你只是消费方</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="h-section">
+  <span class="section-tag neutral">⚪ 中性 · 同事但有立场分歧</span>
+  <div class="h-grid">
+
+    <div class="p-card neutral">
+      <div class="pname">古天龙</div>
+      <div class="prole">同组 · X 浏览器 owner</div>
+      <ul>
+        <li>非威胁，但产品立场会碰撞</li>
+        <li>他认为"memory 没护城河，UX 才有"</li>
+        <li>对小产品成立，对 QB 大体量产品不成立</li>
+        <li>同事，<b>不必交锋</b></li>
+      </ul>
+    </div>
+
+    <div class="p-card neutral">
+      <div class="pname">搜索 AI 组</div>
+      <div class="prole">原搜狗搜索中心转过来的组</div>
+      <ul>
+        <li>非汉博带出的组</li>
+        <li>协作很少，主要做与外部合作的"脏活"</li>
+        <li><b>关注他们做啥就行，不主动交集</b></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="h-section">
+  <span class="section-tag healthy">✅ 直接合作方 · 关系健康</span>
+  <div class="h-grid">
+
+    <div class="p-card healthy">
+      <div class="pname">vance / 程杰 / 小聪哥 / carbon</div>
+      <div class="prole">算法策略 + 算法 + 算法服务</div>
+      <ul>
+        <li>当前接力棒在他们这</li>
+        <li>已给具体问题清单（70% 单叶组 / L1 重复 / 30% 重复率）</li>
+        <li>下周策略改进 + carbon 重跑</li>
+        <li>关系可以更深，他们决定 AI 收藏夹 8 月初质量</li>
+      </ul>
+    </div>
+
+    <div class="p-card healthy">
+      <div class="pname">姝然</div>
+      <div class="prole">设计师</div>
+      <ul>
+        <li>AI 收藏夹一期合作中，节奏顺</li>
+        <li>5/27 已对齐 9 条交互结论</li>
+        <li><b>视觉细节高要求 → 你和她适配</b></li>
+      </ul>
+    </div>
+
+    <div class="p-card healthy">
+      <div class="pname">云光 / cyy（曹炎炎）</div>
+      <div class="prole">测评 + 测评研发</div>
+      <ul>
+        <li>提供数据 → 你接力到算法</li>
+        <li>评测自动化平台还在搭（环境卡过）</li>
+        <li>现在用 HTML 工具评 20 user 跑通了</li>
+      </ul>
+    </div>
+
+    <div class="p-card healthy">
+      <div class="pname">琛哥（移动端协作面）</div>
+      <div class="prole">移动端字段补齐协作</div>
+      <ul>
+        <li>不和"高敏感"那张矛盾——是同人不同场景</li>
+        <li>需求发起方是你，落地者是她团队</li>
+        <li><b>留好证据 → 她接 / 不接都不影响你</b></li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+</div>
+<!-- /body -->
+
+<!-- 行动指南 -->
+<div class="tips">
+  <div class="tt">⚡ STRATEGY · 我从这张图看出的 3 件你该做的事</div>
+  <h3>关系账要长期养，不是临时抱佛脚</h3>
+
+  <div class="item">
+    <div class="num">ACTION 01</div>
+    <div class="h">颖姐和汉博的"双线"分工</div>
+    <div class="d">
+      <b>汉博</b>：给战略弹药、深思考、共脑/AI Native 这种大局。<br>
+      <b>颖姐</b>：给执行进度、AI 收藏夹推进、议价数字（结构化）。<br>
+      <b>不要把同一份战略稿同时给两个人</b>——同稿两看，会漏掉各自需要的东西，反而显得没章法。
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="num">ACTION 02</div>
+    <div class="h">xizhi 这条线长期养，不是只在出事时找</div>
+    <div class="d">
+      他强势 + 你前 Mentor → 半年内还会有交集。<br>
+      <b>每 2-3 周主动同步进展</b>（不问意见，只同步）——让他知道你没浪费他当年带你。<br>
+      避免"出事才找他"模式：那等于把他当救火队，关系会快速消耗。
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="num">ACTION 03</div>
+    <div class="h">明睿这条线现在最紧迫</div>
+    <div class="d">
+      AI 收藏夹 → 元宝 RAG 通道 <b>6/15 必须锁字段 + 触发时机</b>。<br>
+      <b>本周内主动约一次 30min 对接</b> → 不约就翻车。<br>
+      明睿不是你的同事，是元宝侧的人，主动联系成本高 → 越拖越难约。
+    </div>
+  </div>
+
+  <div class="item">
+    <div class="num">ACTION 04</div>
+    <div class="h">永久铁律提醒</div>
+    <div class="d">
+      <b>① 别人的地盘别碰</b>——捕捉=晓航/苏导、元宝沉淀=明睿、X 浏览器=古天龙。<br>
+      <b>② 议价数字不主动报</b>——资源/工期/范围揣兜里，等问再出。<br>
+      <b>③ 不打老板脸</b>——汉博/颖姐提的概念是延伸不是替代。<br>
+      这三条任违一条 = 政治失分，无论逻辑多对。
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>
