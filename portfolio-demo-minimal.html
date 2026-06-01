@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>李子安 · 产品经理求职作品集</title>
+<style>
+:root {
+  --bg: #f7f4ed;
+  --bg-card: #fffdf7;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4a4a4a;
+  --text-muted: #8a8580;
+  --accent: #b85c1c;
+  --line: #e8e2d4;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: "Source Han Serif SC", "Songti SC", "Noto Serif SC", "Times New Roman", serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.75;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container { max-width: 760px; margin: 0 auto; padding: 80px 32px 100px; }
+
+/* Header */
+.hero {
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid var(--line);
+}
+.hero .name {
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+.hero .role {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.hero .intro {
+  font-size: 15.5px;
+  color: var(--text-secondary);
+  font-style: italic;
+  line-height: 1.85;
+}
+
+/* Section */
+.section { margin-bottom: 56px; }
+.section-label {
+  font-family: -apple-system, "Helvetica Neue", sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.section-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+/* About */
+.about p {
+  margin-bottom: 14px;
+  color: var(--text-secondary);
+  font-size: 15.5px;
+}
+
+/* Experience */
+.exp-item {
+  margin-bottom: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px dashed var(--line);
+}
+.exp-item:last-child { border-bottom: none; }
+
+.exp-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  flex-wrap: wrap; gap: 6px;
+  margin-bottom: 4px;
+}
+.exp-company {
+  font-size: 18px; font-weight: 600; color: var(--text-primary);
+}
+.exp-time {
+  font-family: -apple-system, sans-serif;
+  font-size: 13px; color: var(--text-muted);
+}
+.exp-position {
+  font-size: 14.5px; color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+.exp-detail {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  padding-left: 16px;
+  border-left: 2px solid var(--accent);
+  line-height: 1.85;
+}
+.exp-detail b { color: var(--text-primary); }
+
+/* Skills */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.skill {
+  padding: 8px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-family: -apple-system, sans-serif;
+}
+
+/* Projects */
+.project {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 22px 26px;
+  margin-bottom: 18px;
+}
+.project-title {
+  font-size: 17px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.project-meta {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  font-family: -apple-system, sans-serif;
+}
+.project-detail {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.project-detail b { color: var(--text-primary); }
+
+/* Contact */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 8px 16px;
+  font-size: 15px;
+}
+.contact-label {
+  color: var(--text-muted);
+  font-family: -apple-system, sans-serif;
+  font-size: 13.5px;
+}
+.contact-value { color: var(--text-primary); }
+
+/* Footer */
+.footer {
+  margin-top: 80px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-family: -apple-system, sans-serif;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 60px 22px 80px; }
+  .hero .name { font-size: 32px; }
+  .section-title { font-size: 20px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1 class="name">李子安</h1>
+    <div class="role">C 端社区方向 PM · 25 届秋招</div>
+    <p class="intro">港中深口译硕士背景的产品经理。做过 100+ 用户访谈、写过 3 份 0→1 PRD。我相信好产品的本质是"让对的人在对的时刻被理解"。</p>
+  </div>
+
+  <!-- About -->
+  <section class="section about">
+    <div class="section-label">About</div>
+    <h2 class="section-title">关于我</h2>
+    <p>我是李子安，香港中文大学（深圳）翻译与口译硕士。在校期间做过 3 段 PM 实习，主要在 C 端社区和内容产品方向。</p>
+    <p>口译训练给了我两个独特的能力：在大量信息流里快速抓主干 + 把复杂概念翻译成普通用户能懂的话。这两件事正好是 PM 每天在做的事。</p>
+  </section>
+
+  <!-- Education -->
+  <section class="section">
+    <div class="section-label">Education</div>
+    <h2 class="section-title">教育背景</h2>
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">香港中文大学（深圳）</div>
+        <div class="exp-time">2023.09 - 2025.06</div>
+      </div>
+      <div class="exp-position">翻译与口译硕士 · GPA 3.7/4.0</div>
+      <div class="exp-detail">课程聚焦认知翻译 + 跨文化沟通；连续 2 年获研究生奖学金；担任校园 AI 产品社团联合创始人。</div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="section">
+    <div class="section-label">Experience</div>
+    <h2 class="section-title">实习经历</h2>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">字节跳动 · 抖音电商</div>
+        <div class="exp-time">2024.07 - 2024.11</div>
+      </div>
+      <div class="exp-position">产品经理实习生 · 直播带货中转中心</div>
+      <div class="exp-detail">在新主播留存场景中，发现"开播第 3 天找不到货源"是最大痛点。通过 30+ 用户访谈识别核心问题，联动招商团队推出"新人专属选品池"功能。<b>新主播 7 日留存从 12% 提升至 31%</b>，团队季度 OKR 超额完成。</div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">腾讯 · QQ 浏览器</div>
+        <div class="exp-time">2024.01 - 2024.05</div>
+      </div>
+      <div class="exp-position">产品经理实习生 · 用户增长方向</div>
+      <div class="exp-detail">负责新人引导流程的 A/B 测试设计与迭代。通过 5 轮实验找到关键变量，<b>新人 D7 留存提升 18%</b>。复盘文档被作为团队 onboarding 教材。</div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="section">
+    <div class="section-label">Projects</div>
+    <h2 class="section-title">代表项目</h2>
+
+    <div class="project">
+      <div class="project-title">AI 标签智能分组（0→1 主导）</div>
+      <div class="project-meta">0→1 主导 · 2024 Q3 · 跨 5 人团队</div>
+      <div class="project-detail">用户痛点：日均打开 30+ 标签，信息查找困难。<b>关键决策：弃用"按域名分组"，主推"按主题分组"</b>。第一版指标好但取消率高 30%，反思后改用"AI 候选 + 用户一键确认"模式。最终：<b>聚类成功率 99%，操作时长 12s→5.6s，任务完成率 +33%</b>。</div>
+    </div>
+
+    <div class="project">
+      <div class="project-title">校园 AI 工具社群（500+ 成员）</div>
+      <div class="project-meta">联合创始人 · 2024 至今 · 跨 3 校</div>
+      <div class="project-detail">创建跨校 AI 工具实践社群，每周组织 1 次线上分享。<b>累计 500+ 成员，30+ 次活动</b>。把社群运营做成了我的简历差异化标签——证明我能做内容产品。</div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="section">
+    <div class="section-label">Skills</div>
+    <h2 class="section-title">技能标签</h2>
+    <div class="skills-grid">
+      <div class="skill">用户访谈 100+</div>
+      <div class="skill">数据分析 SQL</div>
+      <div class="skill">Figma 原型</div>
+      <div class="skill">A/B 测试</div>
+      <div class="skill">AI 工具实战</div>
+      <div class="skill">中英双语口译</div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">联系我</h2>
+    <div class="contact-grid">
+      <div class="contact-label">Email</div>
+      <div class="contact-value">lzian@example.com</div>
+      <div class="contact-label">WeChat</div>
+      <div class="contact-value">lzian_pm</div>
+      <div class="contact-label">LinkedIn</div>
+      <div class="contact-value">linkedin.com/in/lzian</div>
+    </div>
+  </section>
+
+  <div class="footer">
+    © 2026 李子安 · 用 AI 一小时搭建 · Powered by Cloudflare Pages
+  </div>
+
+</div>
+</body>
+</html>
