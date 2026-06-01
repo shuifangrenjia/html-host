@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Native 浏览器 · 产品定位</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f6f8;
+  color: #1a202c;
+  line-height: 1.65;
+  padding: 24px 16px;
+  font-size: 15px;
+}
+.container { max-width: 920px; margin: 0 auto; }
+
+.hero {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  color: #fff;
+  padding: 36px 38px;
+  border-radius: 14px 14px 0 0;
+}
+.hero .tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: .15em;
+  margin-bottom: 12px;
+}
+.hero h1 { font-size: 26px; margin-bottom: 10px; line-height: 1.4; }
+.hero .punch {
+  margin-top: 16px; padding: 14px 18px;
+  background: rgba(255,255,255,0.1);
+  border-left: 3px solid #fbd38d;
+  border-radius: 0 6px 6px 0;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.hero .punch *, .hero .punch b { color: inherit; }
+.hero .punch .accent { color: #fbd38d; font-weight: 700; }
+
+.section {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 28px 38px;
+}
+.section:last-of-type { border-radius: 0 0 14px 14px; border-bottom: none; }
+
+.section-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px;
+}
+.section-num {
+  width: 32px; height: 32px; flex-shrink: 0;
+  background: #1a365d; color: #fff;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 14px;
+}
+.section-title {
+  font-size: 19px; font-weight: 700; color: #1a365d;
+  flex: 1;
+}
+
+.def {
+  background: #f7fafc;
+  padding: 22px 26px;
+  border-radius: 12px;
+  border-left: 4px solid #1a365d;
+  margin-bottom: 14px;
+}
+.def .lbl {
+  font-size: 11px;
+  letter-spacing: .15em;
+  color: #2c5282;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.def .body {
+  font-size: 17px;
+  color: #1a365d;
+  line-height: 1.75;
+  font-weight: 600;
+}
+.def .body .y { background: #fefae0; padding: 1px 6px; border-radius: 3px; }
+
+.cmp {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin: 14px 0;
+}
+.cmp-cell {
+  padding: 18px 20px;
+  border-radius: 10px;
+}
+.cmp-cell.bad {
+  background: #fff5f5;
+  border-left: 3px solid #c53030;
+}
+.cmp-cell.good {
+  background: #f0fff4;
+  border-left: 3px solid #2f855a;
+}
+.cmp-cell .lbl {
+  font-size: 11px; letter-spacing: .15em;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.cmp-cell.bad .lbl { color: #c53030; }
+.cmp-cell.good .lbl { color: #2f855a; }
+.cmp-cell .t {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1a202c;
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.cmp-cell .d {
+  font-size: 13px;
+  color: #4a5068;
+  line-height: 1.65;
+}
+
+.principle {
+  background: linear-gradient(135deg, #fffaf0 0%, #fef5e7 100%);
+  border-left: 4px solid #d69e2e;
+  padding: 18px 22px;
+  border-radius: 0 12px 12px 0;
+  margin-bottom: 12px;
+}
+.principle .num {
+  display: inline-block;
+  background: #d69e2e;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+.principle .t {
+  font-size: 15px;
+  font-weight: 700;
+  color: #744210;
+  margin-bottom: 6px;
+}
+.principle .d {
+  font-size: 13.5px;
+  color: #744210;
+  line-height: 1.7;
+  padding-left: 4px;
+}
+.principle .d b { color: #1a365d; }
+
+.module {
+  background: #f7fafc;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+}
+.module .h {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 4px;
+}
+.module .h .badge {
+  display: inline-block;
+  background: #2c5282;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+  letter-spacing: .1em;
+}
+.module .d {
+  font-size: 13.5px;
+  color: #4a5068;
+  line-height: 1.7;
+}
+.module .case {
+  margin-top: 8px;
+  padding: 10px 14px;
+  background: #fff;
+  border-radius: 6px;
+  font-size: 12.5px;
+  color: #2c5282;
+  font-style: italic;
+  border-left: 2px solid #2c5282;
+  line-height: 1.7;
+}
+
+.first3sec {
+  background: #1a365d;
+  color: #fff;
+  padding: 24px 28px;
+  border-radius: 12px;
+  margin: 18px 0;
+}
+.first3sec *, .first3sec b { color: inherit; }
+.first3sec .lbl {
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: #fbd38d;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.first3sec h3 {
+  font-size: 18px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+.first3sec .accent { color: #fbd38d; }
+.first3sec ul {
+  padding-left: 22px;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.first3sec li b { color: #fbd38d; }
+
+.golden {
+  margin-top: 24px;
+  padding: 26px 30px;
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  border-radius: 12px;
+  text-align: center;
+}
+.golden *, .golden b { color: inherit; }
+.golden .lbl {
+  color: #fbd38d;
+  font-size: 11px;
+  letter-spacing: .25em;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.golden h2 {
+  color: #fff;
+  font-size: 20px;
+  line-height: 1.6;
+  font-weight: 800;
+}
+.golden h2 .accent { color: #fbd38d; }
+
+@media (max-width: 600px) {
+  body { padding: 12px 8px; }
+  .hero { padding: 22px 20px; }
+  .hero h1 { font-size: 19px; }
+  .section { padding: 20px 20px; }
+  .cmp { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <span class="tag">AI NATIVE 浏览器 · 产品定位 v1</span>
+    <h1>把浏览器藏在 AI 后面，<br>而不是把 AI 装在浏览器旁边</h1>
+    <div class="punch">
+      所有的双栏 · 工作台 · 侧边聊天框，<br>
+      本质都还是 <span class="accent">"浏览器 + AI 助手"</span>。<br>
+      AI Native 浏览器，应该让用户<span class="accent">第一次打开就忘记浏览器的存在</span>——<br>
+      他只看到一个能听懂他的对话框。
+    </div>
+  </div>
+
+  <!-- 1 · 一句话定义 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <div class="section-title">一句话产品定义</div>
+    </div>
+    <div class="def">
+      <div class="lbl">PRODUCT DEFINITION</div>
+      <div class="body">
+        AI Native 浏览器 = <span class="y">一个能听懂你意图的对话框</span> + <span class="y">能替你做事的 Agent</span> + <span class="y">能记住你脑子里所有想法的 Memory</span>。
+      </div>
+    </div>
+    <div class="def" style="border-left-color:#d69e2e; background:#fffaf0;">
+      <div class="lbl" style="color:#c05621;">USER MEMORY POINT · 用户记忆点</div>
+      <div class="body" style="color:#744210;">
+        "<span class="y">这是一个和 AI 说话的浏览器</span>。"
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · 旧 vs 新 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <div class="section-title">最大差异 · 旧浏览器 vs AI Native</div>
+    </div>
+    <div class="cmp">
+      <div class="cmp-cell bad">
+        <div class="lbl">✗ 浏览器 + AI 助手（当前稿）</div>
+        <div class="t">双栏工作台</div>
+        <div class="d">左对话框 / 右画布。用户要先理解"哪里是 AI、哪里是浏览器、什么场景用什么"。门槛高。</div>
+      </div>
+      <div class="cmp-cell good">
+        <div class="lbl">✓ AI Native 浏览器</div>
+        <div class="t">一个对话框 + 渐进展开</div>
+        <div class="d">首屏只有一个框。用户表达意图，AI 决定后续呈现什么。<b>新用户 0 学习成本，重度用户解锁全能力</b>。</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="cmp-cell bad">
+        <div class="lbl">✗ 入口是搜索/地址栏</div>
+        <div class="t">用户主动 navigate</div>
+        <div class="d">用户必须先知道"我要去哪 / 我要搜啥"。这是 30 年的旧范式。</div>
+      </div>
+      <div class="cmp-cell good">
+        <div class="lbl">✓ 入口是意图</div>
+        <div class="t">用户表达"我想做什么"</div>
+        <div class="d">用户说"帮我比一下这 3 家公司"，AI 自动跳 tab、抓数据、出表。<b>意图 → AI → 结果</b>。</div>
+      </div>
+    </div>
+
+    <div class="cmp">
+      <div class="cmp-cell bad">
+        <div class="lbl">✗ 记忆 = 收藏夹 / 稍后读</div>
+        <div class="t">需要用户管理</div>
+        <div class="d">用户要建文件夹 / 打标签 / 整理。这就是另一个 Notion，又一个负担。</div>
+      </div>
+      <div class="cmp-cell good">
+        <div class="lbl">✓ 记忆 = 被动吸收 + 主动召唤</div>
+        <div class="t">不需要用户管理</div>
+        <div class="d">AI 后台默默存 / 用户随时召唤。<b>"管理"是负担，"召唤"才是产品</b>。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · 三大设计原则 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">3</div>
+      <div class="section-title">三大设计原则</div>
+    </div>
+
+    <div class="principle">
+      <div class="t"><span class="num">原则 1</span>极简首屏 · 0 学习成本</div>
+      <div class="d">
+        新用户打开浏览器的<b>前 3 秒</b>只看到一个东西：<b>居中的对话框 + 一句欢迎语</b>。<br>
+        没有 tab 栏、没有书签栏、没有侧边栏、没有"AI/搜索/网页"这种模式切换按钮。<br>
+        用户只需要会一件事——<b>打字或说话</b>。
+      </div>
+    </div>
+
+    <div class="principle">
+      <div class="t"><span class="num">原则 2</span>意图驱动 · 不是工具切换</div>
+      <div class="d">
+        用户表达意图，AI 决定后续呈现什么——<br>
+        说"打开 X 网站" → 直接跳转<br>
+        说"我想买车" → AI 给答案 + 推荐 + 沉淀到记忆<br>
+        说"比一下 3 家公司" → AI 自动开 tab + 抓数据 + 出表<br>
+        <b>用户永远不需要选"我现在要用 AI 还是用浏览器"</b>。
+      </div>
+    </div>
+
+    <div class="principle">
+      <div class="t"><span class="num">原则 3</span>渐进展开 · 重度用户解锁深度</div>
+      <div class="d">
+        首屏极简，但<b>用过几天后</b>——<br>
+        最近召唤过的记忆 / 正在跑的任务 / 推荐的内容流，<br>
+        会自然出现在副视觉位（侧边 / 底部 / 卡片）。<br>
+        <b>新用户只看到第一层 / 重度用户拥有全部能力</b>——同一个产品，两种密度。
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · 三模块如何承接 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">4</div>
+      <div class="section-title">汉博三模块 · 在新定位下怎么落</div>
+    </div>
+
+    <div class="module">
+      <div class="h">看得快 · 理解透 <span class="badge">P2</span></div>
+      <div class="d">不是产品形态创新点，是底层能力——<b>必备但不是钩子</b>。X 浏览器原班人马继续做。</div>
+    </div>
+
+    <div class="module">
+      <div class="h">有手有脚 <span class="badge">P1</span></div>
+      <div class="d">藏在意图后面，不是悬浮按钮 / 不是工作台模式。用户说"做 X"，AI 直接做完——<b>执行不是入口，是结果</b>。</div>
+      <div class="case">用户："帮我看完这 3 家公司财报，给我一张对比表" → AI 自动跳 3 tab + 抓数据 + 出表 + 沉淀到记忆。<b>用户全程不点任何"开启 Agent 模式"按钮</b>。</div>
+    </div>
+
+    <div class="module">
+      <div class="h">记忆（智能收藏夹 + Trigger）<span class="badge">P0 · 我的主战场</span></div>
+      <div class="d"><b>记忆是这个浏览器和别人最大的差异点</b>。但用户不会管理它——只会"种"和"召唤"。</div>
+      <div class="case">
+        用户在浏览器里说"记一下" → AI 给自己留一颗种子。<br>
+        一周后，他打开新 tab，AI 主动说："你上周种的 5 颗种子，可能在指向同一件事，要不要展开？"<br><br>
+        <b>"AI 真的懂我"</b>——不是又一个稍后读、不是又一个收藏夹。
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 · 前 3 秒蓝图 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">5</div>
+      <div class="section-title">新用户打开浏览器的前 3 秒蓝图</div>
+    </div>
+
+    <div class="first3sec">
+      <div class="lbl">FIRST 3 SECONDS</div>
+      <h3>看到的：<span class="accent">一个对话框 + 一句欢迎语</span>。仅此而已。</h3>
+      <ul>
+        <li><b>居中大对话框</b>（占屏幕中部，参考 Arc Search / Spotlight）</li>
+        <li><b>欢迎语</b>："想做什么？告诉我就好。"</li>
+        <li><b>没有</b> tab 栏 / 书签栏 / 历史栏 / 侧边栏</li>
+        <li><b>没有</b> 模式切换按钮（AI / 搜索 / 网页）</li>
+        <li>顶部右上角：1 个隐藏的菜单按钮（重度用户用）</li>
+      </ul>
+    </div>
+
+    <div class="cmp">
+      <div class="cmp-cell good">
+        <div class="lbl">✓ 类比 anchor</div>
+        <div class="t">iPhone 第一次发布砍掉实体键盘</div>
+        <div class="d">AI 浏览器第一次定义应该砍掉 tab/地址/书签栏。<b>保留的只有"和 AI 说话"这一件事</b>。</div>
+      </div>
+      <div class="cmp-cell good">
+        <div class="lbl">✓ 已被验证的标杆</div>
+        <div class="t">Arc Search · ChatGPT 桌面 · Dia</div>
+        <div class="d">这一代 AI Native 产品的赢家全部走"对话框替代地址栏"。<b>不是赌方向，是赌时机</b>。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 · 这一刀如果有人接 -->
+  <div class="golden">
+    <div class="lbl">THE GOLDEN LINE</div>
+    <h2>把浏览器藏在 AI 后面，<br>而不是把 AI 装在浏览器旁边。<br><br><span class="accent">前 3 秒，用户只应该看到一个对话框。</span></h2>
+  </div>
+
+</div>
+</body>
+</html>
