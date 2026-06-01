@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>火酱分享会 · 现场演示脚本（8 分钟）</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #0a0a0a;
+  color: #e8e8e8;
+  line-height: 1.7;
+  font-size: 15px;
+  padding: 24px 16px;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+.hero {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  padding: 32px 28px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.hero .tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  padding: 5px 14px;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: .18em;
+  margin-bottom: 12px;
+}
+.hero h1 {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.hero .sub {
+  color: #cbd5e0;
+  font-size: 14.5px;
+  line-height: 1.85;
+}
+.hero .meta {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  display: flex;
+  gap: 14px 22px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+  color: #a0aec0;
+}
+.hero .meta b { color: #fbd38d; }
+
+.warning {
+  background: #2a1a1a;
+  border-left: 4px solid #c53030;
+  padding: 14px 18px;
+  border-radius: 0 10px 10px 0;
+  margin-bottom: 24px;
+  font-size: 13.5px;
+  color: #fed7d7;
+  line-height: 1.7;
+}
+.warning b { color: #fc8181; }
+
+.timeline-overall {
+  background: #1a1a1a;
+  padding: 18px 22px;
+  border-radius: 10px;
+  border: 1px solid #2d2d2d;
+  margin-bottom: 28px;
+}
+.timeline-overall .tt {
+  font-size: 12.5px;
+  color: #a0aec0;
+  letter-spacing: .12em;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.timeline-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 13.5px;
+  color: #cbd5e0;
+}
+.timeline-row .clock {
+  flex: 0 0 70px;
+  color: #fbd38d;
+  font-family: "SF Mono", Menlo, monospace;
+  font-weight: 700;
+}
+.timeline-row .lbl { flex: 1; }
+.timeline-row .dur {
+  color: #4a5568;
+  font-size: 11.5px;
+  font-family: "SF Mono", Menlo, monospace;
+}
+
+.act {
+  background: #131313;
+  border-radius: 12px;
+  padding: 24px 26px;
+  margin-bottom: 18px;
+  border: 1px solid #232323;
+}
+.act-head {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #232323;
+}
+.act-num {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: .15em;
+  font-weight: 700;
+  color: #fbd38d;
+  background: rgba(214, 158, 46, 0.12);
+  padding: 5px 12px;
+  border-radius: 4px;
+}
+.act-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  flex: 1;
+}
+.act-time {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  color: #4a5568;
+}
+
+.layer {
+  margin: 14px 0;
+  padding: 14px 16px;
+  border-radius: 8px;
+}
+.layer-screen {
+  background: #1a2332;
+  border-left: 3px solid #4299e1;
+}
+.layer-mouth {
+  background: #1d2519;
+  border-left: 3px solid #68d391;
+}
+.layer-action {
+  background: #2a1f0f;
+  border-left: 3px solid #d69e2e;
+}
+.layer .lbl {
+  font-size: 10.5px;
+  letter-spacing: .18em;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.layer-screen .lbl { color: #63b3ed; }
+.layer-mouth .lbl { color: #9ae6b4; }
+.layer-action .lbl { color: #f6ad55; }
+.layer .body {
+  color: #e2e8f0;
+  font-size: 14px;
+  line-height: 1.85;
+}
+.layer .body b { color: #fff; }
+.layer .body .quote {
+  display: block;
+  padding: 10px 14px;
+  background: rgba(0,0,0,0.3);
+  border-radius: 6px;
+  margin: 8px 0;
+  font-style: italic;
+  color: #fbd38d;
+  border-left: 2px solid #fbd38d;
+}
+.layer .body .stress { background: rgba(251, 211, 141, 0.18); color: #fbd38d; padding: 1px 5px; border-radius: 3px; font-weight: 700; }
+
+.tip {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(199, 121, 25, 0.1);
+  border-left: 2px solid #c77919;
+  border-radius: 0 6px 6px 0;
+  font-size: 12.5px;
+  color: #f6ad55;
+  line-height: 1.7;
+}
+.tip b { color: #fbd38d; }
+
+.fallback {
+  background: #2a1a1a;
+  border: 1px solid #c53030;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin-top: 32px;
+}
+.fallback h3 {
+  color: #fc8181;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+.fallback ol {
+  padding-left: 22px;
+  color: #fed7d7;
+  font-size: 13.5px;
+  line-height: 2;
+}
+.fallback ol b { color: #fbd38d; }
+
+.checklist {
+  background: #131e0f;
+  border: 1px solid #2f4720;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin-top: 24px;
+}
+.checklist h3 {
+  color: #9ae6b4;
+  font-size: 15px;
+  margin-bottom: 14px;
+}
+.checklist .item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px dashed #2f4720;
+  font-size: 13.5px;
+  color: #c6f6d5;
+  line-height: 1.7;
+}
+.checklist .item:last-child { border-bottom: none; }
+.checklist .item .box {
+  flex: 0 0 18px;
+  height: 18px;
+  border: 1.5px solid #68d391;
+  border-radius: 3px;
+  margin-top: 3px;
+}
+.checklist .item .text b { color: #fff; }
+
+.golden {
+  margin-top: 28px;
+  padding: 28px 30px;
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  border-radius: 14px;
+  text-align: center;
+  border: 1px solid rgba(251, 211, 141, 0.3);
+}
+.golden .lbl {
+  color: #fbd38d;
+  font-size: 11px;
+  letter-spacing: .25em;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.golden h2 {
+  color: #fff;
+  font-size: 22px;
+  line-height: 1.5;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.golden h2 .accent { color: #fbd38d; }
+
+@media (max-width: 600px) {
+  .hero h1 { font-size: 22px; }
+  .act { padding: 18px 18px; }
+  .act-title { font-size: 16px; }
+  .timeline-row .clock { flex: 0 0 56px; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <span class="tag">FIRESAUCE 圆桌 · 现场演示脚本</span>
+    <h1>用 AI 一小时帮你做出秋招作品集</h1>
+    <div class="sub">8 分钟现场演示 · 让 100 个 27/28 届学弟学妹当场看到——AI 不是替代你，是放大你的 10 倍。</div>
+    <div class="meta">
+      <span>讲者：<b>游杰</b></span>
+      <span>受众：<b>27 / 28 届秋招求职学生</b></span>
+      <span>总时长：<b>8 分钟</b></span>
+      <span>载体：<b>WorkBuddy + Cloudflare Pages</b></span>
+    </div>
+  </div>
+
+  <div class="warning">
+    <b>⚠️ 演示前 1 小时 · 必检 5 件事</b>
+    <ol style="padding-left:22px;margin-top:8px;line-height:2;">
+      <li>WorkBuddy 已登录 · 网络稳定（手机热点兜底）</li>
+      <li>GitHub Token 在 <code>~/.workbuddy/secrets/github-token.txt</code> 可读</li>
+      <li>提前生成一份"李子安兜底版"<b>本地打开能跑</b></li>
+      <li>关闭微信 / 飞书 / 邮件所有通知（防弹窗破坏沉浸）</li>
+      <li>浏览器全屏 · 字号调到 110%（后排能看清）</li>
+    </ol>
+  </div>
+
+  <div class="timeline-overall">
+    <div class="tt">⏱ 8 MIN OVERALL TIMELINE</div>
+    <div class="timeline-row"><span class="clock">0:00</span><span class="lbl">开场钩子 · 抛"AI 时代简历真相"</span><span class="dur">0:30</span></div>
+    <div class="timeline-row"><span class="clock">0:30</span><span class="lbl">打开 AI 工具 · 介绍日常工作流</span><span class="dur">1:00</span></div>
+    <div class="timeline-row"><span class="clock">1:30</span><span class="lbl">提需求 · AI 出网站框架</span><span class="dur">1:30</span></div>
+    <div class="timeline-row"><span class="clock">3:00</span><span class="lbl">个性化迭代 · 改字 / 改色 / 加项目</span><span class="dur">2:00</span></div>
+    <div class="timeline-row"><span class="clock">5:00</span><span class="lbl">部署上线 · 拿到可访问 URL</span><span class="dur">2:00</span></div>
+    <div class="timeline-row"><span class="clock">7:00</span><span class="lbl">收尾金句 · 把网址写进简历</span><span class="dur">1:00</span></div>
+  </div>
+
+  <!-- ACT 1 -->
+  <div class="act">
+    <div class="act-head">
+      <span class="act-num">ACT 01</span>
+      <span class="act-title">开场钩子 · 抛 AI 时代简历真相</span>
+      <span class="act-time">0:00 → 0:30</span>
+    </div>
+
+    <div class="layer layer-action">
+      <div class="lbl">🎬 舞台动作</div>
+      <div class="body">
+        <b>不要切 PPT · 直接打开 Cursor / WorkBuddy 全屏</b>。让屏幕停留在<b>空对话框</b> + 闪烁光标 3 秒，然后说话。
+      </div>
+    </div>
+
+    <div class="layer layer-mouth">
+      <div class="lbl">🎤 你说什么</div>
+      <div class="body">
+        <span class="quote">"接下来 8 分钟，我不讲 PPT。我现在打开的就是我每天上班的工作环境——这一个对话框，这一个 AI。<br><br>我要做一件事：<span class="stress">8 分钟，从 0 开始，做出一个能放进秋招简历的个人作品集网站</span>。"</span>
+        然后<b>停 1 秒</b>，环视一圈，再说：
+        <span class="quote">"作品集这件事，90% 的 PM 简历是没有的。今晚之后，<span class="stress">你们可以是有的那 10%</span>。"</span>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 关键</b>：开场不要解释 AI 是什么、不要介绍工具。<b>直接动手 = 视觉冲击最强</b>。</div>
+  </div>
+
+  <!-- ACT 2 -->
+  <div class="act">
+    <div class="act-head">
+      <span class="act-num">ACT 02</span>
+      <span class="act-title">打开 AI 工具 · 介绍日常工作流</span>
+      <span class="act-time">0:30 → 1:30</span>
+    </div>
+
+    <div class="layer layer-screen">
+      <div class="lbl">🖥 屏幕显示</div>
+      <div class="body">
+        WorkBuddy 全屏 · 你的<b>真实历史对话列表在左侧</b>（让学生看到你日常用得多）。<br>
+        点开一个空白对话，让他们看到"全新开始"。
+      </div>
+    </div>
+
+    <div class="layer layer-mouth">
+      <div class="lbl">🎤 你说什么</div>
+      <div class="body">
+        <span class="quote">"你看左边——这是我过去几个月的对话记录。我每天用 AI 做的事：写竞品分析、改 PRD、做 demo、整理调研、给老板写汇报。<br><br><span class="stress">不是问 ChatGPT 闲天，是真的把它当同事用。</span>"</span>
+        然后开新对话：
+        <span class="quote">"今天我演示一件事——<b>把简历变成网站</b>。我已经装好了一个 skill，叫『产品经理简历转个人网站』。这是我专门为你们做的。"</span>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 关键</b>：让学生看到 AI = 真实工作伙伴 + 真有专门为他们做的 skill。<b>"专门为你们做" 是情感钩子</b>。</div>
+  </div>
+
+  <!-- ACT 3 -->
+  <div class="act">
+    <div class="act-head">
+      <span class="act-num">ACT 03</span>
+      <span class="act-title">提需求 · AI 出网站框架</span>
+      <span class="act-time">1:30 → 3:00</span>
+    </div>
+
+    <div class="layer layer-action">
+      <div class="lbl">🎬 舞台动作</div>
+      <div class="body">
+        <b>逐字打字</b>（不要复制粘贴！让学生看到你打字过程的真实感）。
+      </div>
+    </div>
+
+    <div class="layer layer-screen">
+      <div class="lbl">🖥 屏幕显示 · 你输入的话</div>
+      <div class="body">
+        <span class="quote">"我是 25 届产品经理，想做个人作品集网站。<br>简历核心：港中深口译硕士，做过字节抖音电商和腾讯 QQ 浏览器实习，主导过 AI 标签智能分组项目。<br>风格要苹果官网那种简约、留白、大字 hero。<br>帮我生成 HTML。"</span>
+      </div>
+    </div>
+
+    <div class="layer layer-mouth">
+      <div class="lbl">🎤 你说什么（边等 AI 边讲）</div>
+      <div class="body">
+        <span class="quote">"注意我提需求的方式——<span class="stress">不是空泛地说『帮我做个网站』，而是给了 4 个东西：身份 / 经历亮点 / 视觉范式 / 输出格式</span>。<br><br>这就是 PM 用 AI 的核心能力——<b>不是会问 AI，是会用产品语言提需求</b>。"</span>
+        AI 开始流式输出 HTML：
+        <span class="quote">"看，AI 正在写代码。你不用懂代码——你只要看它写的<b>结构</b>：首页 / 项目 / 关于 / 联系，4 个 tab。这就是一个真网站的样子。"</span>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 关键</b>：这一段是<b>炫技 + 教学</b>双结合。学生看到 AI 出活的视觉冲击 + 学到"提需求的方法论"。</div>
+  </div>
+
+  <!-- ACT 4 -->
+  <div class="act">
+    <div class="act-head">
+      <span class="act-num">ACT 04</span>
+      <span class="act-title">个性化迭代 · 改字 / 改色 / 加项目</span>
+      <span class="act-time">3:00 → 5:00</span>
+    </div>
+
+    <div class="layer layer-action">
+      <div class="lbl">🎬 舞台动作</div>
+      <div class="body">
+        AI 出完第一版 → <b>本地打开预览</b>（双击 HTML 文件用浏览器打开 · Cmd+Tab 切到浏览器全屏）。
+        <b>这一刻全场会"哇"</b>—— 因为他们第一次看到自己的姓名出现在一个真网站上。
+      </div>
+    </div>
+
+    <div class="layer layer-mouth">
+      <div class="lbl">🎤 你说什么</div>
+      <div class="body">
+        <span class="quote">"看，3 分钟，第一版。<br>但还不够——网站上线前，<span class="stress">必须让它像『你』，而不是像『AI 写出来的模板』</span>。"</span>
+        切回 AI 对话：
+        <span class="quote">"我现在让它做 3 件事：<br>① 把『关于』那段改成第一人称、口语化<br>② 主色从默认蓝换成深灰，更高级<br>③ 加一个『我做过的失败项目』模块——<b>这个反而最容易打动 HR</b>"</span>
+      </div>
+    </div>
+
+    <div class="layer layer-screen">
+      <div class="lbl">🖥 屏幕显示 · 二次提示词</div>
+      <div class="body">
+        <span class="quote">"刚才的网站做 3 处调整：<br>1. About 段改成第一人称口语 · 加一句『我相信好产品的本质是让对的人在对的时刻被理解』<br>2. 主色 #2c5282 换成 #1a1a1a · 整体更高级感<br>3. 项目页加一个『最有价值的失败』模块 · 写我第一版被取消率 30% 否决然后改方案"</span>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 关键</b>：<b>"加失败项目"是最大金句</b>——大多数学生简历都在堆成功，写"失败 + 反思"反而稀缺。这一刀让全场记住你。</div>
+  </div>
+
+  <!-- ACT 5 -->
+  <div class="act">
+    <div class="act-head">
+      <span class="act-num">ACT 05</span>
+      <span class="act-title">部署上线 · 拿到可访问 URL</span>
+      <span class="act-time">5:00 → 7:00</span>
+    </div>
+
+    <div class="layer layer-action">
+      <div class="lbl">🎬 舞台动作</div>
+      <div class="body">
+        让 AI 帮你<b>调用部署脚本</b>（你的 Cloudflare 链路 · 一键），<b>30 秒</b>后链接出来。
+      </div>
+    </div>
+
+    <div class="layer layer-mouth">
+      <div class="lbl">🎤 你说什么</div>
+      <div class="body">
+        <span class="quote">"现在它在网站本地，但 HR 看不到。我需要一个<b>能发出去的网址</b>。<br><br>我用的是 GitHub + Cloudflare Pages——<span class="stress">完全免费，全球可访问，10 分钟你也能学会</span>。"</span>
+        部署中等 30 秒：
+        <span class="quote">"等部署的这 30 秒，我说一件事——<br><b>对于学生，最难的不是做网站，是相信『我也可以有一个网址』</b>。<br>过去这件事要懂代码、要花钱买服务器、要等运维。<br>现在 AI + 免费工具 = 学生人均可达。"</span>
+        URL 出来：
+        <span class="quote">"看，<span class="stress">https://xxx.pages.dev</span>——这就是你的作品集，可以发给任何 HR、任何招聘方。"</span>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 关键</b>：链接出来那一刻，<b>用手机扫码现场让一两个学弟学妹打开</b>——制造"它真的在网上"的物理感受。</div>
+  </div>
+
+  <!-- ACT 6 -->
+  <div class="act">
+    <div class="act-head">
+      <span class="act-num">ACT 06</span>
+      <span class="act-title">收尾金句 · 把网址写进简历</span>
+      <span class="act-time">7:00 → 8:00</span>
+    </div>
+
+    <div class="layer layer-action">
+      <div class="lbl">🎬 舞台动作</div>
+      <div class="body">
+        切回 PPT · 显示你提前准备的<b>"3 个交付物"</b>页（skill 链接 + demo 链接 + checklist 链接）。
+      </div>
+    </div>
+
+    <div class="layer layer-mouth">
+      <div class="lbl">🎤 你说什么</div>
+      <div class="body">
+        <span class="quote">"刚才 8 分钟，演示完了。<br>真的轮到你的话——<span class="stress">第一次跑大概要 1 小时</span>，因为你要花 30 分钟想清楚『我到底想呈现什么』。<br><br>但这 30 分钟<b>本身就是面试准备</b>——你想清楚自己怎么呈现，面试也答得清楚。"</span>
+        最后一句金句（<b>慢、重</b>）：
+        <span class="quote">"<span class="stress">你不是没有项目可以写——你只是没用 AI 帮你把它包装成能被看见的样子。</span><br><br>今晚回去就做。下周一你的简历上就能有一个网址。"</span>
+      </div>
+    </div>
+
+    <div class="tip"><b>💡 关键</b>：最后金句一定要<b>慢、重、停 2 秒再下一句</b>。这是全场的"带走点"——他们记不住你说的所有话，但能记住这一句。</div>
+  </div>
+
+  <!-- 翻车兜底 -->
+  <div class="fallback">
+    <h3>🚨 翻车兜底预案（ACT 顺序备份）</h3>
+    <ol>
+      <li><b>AI 卡了不出代码</b>：立刻打开提前生成的<b>"李子安兜底版"</b>本地文件，假装"我们直接看上一版"，跳过 ACT 3 的等待。</li>
+      <li><b>网络断 / 部署失败</b>：跳过 ACT 5 的部署，<b>直接给一个昨天部署好的链接</b>"演示链路是这样，今晚的版本明天会同步上线"。</li>
+      <li><b>AI 出来的样式很丑</b>：不要现场修——直接说"<b>我现在拿到的是骨架，回去花 30 分钟微调就是终版</b>"，强调流程不强调效果。</li>
+      <li><b>学生现场提问打断</b>：礼貌延后——"这个问题最后留 5 分钟 Q&A 一起聊，先让你们看完完整流程"。</li>
+      <li><b>时间超了（演示卡到 6 分钟还没部署）</b>：<b>立刻跳过 ACT 4 的迭代</b>，直接进 ACT 5 部署。把"加失败项目"那段挪到 Q&A 当段子讲。</li>
+    </ol>
+  </div>
+
+  <!-- 演示前 30 分钟 final check -->
+  <div class="checklist">
+    <h3>✅ 演示前 30 分钟 · Final Check</h3>
+    <div class="item"><div class="box"></div><div class="text"><b>WorkBuddy</b> 已登录 · 新建空白对话已开 · skill 可触发（试一下"我想做个人网站"）</div></div>
+    <div class="item"><div class="box"></div><div class="text"><b>提示词</b>已抄在你手机备忘录里（防你紧张忘词）</div></div>
+    <div class="item"><div class="box"></div><div class="text"><b>李子安兜底版</b>已在桌面 · 双击就能打开</div></div>
+    <div class="item"><div class="box"></div><div class="text"><b>昨天的部署链接</b>留在浏览器收藏夹（断网兜底）</div></div>
+    <div class="item"><div class="box"></div><div class="text"><b>关掉</b>所有微信 / 飞书 / 邮件通知 · 浏览器全屏 F11</div></div>
+    <div class="item"><div class="box"></div><div class="text"><b>水</b>放手边 · 讲到 5 分钟时喝一口（自然停顿）</div></div>
+    <div class="item"><div class="box"></div><div class="text"><b>开场前深呼吸 3 次</b> · 提醒自己——不是表演，是真实日常</div></div>
+  </div>
+
+  <div class="golden">
+    <div class="lbl">THE GOLDEN LINE</div>
+    <h2>你不是没有项目可以写——<br>你只是没用 AI 帮你<span class="accent">把它包装成能被看见的样子</span>。</h2>
+  </div>
+
+</div>
+</body>
+</html>
