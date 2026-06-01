@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>元宝浏览器方案讨论 · 讨论大纲</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f6f8;
+  color: #1a202c;
+  line-height: 1.65;
+  padding: 24px 16px;
+  font-size: 15px;
+}
+.container { max-width: 980px; margin: 0 auto; }
+
+.hero {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  color: #fff;
+  padding: 28px 32px;
+  border-radius: 14px 14px 0 0;
+}
+.hero .tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: .15em;
+  margin-bottom: 10px;
+}
+.hero h1 { font-size: 24px; margin-bottom: 8px; }
+.hero .meta {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.18);
+  font-size: 12.5px; opacity: 0.9;
+  display: flex; gap: 16px 24px; flex-wrap: wrap;
+}
+.hero .meta b { color: #fbd38d; }
+
+.section {
+  background: #fff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 26px 32px;
+}
+.section:last-of-type { border-radius: 0 0 14px 14px; border-bottom: none; }
+
+.section-head {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 16px;
+}
+.section-num {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: #1a365d; color: #fff;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 16px;
+}
+.section-title {
+  font-size: 18px; font-weight: 700; color: #1a365d;
+  flex: 1;
+}
+.section-time {
+  font-family: "SF Mono", Menlo, monospace;
+  font-size: 12px; color: #c53030;
+  background: #fff5f5;
+  padding: 4px 10px; border-radius: 4px;
+  font-weight: 700;
+}
+.section-goal {
+  background: #fffaf0;
+  border-left: 3px solid #d69e2e;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  color: #744210;
+}
+.section-goal b { color: #c05621; }
+
+.q {
+  background: #f7fafc;
+  border-radius: 10px;
+  padding: 16px 18px;
+  margin-bottom: 10px;
+  border-left: 3px solid #2c5282;
+}
+.q-title {
+  font-size: 15px; font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 6px;
+}
+.q-title .num {
+  display: inline-block;
+  background: #2c5282; color: #fff;
+  font-size: 11px;
+  padding: 2px 8px; border-radius: 4px;
+  margin-right: 8px;
+  font-weight: 700;
+}
+.q-body {
+  font-size: 13.5px;
+  color: #4a5068;
+  line-height: 1.75;
+  padding-left: 4px;
+}
+.q-body ul {
+  padding-left: 18px;
+  margin-top: 4px;
+}
+.q-body li {
+  margin-bottom: 3px;
+}
+.q-owner {
+  display: inline-block;
+  background: #ebf4ff;
+  color: #2c5282;
+  font-size: 11.5px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: 8px;
+  font-weight: 600;
+}
+
+.you-must {
+  background: linear-gradient(135deg, #fffaf0 0%, #fff5e6 100%);
+  border-left: 4px solid #d69e2e;
+  padding: 18px 20px;
+  margin-top: 14px;
+  border-radius: 0 10px 10px 0;
+}
+.you-must .lbl {
+  font-size: 11px; letter-spacing: .15em;
+  color: #c05621; font-weight: 700;
+  margin-bottom: 8px;
+}
+.you-must .body {
+  font-size: 13.5px;
+  color: #744210;
+  line-height: 1.8;
+}
+.you-must .body b { color: #1a365d; }
+.you-must .ammo {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  border-radius: 6px;
+  border: 1px solid #fbd38d;
+  font-style: italic;
+  color: #1a365d;
+  font-size: 13px;
+  line-height: 1.85;
+}
+
+.hard-q {
+  background: #fff5f5;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  border-left: 3px solid #c53030;
+}
+.hard-q .t {
+  font-size: 14px; font-weight: 700;
+  color: #c53030;
+  margin-bottom: 4px;
+}
+.hard-q .d {
+  font-size: 13px; color: #744210;
+  line-height: 1.65;
+}
+
+.warn-bar {
+  background: #1a365d;
+  color: #fff;
+  padding: 18px 22px;
+  border-radius: 12px;
+  margin: 22px 0;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.warn-bar *, .warn-bar b { color: inherit; }
+.warn-bar .lbl {
+  color: #fbd38d;
+  font-size: 11px;
+  letter-spacing: .2em;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.warn-bar b { color: #fbd38d; font-weight: 700; }
+
+.timeline-overall {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+  background: #f7fafc;
+  padding: 14px;
+  border-radius: 10px;
+  margin: 14px 0 4px;
+}
+.tlo-cell {
+  background: #fff;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border-left: 3px solid #2c5282;
+}
+.tlo-cell .t {
+  font-size: 11px; font-weight: 700; color: #2c5282;
+  font-family: "SF Mono", Menlo, monospace;
+}
+.tlo-cell .l {
+  font-size: 12.5px; color: #1a202c; margin-top: 2px;
+  line-height: 1.4;
+}
+
+@media (max-width: 600px) {
+  body { padding: 12px 8px; font-size: 14px; }
+  .hero { padding: 22px 18px; }
+  .hero h1 { font-size: 20px; }
+  .section { padding: 20px 18px; }
+  .section-num { width: 32px; height: 32px; font-size: 14px; }
+  .section-title { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <span class="tag">元宝浏览器方案讨论 · 内部对齐</span>
+    <h1>讨论大纲 · 5 段 90 分钟</h1>
+    <div class="meta">
+      <span>时间：<b>2026-06-01 · 16:00–18:00</b></span>
+      <span>会议室：<b>1713</b></span>
+      <span>发起：<b>古天龙</b></span>
+      <span>参会：<b>古天龙 / 游杰 / 陈颖 / 黄姝然 / 王伟航 / 陈建军 / 狗蛋</b></span>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">⏱</div>
+      <div class="section-title">90 分钟时间分配</div>
+    </div>
+    <div class="timeline-overall">
+      <div class="tlo-cell"><div class="t">16:00–16:25</div><div class="l">① 对齐认知</div></div>
+      <div class="tlo-cell"><div class="t">16:25–17:00</div><div class="l">② 模块拆解</div></div>
+      <div class="tlo-cell"><div class="t">17:00–17:20</div><div class="l">③ 协作分工</div></div>
+      <div class="tlo-cell"><div class="t">17:20–17:40</div><div class="l">④ 当场必拍板</div></div>
+      <div class="tlo-cell"><div class="t">17:40–17:50</div><div class="l">⑤ 收尾 + 行动项</div></div>
+    </div>
+  </div>
+
+  <!-- 汉博录音核心信号 -->
+  <div class="warn-bar">
+    <div class="lbl">⚡ 汉博昨晚电话给的 KEY SIGNALS</div>
+    ① <b>三模块</b>：看得快 / 理解透 / 有手有脚（含记忆）<br>
+    ② <b>记忆分两层</b>：智能收藏夹 + Trigger（封装思考逻辑）<br>
+    ③ <b>底座 = 古天龙的 X 浏览器</b>（直接接，不重做）<br>
+    ④ <b>"不再做意义论证 / 价值解释，赶紧做事"</b><br>
+    ⑤ <b>搜索退到第二位</b>，AI 问答直达<br>
+    ⑥ "记忆的实足冲击感" <b>汉博自己也没想清楚</b> ← 你的机会<br>
+    ⑦ 下周给老板汇报，本周内部对清楚
+  </div>
+
+  <!-- 第一段 · 对齐认知 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">1</div>
+      <div class="section-title">对齐认知 · 让所有人对"AI Native 浏览器"有同一个心智图</div>
+      <div class="section-time">25 min</div>
+    </div>
+    <div class="section-goal"><b>目标</b>：会议结束时，每个人能用同一句话描述"我们在做什么"。如果做不到，后面所有讨论都是空中楼阁。</div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">Q1</span>我们在做"AI 浏览器"还是"在浏览器里加 AI"？</div>
+      <div class="q-body">
+        这两个的根本差异：
+        <ul>
+          <li>"加 AI" = 旧浏览器框架 + 一个 AI 助手插件</li>
+          <li>"AI 浏览器" = 重新定义"用户在浏览器里干什么"</li>
+        </ul>
+        汉博明确选 AI 浏览器路线。<b>所有人是否同意"搜索退到第二位"</b>这条？
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">Q2</span>三模块（看快 / 理解透 / 有手有脚 + 记忆）的优先级是什么？</div>
+      <div class="q-body">
+        三件不能并行做完。先做哪个？
+        <ul>
+          <li>"看快 / 理解透" 是 X 浏览器原本在做的事</li>
+          <li>"有手有脚 + 记忆" 是新增的位</li>
+        </ul>
+        提议 P0 = 记忆（汉博录音里时间最长）/ P1 = 有手有脚 / P2 = 看快理解透（X 已有底座）。<b>大家认这个排序吗？</b>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">Q3</span>底座是 X 浏览器，X 现在的哪些假设我们要保留？哪些要推翻？</div>
+      <div class="q-body">
+        <ul>
+          <li>X 现有的"上手门槛高"问题 — 我们怎么解？（汉博明确点名"门槛要做到极低"）</li>
+          <li>X 现有的产品形态 — 哪些可以原样用？哪些必须改？</li>
+          <li>X 之前面向的用户 — 是不是新浏览器的目标用户？</li>
+        </ul>
+        <span class="q-owner">古天龙主答</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第二段 · 模块拆解 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">2</div>
+      <div class="section-title">模块拆解 · 每个模块 owner 锁定 + 接口定义</div>
+      <div class="section-time">35 min</div>
+    </div>
+    <div class="section-goal"><b>目标</b>：3 个模块每个有明确的 owner、有可演示的杀手 case、有跟其他模块的接口契约。</div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">2.1</span>看得快（10 min） <span class="q-owner">古天龙 / 王伟航主答</span></div>
+      <div class="q-body">
+        <ul>
+          <li>"快" 的具体场景是什么？页面加载快 / 摘要快 / 跨 tab 切快？</li>
+          <li>用户感知"看快了"长什么样？给一个 30 秒能演示的 case</li>
+          <li>X 浏览器现在做到哪了？还差什么？</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">2.2</span>理解透（10 min） <span class="q-owner">王伟航 / 古天龙主答</span></div>
+      <div class="q-body">
+        <ul>
+          <li>"理解" = 抽取 + 摘要 + 主动反问？还是更多？</li>
+          <li>是给当前页面的，还是跨 tab / 跨时间的？</li>
+          <li>失败 case：哪种内容 AI 现在理解不透？我们怎么补？</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">2.3</span>有手有脚 + 记忆（15 min） <span class="q-owner">游杰 + 古天龙主答 ★ 主战场</span></div>
+      <div class="q-body">
+        <ul>
+          <li><b>记忆 vs 执行的关系</b>：执行从记忆里取上下文吗？</li>
+          <li><b>智能收藏夹（搜过去脑里的）</b> vs <b>Trigger（封装思考逻辑）</b> 两层怎么协同？</li>
+          <li><b>用户感知冲击点</b> — 这是汉博自己说没想清楚的</li>
+          <li>有手有脚和现有 X 的执行能力如何整合？</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="you-must">
+      <div class="lbl">⚡ 你必须在这一段给出的"用户冲击点"金句（直接念）</div>
+      <div class="body">
+        汉博自己说"没找到记忆的实足冲击感"——<b>这是你今天最大的机会</b>。讲出来 = 你成为这块的脑子。
+      </div>
+      <div class="ammo">
+        "记忆的用户冲击感我想了一个钩子——<br><br>
+        用户在浏览器里说一句『记一下』，相当于在 AI 脑子里给自己留一颗种子。<br>
+        一周后他打开新 tab，AI 主动说：『你上周种的 5 颗种子，我看了一下，可能在指向同一件事，要不要展开？』<br><br>
+        这是用户能立刻感受到『AI 真的懂我』，<br>
+        而不是又一个稍后读 / 又一个收藏夹。"
+      </div>
+    </div>
+  </div>
+
+  <!-- 第三段 · 协作分工 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">3</div>
+      <div class="section-title">协作分工 · 明天起每个人知道自己干啥</div>
+      <div class="section-time">20 min</div>
+    </div>
+    <div class="section-goal"><b>目标</b>：散会前，每人手里至少有 1 个明确交付物 + deadline。</div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">Q1</span>下周给老板的汇报，谁主讲？</div>
+      <div class="q-body">
+        ① 古天龙主讲（X 是底座）<br>
+        ② 游杰主讲（记忆 + 用户冲击是核心）<br>
+        ③ 分模块各讲各的（最不推荐 — 3 个人讲 = 没主线）<br>
+        <b>必须当场拍。</b>
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">Q2</span>本周 3 个核心交付物，谁负责？</div>
+      <div class="q-body">
+        ① <b>全景框架文档</b>（旧文档形式，老板不喜欢 HTML）<br>
+        ② <b>记忆模块用户冲击 demo</b>（让老板一眼有感的）<br>
+        ③ <b>三模块接口对齐表</b>（看快 ↔ 理解透 ↔ 记忆 怎么相互调用）
+      </div>
+    </div>
+
+    <div class="q">
+      <div class="q-title"><span class="num">Q3</span>节奏：周二是不是要出第一版？</div>
+      <div class="q-body">
+        姝然之前提"周二左右给一套比较完整的方案"——<br>
+        是周二内部对齐，还是周二就给老板？<b>这个时间锚点必须当场拍死。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- 第四段 · 当场拍板 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">4</div>
+      <div class="section-title">当场必拍板 · 不留下次的 4 个硬问题</div>
+      <div class="section-time">20 min</div>
+    </div>
+    <div class="section-goal"><b>目标</b>：这 4 个不拍，散会就是白开。每个 3-5 分钟，<b>不展开论证，直接表态</b>。</div>
+
+    <div class="hard-q">
+      <div class="t">① 导入旧浏览器书签 — 做不做？</div>
+      <div class="d">汉博明确说要做（不兼容旧用户资产但要导入其他浏览器书签）。<b>谁来做？怎么做？</b></div>
+    </div>
+
+    <div class="hard-q">
+      <div class="t">② 搜索是否做成"AI 问答优先" — 商业化压力下能不能扛？</div>
+      <div class="d">汉博的判断：搜索退第二位。但 KPI / 营收压力是真的。<b>有没有人能扛？怎么扛？</b></div>
+    </div>
+
+    <div class="hard-q">
+      <div class="t">③ 记忆模块向元宝沉淀的接口 — 谁对接明睿？</div>
+      <div class="d">明睿是元宝侧资产沉淀 owner。<b>不是游杰单挑——需要明确对接节奏</b>，6 月中前锁字段。</div>
+    </div>
+
+    <div class="hard-q">
+      <div class="t">④ 这个"AI Native 浏览器"对外口径叫什么名字？</div>
+      <div class="d">不能开会一个月还在说"那个浏览器"。<b>下周汇报前必须有名字</b>，不然老板第一句就追问。</div>
+    </div>
+  </div>
+
+  <!-- 第五段 · 收尾 -->
+  <div class="section">
+    <div class="section-head">
+      <div class="section-num">5</div>
+      <div class="section-title">收尾 · 5 分钟过一遍 action items</div>
+      <div class="section-time">10 min</div>
+    </div>
+    <div class="section-goal"><b>目标</b>：每个人念出"我下一步做 X，几号交付"。当场写在白板，散会拍照存档。</div>
+
+    <div class="you-must">
+      <div class="lbl">📌 你今天要带走的 3 件事</div>
+      <div class="body">
+        ① <b>记忆模块 owner 锁死在你头上</b>（不是古天龙，不是 X 浏览器原班人马）<br>
+        ② <b>"用户冲击点"金句要被会议纪要记下</b>（不被记 = 等于没说）<br>
+        ③ <b>明确你下周汇报里讲哪一段</b>（最少 5 分钟主讲 · 记忆模块）
+      </div>
+    </div>
+  </div>
+
+  <!-- 心态铁律 -->
+  <div class="warn-bar">
+    <div class="lbl">⚡ 进会前最后 3 条铁律</div>
+    ① <b>不抢戏</b> — 框架（三模块）是汉博定的，古天龙是 X owner，你的位 = 记忆 + 用户冲击。<br>
+    ② <b>少讲为什么 · 多讲做什么</b> — 汉博明确"不再做意义论证"。今天会上把"我做什么 / 怎么做" 讲清楚。<br>
+    ③ <b>陈颖在场</b> — INTJ 看你怎么和古天龙协作。最佳姿态：在记忆当主角 / 其他模块当配角 / 全程结构化。
+  </div>
+
+</div>
+</body>
+</html>
