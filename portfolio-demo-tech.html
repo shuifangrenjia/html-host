@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>李子安 · Product Manager Portfolio</title>
+<style>
+:root {
+  --bg: #0a0a0a;
+  --bg-card: #141414;
+  --bg-card-hover: #1c1c1c;
+  --text-primary: #f5f5f5;
+  --text-secondary: #a8a8a8;
+  --text-muted: #6b6b6b;
+  --accent: #d4af37;
+  --accent-soft: rgba(212, 175, 55, 0.15);
+  --line: #2a2a2a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: -apple-system, "SF Pro Display", "PingFang SC", "Inter", sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.7;
+  font-size: 15.5px;
+  -webkit-font-smoothing: antialiased;
+  background-image:
+    radial-gradient(circle at 20% 0%, rgba(212, 175, 55, 0.06) 0%, transparent 50%),
+    radial-gradient(circle at 80% 100%, rgba(212, 175, 55, 0.04) 0%, transparent 50%);
+  background-attachment: fixed;
+}
+a { color: var(--accent); text-decoration: none; transition: opacity 0.2s; }
+a:hover { opacity: 0.8; }
+
+.container { max-width: 880px; margin: 0 auto; padding: 80px 32px 100px; }
+
+/* Hero */
+.hero {
+  margin-bottom: 80px;
+  position: relative;
+}
+.hero::before {
+  content: ""; display: block;
+  width: 60px; height: 2px;
+  background: var(--accent);
+  margin-bottom: 28px;
+}
+.hero .greeting {
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.hero .name {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: 12px;
+  background: linear-gradient(180deg, #ffffff 0%, #c0c0c0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero .role {
+  font-size: 22px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+  font-weight: 300;
+}
+.hero .role .highlight {
+  color: var(--accent);
+  font-weight: 500;
+}
+.hero .intro {
+  font-size: 16.5px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  max-width: 640px;
+}
+
+/* Section */
+.section { margin-bottom: 72px; }
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 32px;
+}
+.section-num {
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+}
+.section-title {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+.section-line {
+  flex: 1; height: 1px; background: var(--line);
+}
+
+/* About */
+.about-content {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.about-content::before {
+  content: ""; position: absolute;
+  top: 0; left: 0; width: 4px; height: 100%;
+  background: linear-gradient(180deg, var(--accent) 0%, transparent 100%);
+}
+.about-content p {
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+.about-content p:last-child { margin-bottom: 0; }
+
+/* Education + Experience */
+.exp-item {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 16px;
+  transition: all 0.3s;
+}
+.exp-item:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-soft);
+  transform: translateX(4px);
+}
+.exp-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  flex-wrap: wrap; gap: 8px;
+  margin-bottom: 6px;
+}
+.exp-company {
+  font-size: 18px; font-weight: 600;
+  color: var(--text-primary);
+}
+.exp-time {
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  font-size: 12.5px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.exp-position {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.exp-detail {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.exp-detail b { color: var(--accent); font-weight: 500; }
+
+/* Projects */
+.projects-grid {
+  display: grid;
+  gap: 18px;
+}
+.project {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 26px 30px;
+  transition: all 0.3s;
+}
+.project:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-soft);
+}
+.project-title {
+  font-size: 19px; font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+.project-meta {
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 14px;
+  letter-spacing: 0.04em;
+}
+.project-detail {
+  font-size: 14.5px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+.project-detail b { color: var(--text-primary); }
+
+/* Skills */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 10px;
+}
+.skill {
+  padding: 12px 18px;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 13.5px;
+  color: var(--text-primary);
+  text-align: center;
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  letter-spacing: 0.02em;
+  transition: all 0.2s;
+}
+.skill:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Contact */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+.contact-card {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px 22px;
+}
+.contact-label {
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  font-size: 11px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 6px;
+}
+.contact-value {
+  font-size: 14.5px;
+  color: var(--text-primary);
+  word-break: break-all;
+}
+
+/* Footer */
+.footer {
+  margin-top: 100px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  font-family: "JetBrains Mono", "SF Mono", monospace;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .container { padding: 60px 20px 80px; }
+  .hero .name { font-size: 38px; }
+  .hero .role { font-size: 17px; }
+  .section-title { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="greeting">// hello, world</div>
+    <h1 class="name">李子安</h1>
+    <div class="role"><span class="highlight">C 端社区方向 PM · 25 届秋招</span> · 25-28 届求职中</div>
+    <p class="intro">港中深口译硕士背景的产品经理。做过 100+ 用户访谈、写过 3 份 0→1 PRD。我相信好产品的本质是"让对的人在对的时刻被理解"。</p>
+  </div>
+
+  <!-- About -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">About</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="about-content">
+      <p>我是李子安，香港中文大学（深圳）翻译与口译硕士。在校期间做过 3 段 PM 实习，主要在 C 端社区和内容产品方向。</p>
+      <p>口译训练给了我两个独特的能力：在大量信息流里快速抓主干 + 把复杂概念翻译成普通用户能懂的话。这两件事正好是 PM 每天在做的事。</p>
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Education</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">香港中文大学（深圳）</div>
+        <div class="exp-time">2023.09 - 2025.06</div>
+      </div>
+      <div class="exp-position">翻译与口译硕士 · GPA 3.7/4.0</div>
+      <div class="exp-detail">课程聚焦认知翻译 + 跨文化沟通；连续 2 年获研究生奖学金；担任校园 AI 产品社团联合创始人。</div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Experience</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">字节跳动 · 抖音电商</div>
+        <div class="exp-time">2024.07 - 2024.11</div>
+      </div>
+      <div class="exp-position">产品经理实习生 · 直播带货中转中心</div>
+      <div class="exp-detail">在新主播留存场景中，发现"开播第 3 天找不到货源"是最大痛点。通过 30+ 用户访谈识别核心问题，联动招商团队推出"新人专属选品池"功能。<b>新主播 7 日留存从 12% 提升至 31%</b>，团队季度 OKR 超额完成。</div>
+    </div>
+
+    <div class="exp-item">
+      <div class="exp-header">
+        <div class="exp-company">腾讯 · QQ 浏览器</div>
+        <div class="exp-time">2024.01 - 2024.05</div>
+      </div>
+      <div class="exp-position">产品经理实习生 · 用户增长方向</div>
+      <div class="exp-detail">负责新人引导流程的 A/B 测试设计与迭代。通过 5 轮实验找到关键变量，<b>新人 D7 留存提升 18%</b>。复盘文档被作为团队 onboarding 教材。</div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Projects</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="projects-grid">
+      <div class="project">
+        <div class="project-title">AI 标签智能分组（0→1 主导）</div>
+        <div class="project-meta">0→1 主导 · 2024 Q3 · 跨 5 人团队</div>
+        <div class="project-detail">用户痛点：日均打开 30+ 标签，信息查找困难。<b>关键决策：弃用"按域名分组"，主推"按主题分组"</b>。第一版指标好但取消率高 30%，反思后改用"AI 候选 + 用户一键确认"模式。最终：<b>聚类成功率 99%，操作时长 12s→5.6s，任务完成率 +33%</b>。</div>
+      </div>
+      <div class="project">
+        <div class="project-title">校园 AI 工具社群（500+ 成员）</div>
+        <div class="project-meta">联合创始人 · 2024 至今 · 跨 3 校</div>
+        <div class="project-detail">创建跨校 AI 工具实践社群，每周组织 1 次线上分享。<b>累计 500+ 成员，30+ 次活动</b>。把社群运营做成了我的简历差异化标签——证明我能做内容产品。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Skills</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="skills-grid">
+      <div class="skill">用户访谈 100+</div>
+      <div class="skill">数据分析 SQL</div>
+      <div class="skill">Figma 原型</div>
+      <div class="skill">A/B 测试</div>
+      <div class="skill">AI 工具实战</div>
+      <div class="skill">中英双语口译</div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Contact</h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <div class="contact-label">Email</div>
+        <div class="contact-value">lzian@example.com</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-label">WeChat</div>
+        <div class="contact-value">lzian_pm</div>
+      </div>
+      <div class="contact-card">
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">linkedin.com/in/lzian</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    [ © 2026 李子安 · BUILT WITH AI · DEPLOYED ON CLOUDFLARE ]
+  </div>
+
+</div>
+</body>
+</html>
