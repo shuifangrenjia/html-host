@@ -3,209 +3,508 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>妈妈保险 · 4 姐弟平摊测算</title>
+<title>妈妈百万医疗险 · 鹅厂专属投保方案</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:linear-gradient(180deg,#fff5f0 0%,#f5f6f8 240px);color:#1a202c;line-height:1.65;font-size:15px;-webkit-font-smoothing:antialiased}
-body{padding:18px 14px 40px;min-height:100vh}
-.wrap{max-width:520px;margin:0 auto}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f2f4f7;
+  color: #1a202c;
+  line-height: 1.65;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+body { padding: 14px 12px 40px; }
+.container { max-width: 520px; margin: 0 auto; }
 
-/* Header */
-.header{background:linear-gradient(135deg,#c53030 0%,#9b2c2c 100%);color:#fff;padding:24px 22px;border-radius:18px;box-shadow:0 8px 24px rgba(197,48,48,.18);margin-bottom:18px}
-.header *{color:inherit}
-.tag{display:inline-block;background:rgba(255,255,255,.2);padding:4px 12px;border-radius:980px;font-size:11px;letter-spacing:.1em;margin-bottom:10px}
-.header h1{font-size:22px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px;line-height:1.3}
-.header .sub{font-size:13px;opacity:.92;line-height:1.6}
-.meta-row{margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.2);display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12.5px}
-.meta-row b{color:#fed7aa}
+/* ========== Hero · 时间锚 ========== */
+.urgency-banner {
+  background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%);
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 12px 12px 0 0;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: 0 4px 12px rgba(197, 48, 48, 0.2);
+}
+.urgency-emoji { font-size: 26px; }
+.urgency-text { flex: 1; }
+.urgency-title { font-size: 13.5px; font-weight: 700; letter-spacing: 0.5px; opacity: 0.95; margin-bottom: 2px; }
+.urgency-date { font-size: 17px; font-weight: 800; }
 
-/* Hero · 单人月费 */
-.hero-cost{background:#fff;border-radius:18px;padding:24px 22px;margin-bottom:18px;box-shadow:0 4px 14px rgba(0,0,0,.04);text-align:center;border:1px solid #fed7d7}
-.hero-cost .lbl{font-size:12px;letter-spacing:.15em;color:#c53030;font-weight:700;margin-bottom:8px}
-.hero-cost .num{font-size:54px;font-weight:800;color:#1a365d;letter-spacing:-.03em;line-height:1.05}
-.hero-cost .num .unit{font-size:20px;color:#4a5068;font-weight:600;margin-left:4px}
-.hero-cost .desc{font-size:13px;color:#718096;margin-top:8px}
-.hero-cost .annual{margin-top:14px;padding-top:12px;border-top:1px dashed #e2e8f0;font-size:13px;color:#2d3748}
-.hero-cost .annual b{color:#c53030;font-size:15px;font-weight:700}
+.hero {
+  background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+  color: #fff;
+  padding: 22px 20px 26px;
+  border-radius: 0 0 12px 12px;
+  position: relative;
+}
+.hero *, .hero p, .hero span { color: inherit; }
+.hero-tag {
+  display: inline-block;
+  background: rgba(255,255,255,0.18);
+  padding: 3px 11px;
+  border-radius: 4px;
+  font-size: 11px;
+  letter-spacing: 1.3px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.hero h1 { font-size: 21px; line-height: 1.4; margin-bottom: 6px; font-weight: 800; color: #fff; }
+.hero .sub { font-size: 13.5px; opacity: 0.88; color: #e2e8f0; }
+.hero .pricing {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  border-left: 3px solid #fbd38d;
+}
+.pricing-lbl { font-size: 11px; letter-spacing: 1.2px; color: #fbd38d; font-weight: 700; margin-bottom: 8px; }
+.pricing-row { display: flex; align-items: baseline; gap: 6px; }
+.pricing-row + .pricing-row { margin-top: 4px; }
+.pricing-num { font-size: 26px; font-weight: 800; color: #fff; font-family: -apple-system, "SF Pro Display", sans-serif; }
+.pricing-unit { font-size: 13px; color: #cbd5e0; }
+.pricing-label { font-size: 12px; color: #a0aec0; margin-left: auto; }
 
-/* Section */
-.section{background:#fff;border-radius:16px;padding:20px 22px;margin-bottom:14px;box-shadow:0 2px 10px rgba(0,0,0,.03)}
-.h2{font-size:15px;font-weight:700;color:#1a365d;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-.h2::before{content:"";width:4px;height:16px;background:#c53030;border-radius:2px}
-.h2 .badge{margin-left:auto;font-size:11px;background:#fff5f5;color:#c53030;padding:3px 10px;border-radius:980px;font-weight:600;letter-spacing:.05em}
+/* ========== 卡片基础 ========== */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  margin-top: 12px;
+  padding: 18px 18px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1a365d;
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.card-title .num {
+  background: #1a365d; color: #fff;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  font-size: 12px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.card-text { font-size: 13.5px; color: #2d3748; line-height: 1.75; }
+.card-text b { color: #c53030; }
 
-/* 表格卡片 */
-.row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:10px 0;border-bottom:1px dashed #edf2f7;font-size:13.5px;align-items:baseline}
-.row:last-child{border-bottom:none}
-.row .k{color:#4a5068}
-.row .v{color:#1a365d;font-weight:600;font-family:"SF Mono",Menlo,monospace}
-.row .v.hot{color:#c53030;font-weight:700}
+/* ========== 投保资格 quick check ========== */
+.eligibility {
+  background: linear-gradient(135deg, #ebf8ff 0%, #f7fafc 100%);
+  border: 1px solid #bee3f8;
+}
+.elig-row {
+  display: flex; gap: 10px;
+  font-size: 13px;
+  padding: 6px 0;
+}
+.elig-row + .elig-row { border-top: 1px dashed #e2e8f0; padding-top: 8px; }
+.elig-ok { color: #22543d; font-weight: 600; flex-shrink: 0; width: 28px; }
+.elig-no { color: #c53030; font-weight: 600; flex-shrink: 0; width: 28px; }
 
-/* 大数字行（年/月） */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.split .cell{background:#fff5f5;border:1px solid #fed7d7;padding:14px;border-radius:10px;text-align:center}
-.split .cell.year{background:#edf2f7;border-color:#cbd5e0}
-.split .cell .l{font-size:11px;color:#718096;letter-spacing:.08em;margin-bottom:4px}
-.split .cell .n{font-size:22px;font-weight:800;color:#1a365d;letter-spacing:-.02em}
-.split .cell .n .u{font-size:12px;color:#718096;font-weight:500;margin-left:2px}
-.split .cell.year .n{color:#1a365d}
-.split .cell.month .n{color:#c53030}
+/* ========== A 款 vs A Plus 对比 ========== */
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+.plan-card {
+  padding: 14px 12px;
+  border-radius: 10px;
+  border: 2px solid;
+  background: #fff;
+  position: relative;
+}
+.plan-a { border-color: #cbd5e0; background: #fafbfc; }
+.plan-plus { border-color: #d69e2e; background: linear-gradient(180deg, #fffbeb 0%, #fff 100%); }
+.plan-badge {
+  position: absolute;
+  top: -10px; right: 10px;
+  background: #d69e2e; color: #fff;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.plan-name { font-size: 14px; font-weight: 800; color: #1a365d; margin-bottom: 4px; }
+.plan-price { font-size: 19px; font-weight: 800; color: #c53030; margin-bottom: 4px; }
+.plan-price-sub { font-size: 11px; color: #718096; margin-bottom: 10px; }
+.plan-feature {
+  font-size: 11.5px;
+  color: #4a5568;
+  padding: 3px 0;
+  display: flex; align-items: start; gap: 4px;
+  line-height: 1.5;
+}
+.plan-feature .icon { color: #38a169; font-weight: 700; flex-shrink: 0; }
+.plan-feature .icon-no { color: #cbd5e0; font-weight: 700; flex-shrink: 0; }
 
-/* tabs · 首年 vs 续保 */
-.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;background:#edf2f7;padding:4px;border-radius:12px}
-.tab{padding:10px 0;border-radius:8px;text-align:center;font-size:13.5px;font-weight:600;color:#4a5068;cursor:pointer;border:none;background:transparent;font-family:inherit;transition:all .2s}
-.tab.active{background:#fff;color:#1a365d;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+/* ========== 推荐方案 ========== */
+.recommend {
+  background: linear-gradient(135deg, #fffbeb 0%, #fff 60%);
+  border: 1px solid #ecc94b;
+}
+.recommend .card-title { color: #744210; }
+.recommend .card-title .num { background: #d69e2e; }
+.recom-line {
+  background: #fff;
+  border: 1px solid #fef3c7;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.recom-line .key { color: #c53030; font-weight: 700; }
 
-.panel{display:none}
-.panel.active{display:block}
+/* ========== 分摊表 ========== */
+.split-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin: 12px 0;
+}
+.split-cell {
+  text-align: center;
+  padding: 10px 4px;
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+.split-emoji { font-size: 22px; line-height: 1; margin-bottom: 4px; }
+.split-name { font-size: 11px; color: #718096; margin-bottom: 4px; }
+.split-amount { font-size: 13px; font-weight: 700; color: #1a365d; }
 
-/* 备选方案 */
-.alt{background:#fffaf0;border:1px dashed #d69e2e;border-radius:12px;padding:14px 16px;margin-top:10px;font-size:13px;color:#744210;line-height:1.7}
-.alt b{color:#9b2c2c;font-weight:700}
+.total-box {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: #1a365d;
+  color: #fff;
+  border-radius: 8px;
+}
+.total-box *, .total-box span { color: inherit; }
+.total-box-row { display: flex; justify-content: space-between; align-items: baseline; }
+.total-box-row + .total-box-row { margin-top: 6px; padding-top: 6px; border-top: 1px solid rgba(255,255,255,0.18); }
+.total-lbl { font-size: 12px; color: #cbd5e0; }
+.total-num { font-size: 17px; font-weight: 800; color: #fbd38d; }
+.total-num .small { font-size: 12px; color: #e2e8f0; font-weight: 600; margin-left: 4px; }
 
-/* 备注 */
-.note{font-size:12.5px;color:#4a5068;line-height:1.75;padding-left:20px;position:relative;margin-bottom:8px}
-.note::before{content:"💡";position:absolute;left:0;top:0;font-size:13px}
+/* ========== 鹅厂专属价值 ========== */
+.value-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+}
+.value-item + .value-item { border-top: 1px dashed #e2e8f0; }
+.value-icon {
+  flex-shrink: 0;
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.value-body { flex: 1; }
+.value-title { font-size: 14px; font-weight: 700; color: #1a365d; margin-bottom: 3px; }
+.value-desc { font-size: 12.5px; color: #4a5568; line-height: 1.6; }
+.value-desc b { color: #c53030; }
 
-/* 4 人示意 */
-.family{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 4px}
-.family .p{background:#fff5f5;border:1px solid #fed7d7;border-radius:10px;padding:10px 4px;text-align:center;font-size:11px;color:#9b2c2c;font-weight:600}
-.family .p .emoji{font-size:22px;display:block;margin-bottom:3px}
+/* ========== 行动清单 ========== */
+.action {
+  background: linear-gradient(135deg, #f0fff4 0%, #fff 100%);
+  border: 1px solid #9ae6b4;
+}
+.action .card-title { color: #22543d; }
+.action .card-title .num { background: #38a169; }
+.action-step {
+  display: flex; gap: 10px;
+  padding: 8px 0;
+  font-size: 13px;
+}
+.action-step + .action-step { border-top: 1px dashed #c6f6d5; }
+.action-no {
+  background: #38a169; color: #fff;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  font-size: 11px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.action-text { flex: 1; line-height: 1.6; color: #22543d; }
+.action-text b { color: #c53030; }
 
-footer{text-align:center;font-size:11px;color:#a0aec0;margin-top:24px}
+/* ========== 备注 ========== */
+.note {
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: #fff;
+  border-left: 3px solid #cbd5e0;
+  border-radius: 0 8px 8px 0;
+  font-size: 12px;
+  color: #4a5568;
+  line-height: 1.7;
+}
+.note b { color: #1a365d; }
+
+.footer {
+  text-align: center;
+  font-size: 11px;
+  color: #a0aec0;
+  margin-top: 24px;
+  padding: 14px;
+}
+
+@media (max-width: 380px) {
+  .compare-grid { grid-template-columns: 1fr; }
+  .split-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero h1 { font-size: 19px; }
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="container">
 
-<!-- Header -->
-<div class="header">
-  <span class="tag">家庭医疗险 · 平摊方案</span>
-  <h1>妈妈保费分摊测算</h1>
-  <div class="sub">A Plus + 6 年保证续保 · 首次投保 · 4 姐弟平摊</div>
-  <div class="meta-row">
-    <div>👵 被保人：<b>57 周岁</b></div>
-    <div>👥 出资人：<b>你 + 3 姐</b></div>
-    <div>📦 主险：<b>A Plus + 续保</b></div>
-    <div>➕ 附加：<b>意外医疗</b></div>
-  </div>
-</div>
-
-<!-- 4 姐弟可视化 -->
-<div class="section">
-  <div class="h2">谁来出钱 <span class="badge">人均 1/4</span></div>
-  <div class="family">
-    <div class="p"><span class="emoji">👩</span>大姐</div>
-    <div class="p"><span class="emoji">👩</span>二姐</div>
-    <div class="p"><span class="emoji">👩</span>三姐</div>
-    <div class="p"><span class="emoji">🧑</span>你</div>
-  </div>
-</div>
-
-<!-- Hero · 关键数字 -->
-<div class="section" style="padding:0;background:transparent;box-shadow:none">
-  <div class="tabs">
-    <button class="tab active" data-tab="year1">首年（含等待期）</button>
-    <button class="tab" data-tab="year2">续保年度</button>
-  </div>
-
-  <!-- 首年面板 -->
-  <div class="panel active" id="year1">
-    <div class="hero-cost">
-      <div class="lbl">首年 · 单人每月只需</div>
-      <div class="num">¥38.90<span class="unit">/月</span></div>
-      <div class="desc">医疗险 33.48 + 意外险 5.42</div>
-      <div class="annual">单人全年合计 <b>¥466.75</b></div>
+  <!-- 紧急时间锚 -->
+  <div class="urgency-banner">
+    <div class="urgency-emoji">⏰</div>
+    <div class="urgency-text">
+      <div class="urgency-title">投保窗口期 · 错过等明年</div>
+      <div class="urgency-date">2026年 6月16日 — 6月30日</div>
     </div>
+  </div>
 
-    <div class="section" style="margin-top:14px">
-      <div class="h2">费用拆解 · 首年</div>
-      <div class="row"><div class="k">A Plus 医疗险（保证续保）</div><div class="v">¥1,379</div></div>
-      <div class="row"><div class="k">附加责任</div><div class="v">¥228</div></div>
-      <div class="row"><div class="k">医疗险首年总保费</div><div class="v hot">¥1,607 / 年</div></div>
-      <div class="row"><div class="k">中老年意外险（参考市价）</div><div class="v">¥260 / 年</div></div>
-      <div class="row" style="border-top:2px solid #fed7d7;margin-top:6px;padding-top:12px"><div class="k"><b>全家全年合计</b></div><div class="v hot" style="font-size:15px">¥1,867</div></div>
+  <!-- Hero -->
+  <div class="hero">
+    <span class="hero-tag">妈妈 · 57岁 · 鹅厂专属百万医疗险</span>
+    <h1>4 姐弟一起，给妈妈接下来 20 年医疗安全感</h1>
+    <p class="sub">基于游杰腾讯员工身份 · A Plus + 6 年保证续保 + 中老年意外险</p>
 
-      <div class="split">
-        <div class="cell year">
-          <div class="l">单人 / 全年</div>
-          <div class="n">¥466.75<span class="u">/年</span></div>
-        </div>
-        <div class="cell month">
-          <div class="l">单人 / 每月</div>
-          <div class="n">¥38.90<span class="u">/月</span></div>
-        </div>
+    <div class="pricing">
+      <div class="pricing-lbl">每人每月承担</div>
+      <div class="pricing-row">
+        <span class="pricing-num">¥38.90</span>
+        <span class="pricing-unit">/月</span>
+        <span class="pricing-label">首年</span>
+      </div>
+      <div class="pricing-row">
+        <span class="pricing-num">¥41.82</span>
+        <span class="pricing-unit">/月</span>
+        <span class="pricing-label">续保年度</span>
       </div>
     </div>
   </div>
 
-  <!-- 续保面板 -->
-  <div class="panel" id="year2">
-    <div class="hero-cost">
-      <div class="lbl">续保年度 · 单人每月只需</div>
-      <div class="num">¥41.82<span class="unit">/月</span></div>
-      <div class="desc">医疗险 36.40 + 意外险 5.42</div>
-      <div class="annual">单人全年合计 <b>¥501.75</b></div>
+  <!-- 1. 投保资格 -->
+  <div class="card eligibility">
+    <div class="card-title"><span class="num">1</span>投保资格 · 先确认妈妈能不能买</div>
+    <div class="elig-row">
+      <span class="elig-ok">✅</span>
+      <span><b>游杰是腾讯在职员工</b>——直系亲属（父母 / 配偶 / 子女）可同步投保</span>
+    </div>
+    <div class="elig-row">
+      <span class="elig-ok">✅</span>
+      <span>妈妈 57 岁 → <b>落在 56-60 岁档</b>，A Plus 可投</span>
+    </div>
+    <div class="elig-row">
+      <span class="elig-ok">✅</span>
+      <span>定制版健康告知<b>极简</b>，大部分亚健康不影响投保（外部产品 57 岁基本买不到）</span>
+    </div>
+    <div class="elig-row">
+      <span class="elig-no">⚠️</span>
+      <span>必须在 <b>6/16-6/30</b> 开窗期内操作；离职后保单仍可保留（可带走）</span>
+    </div>
+  </div>
+
+  <!-- 2. A 款 vs A Plus 对比 -->
+  <div class="card">
+    <div class="card-title"><span class="num">2</span>A 款 vs A Plus · 妈妈该买哪个</div>
+    <div class="card-text" style="margin-bottom: 4px; font-size: 13px; color: #4a5568;">
+      鹅厂定制有两个版本，价格和保障不同：
     </div>
 
-    <div class="section" style="margin-top:14px">
-      <div class="h2">费用拆解 · 续保年度</div>
-      <div class="row"><div class="k">A Plus + 6 年保证续保</div><div class="v hot">¥1,747 / 年</div></div>
-      <div class="row"><div class="k">中老年意外险</div><div class="v">¥260 / 年</div></div>
-      <div class="row" style="border-top:2px solid #fed7d7;margin-top:6px;padding-top:12px"><div class="k"><b>全家全年合计</b></div><div class="v hot" style="font-size:15px">¥2,007</div></div>
+    <div class="compare-grid">
+      <!-- A 款 -->
+      <div class="plan-card plan-a">
+        <div class="plan-name">A 款</div>
+        <div class="plan-price">¥999</div>
+        <div class="plan-price-sub">/ 人 / 年 · 统一价</div>
+        <div class="plan-feature"><span class="icon">✓</span><span>住院 400 万 / 重疾 400 万</span></div>
+        <div class="plan-feature"><span class="icon">✓</span><span>特定疾病津贴 1 万</span></div>
+        <div class="plan-feature"><span class="icon-no">○</span><span>无保证续保</span></div>
+        <div class="plan-feature"><span class="icon-no">○</span><span>无成人先心病/脑保</span></div>
+      </div>
 
-      <div class="split">
-        <div class="cell year">
-          <div class="l">单人 / 全年</div>
-          <div class="n">¥501.75<span class="u">/年</span></div>
-        </div>
-        <div class="cell month">
-          <div class="l">单人 / 每月</div>
-          <div class="n">¥41.82<span class="u">/月</span></div>
-        </div>
+      <!-- A Plus 推荐 -->
+      <div class="plan-card plan-plus">
+        <div class="plan-badge">推荐</div>
+        <div class="plan-name">A Plus 款</div>
+        <div class="plan-price">¥1,398</div>
+        <div class="plan-price-sub">/ 57 岁 / 年 · 按年龄</div>
+        <div class="plan-feature"><span class="icon">✓</span><span>住院 + 重疾 + 院外特药</span></div>
+        <div class="plan-feature"><span class="icon">✓</span><span>特定疾病津贴 1 万</span></div>
+        <div class="plan-feature"><span class="icon">✓</span><span><b>+228 元可加 6 年保证续保</b></span></div>
+        <div class="plan-feature"><span class="icon">✓</span><span>成人先心病 5 万</span></div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-top: 12px;">
+      💡 <b>为什么强推 A Plus + 保证续保</b>：A 款每年都要重新核保，妈妈一旦得过病，第二年可能续不上。<b>A Plus + 6 年保证续保 = 锁定 57→63 岁 6 年保障</b>，每月只多 5 元钱，但买的是"妈妈生病了也不会被踢出去"的安全感。
+    </div>
+  </div>
+
+  <!-- 3. 推荐方案 -->
+  <div class="card recommend">
+    <div class="card-title"><span class="num">3</span>推荐方案 · 妈妈一年要花多少钱</div>
+
+    <div class="recom-line">
+      <b>A Plus 基础保费</b>　<span class="key">¥1,398</span> / 年（57 岁档）
+    </div>
+    <div class="recom-line">
+      <b>+ 6 年保证续保附加</b>　<span class="key">¥228</span> / 年（首年优惠 → 续保 +140）
+    </div>
+    <div class="recom-line">
+      <b>+ 中老年意外险</b>　<span class="key">¥260</span> / 年（建议同步配齐）
+    </div>
+
+    <div class="total-box">
+      <div class="total-box-row">
+        <span class="total-lbl">首年全家总保费</span>
+        <span class="total-num">¥1,867<span class="small">/ 年</span></span>
+      </div>
+      <div class="total-box-row">
+        <span class="total-lbl">续保年度全家总保费</span>
+        <span class="total-num">¥2,007<span class="small">/ 年</span></span>
       </div>
     </div>
   </div>
-</div>
 
-<!-- 费率依据 -->
-<div class="section">
-  <div class="h2">费率依据 <span class="badge">官方表</span></div>
-  <div class="row"><div class="k">51~55 周岁（A Plus 不带续保）</div><div class="v">¥1,066 / 年</div></div>
-  <div class="row"><div class="k">56~60 周岁（A Plus 不带续保）</div><div class="v">¥1,398 / 年</div></div>
-  <div class="row"><div class="k">妈妈 57 岁 → 落 56-60 档</div><div class="v hot">应用 56-60 档</div></div>
-</div>
+  <!-- 4. 4 姐弟分摊 -->
+  <div class="card">
+    <div class="card-title"><span class="num">4</span>4 姐弟平摊 · 每人多少</div>
 
-<!-- 备选方案 -->
-<div class="section">
-  <div class="h2">备选 · 仅保留基础版（不带续保）</div>
-  <div class="alt">
-    如果不附加 6 年保证续保，<b>A Plus 基础版 57 岁 ¥1,398/年</b>。<br><br>
-    单人平摊 <b>¥349.5/年</b> + 意外险 <b>¥65/年</b> = <b>¥414.5/人/年</b>（约 <b>¥34.5/人/月</b>）。<br><br>
-    省下 ¥52.25/人/年，但失去 6 年保费锁价 + 续保确定性——<b>不推荐</b>。
+    <div style="font-size: 13px; color: #4a5568; margin-bottom: 4px;">首年（投保当年）</div>
+    <div class="split-grid">
+      <div class="split-cell">
+        <div class="split-emoji">👩</div>
+        <div class="split-name">大姐</div>
+        <div class="split-amount">¥466.75</div>
+      </div>
+      <div class="split-cell">
+        <div class="split-emoji">👩</div>
+        <div class="split-name">二姐</div>
+        <div class="split-amount">¥466.75</div>
+      </div>
+      <div class="split-cell">
+        <div class="split-emoji">👩</div>
+        <div class="split-name">三姐</div>
+        <div class="split-amount">¥466.75</div>
+      </div>
+      <div class="split-cell" style="background: #fef3c7; border-color: #fbbf24;">
+        <div class="split-emoji">🧑</div>
+        <div class="split-name">游杰</div>
+        <div class="split-amount">¥466.75</div>
+      </div>
+    </div>
+
+    <div class="total-box">
+      <div class="total-box-row">
+        <span class="total-lbl">每人每年</span>
+        <span class="total-num">¥466.75</span>
+      </div>
+      <div class="total-box-row">
+        <span class="total-lbl">折算每人每月</span>
+        <span class="total-num">¥38.90</span>
+      </div>
+    </div>
+
+    <div class="note">
+      💡 <b>续保年度</b>：每人 ¥501.75/年 = <b>¥41.82/月</b>。
+      操作建议：建群「妈妈的医疗保障」每月 1 号互发红包，4 个月轮流主出。
+    </div>
   </div>
+
+  <!-- 5. 鹅厂专属 vs 外部 · 不可替代价值 -->
+  <div class="card">
+    <div class="card-title"><span class="num">5</span>为什么必须买鹅厂专属 · 3 个外部产品做不到的</div>
+
+    <div class="value-item">
+      <div class="value-icon">🏥</div>
+      <div class="value-body">
+        <div class="value-title">承担"既往症"</div>
+        <div class="value-desc">外部百万医疗 99% 不保既往症——妈妈 57 岁，有<b>任何一点既往（高血压 / 血糖偏高 / 结节）</b>，外部产品第二年就因这个原因住院不报。鹅厂定制承担既往症，<b>这是外部用钱也买不到的</b>。</div>
+      </div>
+    </div>
+
+    <div class="value-item">
+      <div class="value-icon">🎫</div>
+      <div class="value-body">
+        <div class="value-title">免核保 · 健康告知极简</div>
+        <div class="value-desc">外部 57 岁老人买百万医疗，健康告知一关基本过不了。鹅厂定制<b>不问大部分亚健康问题</b>，妈妈基本能直接买上——避免"以为有保障但理赔时审核没过"。</div>
+      </div>
+    </div>
+
+    <div class="value-item">
+      <div class="value-icon">💰</div>
+      <div class="value-body">
+        <div class="value-title">团险价 · 外部 6-7 折</div>
+        <div class="value-desc">鹅厂定制是平安健康保险的<b>团体定价</b>，是市场新保价格的 6-7 折。外部同等保障的 57 岁产品保费在 ¥2,500-3,000/年，<b>鹅厂只要 ¥1,398</b>，便宜一倍。</div>
+      </div>
+    </div>
+
+    <div class="value-item">
+      <div class="value-icon">🔒</div>
+      <div class="value-body">
+        <div class="value-title">保证续保 6 年（锁价）</div>
+        <div class="value-desc">妈妈未来 6 年（57→63 岁）保费按当前年龄档<b>锁价不涨</b>，即使期间住院、生病，<b>不会被拒续保</b>。6 年后重新核保，但即使重新核保，鹅厂定制也比外部宽松得多。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 行动清单 -->
+  <div class="card action">
+    <div class="card-title"><span class="num">6</span>4 姐弟行动清单</div>
+
+    <div class="action-step">
+      <span class="action-no">1</span>
+      <div class="action-text"><b>本周内</b>：建"妈妈的医疗保障"4 人群，发本页链接对齐方案</div>
+    </div>
+    <div class="action-step">
+      <span class="action-no">2</span>
+      <div class="action-text"><b>6/16 当天</b>：游杰在 KM-员工服务 / "鹅厂保障"小程序内提交妈妈投保信息（身份证 + 健康告知 + 体检报告，如有）</div>
+    </div>
+    <div class="action-step">
+      <span class="action-no">3</span>
+      <div class="action-text"><b>投保确认后</b>：游杰先垫付 ¥1,867，把保单截图发群</div>
+    </div>
+    <div class="action-step">
+      <span class="action-no">4</span>
+      <div class="action-text"><b>每月 1 号</b>：3 位姐姐各发 ¥38.90 红包（首年），续保年度起 ¥41.82</div>
+    </div>
+    <div class="action-step">
+      <span class="action-no">5</span>
+      <div class="action-text"><b>6/30 兜底</b>：错过开窗期 = 错过一年。如有姐妹拖延，<b>游杰先全垫，事后再分摊</b></div>
+    </div>
+  </div>
+
+  <!-- 7. 必知风险 -->
+  <div class="card" style="border-left: 4px solid #c53030;">
+    <div class="card-title" style="color: #c53030;"><span class="num" style="background: #c53030;">!</span>必知风险</div>
+    <div class="card-text">
+      <p><b>① 30 天等待期</b>——投保后 30 天内住院不报（避免逆选择）。所以 6 月投，7 月开始才真正生效。</p>
+      <p style="margin-top: 8px;"><b>② 年免赔额 1-2 万</b>——单次住院花费超过免赔额的部分才报，小病不报。配上意外险弥补小额风险。</p>
+      <p style="margin-top: 8px;"><b>③ 6 年保证续保到期后</b>——重新核保，保费按当年年龄档（63 岁）。但即使重新核保，鹅厂也比外部宽松得多。</p>
+      <p style="margin-top: 8px;"><b>④ 居民医保仍要单独缴</b>（各地 380-500 元/年）——百万医疗是商业险，不能替代基本医保。</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    游杰 · 2026-06-02 凌晨 · 基于鹅厂 KM《【鹅厂专属】百万医疗险投保指南 2026》整理
+  </div>
+
 </div>
-
-<!-- 补充说明 -->
-<div class="section">
-  <div class="h2">📌 补充说明</div>
-  <p class="note">居民医保需<b>单独缴</b>（各地 ¥380~500/年），不在以上商业险内，可同样 4 人分摊。</p>
-  <p class="note"><b>6 年保证续保期内首年锁价</b>，6 年内不会随意涨价；期满后按当年年龄费率重新核保。</p>
-  <p class="note">意外险按市价 ¥260/年估算，最终以实际产品为准；意外+医疗双保障是 57 岁人群标配。</p>
-  <p class="note"><b>建议</b>：4 人按月微信红包 / 月初固定转账，每人 <b>¥38.90 → ¥41.82</b>，长期无感。</p>
-</div>
-
-<footer>测算日期：2026-06-02 · 仅供家庭内部分摊参考</footer>
-
-</div>
-
-<script>
-document.querySelectorAll('.tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));
-    document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===t.dataset.tab));
-  });
-});
-</script>
 </body>
 </html>
