@@ -10,7 +10,7 @@
     font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
     background: #0a0a14;
     color: #ffffff;
-    padding: 24px 16px 40px;
+    padding: 20px 16px 32px;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
@@ -20,10 +20,10 @@
     position: fixed;
     top: -10%; left: -10%; right: -10%; bottom: -10%;
     background:
-      radial-gradient(circle at 0% 0%, rgba(255, 107, 158, 0.18), transparent 40%),
-      radial-gradient(circle at 100% 0%, rgba(122, 162, 255, 0.18), transparent 40%),
-      radial-gradient(circle at 0% 100%, rgba(180, 255, 200, 0.12), transparent 40%),
-      radial-gradient(circle at 100% 100%, rgba(255, 200, 120, 0.15), transparent 40%);
+      radial-gradient(circle at 0% 0%, rgba(255, 107, 158, 0.45), transparent 45%),
+      radial-gradient(circle at 100% 0%, rgba(122, 162, 255, 0.40), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgba(180, 255, 200, 0.30), transparent 45%),
+      radial-gradient(circle at 100% 100%, rgba(255, 200, 120, 0.40), transparent 45%);
     z-index: -1;
     animation: breathe 8s ease-in-out infinite;
   }
@@ -64,21 +64,22 @@
     border-color: rgba(255, 215, 100, 0.35);
     box-shadow: 0 0 30px rgba(255, 200, 100, 0.15);
   }
-  .card.featured::after {
-    content: '推荐';
-    position: absolute;
-    top: 14px; right: 14px;
+  .featured-badge {
+    display: inline-block;
+    margin-left: 6px;
     background: linear-gradient(135deg, #ffb86c, #ff6b9e);
     color: #fff;
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 10px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    vertical-align: middle;
   }
   .card-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    gap: 8px;
     margin-bottom: 14px;
     padding-bottom: 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -95,17 +96,21 @@
   }
   .price-block {
     text-align: right;
+    flex-shrink: 0;
+    min-width: 140px;
   }
   .price {
     font-size: 22px;
     font-weight: 700;
     color: #ffb86c;
-    line-height: 1;
+    line-height: 1.1;
+    white-space: nowrap;
   }
   .price-unit {
     font-size: 11px;
     color: #a8aac0;
     margin-top: 4px;
+    white-space: nowrap;
   }
   .featured .price { color: #ffd66c; }
   .row {
@@ -161,7 +166,7 @@
   <div class="card featured">
     <div class="card-header">
       <div>
-        <div class="product-name">鹅厂 A Plus</div>
+        <div class="product-name">鹅厂 A Plus<span class="featured-badge">推荐</span></div>
         <div class="product-tag">员工福利 · 内部通道</div>
       </div>
       <div class="price-block">
