@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>记忆与上下文 · 底座接口需求</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", sans-serif;
+    background: #0a0a14;
+    color: #ffffff;
+    padding: 32px 20px 60px;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: -10%; left: -10%; right: -10%; bottom: -10%;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(122, 162, 255, 0.35), transparent 45%),
+      radial-gradient(circle at 100% 0%, rgba(255, 107, 158, 0.28), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgba(180, 255, 200, 0.25), transparent 45%),
+      radial-gradient(circle at 100% 100%, rgba(255, 200, 120, 0.30), transparent 45%);
+    z-index: -1;
+    animation: breathe 8s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%, 100% { opacity: 0.8; } 50% { opacity: 1; } }
+  .container { max-width: 880px; margin: 0 auto; }
+  .hero {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+  h1 {
+    font-size: 32px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffd6e0 0%, #c9d8ff 50%, #d4ffea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .hero .sub { color: #a8aac0; font-size: 14px; }
+  .hero .meta { color: #6e7090; font-size: 12px; margin-top: 6px; }
+
+  .section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 28px 26px;
+    margin-bottom: 20px;
+  }
+  .section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section h2 .num {
+    display: inline-flex;
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #7aa2ff, #b366ff);
+    border-radius: 8px;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .section h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffd66c;
+    margin: 18px 0 8px;
+  }
+  .section p, .section li {
+    font-size: 14px;
+    color: #d4d6e8;
+    line-height: 1.75;
+  }
+  .section ul { padding-left: 20px; margin-bottom: 8px; }
+  .section li { margin-bottom: 4px; }
+  .section strong { color: #fff; font-weight: 600; }
+  .hl { color: #ffd66c; font-weight: 500; }
+  .hl-blue { color: #c9d8ff; font-weight: 500; }
+  .hl-green { color: #6ee7a0; font-weight: 500; }
+  .hl-red { color: #ff8a9e; font-weight: 500; }
+
+  .core-claim {
+    background: rgba(255, 215, 100, 0.08);
+    border: 1px solid rgba(255, 215, 100, 0.3);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin: 16px 0;
+    font-size: 15px;
+    color: #fff;
+    line-height: 1.75;
+  }
+  .core-claim strong { color: #ffd66c; }
+
+  .layer-stack {
+    display: grid;
+    gap: 10px;
+    margin: 14px 0 8px;
+  }
+  .layer {
+    background: rgba(122, 162, 255, 0.08);
+    border-left: 3px solid #7aa2ff;
+    padding: 14px 18px;
+    border-radius: 10px;
+  }
+  .layer .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c9d8ff;
+    margin-bottom: 4px;
+  }
+  .layer .desc {
+    font-size: 13px;
+    color: #d4d6e8;
+    line-height: 1.65;
+  }
+  .layer.you { border-left-color: #ffb86c; background: rgba(255, 184, 108, 0.08); }
+  .layer.you .name { color: #ffb86c; }
+  .layer.shared { border-left-color: #ff6b9e; background: rgba(255, 107, 158, 0.08); }
+  .layer.shared .name { color: #ff8a9e; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    vertical-align: top;
+  }
+  th {
+    background: rgba(255, 255, 255, 0.04);
+    color: #c9d8ff;
+    font-weight: 600;
+    font-size: 12px;
+  }
+  td { color: #d4d6e8; }
+  td code {
+    background: rgba(122, 162, 255, 0.15);
+    color: #c9d8ff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-family: "SF Mono", Menlo, monospace;
+  }
+  .pri-p0 { color: #ff8a9e; font-weight: 600; }
+  .pri-p1 { color: #ffd66c; font-weight: 600; }
+  .pri-p2 { color: #a8aac0; }
+
+  .timeline {
+    position: relative;
+    padding-left: 24px;
+    margin: 16px 0 8px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px; top: 4px; bottom: 4px;
+    width: 2px;
+    background: linear-gradient(to bottom, #7aa2ff, #ff6b9e);
+  }
+  .ti {
+    position: relative;
+    padding: 8px 0 8px 18px;
+  }
+  .ti::before {
+    content: '';
+    position: absolute;
+    left: -22px; top: 14px;
+    width: 12px; height: 12px;
+    background: #7aa2ff;
+    border-radius: 50%;
+    border: 2px solid #0a0a14;
+  }
+  .ti .when {
+    font-size: 12px;
+    color: #ffd66c;
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .ti .what {
+    font-size: 14px;
+    color: #fff;
+  }
+
+  .responsibility {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .resp-box {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+  .resp-box.you-r { border: 1px solid rgba(255, 184, 108, 0.3); }
+  .resp-box.chen-r { border: 1px solid rgba(122, 162, 255, 0.3); }
+  .resp-box .title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .resp-box.you-r .title { color: #ffb86c; }
+  .resp-box.chen-r .title { color: #7aa2ff; }
+  .resp-box ul { padding-left: 18px; }
+  .resp-box li { font-size: 13px; color: #d4d6e8; margin-bottom: 4px; }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #6e7090;
+    margin-top: 30px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 600px) {
+    .responsibility { grid-template-columns: 1fr; }
+    h1 { font-size: 26px; }
+    .section { padding: 22px 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <h1>记忆与上下文</h1>
+    <div class="sub">元宝浏览器「记得住」对底座的接口需求</div>
+    <div class="meta">游杰 → 琛哥 · 2026.06.02</div>
+  </div>
+
+  <!-- 0. 一句话 -->
+  <div class="section">
+    <div class="core-claim">
+      <strong>一句话：</strong>「记得住」是底座的<strong>头号客户</strong>，本文不讨论业务怎么做，只对齐<strong>底座要为我提供什么能力、什么时候提供、谁兜什么责任</strong>。
+    </div>
+  </div>
+
+  <!-- 1. 概念对齐 -->
+  <div class="section">
+    <h2><span class="num">1</span>先对齐两个核心概念</h2>
+
+    <h3>记忆（Memory）</h3>
+    <p>用户在浏览器内沉淀下来的<span class="hl">长期可复用资产</span>。包括：</p>
+    <ul>
+      <li><strong>显性资产</strong>：书签、笔记、收藏、文件、AI 对话记录、用户主动标记</li>
+      <li><strong>隐性资产</strong>：浏览行为（停留时长、跳转路径、复访）、搜索历史、内容偏好</li>
+    </ul>
+    <p>关键属性：<span class="hl-blue">跨会话存在</span>、<span class="hl-blue">可被检索</span>、<span class="hl-blue">可被 AI 调用</span>。</p>
+
+    <h3>上下文（Context）</h3>
+    <p>用户当前会话/任务内的<span class="hl">短期工作集</span>。包括：</p>
+    <ul>
+      <li>当前打开的标签页、当前阅读的内容、当前任务的中间产物</li>
+      <li>本次对话的历史轮次、当前页面的语境注入</li>
+    </ul>
+    <p>关键属性：<span class="hl-blue">短生命周期</span>、<span class="hl-blue">高频读写</span>、<span class="hl-blue">需要快速注入到 LLM</span>。</p>
+
+    <div class="core-claim">
+      <strong>两者关系：</strong>上下文是<span class="hl">入口</span>（用户当下在做什么），记忆是<span class="hl">弹药库</span>（过去沉淀的资产）。<br>
+      「记得住」业务的本质 = 把<span class="hl-blue">上下文</span>实时翻译成<span class="hl-blue">检索意图</span>，从<span class="hl-blue">记忆</span>里召回相关资产，注入给 AI。
+    </div>
+  </div>
+
+  <!-- 2. 我用你的什么 -->
+  <div class="section">
+    <h2><span class="num">2</span>我用你的底座哪几层</h2>
+
+    <div class="layer-stack">
+      <div class="layer">
+        <div class="name">L0 · 账号通道（UnionID）</div>
+        <div class="desc">跨端用户身份统一，让 PC/移动/元宝/输入法看到同一个用户。我不重做，全用你的。</div>
+      </div>
+      <div class="layer">
+        <div class="name">L1 · 资产存储底座</div>
+        <div class="desc">5 类资产（书签/图片/文件/摘录/AI 对话）的统一 CRUD、版本管理、冲突解决。我把业务 schema 映射到你的底层 schema。</div>
+      </div>
+      <div class="layer">
+        <div class="name">L2 · 跨端同步通道</div>
+        <div class="desc">PC ↔ 移动 ↔ 元宝矩阵 资产实时/准实时同步。push/pull 策略、冲突合并、断点续传。</div>
+      </div>
+      <div class="layer you">
+        <div class="name">L3 · 索引与检索（待对齐归属）</div>
+        <div class="desc">向量索引、全文索引、混合检索。性能/准确率敏感，可能你做底座我做策略，也可能我自建。<span class="hl-red">这是核心待决策点</span>。</div>
+      </div>
+      <div class="layer shared">
+        <div class="name">L4 · 业务层（我做）</div>
+        <div class="desc">「记得住」三层业务能力：自动打标摘要 / 聚类整理 / 召唤过往。Skill 沉淀、轻量手势交互、RAG 业务编排。</div>
+      </div>
+    </div>
+
+    <p style="margin-top: 12px; font-size: 13px; color: #a8aac0;">
+      <strong style="color:#fff;">边界规则：</strong>底座 schema 你定，业务 schema 我定怎么映射；通用组件你做，业务 Skill 我做；数据安全/同步一致性你兜，检索准确率/业务策略我兜。
+    </p>
+  </div>
+
+  <!-- 3. 具体接口清单 -->
+  <div class="section">
+    <h2><span class="num">3</span>具体接口需求清单</h2>
+
+    <h3>3.1 资产存储 API（L1）</h3>
+    <table>
+      <thead>
+        <tr><th>接口</th><th>用途</th><th>优先级</th><th>预期</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>asset.create</code></td><td>新建资产（含元数据 + 内容 + 用户标签）</td><td class="pri-p0">P0</td><td>p99 &lt; 200ms</td></tr>
+        <tr><td><code>asset.read</code></td><td>按 ID/类型/时间/标签批量读</td><td class="pri-p0">P0</td><td>p99 &lt; 100ms</td></tr>
+        <tr><td><code>asset.update</code></td><td>更新元数据（重点：AI 打标结果回写）</td><td class="pri-p0">P0</td><td>支持批量</td></tr>
+        <tr><td><code>asset.delete</code></td><td>软删 + 硬删，软删保留 30 天</td><td class="pri-p0">P0</td><td>—</td></tr>
+        <tr><td><code>asset.search</code></td><td>结构化检索（按字段）</td><td class="pri-p1">P1</td><td>p99 &lt; 300ms</td></tr>
+        <tr><td><code>asset.bulk_import</code></td><td>历史书签/收藏一次性导入</td><td class="pri-p1">P1</td><td>支持 1 万条/批</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.2 跨端同步 API（L2）</h3>
+    <table>
+      <thead>
+        <tr><th>接口</th><th>用途</th><th>优先级</th><th>预期</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>sync.push</code></td><td>本端变更推送到云端</td><td class="pri-p0">P0</td><td>实时</td></tr>
+        <tr><td><code>sync.pull</code></td><td>云端变更拉取到本端</td><td class="pri-p0">P0</td><td>增量、断点续传</td></tr>
+        <tr><td><code>sync.conflict_resolve</code></td><td>多端冲突合并策略（默认时间戳后写赢）</td><td class="pri-p0">P0</td><td>提供策略钩子</td></tr>
+        <tr><td><code>sync.subscribe</code></td><td>订阅资产变更事件，用于 AI 实时打标</td><td class="pri-p1">P1</td><td>WebSocket / SSE</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.3 账号互通 API（L0）</h3>
+    <table>
+      <thead>
+        <tr><th>接口</th><th>用途</th><th>优先级</th><th>预期</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>account.unionid</code></td><td>获取当前用户 UnionID</td><td class="pri-p0">P0</td><td>—</td></tr>
+        <tr><td><code>account.matrix_map</code></td><td>UnionID → 元宝矩阵各产品 ID 映射</td><td class="pri-p0">P0</td><td>支持元宝/翻译/输入法</td></tr>
+        <tr><td><code>account.permission</code></td><td>跨产品资产授权（用户主动授权后元宝才能读浏览器资产）</td><td class="pri-p1">P1</td><td>—</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 4. 待决策项 -->
+  <div class="section">
+    <h2><span class="num">4</span>待你拍板的 3 件事</h2>
+
+    <h3 style="color:#ff8a9e;">决策 1：索引层（L3）谁建？</h3>
+    <p><strong>背景</strong>：「记得住」要做 RAG 检索，需要向量索引 + 全文索引。</p>
+    <ul>
+      <li><strong>方案 A</strong>：你底座建统一索引服务，我调 API</li>
+      <li><strong>方案 B</strong>：我自建（用算法侧的能力），你只提供原始数据</li>
+    </ul>
+    <p><span class="hl">我的倾向：A</span>。理由：索引是底座能力的天然延伸，未来元宝矩阵其他产品也要用。</p>
+
+    <h3 style="color:#ff8a9e;">决策 2：实时事件订阅要不要做？</h3>
+    <p><strong>背景</strong>：AI 自动打标/摘要需要在用户新增资产后<span class="hl">秒级</span>触发。</p>
+    <ul>
+      <li><strong>方案 A</strong>：底座提供事件订阅（WebSocket/SSE），我订阅后触发算法</li>
+      <li><strong>方案 B</strong>：我轮询，简单但延迟高、浪费 IO</li>
+    </ul>
+    <p><span class="hl">我的倾向：A</span>。理由：MVP 阶段可以接受方案 B 兜底，但长期必走 A。</p>
+
+    <h3 style="color:#ff8a9e;">决策 3：跨产品授权机制何时上？</h3>
+    <p><strong>背景</strong>：元宝读浏览器资产、输入法读浏览器资产，必须有用户授权流程。</p>
+    <ul>
+      <li><strong>方案 A</strong>：MVP 不上，先做内部 dogfood</li>
+      <li><strong>方案 B</strong>：MVP 就上，但产品/法务/UX 都要拉</li>
+    </ul>
+    <p><span class="hl">我的倾向：A</span>（先验证价值，授权机制 V2 再加）。</p>
+  </div>
+
+  <!-- 5. 时间锚点 -->
+  <div class="section">
+    <h2><span class="num">5</span>时间锚点（围绕我 8 月初 MVP）</h2>
+    <div class="timeline">
+      <div class="ti"><div class="when">6 月中旬</div><div class="what">本文档对齐完成 → 接口契约 v1 出稿</div></div>
+      <div class="ti"><div class="when">6 月底</div><div class="what">L0/L1/L2 P0 接口 mock 可用 → 我开始业务侧联调</div></div>
+      <div class="ti"><div class="when">7 月中旬</div><div class="what">L0/L1/L2 P0 接口冻结 → 不再变更</div></div>
+      <div class="ti"><div class="when">7 月下旬</div><div class="what">全链路联调 → 性能压测 → bug 修复</div></div>
+      <div class="ti"><div class="when">8 月初</div><div class="what">MVP 上线</div></div>
+    </div>
+    <p style="margin-top:10px; font-size:13px; color:#ff8a9e;"><strong>红线</strong>：L1（资产存储）和 L2（跨端同步）任何一项延期到 7 月下旬，MVP 必延期，请提前 2 周 flag。</p>
+  </div>
+
+  <!-- 6. 责任边界 -->
+  <div class="section">
+    <h2><span class="num">6</span>责任边界（出问题谁背）</h2>
+    <div class="responsibility">
+      <div class="resp-box chen-r">
+        <div class="title">琛哥兜：</div>
+        <ul>
+          <li>数据丢失 / 错乱</li>
+          <li>跨端同步不一致</li>
+          <li>底座 API SLA（可用性/响应时间）</li>
+          <li>账号通道稳定性</li>
+          <li>底层存储扩容</li>
+        </ul>
+      </div>
+      <div class="resp-box you-r">
+        <div class="title">游杰兜：</div>
+        <ul>
+          <li>业务 schema 设计合理性</li>
+          <li>AI 打标/摘要准确率</li>
+          <li>检索召回率/准确率</li>
+          <li>业务 UI/交互</li>
+          <li>用户主动标记的产品形态</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:12px; font-size:13px; color:#a8aac0;"><strong style="color:#fff;">灰色地带：</strong>性能问题先分层定位——是底座 IO 慢还是上层处理慢，分锅后再认。</p>
+  </div>
+
+  <!-- 7. 会后产出 -->
+  <div class="section">
+    <h2><span class="num">7</span>会后产出</h2>
+    <ul>
+      <li>✅ <strong>接口契约文档</strong>（你出初稿，我评审，6/15 前）</li>
+      <li>✅ <strong>3 个待决策项</strong>给出明确结论（接口归属/事件订阅/授权机制）</li>
+      <li>✅ <strong>时间表</strong>双方签字确认</li>
+      <li>✅ <strong>责任边界</strong>同步陈颖+汉博，避免后续扯皮</li>
+    </ul>
+  </div>
+
+  <p class="footer">
+    本文档为「记得住」对底座的接口需求初版<br>
+    游杰 · 元宝浏览器 · 2026.06.02
+  </p>
+
+</div>
+</body>
+</html>
