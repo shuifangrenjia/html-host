@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>元宝浏览器 · 记得住 · 七要素</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    background: #0a0a14;
+    color: #ffffff;
+    line-height: 1.7;
+    position: relative;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    top: -10%; left: -10%; right: -10%; bottom: -10%;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(255, 107, 158, 0.40), transparent 45%),
+      radial-gradient(circle at 100% 0%, rgba(122, 162, 255, 0.42), transparent 45%),
+      radial-gradient(circle at 0% 100%, rgba(180, 255, 200, 0.28), transparent 45%),
+      radial-gradient(circle at 100% 100%, rgba(255, 200, 120, 0.38), transparent 45%);
+    z-index: -1;
+    animation: breathe 10s ease-in-out infinite;
+  }
+  @keyframes breathe {
+    0%, 100% { opacity: 0.75; }
+    50% { opacity: 1; }
+  }
+
+  .container { max-width: 920px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 30px 0 50px; }
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background: rgba(122, 162, 255, 0.15);
+    border: 1px solid rgba(122, 162, 255, 0.3);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #c9d8ff;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+  h1 {
+    font-size: 44px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffd6e0 0%, #c9d8ff 35%, #d4ffea 70%, #ffe9b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 14px;
+    letter-spacing: -0.5px;
+  }
+  .hero .sub {
+    font-size: 18px;
+    color: #a8aac0;
+    font-weight: 400;
+    margin-bottom: 10px;
+  }
+  .hero .meta {
+    font-size: 12px;
+    color: #6e7090;
+  }
+
+  /* TLDR card */
+  .tldr {
+    background: rgba(255, 215, 100, 0.08);
+    border: 1px solid rgba(255, 215, 100, 0.3);
+    border-radius: 22px;
+    padding: 32px 30px;
+    margin: 40px 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+  .tldr-title {
+    font-size: 13px;
+    color: #ffd66c;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+  .tldr-claim {
+    font-size: 22px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.5;
+    margin-bottom: 18px;
+  }
+  .tldr-claim em {
+    font-style: normal;
+    color: #ffd66c;
+  }
+  .tldr-body {
+    font-size: 15px;
+    color: #d4d6e8;
+    line-height: 1.85;
+    margin-bottom: 18px;
+  }
+  .tldr-perspectives {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .persp {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 14px 16px;
+    border-left: 3px solid;
+  }
+  .persp:nth-child(1) { border-left-color: #ff8a9e; }
+  .persp:nth-child(2) { border-left-color: #7aa2ff; }
+  .persp:nth-child(3) { border-left-color: #ffb86c; }
+  .persp .who {
+    font-size: 12px;
+    color: #a8aac0;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .persp .what {
+    font-size: 13px;
+    color: #fff;
+    line-height: 1.6;
+  }
+
+  /* Sections */
+  .section {
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 22px;
+    padding: 32px 30px;
+    margin-bottom: 22px;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .section-num {
+    display: inline-flex;
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, #7aa2ff, #b366ff);
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+  }
+  .section-sub {
+    font-size: 12px;
+    color: #8e90a8;
+    margin-top: 2px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #ffd66c;
+    margin: 22px 0 10px;
+  }
+  h3:first-of-type { margin-top: 6px; }
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c9d8ff;
+    margin: 16px 0 8px;
+  }
+
+  p, li {
+    font-size: 14px;
+    color: #d4d6e8;
+    line-height: 1.85;
+  }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin-bottom: 5px; }
+  strong { color: #fff; font-weight: 600; }
+  em { font-style: normal; color: #ffd66c; }
+  .hl { color: #ffd66c; font-weight: 500; }
+  .hl-blue { color: #c9d8ff; font-weight: 500; }
+  .hl-green { color: #6ee7a0; font-weight: 500; }
+  .hl-red { color: #ff8a9e; font-weight: 500; }
+
+  .quote-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 12px 0;
+  }
+  .quote-list li {
+    padding: 10px 14px;
+    background: rgba(122, 162, 255, 0.08);
+    border-left: 3px solid #7aa2ff;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #d4d6e8;
+    line-height: 1.7;
+  }
+  .quote-list li::before { content: '"'; color: #7aa2ff; font-weight: 700; margin-right: 4px; }
+  .quote-list li::after { content: '"'; color: #7aa2ff; font-weight: 700; margin-left: 4px; }
+
+  .pending {
+    background: rgba(255, 138, 158, 0.08);
+    border: 1px dashed rgba(255, 138, 158, 0.3);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+    color: #ff8a9e;
+    line-height: 1.7;
+  }
+  .pending strong { color: #ff8a9e; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 11px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    vertical-align: top;
+    color: #d4d6e8;
+  }
+  th {
+    background: rgba(255, 255, 255, 0.04);
+    color: #c9d8ff;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  td .yes { color: #6ee7a0; font-weight: 500; }
+  td .no { color: #ff8a9e; font-weight: 500; }
+  .pri-p0 { color: #ff8a9e; font-weight: 600; }
+  .pri-p1 { color: #ffd66c; font-weight: 600; }
+  .pri-p2 { color: #a8aac0; }
+
+  .compete-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .compete-card {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .compete-card .cname {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .compete-card .ctag {
+    display: inline-block;
+    font-size: 11px;
+    background: rgba(122, 162, 255, 0.15);
+    color: #c9d8ff;
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-left: 6px;
+  }
+  .compete-card .line { font-size: 12px; color: #d4d6e8; margin-bottom: 4px; line-height: 1.6; }
+  .compete-card .line .y { color: #6ee7a0; font-weight: 600; }
+  .compete-card .line .n { color: #ff8a9e; font-weight: 600; }
+
+  .solution-block {
+    background: rgba(122, 162, 255, 0.06);
+    border-left: 3px solid #7aa2ff;
+    border-radius: 0 12px 12px 0;
+    padding: 16px 18px;
+    margin: 12px 0;
+  }
+  .solution-block .stitle {
+    font-size: 14px;
+    font-weight: 600;
+    color: #c9d8ff;
+    margin-bottom: 8px;
+  }
+  .solution-block .core-mind {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(255, 215, 100, 0.08);
+    border-radius: 8px;
+    font-size: 13px;
+    color: #ffd66c;
+    border: 1px solid rgba(255, 215, 100, 0.2);
+  }
+
+  .anchor-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin: 12px 0;
+  }
+  .anchor-block {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 14px;
+    padding: 16px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .anchor-block.behavior { border-color: rgba(110, 231, 160, 0.3); }
+  .anchor-block.ai { border-color: rgba(122, 162, 255, 0.3); }
+  .anchor-block.strategic {
+    border-color: rgba(255, 215, 100, 0.4);
+    background: rgba(255, 215, 100, 0.06);
+  }
+  .anchor-block .ahead {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .anchor-block.behavior .ahead { color: #6ee7a0; }
+  .anchor-block.ai .ahead { color: #c9d8ff; }
+  .anchor-block.strategic .ahead { color: #ffd66c; }
+  .anchor-block ul { padding-left: 18px; margin: 4px 0; }
+  .anchor-block li { font-size: 13px; }
+
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+    margin: 14px 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 6px; bottom: 6px;
+    width: 2px;
+    background: linear-gradient(to bottom, #7aa2ff, #ff6b9e, #ffd66c);
+  }
+  .ti { position: relative; padding: 6px 0 12px 18px; }
+  .ti::before {
+    content: '';
+    position: absolute;
+    left: -22px; top: 12px;
+    width: 12px; height: 12px;
+    background: #7aa2ff;
+    border-radius: 50%;
+    border: 2px solid #0a0a14;
+  }
+  .ti.milestone::before { background: #ffd66c; box-shadow: 0 0 12px rgba(255, 214, 108, 0.6); }
+  .ti .when { font-size: 12px; color: #ffd66c; font-weight: 600; margin-bottom: 2px; }
+  .ti .what { font-size: 14px; color: #fff; line-height: 1.6; }
+
+  .decision-table tr td:nth-child(2) { font-weight: 500; color: #fff; }
+  .decision-table tr td:nth-child(3) {
+    color: #ffd66c;
+    font-weight: 500;
+  }
+
+  .hook-card {
+    background: linear-gradient(135deg, rgba(255, 107, 158, 0.15), rgba(122, 162, 255, 0.15));
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 22px;
+    padding: 36px 32px;
+    margin: 40px 0 24px;
+    text-align: center;
+  }
+  .hook-card .hook-label {
+    font-size: 12px;
+    color: #c9d8ff;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .hook-card .hook-text {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.55;
+    background: linear-gradient(135deg, #ffd6e0, #c9d8ff, #d4ffea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #6e7090;
+    margin-top: 40px;
+    line-height: 1.8;
+  }
+
+  /* TOC */
+  .toc {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 24px 26px;
+    margin-bottom: 28px;
+  }
+  .toc-title {
+    font-size: 13px;
+    color: #a8aac0;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    margin-bottom: 14px;
+  }
+  .toc-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .toc-list li a {
+    display: block;
+    padding: 8px 12px;
+    color: #d4d6e8;
+    text-decoration: none;
+    font-size: 13px;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .toc-list li a:hover {
+    background: rgba(122, 162, 255, 0.15);
+    color: #fff;
+  }
+  .toc-list li a .n {
+    color: #ffd66c;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 32px; }
+    .section { padding: 24px 20px; }
+    .tldr { padding: 24px 20px; }
+    .tldr-perspectives { grid-template-columns: 1fr; }
+    .compete-grid { grid-template-columns: 1fr; }
+    .toc-list { grid-template-columns: 1fr; }
+    .hook-card .hook-text { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">陈颖指定框架 · 产品七要素</div>
+    <h1>记得住</h1>
+    <div class="sub">元宝浏览器 · 三主线之一 · 七要素 + 功能盘点</div>
+    <div class="meta">游杰 · 2026.06.03 · 受众：陈颖 · 汉博 · 琛哥</div>
+  </div>
+
+  <!-- TLDR -->
+  <div class="tldr">
+    <div class="tldr-title">TL;DR · 一页看懂</div>
+    <div class="tldr-claim">
+      「记得住」<em>不是 AI 收藏夹</em>，是<em>元宝矩阵的上下文中枢</em>。
+    </div>
+    <div class="tldr-body">
+      浏览器是用户<strong>唯一会主动标记信息</strong>的入口。我们用 AI 把<span class="hl-blue">主动标记 + 浏览行为 + 内容理解</span>三层数据，加工成 Agent 时代<strong>最高信噪比的上下文流</strong>，反哺元宝自研模型与全矩阵产品。
+    </div>
+    <div class="tldr-perspectives">
+      <div class="persp">
+        <div class="who">用户视角</div>
+        <div class="what">第一次有一个浏览器能"记住我看过什么、想过什么、决定了什么"</div>
+      </div>
+      <div class="persp">
+        <div class="who">模型视角</div>
+        <div class="what">第一次拿到经过用户授权、用户校准、有结构的真实使用数据</div>
+      </div>
+      <div class="persp">
+        <div class="who">战略视角</div>
+        <div class="what">6 个工具捕捉上下文，所有数据汇入「记得住」，构成元宝模型护城河</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc">
+    <div class="toc-title">导航</div>
+    <ul class="toc-list">
+      <li><a href="#s1"><span class="n">1</span>用户痛点</a></li>
+      <li><a href="#s2"><span class="n">2</span>用户规模</a></li>
+      <li><a href="#s3"><span class="n">3</span>竞品分析</a></li>
+      <li><a href="#s4"><span class="n">4</span>我们的解法</a></li>
+      <li><a href="#s5"><span class="n">5</span>质量锚点</a></li>
+      <li><a href="#s6"><span class="n">6</span>市场盘子</a></li>
+      <li><a href="#s7"><span class="n">7</span>资源与节奏</a></li>
+      <li><a href="#fp"><span class="n">F</span>功能盘点</a></li>
+      <li><a href="#dec"><span class="n">D</span>待决策项</a></li>
+      <li><a href="#hook"><span class="n">★</span>一句话钩子</a></li>
+    </ul>
+  </div>
+
+  <!-- 1. 痛点 -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-num">1</div>
+      <div>
+        <div class="section-title">用户痛点</div>
+        <div class="section-sub">决策目的：决定我们要下多猛的药</div>
+      </div>
+    </div>
+
+    <p><strong>抽象痛点</strong>：用户每天在浏览器里产生大量信息（看过、收藏、复制、搜索），但<span class="hl">沉淀不下来、找不回来、AI 用不上</span>。</p>
+
+    <h3>三个具体场景</h3>
+
+    <h4>场景 1 · 看过的找不回</h4>
+    <ul class="quote-list">
+      <li>上周看到一篇好文章，今天想引用，怎么也搜不到</li>
+      <li>我明明收藏了，但收藏夹打开后一片混乱，根本找不到</li>
+    </ul>
+
+    <h4>场景 2 · 收藏 = 黑洞</h4>
+    <ul class="quote-list">
+      <li>我的收藏夹有 800 个网页，从来没回看过</li>
+      <li>收藏就是为了不再焦虑，然后再也不会看</li>
+    </ul>
+
+    <h4>场景 3 · AI 不知道我</h4>
+    <ul class="quote-list">
+      <li>ChatGPT 每次都从零开始，我看过的资料它都不知道</li>
+      <li>想让 AI 帮我总结我读过的资料，但没法把几十个网页喂给它</li>
+    </ul>
+
+    <div class="pending">
+      <strong>⚠️ 待补 · 真实用户原话</strong><br>
+      • QQ 浏览器用户洞察平台 · 收藏夹相关访谈片段（nicole · 6/3 上午到货）<br>
+      • 宏宇《PC端AI助手调研》《PC浏览器网页+AI能力调研》《AI插件调研报告》三份文档（已发链接，6/3 精读）<br>
+      • nicole 一周搭车访谈中关于"页面捕捉→收藏→AI应用"主链路反馈
+    </div>
+
+    <h3>痛到什么程度 = 该下多猛的药</h3>
+    <ul>
+      <li>收藏行为发生频次<strong>高</strong>（QB 收藏 DAU 待 carbon 拉数）</li>
+      <li>但回看率<strong>极低</strong>（行业经验值 &lt; 10%）</li>
+      <li>AI 时代用户对<span class="hl">"被 AI 理解"</span>的诉求从无到有，是浏览器从未满足过的全新需求</li>
+      <li>→ <strong class="hl">解法力度：不是优化收藏夹，是重新定义浏览器的记忆层</strong></li>
+    </ul>
+  </div>
+
+  <!-- 2. 用户规模 -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-num">2</div>
+      <div>
+        <div class="section-title">用户规模</div>
+        <div class="section-sub">决策目的：值不值得现在做、投多少</div>
+      </div>
+    </div>
+
+    <h3>QQ 浏览器现有基数</h3>
+    <ul>
+      <li>MAU <strong>~1.4 亿</strong>（公开数据，待校准）</li>
+      <li>月活收藏用户：<span class="hl-red">⚠️ 待 carbon 拉数据</span>（书签复访当次留存 78.3% 已有）</li>
+      <li>PC + 移动双端覆盖</li>
+    </ul>
+
+    <h3>对标市场规模（国内+海外独立工具）</h3>
+    <table>
+      <thead>
+        <tr><th>产品</th><th>类型</th><th>规模</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Pocket</td><td>海外 · 跨端稍后读</td><td>千万级 MAU（已被 Mozilla 关停，留下空窗）</td></tr>
+        <tr><td>Notion Web Clipper</td><td>海外 · 收藏+笔记</td><td>Notion 全量 ~3000 万 MAU</td></tr>
+        <tr><td>Raindrop</td><td>海外 · 标签型收藏</td><td>百万级，付费率高</td></tr>
+        <tr><td>Cubox</td><td>国内 · AI 摘要收藏</td><td>数十万 MAU，订阅制</td></tr>
+        <tr><td>即刻收藏</td><td>国内 · 社交化收藏</td><td>即刻 ~500 万 MAU 子功能</td></tr>
+        <tr><td>微信收藏</td><td>国内 · 大众收藏</td><td>微信 13 亿，收藏渗透待估</td></tr>
+      </tbody>
+    </table>
+
+    <h3>潜在用户规模</h3>
+    <ul>
+      <li><strong>短期</strong>：QB MAU × 收藏行为渗透率 × AI 接受度 ≈ <span class="hl">数千万级潜在用户</span></li>
+      <li><strong>中期</strong>：元宝矩阵 DAU（6 产品合计目标）× 资产沉淀场景渗透</li>
+      <li><strong>长期</strong>：<span class="hl-blue">所有 AI 浏览器战场的"记忆战"</span> — Chrome、Edge、Arc（已凉）、Dia、Atlas、Tabbit 都还没赢的战场</li>
+    </ul>
+
+    <h3>优先级判断</h3>
+    <ul>
+      <li>用户基数足够大（QB 数千万级） → <span class="hl-green">值得现在做</span></li>
+      <li>单产品价值之外还有矩阵协同（喂模型、跨产品上下文） → <span class="hl-green">战略价值 >> 功能价值</span></li>
+      <li>海外独立工具无 AI 加持仍能跑出千万级 → <span class="hl-green">我们叠 AI 上限更高</span></li>
+    </ul>
+  </div>
+
+  <!-- 3. 竞品分析 -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-num">3</div>
+      <div>
+        <div class="section-title">竞品分析</div>
+        <div class="section-sub">决策目的：打开思路 · 降低试错成本（国内 + 海外）</div>
+      </div>
+    </div>
+
+    <h3>国内</h3>
+    <div class="compete-grid">
+      <div class="compete-card">
+        <div class="cname">夸克 / 360 浏览器收藏<span class="ctag">国内</span></div>
+        <div class="line"><span class="y">✓</span> 用户基数大、跨端通</div>
+        <div class="line"><span class="n">✗</span> 纯文件夹、零 AI、无心智</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">Cubox<span class="ctag">国内</span></div>
+        <div class="line"><span class="y">✓</span> AI 摘要好用、UI 干净、跨端流畅</div>
+        <div class="line"><span class="n">✗</span> 订阅贵（¥168/年起）、基数小、非浏览器原生</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">即刻收藏<span class="ctag">国内</span></div>
+        <div class="line"><span class="y">✓</span> 移动端轻、社交化</div>
+        <div class="line"><span class="n">✗</span> 无 AI 整理、跨端弱、没有 PC</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">微信收藏<span class="ctag">国内</span></div>
+        <div class="line"><span class="y">✓</span> 用户基数全国最大</div>
+        <div class="line"><span class="n">✗</span> 零检索、不能分类、零智能</div>
+      </div>
+    </div>
+
+    <h3>海外</h3>
+    <div class="compete-grid">
+      <div class="compete-card">
+        <div class="cname">Arc Browser<span class="ctag">海外</span></div>
+        <div class="line"><span class="y">✓</span> Easels 形态创新、Spaces 把浏览组织化、设计极强</div>
+        <div class="line"><span class="n">✗</span> 用户量小、商业失败、已死</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">Dia Browser<span class="ctag">海外</span></div>
+        <div class="line"><span class="y">✓</span> "和浏览器对话" 范式、深度集成 LLM</div>
+        <div class="line"><span class="n">✗</span> 未公开发布、海外限定、生态零</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">Atlas Browser<span class="ctag">海外</span></div>
+        <div class="line"><span class="y">✓</span> AI Tab Groups、Smart Bookmarks</div>
+        <div class="line"><span class="n">✗</span> 新产品、规模小、验证未完成</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">Tabbit<span class="ctag">海外</span></div>
+        <div class="line"><span class="y">✓</span> 垂直做标签页智能管理、单点深</div>
+        <div class="line"><span class="n">✗</span> 太窄、非完整浏览器</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">Gemini in Chrome<span class="ctag">海外</span></div>
+        <div class="line"><span class="y">✓</span> Google 全家桶数据通、模型强、记忆体系成熟</div>
+        <div class="line"><span class="n">✗</span> 国内无法用，无法迁移</div>
+      </div>
+      <div class="compete-card">
+        <div class="cname">Pocket（已停运）<span class="ctag">海外</span></div>
+        <div class="line"><span class="y">✓</span> 跨端、用户习惯沉淀 10+ 年</div>
+        <div class="line"><span class="n">✗</span> AI 弱、商业失败被关停 → <strong>留下市场空窗</strong></div>
+      </div>
+    </div>
+
+    <h3>核心结论 · 4 个市场启示</h3>
+    <ol>
+      <li>国内独立工具：Cubox 验证了 "AI 摘要 + 标签整理" 有付费意愿，但<strong>没人在浏览器原生场景里做</strong></li>
+      <li>海外创新派：Arc/Dia/Atlas 都在尝试 "AI 原生浏览器"，但<strong>都没解决"记忆"这一层</strong></li>
+      <li>Gemini in Chrome 路径对，但国内用不了 → <strong class="hl">国内 AI 原生浏览器的记忆层是空地</strong></li>
+      <li>微信/夸克用户多但没做智能 → <strong>存量市场可被颠覆</strong></li>
+    </ol>
+
+    <h3>我们的差异化机会</h3>
+    <ul>
+      <li><strong>浏览器原生场景</strong>（vs Cubox 这类独立工具）</li>
+      <li><strong>用户主动标记 = 高信噪比</strong>（vs 纯 AI 自动总结）</li>
+      <li><strong>元宝矩阵协同</strong>（vs 单一产品 Arc/Dia）</li>
+    </ul>
+  </div>
+
+  <!-- 4. 解法 -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-num">4</div>
+      <div>
+        <div class="section-title">我们的解法</div>
+        <div class="section-sub">决策目的：评估方案好不好用</div>
+      </div>
+    </div>
+
+    <p><strong>不是 "AI 收藏夹"，是「记得住」三件套：</strong></p>
+
+    <div class="solution-block">
+      <div class="stitle">4.1 输入侧 · 轻量手势捕捉（让标记成本接近 0）</div>
+      <p>5 类资产统一捕捉：</p>
+      <ul>
+        <li><strong>页面级</strong>：整页收藏（一键 / 自动）</li>
+        <li><strong>片段级</strong>：划词摘录（手势触发，所见即所得）</li>
+        <li><strong>图片</strong>：长按收藏，自动打标</li>
+        <li><strong>文件</strong>：下载即沉淀，与浏览历史关联</li>
+        <li><strong>AI 对话</strong>：跟元宝对话的关键片段一键沉淀</li>
+      </ul>
+      <div class="core-mind">
+        💡 核心心智：用户不是"在收藏"，是"在标记 ground truth" — 告诉 AI "这个对我重要"
+      </div>
+    </div>
+
+    <div class="solution-block">
+      <div class="stitle">4.2 加工侧 · AI 三件套（让沉淀自动有序）</div>
+      <ul>
+        <li><strong>自动打标</strong>：基于内容 + 浏览行为打多维标签（领域 / 用途 / 重要性 / 时效）</li>
+        <li><strong>自动摘要</strong>：每条资产自动生成 1 句摘要 + 1 段精读</li>
+        <li><strong>自动聚类</strong>：相似/相关内容自动归组（基于嵌入向量 + 行为相关性）</li>
+      </ul>
+    </div>
+
+    <div class="solution-block">
+      <div class="stitle">4.3 召回侧 · 三种"召唤过往"形态</div>
+      <ul>
+        <li><strong>主动召回</strong>：用户在做事时（浏览/搜索/对话），AI 自动从过往资产中推送相关内容</li>
+        <li><strong>被动检索</strong>：用户主动问 "我之前看的那个 X" → AI 检索召回</li>
+        <li><strong>场景注入</strong>：用户跟元宝对话时，过往资产作为 context 自动注入 prompt</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. 质量锚点 -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-num">5</div>
+      <div>
+        <div class="section-title">质量锚点（"做得好"的定义）</div>
+        <div class="section-sub">决策目的：找到质量的锚点 · 可被文字明确定义的好标准</div>
+      </div>
+    </div>
+
+    <p>三个可验证的"好"标准：</p>
+
+    <div class="anchor-grid">
+      <div class="anchor-block behavior">
+        <div class="ahead">📊 5.1 用户行为锚点（说明用户真的在用）</div>
+        <ul>
+          <li><strong>主动标记 DAU</strong>：用户每周自然主动标记 ≥ 3 次（无运营激励）</li>
+          <li><strong>召回率</strong>：每周从过往资产被 AI 唤起使用 ≥ 1 次</li>
+          <li><strong>留存</strong>：3 个月后仍活跃使用「记得住」的用户 ≥ 40%</li>
+        </ul>
+      </div>
+
+      <div class="anchor-block ai">
+        <div class="ahead">🤖 5.2 AI 体验锚点（说明 AI 真的有用）</div>
+        <ul>
+          <li><strong>召回准确率</strong>：用户主动检索时 top-3 命中率 ≥ 70%</li>
+          <li><strong>打标准确率</strong>：用户对 AI 自动打标的认可度 ≥ 80%（不主动修改）</li>
+          <li><strong>摘要质量</strong>：用户对摘要满意度 ≥ 4/5</li>
+        </ul>
+      </div>
+
+      <div class="anchor-block strategic">
+        <div class="ahead">⭐ 5.3 矩阵协同锚点（说明战略价值兑现）</div>
+        <ul>
+          <li><strong>元宝主模型在用户授权后，使用浏览器记忆的次数 ≥ 5 次/月/活跃用户</strong></li>
+          <li><strong>跨产品调用</strong>：录音笔/翻译/文件等其他产品调用浏览器记忆数据的次数和占比</li>
+          <li><strong>模型训练贡献</strong>：每月新增高质量上下文数据量（脱敏后供模型训练）</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>为什么这套锚点强</h3>
+    <ul>
+      <li>既看用户价值（5.1 / 5.2）也看战略价值（5.3）</li>
+      <li>每条都是<strong>可数字化、可被陈颖/汉博/Lori 在汇报里复述</strong>的指标</li>
+      <li>跟汉博 docx 里 <span class="hl">"捕捉上下文喂自研模型"</span> 完全对齐</li>
+    </ul>
+  </div>
+
+  <!-- 6. 数量锚点 -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-num">6</div>
+      <div>
+        <div class="section-title">市场盘子（数量锚点）</div>
+        <div class="section-sub">决策目的：看清能占据多大市场规模</div>
+      </div>
+    </div>
+
+    <h3>短期（MVP · 8 月初）</h3>
+    <ul>
+      <li>目标用户基数：QB 现有月活收藏用户（数千万级）× 转化 30%（行业经验值）</li>
+      <li>≈ <strong>千万级 MAU 触达</strong></li>
+      <li>留存目标：3 个月留存 ≥ 40%</li>
+    </ul>
+
+    <h3>中期（V1-V2 · 年底）</h3>
+    <ul>
+      <li>元宝矩阵 6 产品累计 DAU × 资产沉淀场景渗透</li>
+      <li>跨产品上下文调用：每月 ≥ <strong>10 亿次</strong>（保守估算）</li>
+      <li>元宝主模型调用浏览器记忆数据次数：每月 ≥ <strong>1 亿次</strong></li>
+    </ul>
+
+    <h3>长期（明年 H1）</h3>
+    <ul>
+      <li>抢占国内 <span class="hl">"AI 浏览器记忆战"第一心智</span></li>
+      <li>对标 Pocket 关停后留下的千万级海外市场空窗</li>
+      <li>海外用户增长（参考已配置海外通道）</li>
+    </ul>
+
+    <h3>不做会丢失什么</h3>
+    <ul>
+      <li><span class="hl-red">失去元宝矩阵的上下文飞轮</span> → 自研模型失去最干净的训练数据源</li>
+      <li><span class="hl-red">失去 AI 浏览器记忆战的入场券</span> → Dia/Atlas/Gemini in Chrome 全部抢先</li>
+      <li>浏览器从 "流量入口" 沦为 "内容消费工具"，长期被工具型 Chatbot 替代</li>
+    </ul>
+  </div>
+
+  <!-- 7. 资源与节奏 -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-num">7</div>
+      <div>
+        <div class="section-title">资源与节奏</div>
+        <div class="section-sub">决策目的：讲清楚需要的支持 · 掌握可控的推进节奏</div>
+      </div>
+    </div>
+
+    <h3>当前资源（按资源盘点）</h3>
+    <ul>
+      <li><strong>产品</strong>：游杰 1 人（记得住主线）</li>
+      <li><strong>算法</strong>：1 位 Agent 算法 + 2 位 RAG/检索算法 + 1 位多模态&页面理解（共享团队）</li>
+      <li><strong>工程</strong>：依赖琛哥底座团队（资产存储 + 跨端同步 + 账号互通） + 应用层 RAG 引擎工程师</li>
+      <li><strong>设计</strong>：姝然 1 位（共享团队）</li>
+      <li><strong>测评</strong>：云光 + cyy 曹炎炎</li>
+    </ul>
+
+    <h3>关键依赖（必须对齐）</h3>
+    <ul>
+      <li><span class="hl-red">🔴 琛哥底座</span>：7 月中旬 L0/L1/L2 接口冻结（已对齐，待正式契约文档）</li>
+      <li><span class="hl">🟡 算法侧 RAG</span>：6 月底基础召回链路就绪</li>
+      <li><span class="hl">🟡 跨产品授权机制</span>：MVP 暂不做，V2 启动</li>
+      <li><span class="hl-green">🟢 用户调研</span>：nicole + 宏宇 三份存货 + 一周搭车访谈</li>
+    </ul>
+
+    <h3>节奏锚点</h3>
+    <div class="timeline">
+      <div class="ti"><div class="when">6 月底</div><div class="what">底座 mock 可联调 + RAG 基础召回 ready + 用户调研报告闭环</div></div>
+      <div class="ti milestone"><div class="when">7 月中旬</div><div class="what">底座接口冻结 + MVP 功能开发完成</div></div>
+      <div class="ti"><div class="when">7 月下旬</div><div class="what">全链路联调 + 性能压测 + 灰度发布</div></div>
+      <div class="ti milestone"><div class="when">8 月初</div><div class="what">MVP 公测上线</div></div>
+      <div class="ti"><div class="when">10 月</div><div class="what">V1（聚类整理 + 跨端同步全部 ready）</div></div>
+      <div class="ti milestone"><div class="when">年底</div><div class="what">V2（跨产品上下文 + 元宝矩阵协同）</div></div>
+    </div>
+
+    <h3>风险与预警</h3>
+    <ul>
+      <li><span class="hl-red">🔴 底座延期</span>：若琛哥 L1/L2 延期到 7 月下旬，MVP 必延期，已设红线</li>
+      <li><span class="hl">🟡 算法效果不达标</span>：召回率 &lt; 60% 严重影响体验，需算法侧承诺保底</li>
+      <li><span class="hl">🟡 跨产品授权法务</span>：V2 涉及跨产品数据互通，需提前 1 个月拉法务对齐</li>
+    </ul>
+  </div>
+
+  <!-- 功能盘点 -->
+  <div class="section" id="fp">
+    <div class="section-header">
+      <div class="section-num">F</div>
+      <div>
+        <div class="section-title">功能盘点</div>
+        <div class="section-sub">七要素的承接 · 每个功能反向链接到七要素哪一条</div>
+      </div>
+    </div>
+
+    <h3>MVP（8 月初上线）</h3>
+    <table>
+      <thead>
+        <tr><th>功能模块</th><th>具体功能</th><th>对应要素</th><th>优先级</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>轻量捕捉</td><td>一键收藏整页 / 划词摘录手势 / 长按收藏图片</td><td>要素 4.1</td><td class="pri-p0">P0</td></tr>
+        <tr><td>AI 打标</td><td>自动打标（领域/用途/时效）</td><td>要素 4.2</td><td class="pri-p0">P0</td></tr>
+        <tr><td>AI 摘要</td><td>每条资产 1 句摘要</td><td>要素 4.2</td><td class="pri-p0">P0</td></tr>
+        <tr><td>5 类资产统一阵地</td><td>书签/图片/文件/摘录/AI 对话 5 个 Tab</td><td>要素 4.1 + 4.3</td><td class="pri-p0">P0</td></tr>
+        <tr><td>基础检索</td><td>关键词检索 + 标签筛选</td><td>要素 4.3</td><td class="pri-p0">P0</td></tr>
+        <tr><td>跨端同步</td><td>PC ↔ 移动端实时同步（依赖琛哥底座）</td><td>要素 4 整体</td><td class="pri-p0">P0</td></tr>
+        <tr><td>死链清理</td><td>410/451/DNS NXDOMAIN 一期清理</td><td>数据质量</td><td class="pri-p1">P1</td></tr>
+      </tbody>
+    </table>
+
+    <h3>V1（10 月）</h3>
+    <table>
+      <thead>
+        <tr><th>功能模块</th><th>具体功能</th><th>对应要素</th><th>优先级</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AI 聚类</td><td>自动归组（嵌入向量+行为相关性）</td><td>要素 4.2</td><td class="pri-p0">P0</td></tr>
+        <tr><td>AI 主动召回</td><td>用户浏览/搜索时自动推送相关旧资产</td><td>要素 4.3</td><td class="pri-p0">P0</td></tr>
+        <tr><td>场景注入</td><td>元宝对话时过往资产自动注入 prompt</td><td>要素 4.3 + 5.3</td><td class="pri-p0">P0</td></tr>
+        <tr><td>用户主动校准</td><td>一键修正 AI 打标 / 一键打分</td><td>数据质量 + 5.2</td><td class="pri-p1">P1</td></tr>
+      </tbody>
+    </table>
+
+    <h3>V2（年底）</h3>
+    <table>
+      <thead>
+        <tr><th>功能模块</th><th>具体功能</th><th>对应要素</th><th>优先级</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>跨产品上下文</td><td>录音笔/翻译/文件调用浏览器记忆</td><td>要素 5.3 战略锚点</td><td class="pri-p0">P0</td></tr>
+        <tr><td>跨产品授权机制</td><td>用户主动授权 + 法务合规</td><td>5.3 前置条件</td><td class="pri-p0">P0</td></tr>
+        <tr><td>模型训练数据回流</td><td>脱敏数据回流自研模型</td><td>5.3 战略锚点</td><td class="pri-p0">P0</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 待决策项 -->
+  <div class="section" id="dec">
+    <div class="section-header">
+      <div class="section-num">D</div>
+      <div>
+        <div class="section-title">三个待决策项</div>
+        <div class="section-sub">请陈颖 / 汉博 / 琛哥拍板</div>
+      </div>
+    </div>
+
+    <table class="decision-table">
+      <thead>
+        <tr><th>#</th><th>决策点</th><th>我的倾向</th><th>影响</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>「记得住」MVP 是否独立 Tab（vs 嵌入现有书签 Tab）</td>
+          <td>独立 5 Tab 阵地</td>
+          <td>用户心智清晰度</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>索引层（L3）归属：琛哥底座做 vs 我自建</td>
+          <td>琛哥底座做</td>
+          <td>长期可复用 · 元宝矩阵共享</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>V2 跨产品授权机制何时启动</td>
+          <td>V2 启动</td>
+          <td>法务前置准备时间</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- HOOK -->
+  <div class="hook-card" id="hook">
+    <div class="hook-label">★ 一句话钩子（请陈颖在汇报时复述）</div>
+    <div class="hook-text">
+      「记得住」不是 AI 收藏夹<br>
+      是用户主动校准的高信噪比上下文流<br>
+      它让浏览器从流量入口升级为元宝的记忆中枢
+    </div>
+  </div>
+
+  <div class="footer">
+    游杰 · 元宝浏览器「记得住」主线<br>
+    用户调研依据：nicole + 宏宇 用研存货（待 6/3 上午 review 后补齐）<br>
+    接口需求详情：见《元宝浏览器「记得住」对底座的接口需求》（已交付琛哥）<br>
+    战略对齐：与汉博 6/2 早会 + 元宝产品矩阵 docx 完全对齐
+  </div>
+
+</div>
+</body>
+</html>
