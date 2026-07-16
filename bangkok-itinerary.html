@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#5b6cff" />
+<title>曼谷 4 日漫游 · 行程规划</title>
+<!-- Leaflet（开源，无需 Key）+ CartoDB Positron 清爽底图 -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  :root{
+    --indigo:#5B6CFF; --coral:#FF7A59; --purple:#9B5DE5; --teal:#2EC4B6;
+    --ink:#0a1f44; --muted:#5b6b8c; --line:#e6ebf3; --card:#ffffff;
+    --bg:#f5f8fc; --shadow:0 4px 18px rgba(20,40,80,.07);
+    --shadow-hi:0 10px 30px rgba(91,108,255,.18);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",Helvetica,Arial,sans-serif;
+    background:
+      radial-gradient(1200px 500px at 12% -8%, rgba(91,108,255,.12), transparent 60%),
+      radial-gradient(1000px 480px at 100% 0%, rgba(155,93,229,.12), transparent 55%),
+      var(--bg);
+    color:var(--ink); -webkit-font-smoothing:antialiased; min-height:100vh;
+    -webkit-text-size-adjust:100%; text-size-adjust:100%;
+  }
+  a{color:inherit}
+
+  /* ===== Banner ===== */
+  .banner{
+    position:relative; overflow:hidden;
+    background:linear-gradient(125deg,#5b6cff 0%,#7b5bff 42%,#a855f7 72%,#f06ec0 100%);
+    color:#fff; padding:34px 30px 30px; margin:18px 18px 0; border-radius:22px;
+    box-shadow:var(--shadow-hi);
+  }
+  .banner::after{
+    content:""; position:absolute; right:-60px; top:-80px; width:320px; height:320px;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 60%);
+    filter:blur(8px); opacity:.6;
+  }
+  .banner-inner{position:relative; z-index:2; display:flex; justify-content:space-between; align-items:flex-start; gap:24px; flex-wrap:wrap}
+  .b-title{font-size:42px; font-weight:800; letter-spacing:-.5px; line-height:1.05; margin:0}
+  .b-sub{margin:10px 0 0; font-size:15px; opacity:.92; max-width:560px; line-height:1.6}
+  .b-host{
+    display:inline-flex; align-items:center; gap:7px; margin-top:14px;
+    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.28);
+    padding:6px 12px; border-radius:999px; font-size:13px; backdrop-filter:blur(4px);
+  }
+  .badges{display:flex; gap:12px; flex-wrap:wrap}
+  .badge{
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.30);
+    border-radius:16px; padding:12px 16px; min-width:84px; text-align:center; backdrop-filter:blur(6px);
+  }
+  .badge .n{font-size:24px; font-weight:800; line-height:1}
+  .badge .l{font-size:12px; opacity:.9; margin-top:6px; letter-spacing:.5px}
+
+  /* ===== Tabs ===== */
+  .tabs{display:flex; gap:10px; padding:20px 18px 4px; flex-wrap:wrap}
+  .tab{
+    cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--muted);
+    padding:11px 18px; border-radius:14px; font-size:15px; font-weight:700; transition:.18s;
+    box-shadow:var(--shadow);
+  }
+  .tab small{display:block; font-size:11px; font-weight:600; opacity:.75; margin-top:3px}
+  .tab:hover{transform:translateY(-1px)}
+  .tab.active{
+    color:#fff; border-color:transparent;
+    background:linear-gradient(120deg,var(--indigo),var(--purple));
+    box-shadow:var(--shadow-hi);
+  }
+
+  /* 移动端「列表 / 地图」分段切换（仅小屏显示） */
+  .view-switch{display:none}
+
+  /* ===== Layout ===== */
+  .layout{display:flex; gap:18px; padding:14px 18px 28px; align-items:flex-start}
+  .timeline{flex:1 1 0; min-width:0}
+  .map-panel{
+    flex:0 0 46%; position:sticky; top:18px; align-self:stretch;
+    background:#fff; border:1px solid var(--line); border-radius:20px; overflow:hidden;
+    box-shadow:var(--shadow); display:flex; flex-direction:column;
+  }
+  .map-head{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:12px 16px; border-bottom:1px solid var(--line); background:#fbfcfe;
+  }
+  .map-head .mh-title{font-weight:800; font-size:15px}
+  .map-head .mh-sub{font-size:12px; color:var(--muted); margin-top:2px}
+  .legend{display:flex; gap:12px; flex-wrap:wrap}
+  .legend span{display:inline-flex; align-items:center; gap:5px; font-size:12px; color:var(--muted); font-weight:600}
+  .legend i{width:10px; height:10px; border-radius:50%; display:inline-block}
+  #map{width:100%; height:74vh; min-height:520px; background:#eef2f8}
+  /* Leaflet 覆盖物重置 */
+  .leaflet-div-icon{background:transparent; border:none}
+  .poi-pin{background:transparent; border:none}
+  .leaflet-popup-content-wrapper{border-radius:14px; box-shadow:0 8px 30px rgba(20,40,80,.18)}
+  .leaflet-popup-content{margin:12px 14px; font-family:-apple-system,"PingFang SC",sans-serif}
+  .leaflet-container{font-family:-apple-system,"PingFang SC",sans-serif}
+  .map-fallback{
+    height:74vh; min-height:520px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:30px; gap:14px; color:var(--muted);
+  }
+  .map-fallback .ico{font-size:46px}
+  .map-fallback code{background:#eef1f7; padding:4px 8px; border-radius:8px; color:var(--indigo); font-size:13px}
+  .map-fallback a{color:var(--indigo); font-weight:700}
+
+  /* ===== Timeline cards ===== */
+  .day-head{margin:6px 2px 14px}
+  .day-head h2{margin:0; font-size:22px; font-weight:800; letter-spacing:-.3px}
+  .day-head p{margin:6px 0 0; color:var(--muted); font-size:13.5px; line-height:1.55}
+
+  .tl{position:relative; margin-left:8px; padding-left:26px}
+  .tl::before{content:""; position:absolute; left:7px; top:6px; bottom:6px; width:2px; background:linear-gradient(var(--indigo),var(--purple),var(--teal)); opacity:.35}
+
+  .tl-card{
+    position:relative; background:var(--card); border:1px solid var(--line); border-radius:16px;
+    padding:14px 16px; margin-bottom:14px; box-shadow:var(--shadow); cursor:pointer; transition:.18s;
+  }
+  .tl-card::before{
+    content:""; position:absolute; left:-26px; top:20px; width:14px; height:14px; border-radius:50%;
+    background:var(--cat,#5B6CFF); border:3px solid #fff; box-shadow:0 0 0 2px var(--cat,#5B6CFF);
+  }
+  .tl-card:hover{transform:translateX(3px); box-shadow:var(--shadow-hi)}
+  .tl-card.active{border-color:var(--cat,#5B6CFF); box-shadow:0 0 0 3px color-mix(in srgb, var(--cat,#5B6CFF) 22%, transparent)}
+
+  .tl-top{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+  .tl-time{font-weight:800; font-size:15px; color:var(--ink); font-variant-numeric:tabular-nums}
+  .pill{font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:999px; color:#fff; background:var(--cat)}
+  .tl-dur{font-size:12px; color:var(--muted); margin-left:auto}
+  .tl-name{font-size:17px; font-weight:800; margin:9px 0 4px; letter-spacing:-.2px}
+  .tl-en{font-size:12px; color:var(--muted); font-weight:600; margin-bottom:7px}
+  .tl-desc{font-size:13.5px; color:#3a4a68; line-height:1.62}
+  .tl-go{margin-top:10px; font-size:12.5px; font-weight:700; color:var(--cat); display:inline-flex; align-items:center; gap:5px}
+
+  .foot{padding:6px 18px 40px; color:var(--muted); font-size:12px; text-align:center; line-height:1.7}
+  .foot b{color:var(--ink)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+  @media (max-width:920px){
+    .banner{padding:24px 18px 22px; margin:12px 12px 0}
+    .b-title{font-size:30px}
+    .b-sub{font-size:13.5px}
+    .badges{gap:8px}
+    .badge{min-width:74px; padding:10px 12px}
+    .badge .n{font-size:20px}
+    .layout{flex-direction:column; padding:12px 12px 24px; gap:0}
+    .timeline{width:100%}
+    .map-panel{position:relative; top:0; width:100%; margin-top:14px}
+    #map,.map-fallback{height:50vh; min-height:380px}
+  }
+
+  @media (max-width:768px){
+    /* 顶部常驻分段切换 */
+    .view-switch{
+      display:flex; gap:8px; padding:10px 14px; position:sticky; top:0; z-index:30;
+      background:rgba(245,248,252,.93); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .view-switch button{
+      flex:1; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--muted);
+      padding:11px; border-radius:12px; font-size:14px; font-weight:700; transition:.18s; font-family:inherit;
+    }
+    .view-switch button.active{
+      color:#fff; border-color:transparent;
+      background:linear-gradient(120deg,var(--indigo),var(--purple)); box-shadow:var(--shadow-hi);
+    }
+    /* Tab 横向滚动 */
+    .tabs{flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; padding:14px 14px 6px}
+    .tabs::-webkit-scrollbar{display:none}
+    .tab{flex:0 0 auto}
+    /* 列表 / 地图 二选一显示 */
+    body.m-view-list .map-panel{display:none}
+    body.m-view-map  .timeline{display:none}
+    .map-panel{margin-top:0; border-radius:20px}
+    #map,.map-fallback{height:calc(100vh - 150px); min-height:420px}
+    @supports (height:100dvh){ #map,.map-fallback{height:calc(100dvh - 150px)} }
+    /* 横幅堆叠 */
+    .banner-inner{flex-direction:column; gap:14px}
+    .badges{width:100%; justify-content:space-between}
+    .badge{flex:1}
+    .b-title{font-size:27px}
+    .b-host{font-size:12px}
+    /* 时间轴微调 */
+    .tl{padding-left:22px}
+    .tl-card::before{left:-22px; top:18px}
+    .tl-name{font-size:16px}
+    .tl-card{padding:13px 14px; margin-bottom:12px}
+    .day-head h2{font-size:20px}
+  }
+</style>
+</head>
+<body>
+
+  <header class="banner">
+    <div class="banner-inner">
+      <div>
+        <h1 class="b-title">曼谷 4 日漫游</h1>
+                      </div>
+      </header>
+
+  <nav class="tabs" id="tabs"></nav>
+  <nav class="view-switch" id="viewSwitch">
+    <button data-view="list" class="active">📋 行程列表</button>
+    <button data-view="map">🗺️ 地图导航</button>
+  </nav>
+
+  <main class="layout">
+    <section class="timeline">
+      <div class="day-head" id="day-head"></div>
+      <div class="tl" id="tl"></div>
+    </section>
+
+    <aside class="map-panel">
+      <div class="map-head">
+        <div>
+          <div class="mh-title" id="map-title">行程地图</div>
+          <div class="mh-sub">点击左侧卡片，地图飞抵对应地点</div>
+        </div>
+        </div>
+      <div id="map"></div>
+    </aside>
+  </main>
+
+  <div class="foot">
+    数据由 Leaflet + CartoDB 开源底图渲染 · 坐标均为真实地理定位，连线按当日时间顺序。<br/>
+    预算为单人估算（฿9,500 ≈ ¥1,900，不含机票住宿），实际以当场消费为准。
+  </div>
+
+<script>
+/* 底图：Leaflet + CartoDB Positron（开源，无需 Key，全球覆盖） */
+
+const CATS = {
+  "景点": { color:"#5B6CFF" },
+  "美食": { color:"#FF7A59" },
+  "文化": { color:"#9B5DE5" },
+  "购物": { color:"#2EC4B6" },
+  "✈️机场": { color:"#64748b" },
+  "🏨酒店": { color:"#94a3b8" }
+};
+
+const DAYS = [
+  {
+    name:"7/17 周五",
+    title:"抵达 · 换汇早市 → 是隆夜生活",
+    sub:"凌晨落地，白天休整换汇逛早市，傍晚按 spa → 夜市 → 是隆 Soi 2 的节奏开夜。",
+    pois:[
+      { t:"06:00", dur:"飞行落地", cat:"✈️机场", name:"廊曼机场 T1", en:"Don Mueang Airport (DMK)", lat:13.9125, lng:100.6067,
+        desc:"泰国狮航 SL903 凌晨 03:30 深圳 T3 起飞，05:15 落地廊曼 T1。取行李后打车去酒店，约 45min–1h。" },
+      { t:"07:30", dur:"休整", cat:"🏨酒店", name:"抵达酒店·放行李", en:"Ascott Ambassador Bangkok", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"素坤逸核心，全天大本营。放行李、洗漱、换身舒服的再出门。" },
+      { t:"08:30", dur:"换汇", cat:"购物", name:"X One 换泰铢", en:"X One Currency Exchange", lat:13.7455, lng:100.5618,
+        desc:"步行可达的兑换点，汇率比机场好。换够几天现金——夜店、夜市多收现金。" },
+      { t:"09:30", dur:"早市", cat:"景点", name:"是隆早市", en:"Silom Morning Market", lat:13.7275, lng:100.5350,
+        desc:"是隆路上的本地早市，水果小吃日用品。顺手吃个泰式早餐，感受通勤前的曼谷。" },
+      { t:"12:00", dur:"回酒店", cat:"🏨酒店", name:"返回酒店歇脚", en:"Back to Hotel", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"中午回酒店避最晒的时段，歇一脚。" },
+      { t:"14:30", dur:"1.5h", cat:"文化", name:"JeySpa 按摩", en:"JeySpa", lat:13.7440, lng:100.5580,
+        desc:"14:30–16:00 泰式按摩，落地后松筋解乏，为夜晚蓄力。" },
+      { t:"16:00", dur:"回酒店", cat:"🏨酒店", name:"返回酒店·收拾", en:"Back to Hotel", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"回酒店洗澡换衣，准备夜出。" },
+      { t:"17:00", dur:"2.5h", cat:"景点", name:"朱拉隆功夜市", en:"Chulalongkorn Night Market", lat:13.7370, lng:100.5290,
+        desc:"17:00–19:30 朱拉隆功大学一带夜市，学生气浓、吃喝便宜。周五通常开（以现场为准）。" },
+      { t:"19:30", dur:"回酒店", cat:"🏨酒店", name:"返回酒店·补妆", en:"Back to Hotel", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"回酒店歇口气再出发夜场。" },
+      { t:"20:30", dur:"转场", cat:"文化", name:"ETD Bar（edu de toilette）", en:"ETD Bar", lat:13.7265, lng:100.5340,
+        desc:"20:30 起杯，同志区知名 bar，氛围松弛适合开场。" },
+      { t:"23:00", dur:"深夜", cat:"文化", name:"DJ Station / G.O.D", en:"DJ Station · G.O.D (Silom Soi 2)", lat:13.7268, lng:100.5345,
+        desc:"是隆 Soi 2 同志夜生活核心：DJ Station 传奇迪斯科 + G.O.D go-go bar 挨着一条街，深夜转场步行即达。" }
+    ]
+  },
+  {
+    name:"7/18 周六",
+    title:"711 采购 → 咖啡探店 → Krubb 桑拿 → club",
+    sub:"中午才起，先 11 补货再奔曼谷第一咖啡，喝完直接去桑拿不回酒店，深夜是隆 Soi 2。",
+    pois:[
+      { t:"11:00", dur:"出发", cat:"🏨酒店", name:"从酒店出发", en:"Leave Hotel", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"每天的第一站都是离开酒店出发。" },
+      { t:"11:30", dur:"采购", cat:"购物", name:"7-Eleven 采购", en:"7-Eleven", lat:13.7200, lng:100.5790,
+        desc:"先去 711 买水、零食、防晒、充电宝——曼谷 711 是宝藏便利店。" },
+      { t:"14:00", dur:"探店", cat:"美食", name:"Factory Coffee", en:"FACTORY COFFEE (Ekkamai)", lat:13.7220, lng:100.5810,
+        desc:"曼谷第一精品手冲，工业风探店，豆子出名。Ekkamai / Sukhumvit 63 一带。" },
+      { t:"15:30", dur:"午饭", cat:"美食", name:"附近午饭", en:"Lunch around Ekkamai", lat:13.7210, lng:100.5800,
+        desc:"咖啡后顺路吃顿饭，Ekkamai 餐厅咖啡馆密集。" },
+      { t:"17:00", dur:"5h", cat:"文化", name:"Krubb 桑拿", en:"Krubb Sauna", lat:13.7260, lng:100.5650,
+        desc:"17:00–22:00 同志桑拿（Silom/Sukhumvit 一带）。从 Ekkamai 直接过来不绕酒店。慢慢泡、Steam、社交，节奏自己控。" },
+      { t:"22:30", dur:"转场", cat:"文化", name:"DJ Station / G.O.D", en:"DJ Station · G.O.D (Silom Soi 2)", lat:13.7268, lng:100.5345,
+        desc:"晚些转场回是隆 Soi 2，club 收尾。" }
+    ]
+  },
+  {
+    name:"7/19 周日",
+    title:"CentralWorld 扫货 → 桑拿 → BoyCamp",
+    sub:"白天商圈逛街，傍晚 spa + 桑拿连轴，深夜是隆 Soi 4 酒吧收尾。",
+    pois:[
+      { t:"10:00", dur:"出发", cat:"🏨酒店", name:"从酒店出发", en:"Leave Hotel", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"每天从酒店出发开始新的一天。" },
+      { t:"12:00", dur:"逛街", cat:"景点", name:"Central World 商圈", en:"CentralWorld", lat:13.7465, lng:100.5385,
+        desc:"中午起到 Chidlom/Ratchadamri 商圈，CentralWorld + Siam 一带扫货吹空调，逛到 16:00。" },
+      { t:"16:00", dur:"回酒店", cat:"🏨酒店", name:"返回酒店·收拾", en:"Back to Hotel", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"16:00 回酒店，冲凉准备晚场。" },
+      { t:"17:00", dur:"1.5h", cat:"文化", name:"Residences Spa", en:"Residences Spa", lat:13.7450, lng:100.5600,
+        desc:"17:00–18:30 按摩放松，临近酒店方便。" },
+      { t:"18:30", dur:"转场", cat:"文化", name:"1/0 桑拿", en:"1/0 Sauna (Silom)", lat:13.7265, lng:100.5345,
+        desc:"同志桑拿，是隆区，和当晚其他点同簇。" },
+      { t:"21:00", dur:"深夜", cat:"文化", name:"BoyCamp 酒吧", en:"BoyCamp Bar (Silom Soi 4)", lat:13.7260, lng:100.5350,
+        desc:"是隆 Soi 4 同志酒吧，露天蹦跳驻唱，当晚收尾。" }
+    ]
+  },
+  {
+    name:"7/20 周一",
+    title:"离开 · 水上市场 → 绵绵冰 → 机场",
+    sub:"上午西岸水上市场，下午先吃 After You 再回酒店取行李，然后直奔机场。",
+    pois:[
+      { t:"09:00", dur:"出发", cat:"🏨酒店", name:"从酒店出发", en:"Leave Hotel", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"最后一天也从酒店出发。" },
+      { t:"10:00", dur:"4.5h", cat:"景点", name:"Khlong Bang Luang 水上市场", en:"Khlong Bang Luang Floating Market", lat:13.7405, lng:100.4665,
+        desc:"10:00–14:30 曼谷再三区真实水上市场（近 Bang Phai MRT 蓝线站），西岸老社区，文艺安静，画室与河岸咖啡。打车约 45min。" },
+      { t:"14:30", dur:"甜点", cat:"美食", name:"After You 绵绵冰", en:"After You Dessert Café", lat:13.7468, lng:100.5375,
+        desc:"从水上市场回来先去 After You 吃招牌绵绵冰 / 芒果糯米饭，多家分店（CentralWorld 附近顺路）。" },
+      { t:"15:30", dur:"取行李", cat:"🏨酒店", name:"返回酒店·取行李退房", en:"Back to Hotel · Checkout", lat:13.7468, lng:100.5608, skipPin:true,
+        desc:"吃完绵绵冰回酒店拿行李退房。" },
+      { t:"17:00", dur:"飞 18:30", cat:"✈️机场", name:"廊曼机场 T1", en:"Don Mueang Airport (DMK)", lat:13.9125, lng:100.6067,
+        desc:"17:00 到机场，泰国亚航 FD596 18:30 起飞，22:25 抵深圳 T3。预留值机托运时间。" }
+    ]
+  }
+];
+
+/* ---------- 渲染：徽章 / Tab ---------- */
+document.getElementById("bd-poi").textContent = DAYS.reduce((s,d)=>s+d.pois.length,0);
+const tabsEl = document.getElementById("tabs");
+DAYS.forEach((d,i)=>{
+  const b=document.createElement("div");
+  b.className="tab"+(i===0?" active":"");
+  b.innerHTML = d.name + "<small>"+d.pois.length+" 站</small>";
+  b.onclick=()=>setDay(i);
+  tabsEl.appendChild(b);
+});
+
+/* ---------- 渲染：时间轴 ---------- */
+const tlEl = document.getElementById("tl");
+const dayHead = document.getElementById("day-head");
+function renderTimeline(i){
+  const d=DAYS[i];
+  dayHead.innerHTML = `<h2>${d.name} · ${d.title}</h2><p>${d.sub}</p>`;
+  tlEl.innerHTML="";
+  d.pois.forEach((p,idx)=>{
+    const color=CATS[p.cat].color;
+    const card=document.createElement("div");
+    card.className="tl-card"; card.style.setProperty("--cat",color);
+    card.dataset.idx=idx;
+    card.innerHTML=`
+      <div class="tl-top">
+        <span class="tl-time">${p.t}</span>
+        <span class="pill">${p.cat}</span>
+      </div>
+      <div class="tl-name">${p.name}</div>
+      <div class="tl-en">${p.en}</div>
+`;
+    card.onclick=()=>focusPoi(i,idx);
+    tlEl.appendChild(card);
+  });
+}
+
+/* ---------- 地图（Leaflet + CartoDB） ---------- */
+let map=null, dayLayer=null, currentDay=0;
+
+const HOME = { name:"沙吞雅诗阁大使酒店", en:"Ascott Ambassador Bangkok", lat:13.7468, lng:100.5608 };
+
+function pinSVG(color, num){
+  return `<svg xmlns='http://www.w3.org/2000/svg' width='36' height='46' viewBox='0 0 36 46'>`+
+    `<path d='M18 45 C18 45 3 28 3 18 A15 15 0 1 1 33 18 C33 28 18 45 18 45 Z' fill='${color}'/>`+
+    `<circle cx='18' cy='18' r='13' fill='#ffffff'/>`+
+    `<text x='18' y='23' font-size='15' font-family='Helvetica,Arial' font-weight='700' fill='${color}' text-anchor='middle'>${num}</text></svg>`;
+}
+function pinIcon(color, num){
+  return L.divIcon({ html:pinSVG(color,num), className:"poi-pin", iconSize:[36,46], iconAnchor:[18,46], popupAnchor:[0,-40] });
+}
+function homeIcon(){
+  const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='38' height='48' viewBox='0 0 38 48'>`+
+    `<path d='M19 47 C19 47 3 29 3 19 A16 16 0 1 1 35 19 C35 29 19 47 19 47 Z' fill='#1a2b4a'/>`+
+    `<circle cx='19' cy='19' r='14' fill='#ffffff'/>`+
+    `<text x='19' y='25' font-size='17' text-anchor='middle'>🏠</text></svg>`;
+  return L.divIcon({ html:svg, className:"poi-pin", iconSize:[38,48], iconAnchor:[19,48], popupAnchor:[0,-42] });
+}
+
+function homeHTML(){
+  return `<div style="font:13px/1.5 -apple-system,'PingFang SC',sans-serif;min-width:190px">`+
+    `<div style="font-weight:800;font-size:15px;color:#0a1f44">🏠 ${HOME.name}</div>`+
+    `<div style="color:#5b6b8c;font-size:11px;margin-top:2px">${HOME.en} · 行程大本营</div>`+
+    `<div style="margin-top:7px;color:#3a4a68">每天出发与归来的落脚点，地图上常驻显示。</div></div>`;
+}
+
+function infoHTML(p, num){
+  const color=CATS[p.cat].color;
+  return `<div style="font:13px/1.5 -apple-system,'PingFang SC',sans-serif;min-width:200px">`+
+    `<div style="font-weight:800;font-size:15px;color:#0a1f44">${num}. ${p.name}</div>`+
+    `<div style="color:#5b6b8c;font-size:11px;margin:2px 0 6px">${p.en}</div>`+
+    `<span style="background:${color};color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px">${p.cat} · ${p.t} · ${p.dur}</span>`+
+    `<div style="margin-top:7px;color:#3a4a68">${p.desc}</div></div>`;
+}
+
+function renderDayMap(i){
+  if(!map) return;
+  if(dayLayer) dayLayer.clearLayers(); else dayLayer=L.layerGroup().addTo(map);
+  const d=DAYS[i];
+  d.pois.forEach((p,idx)=>{
+    if(p.skipPin) return; // 返回酒店等重复点不另画 pin（酒店基点已常驻）
+    const m=L.marker([p.lat,p.lng], {icon:pinIcon(CATS[p.cat].color, idx+1)});
+    m.on("click", ()=>focusPoi(i, idx));
+    dayLayer.addLayer(m);
+  });
+  const latlngs=d.pois.map(p=>[p.lat,p.lng]);
+  dayLayer.addLayer(L.polyline(latlngs, {color:"#635bff", weight:4, opacity:.9, lineCap:"round", lineJoin:"round"}));
+  fitDay(d.pois);
+}
+
+function fitDay(pois){
+  const pad = window.matchMedia("(max-width:768px)").matches ? 26 : 50;
+  map.fitBounds(pois.map(p=>[p.lat,p.lng]), {padding:[pad,pad]});
+}
+
+function focusPoi(dayIdx, idx){
+  if(dayIdx!==currentDay) setDay(dayIdx, true);
+  const p=DAYS[dayIdx].pois[idx];
+  const isMobile = window.matchMedia("(max-width:768px)").matches;
+
+  // 📋 复制地点英文名到剪贴板（可直接贴 Google Maps 搜索）
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(p.en).then(()=>{
+      // 短暂提示已复制
+      const tip=document.createElement("div");
+      tip.textContent="✅ 已复制："+p.en;
+      tip.style.cssText="position:fixed;bottom:20%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.78);color:#fff;padding:8px 16px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;animation:fadeUp .35s ease;pointer-events:none";
+      document.body.appendChild(tip);
+      setTimeout(()=>{ tip.style.opacity="0"; setTimeout(()=>tip.remove(),350); },900);
+    }).catch(()=>{});
+  }
+
+  if(map){
+    // 手机端：点卡片自动切地图
+    if(isMobile && !document.body.classList.contains("m-view-map")) setMobileView("map");
+
+    // 🛣️ 绘制从上一站到这一站的路线高亮
+    if(dayLayer){
+      dayLayer.eachLayer(l=>{
+        if(l._routeHighlight) dayLayer.removeLayer(l);
+      });
+    }
+    if(idx > 0){
+      const prevPois=DAYS[dayIdx].pois.slice(0,idx+1).filter(x=>!x.skipPin);
+      if(prevPois.length >= 2){
+        const routeCoords=prevPois.map(x=>[x.lat,x.lng]);
+        const routeLine=L.polyline(routeCoords,{
+          color:"#ff2d55", weight:5, opacity:.95,
+          dashArray:"10,6", lineCap:"round", lineJoin:"round"
+        });
+        routeLine._routeHighlight=true;
+        if(dayLayer) dayLayer.addLayer(routeLine);
+      }
+    }
+
+    map.flyTo([p.lat,p.lng], 15, {duration:.8});
+
+    // 弹窗只显示核心信息（不要 desc）
+    L.popup({offset:[0,-40], closeButton:true})
+      .setLatLng([p.lat,p.lng])
+      .setContent(`<div style="font:600 14px/1.4 -apple-system,sans-serif;min-width:160px">
+<div style="font-weight:800;color:#0a1f44">${p.name}</div>
+<div style="color:#5b6b8c;font-size:11px;margin:2px 0 4px">${p.en}</div>
+<span style="background:${CATS[p.cat].color};color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px">${p.cat} · ${p.t}</span>
+</div>`)
+      .openOn(map);
+  }
+  document.querySelectorAll(".tl-card").forEach(c=>c.classList.remove("active"));
+  const card=document.querySelector(`.tl-card[data-idx="${idx}"]`);
+  if(card){ card.classList.add("active"); if(!isMobile) card.scrollIntoView({behavior:"smooth", block:"center"}); }
+}
+
+/* ---------- 移动端「列表 / 地图」切换 ---------- */
+function setMobileView(v){
+  document.body.classList.toggle("m-view-map", v==="map");
+  document.body.classList.toggle("m-view-list", v==="list");
+  document.querySelectorAll("#viewSwitch button").forEach(b=>b.classList.toggle("active", b.dataset.view===v));
+  if(v==="map" && map){
+    // 容器从 display:none 切回，必须重算尺寸并重拟合视野
+    setTimeout(()=>{ map.invalidateSize(); fitDay(DAYS[currentDay].pois); }, 60);
+  }
+}
+(function bindViewSwitch(){
+  const vs=document.getElementById("viewSwitch");
+  if(!vs) return;
+  vs.querySelectorAll("button").forEach(btn=>{ btn.onclick=()=>setMobileView(btn.dataset.view); });
+  // 移动端默认进入「列表」视图
+  if(window.matchMedia("(max-width:768px)").matches){ document.body.classList.add("m-view-list"); }
+})();
+
+/* ---------- 切换天 ---------- */
+function setDay(i, keepScroll){
+  currentDay=i;
+  document.querySelectorAll(".tab").forEach((t,k)=>t.classList.toggle("active", k===i));
+  renderTimeline(i);
+  renderDayMap(i);
+  const d=DAYS[i];
+  document.getElementById("map-title").textContent = d.name+" · 地图连线";
+  if(!keepScroll) window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ---------- 初始化（Leaflet 已在 <head> 同步加载，无需 Key） ---------- */
+function initMap(){
+  map = L.map("map", { zoomControl:true, attributionControl:true }).setView([13.75,100.50], 11);
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+    attribution:'&copy; OpenStreetMap &copy; CARTO', subdomains:"abcd", maxZoom:20
+  }).addTo(map);
+  // 常驻酒店基点
+  L.marker([HOME.lat, HOME.lng], {icon:homeIcon()}).addTo(map)
+    .bindPopup(homeHTML());
+  setDay(0, true);
+}
+
+if(typeof L!=="undefined"){
+  initMap();
+}else{
+  document.getElementById("map").innerHTML =
+    `<div class="map-fallback"><div class="ico">🗺️</div>`+
+    `<div style="font-weight:800;color:#0a1f44;font-size:17px">底图加载失败</div>`+
+    `<div>Leaflet CDN 未能加载（检查网络后刷新）。左侧时间轴与 Tab 仍可正常使用。</div></div>`;
+  setDay(0, true);
+}
+</script>
+</body>
+</html>
