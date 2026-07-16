@@ -3,52 +3,74 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover">
-<meta name="theme-color" content="#f0f2f5"/>
+<meta name="theme-color" content="#0f172a"/>
 <title>曼谷 4 日漫游 · 行程规划</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
-:root{--bg:#f4f6f9;--white:#fff;--ink:#1a1a2e;--muted:#6b7280;--line:#e5e7eb;--indigo:#5B6CFF;--coral:#FF7A59;--purple:#9B5DE5;--teal:#2EC4B6;--slate:#94a3b8}
+:root{
+  --bg:#f6f4f1;--white:#fff;--ink:#1a1a2e;--muted:#8a8f9c;--line:#ececec;
+  --indigo:#5B6CFF;--coral:#FF7A59;--purple:#9B5DE5;--teal:#2EC4B6;--slate:#94a3b8;
+  --gold:#c9a45c;
+}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font:14px/1.6 -apple-system,'PingFang SC',sans-serif;background:var(--bg);color:var(--ink);-webkit-text-size-adjust:100%;min-height:100vh}
-.banner{background:linear-gradient(135deg,#667eea 0%,#764ba2 50%,#f093fb 100%);padding:36px 24px 32px;color:#fff;text-align:center;border-radius:0 0 28px 28px}
-.banner-inner{max-width:900px;margin:0 auto}
-.b-title{font-size:34px;font-weight:900;letter-spacing:-.5px;line-height:1.25}
+/* ---------- Banner with Bangkok photo + overlay ---------- */
+.banner{position:relative;padding:46px 24px 40px;color:#fff;text-align:center;border-radius:0 0 30px 30px;overflow:hidden;background:linear-gradient(135deg,#1e293b,#0f172a)}
+.banner::before{content:"";position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1528181304800-259b08848526?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;opacity:.62}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.28) 0%,rgba(15,23,42,.55) 60%,rgba(15,23,42,.78) 100%)}
+.banner-inner{position:relative;z-index:1;max-width:900px;margin:0 auto}
+.b-eyebrow{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.b-title{font-size:36px;font-weight:900;letter-spacing:-.5px;line-height:1.25;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.b-meta{margin-top:12px;display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:rgba(255,255,255,.82)}
+.b-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--gold)}
+/* ---------- Tabs ---------- */
 .tabs{display:flex;gap:10px;padding:20px 18px 4px;flex-wrap:wrap}
-.tab{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 18px;border-radius:14px;font-size:15px;font-weight:700;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.tab small{display:block;font-size:11px;font-weight:600;opacity:.75;margin-top:3px}
+.tab{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 18px;border-radius:14px;font-size:15px;font-weight:700;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.05)}
 .tab:hover{transform:translateY(-1px)}
-.tab.active{color:#fff;border-color:transparent;background:linear-gradient(120deg,var(--indigo),var(--purple));box-shadow:0 4px 14px rgba(91,108,255,.35)}
-.view-switch{display:none;position:sticky;top:0;z-index:500;background:#fff;border-bottom:1px solid var(--line);padding:10px 16px;gap:8px}
-.view-switch button{flex:1;padding:10px;border:2px solid var(--line);background:#fff;border-radius:12px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
-.view-switch button.active{border-color:var(--indigo);color:var(--indigo);background:#eff2ff}
+.tab.active{color:#fff;border-color:transparent;background:linear-gradient(120deg,var(--indigo),var(--purple));box-shadow:0 6px 18px rgba(91,108,255,.35)}
+/* ---------- Mobile view switch ---------- */
+.view-switch{display:none;position:sticky;top:0;z-index:600;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line);padding:10px 14px;gap:8px}
+.view-switch button{flex:1;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;transition:.15s}
+.view-switch button.active{border-color:var(--indigo);color:var(--indigo);background:#eef1ff;box-shadow:0 2px 8px rgba(91,108,255,.18)}
+/* ---------- Layout ---------- */
 .layout{display:flex;gap:18px;padding:14px 18px 28px;align-items:flex-start}
 .timeline{flex:1 1 0;min-width:0}.map-panel{flex:0 0 420px;position:sticky;top:12px}
 #map{width:100%;height:72vh;min-height:480px;border-radius:16px;border:1px solid var(--line);z-index:1}
-.map-head{padding:10px 0 8px}
-.mh-title{font-weight:800;font-size:17px}.mh-sub{font-size:12px;color:var(--muted);margin-top:2px}
-.day-head{font-weight:800;font-size:19px;margin:18px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--indigo)}
-.day-head small{font-weight:600;font-size:13px;color:var(--muted);margin-left:8px}
-.tl{display:flex;flex-direction:column;gap:10px}
-.tl-card{background:#fff;border-radius:14px;padding:14px 16px;cursor:pointer;border:1px solid var(--line);transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.map-head{padding:10px 2px 8px}
+.mh-title{font-weight:800;font-size:17px}
+.day-head{font-weight:800;font-size:19px;margin:18px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--indigo)}
+.tl{display:flex;flex-direction:column;gap:11px}
+.tl-card{position:relative;background:#fff;border-radius:14px;padding:13px 16px 13px 18px;cursor:pointer;border:1px solid var(--line);transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden}
+.tl-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--slate)}
+.tl-card.cat-景点::before,.tl-card.cat-机场::before{background:var(--indigo)}
+.tl-card.cat-美食::before{background:var(--coral)}
+.tl-card.cat-文化::before{background:var(--purple)}
+.tl-card.cat-购物::before{background:var(--teal)}
+.tl-card.cat-酒店::before{background:var(--slate)}
 .tl-card:hover{border-color:var(--indigo);transform:translateY(-1px);box-shadow:0 4px 12px rgba(91,108,255,.12)}
 .tl-card.active{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(91,108,255,.15)}
 .tl-time{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
 .tl-cat{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff;margin-left:8px}
 .tl-name{font-weight:700;font-size:15px;margin-top:4px}.tl-en{font-size:12px;color:var(--muted);margin-top:1px}
-.cat-\u666f\u70b9 .tl-cat,.cat-\u673a\u573a .tl-cat{background:var(--indigo)}.cat-\u7f8e\u98df .tl-cat{background:var(--coral)}.cat-\u6587\u5316 .tl-cat{background:var(--purple)}.cat-\u8d2d\u7269 .tl-cat{background:var(--teal)}.cat-\u9152\u5e97 .tl-cat{background:var(--slate)}
 #map .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
-@media(max-width:920px){.banner{padding:26px 20px}.b-title{font-size:28px}.layout{flex-direction:column;gap:0;padding:12px 12px 24px}.timeline{width:100%}.map-panel{position:relative;top:0;width:100%;margin-top:14px}#map{height:55vh;min-height:360px}.view-switch{display:flex!important}}
-@media(max-width:768px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:14px 14px 6px}.tabs::-webkit-scrollbar{display:none}body.m-view-list .map-panel{display:none}body.m-view-map .timeline{display:none}.map-panel{margin-top:0;border-radius:16px}#map{height:calc(100vh - 140px);min-height:unset}}
-@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(max-width:920px){.banner{padding:38px 20px 32px}.b-title{font-size:28px}.layout{flex-direction:column;gap:0;padding:12px 12px 24px}.timeline{width:100%}.map-panel{position:relative;top:0;width:100%;margin-top:14px}#map{height:55vh;min-height:360px}.view-switch{display:flex!important}}
+@media(max-width:768px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:14px 14px 6px}.tabs::-webkit-scrollbar{display:none}body.m-view-list .map-panel{display:none!important}body.m-view-map .timeline{display:none!important}.map-panel{margin-top:0;border-radius:16px}#map{height:calc(100vh - 132px);min-height:unset}}
 </style>
-</head><body>
-<header class="banner"><div class="banner-inner"><h1 class="b-title">曼谷 4 日漫游</h1></div></header>
+</head><body class="m-view-list">
+<header class="banner"><div class="banner-inner">
+  <div class="b-eyebrow">BANGKOK · THAILAND</div>
+  <h1 class="b-title">曼谷 4 日漫游</h1>
+  <div class="b-meta"><span>2026.07.17 – 07.20</span><span class="dot"></span><span>自由行</span></div>
+</div></header>
 <nav class="tabs" id="tabs"></nav>
-<nav class="view-switch" id="viewSwitch"><button data-view="list" class="active">\ud83d\udccb 行程列表</button><button data-view="map">\ud83d\ddfa 地图导航</button></nav>
+<nav class="view-switch" id="viewSwitch">
+  <button data-view="list" class="active">📋 行程列表</button>
+  <button data-view="map">🗺️ 地图导航</button>
+</nav>
 <main class="layout">
 <section class="timeline"><div class="day-head" id="day-head"></div><div class="tl" id="tl"></div></section>
-<aside class="map-panel"><div class="map-head"><div><div class="mh-title" id="map-title">行程地图</div></div></div><div id="map"></div></aside>
+<aside class="map-panel"><div class="map-head"><div class="mh-title" id="map-title">行程地图</div></div><div id="map"></div></aside>
 </main>
 <script>
 const CATS={"机场":{c:"#64748b",i:"✈️"},"酒店":{c:"#94a3b8",i:"🏨"},"景点":{c:"#5B6CFF",i:"🎯"},"美食":{c:"#FF7A59",i:"🍜"},"文化":{c:"#9B5DE5",i:"🎭"},"购物":{c:"#2EC4B6",i:"🛍️"}};
@@ -61,11 +83,10 @@ const D=[
  {tm:"07:30",c:"酒店",n:"🏨 抵达·放行李",en:"Ascott Bangkok",la:13.7468,ln:100.5608,sk:1},
  {tm:"08:30",c:"购物",n:"X One 换泰铢",en:"X One Currency Exchange",la:13.7455,ln:100.5618},
  {tm:"09:30",c:"景点",n:"是隆早市",en:"Silom Morning Market",la:13.7275,ln:100.5350},
- {tm:"12:00",c:"酒店",n:"回酒店歇脚",en:"Back to Hotel",la:13.7468,ln:100.5608,sk:1},
+ {tm:"12:00",c:"酒店",n:"🏨 回酒店·歇脚收拾",en:"Back to Hotel",la:13.7468,ln:100.5608,sk:1},
  {tm:"14:30",c:"文化",n:"JeySpa 按摩",en:"JeySpa",la:13.7440,ln:100.5580},
- {tm:"16:00",c:"酒店",n:"回酒店·收拾",en:"Back to Hotel",la:13.7468,ln:100.5608,sk:1},
  {tm:"17:00",c:"景点",n:"朱拉隆功夜市",en:"Chulalongkorn Night Market",la:13.7370,ln:100.5290},
- {tm:"19:30",c:"酒店",n:"回酒店·补妆",en:"Back to Hotel",la:13.7468,ln:100.5608,sk:1},
+ {tm:"19:30",c:"酒店",n:"🏨 回酒店·补妆",en:"Back to Hotel",la:13.7468,ln:100.5608,sk:1},
  {tm:"20:30",c:"文化",n:"ETD Bar",en:"ETD Bar",la:13.7265,ln:100.5340},
  {tm:"23:00",c:"文化",n:"DJ Station / G.O.D",en:"DJ Station · G.O.D (Silom Soi 2)",la:13.7268,ln:100.5345}]},
 {n:"7/18 周六",t:"咖啡 → Krubb → club",p:[
@@ -78,7 +99,7 @@ const D=[
 {n:"7/19 周日",t:"CW 扫货 → 桑拿 → BoyCamp",p:[
  {tm:"10:00",c:"酒店",n:"🏨 从酒店出发",en:"Leave Hotel",la:13.7468,ln:100.5608,sk:1},
  {tm:"12:00",c:"购物",n:"Central World 商圈",en:"CentralWorld",la:13.7465,ln:100.5385},
- {tm:"16:00",c:"酒店",n:"回酒店·收拾",en:"Back to Hotel",la:13.7468,ln:100.5608,sk:1},
+ {tm:"16:00",c:"酒店",n:"🏨 回酒店·收拾",en:"Back to Hotel",la:13.7468,ln:100.5608,sk:1},
  {tm:"17:00",c:"文化",n:"Residences Spa",en:"Residences Spa",la:13.7450,ln:100.5600},
  {tm:"18:30",c:"文化",n:"1/0 桑拿",en:"1/0 Sauna Silom",la:13.7265,ln:100.5345},
  {tm:"21:00",c:"文化",n:"BoyCamp 酒吧",en:"BoyCamp Bar Silom Soi 4",la:13.7260,ln:100.5350}]},
@@ -91,16 +112,23 @@ const D=[
 ];
 let map=null,dL=null,cD=0;
 function pI(c,n){const s='<svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42"><path d="M16 41 C16 41 2 26 2 16 A14 14 0 1 1 30 16 C30 26 16 41 16 41 Z" fill="'+c+'"/><circle cx="16" cy="16" r="11" fill="#fff"/><text x="16" y="21" font-size="14" font-weight="700" fill="'+c+'" text-anchor="middle">'+n+'</text></svg>';return L.divIcon({html:s,className:'',iconSize:[32,42],iconAnchor:[16,42],popupAnchor:[0,-40]});}
-function hI(){return L.divIcon({html:'<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44"><path d="M17 43 C17 43 3 27 3 17 A14 14 0 1 1 31 17 C31 27 17 43 17 43 Z" fill="#1a2b4a"/><circle cx="17" cy="17" r="12" fill="#fff"/><text x="17" y="23" font-size="16" text-anchor="middle">\ud83c\udfe0</text></svg>',className:'',iconSize:[34,44],iconAnchor:[17,44],popupAnchor:[0,-40]});}
+function hI(){return L.divIcon({html:'<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44"><path d="M17 43 C17 43 3 27 3 17 A14 14 0 1 1 31 17 C31 27 17 43 17 43 Z" fill="#1a2b4a"/><circle cx="17" cy="17" r="12" fill="#fff"/><text x="17" y="23" font-size="16" text-anchor="middle">🏠</text></svg>',className:'',iconSize:[34,44],iconAnchor:[17,44],popupAnchor:[0,-40]});}
 function iH(p){const c=CATS[p.c].c;return'<div style="font:600 14px/1.4 sans-serif;min-width:160px"><div style="font-weight:800;color:#0a1f44">'+p.n+'</div><div style="color:#5b6b8c;font-size:11px;margin:2px 0">'+p.en+'</div><span style="background:'+c+';color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px">'+p.c+' · '+p.tm+'</span></div>';}
-function rT(){const e=document.getElementById("tabs");D.forEach((d,i)=>{const b=document.createElement("button");b.className="tab"+(i?"":" active");b.innerHTML=d.n;b.onclick=()=>sD(i);e.appendChild(b);});}
-function rTL(di){const d=D[di];document.getElementById("day-head").innerHTML="<span>"+d.n+"</span> <small>"+d.t+"</small>";const tl=document.getElementById("tl");tl.innerHTML="";d.p.forEach((p,idx)=>{let ic=CATS[p.c]?CATS[p.c].i:"";for(const k in SUB_ICO){if(p.n.includes(k)||p.en.includes(k)){ic=SUB_ICO[k];break;}}const c=document.createElement("div");c.className="tl-card cat-"+p.c;c.dataset.idx=idx;c.innerHTML='<div><span class="tl-time">'+p.tm+"</span><span class='tl-cat'>"+ic+" "+p.c+'</span></div><div class="tl-name">'+p.n+'</div><div class="tl-en">'+p.en+"</div>";c.onclick=()=>fP(di,idx);tl.appendChild(c);});}
-function rDM(di){if(!map)return;if(dL)map.removeLayer(dL);dL=L.layerGroup().addTo(map);d.p.forEach((p,idx)=>{if(p.sk)return;const m=L.marker([p.la,p.ln],{icon:pI(CATS[p.c].c,idx+1)});m.on("click",()=>fP(di,idx));dL.addLayer(m);});L.marker([HOME.lat,HOME.lng],{icon:hI()}).bindPopup('<div style="font:600 14px/1.4 sans-serif"><b>\ud83c\udfe0 '+HOME.n+'</b><br><span style="color:#5b6b8c;font-size:11px">'+HOME.en+"</span></div>").addTo(dL);const rc=d.p.filter(p=>!p.sk).map(p=>[p.la,p.ln]);if(rc.length>=2)L.polyline(rc,{color:"#c0c8d8",weight:3,opacity:.6}).addTo(dL);fF(d.p.filter(p=>!p.sk));}
+function rT(){const e=document.getElementById("tabs");D.forEach((d,i)=>{const b=document.createElement("button");b.className="tab"+(i?"":" active");b.textContent=d.n;b.onclick=()=>sD(i);e.appendChild(b);});}
+function rTL(di){const d=D[di];document.getElementById("day-head").innerHTML="<span>"+d.n+"</span> <small style=\"color:var(--muted);font-weight:600;font-size:13px;margin-left:8px\">"+d.t+"</small>";const tl=document.getElementById("tl");tl.innerHTML="";d.p.forEach((p,idx)=>{let ic=CATS[p.c]?CATS[p.c].i:"";for(const k in SUB_ICO){if(p.n.includes(k)||p.en.includes(k)){ic=SUB_ICO[k];break;}}const c=document.createElement("div");c.className="tl-card cat-"+p.c;c.dataset.idx=idx;c.innerHTML='<div><span class="tl-time">'+p.tm+"</span><span class='tl-cat' style=\"background:"+CATS[p.c].c+"\">"+ic+" "+p.c+'</span></div><div class="tl-name">'+p.n+'</div><div class="tl-en">'+p.en+"</div>";c.onclick=()=>fP(di,idx);tl.appendChild(c);});}
+function rDM(di){if(!map)return;const d=D[di];if(dL)map.removeLayer(dL);dL=L.layerGroup().addTo(map);d.p.forEach((p,idx)=>{if(p.sk)return;const m=L.marker([p.la,p.ln],{icon:pI(CATS[p.c].c,idx+1)});m.on("click",()=>fP(di,idx));dL.addLayer(m);});L.marker([HOME.lat,HOME.lng],{icon:hI()}).bindPopup('<div style="font:600 14px/1.4 sans-serif"><b>🏠 '+HOME.n+'</b><br><span style="color:#5b6b8c;font-size:11px">'+HOME.en+"</span></div>").addTo(dL);const rc=d.p.filter(p=>!p.sk).map(p=>[p.la,p.ln]);if(rc.length>=2)L.polyline(rc,{color:"#c0c8d8",weight:3,opacity:.6}).addTo(dL);fF(d.p.filter(p=>!p.sk));}
 function fF(ps){if(!ps.length)return;const la=ps.map(p=>p.la),ln=ps.map(p=>p.ln);map.fitBounds([[Math.min(...la),Math.min(...ln)],[Math.max(...la),Math.max(...ln)]],{padding:[50,50]});}
-function sD(i,noS){cD=i;document.querySelectorAll(".tab").forEach((t,j)=>t.classList.toggle("active",j===i));rTL(i);rDM(i);document.getElementById("map-title").textContent=D[i].n+" · "+D[i].t.split("→")[0];if(map&&innerWidth<=768)setTimeout(()=>{try{map.invalidateSize(true);}catch(e){}},200);}
-function fP(di,idx){if(di!==cD)sD(di,true);const p=D[di].p[idx];const m=matchMedia("(max-width:768px)").matches;
+function sD(i){cD=i;document.querySelectorAll(".tab").forEach((t,j)=>t.classList.toggle("active",j===i));rTL(i);rDM(i);document.getElementById("map-title").textContent=D[i].n+" · "+D[i].t.split("→")[0];if(map&&innerWidth<=768)setTimeout(()=>{try{map.invalidateSize(true);}catch(e){}},200);}
+function fP(di,idx){if(di!==cD)sD(di);const p=D[di].p[idx];const m=matchMedia("(max-width:768px)").matches;
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(cpName(p)).catch(()=>{});}
 if(map){if(m&&!document.body.classList.contains("m-view-map"))setMV("map");if(dL)dL.eachLayer(l=>{if(l._rh)dL.removeLayer(l);});const prev=D[di].p.slice(0,idx).filter(x=>!x.sk);if(prev.length>0){const lastP=prev[prev.length-1];const rl=L.polyline([[lastP.la,lastP.ln],[p.la,p.ln]],{color:"#ff2d55",weight:5,opacity:.95,dashArray:"10,6"});rl._rh=true;dL.addLayer(rl);map.flyToBounds([[lastP.la,lastP.ln],[p.la,p.ln]],{paddingTopLeft:[60,80],paddingBottomRight:[60,60],maxZoom:16,duration:.8});}else{map.flyTo([p.la,p.ln],15,{duration:.8});}L.popup({offset:[0,-40],closeButton:true}).setLatLng([p.la,p.ln]).setContent(iH(p)).openOn(map);}document.querySelectorAll(".tl-card").forEach(c=>c.classList.remove("active"));const cd=document.querySelector('.tl-card[data-idx="'+idx+'"]');if(cd){cd.classList.add("active");if(!m)cd.scrollIntoView({behavior:"smooth",block:"center"});}}
-function setMV(v){document.body.classList.remove("m-view-list","m-view-map");document.body.classList.add(v==="map"?"m-view-map":"m-view-list");document.querySelectorAll("#viewSwitch button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));if(v==="map"){try{if(map)map.invalidateSize(true);}catch(e){}setTimeout(()=>{try{fF(D[cD].p.filter(p=>!p.sk));}catch(e){}},250);}}
-(function(){rT();map=L.map("map",{scrollWheelZoom:true,zoomControl:false}).setView([13.74,100.54],12);L.control.zoom({position:'topright'}).addTo(map);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; CARTO',subdomains:'abcd',maxZoom:20}).addTo(map);sD(0,true);document.querySelectorAll("#viewSwitch button").forEach(b=>b.addEventListener("click",()=>setMV(b.dataset.view)));})();
+function setMV(v){
+  const toMap=(v==="map");
+  document.body.classList.toggle("m-view-map",toMap);
+  document.body.classList.toggle("m-view-list",!toMap);
+  document.querySelectorAll("#viewSwitch button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
+  if(toMap){ setTimeout(()=>{ try{map.invalidateSize(true); fF(D[cD].p.filter(p=>!p.sk));}catch(e){} }, 220); }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+(function(){rT();map=L.map("map",{scrollWheelZoom:true,zoomControl:false}).setView([13.74,100.54],12);L.control.zoom({position:'topright'}).addTo(map);L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; CARTO',subdomains:'abcd',maxZoom:20}).addTo(map);sD(0);document.querySelectorAll("#viewSwitch button").forEach(b=>b.addEventListener("click",()=>setMV(b.dataset.view)));})();
 </script></body></html>
