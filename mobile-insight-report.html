@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#1f2540" />
+<title>工作台模式 · 系统性洞察报告</title>
+<style>
+  :root{
+    --blue:#3d6bfa;--blue-2:#5b83ff;--purple:#7c6cff;--green:#0fb968;--orange:#ff8f28;--red:#f04e4e;--teal:#00b7c3;
+    --ink:#1a1e27;--ink-2:#4a5160;--ink-3:#79808f;--ink-4:#a7adba;
+    --line:rgba(20,30,60,.08);--card:#fff;
+    --shadow:0 8px 30px rgba(40,60,120,.08);
+    --ease:cubic-bezier(.22,.61,.36,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+    color:var(--ink);line-height:1.75;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(600px 400px at 90% -5%, rgba(228,236,255,.9), transparent 60%),
+      radial-gradient(500px 400px at 0% 5%, rgba(255,248,244,.9), transparent 55%),
+      linear-gradient(180deg,#fbfcff,#eef1fa);
+    font-size:15px;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:calc(28px + env(safe-area-inset-top)) 18px calc(80px + env(safe-area-inset-bottom));}
+
+  /* 头部 */
+  .hero{margin-bottom:26px;}
+  .hero .eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--blue);background:rgba(61,107,250,.1);padding:5px 12px;border-radius:20px;font-weight:600;margin-bottom:16px;}
+  .hero h1{font-size:27px;font-weight:900;letter-spacing:-.5px;line-height:1.3;margin-bottom:12px;}
+  .hero h1 .grad{background:linear-gradient(120deg,#3d6bfa,#7c6cff);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .hero .sub{font-size:14px;color:var(--ink-3);}
+  .hero .meta{margin-top:14px;font-size:12px;color:var(--ink-4);}
+  .hero .meta b{color:var(--ink-2);}
+
+  /* 目录 */
+  .toc{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:26px;}
+  .toc .tc-t{font-size:12px;color:var(--ink-3);font-weight:700;margin-bottom:8px;letter-spacing:.5px;}
+  .toc a{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;color:var(--ink-2);text-decoration:none;border-bottom:1px dashed var(--line);}
+  .toc a:last-child{border-bottom:none;}
+  .toc a .n{width:22px;height:22px;border-radius:7px;background:rgba(61,107,250,.1);color:var(--blue);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;}
+  .toc a:active{color:var(--blue);}
+
+  /* 区块 */
+  .section{margin-bottom:34px;scroll-margin-top:20px;}
+  .sec-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+  .sec-num{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex:none;box-shadow:var(--shadow);}
+  .sec-head .st{font-size:19px;font-weight:800;line-height:1.3;}
+  .sec-head .sd{font-size:12.5px;color:var(--ink-3);margin-top:2px;}
+
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:20px;margin-bottom:14px;}
+  .card h3{font-size:15.5px;font-weight:700;margin-bottom:10px;line-height:1.4;}
+  .card p{font-size:14px;color:var(--ink-2);margin-bottom:10px;}
+  .card p:last-child{margin-bottom:0;}
+  .card b{color:var(--ink);}
+  .card em{font-style:normal;color:var(--blue);font-weight:600;background:linear-gradient(transparent 62%,rgba(61,107,250,.14) 62%);padding:0 2px;}
+
+  /* 论据 / 数据 chip */
+  .evidence{background:linear-gradient(135deg,#f4f7ff,#eef2ff);border:1px solid rgba(61,107,250,.15);border-radius:12px;padding:13px 15px;margin:12px 0;}
+  .evidence .ev-t{font-size:11.5px;font-weight:700;color:var(--blue);letter-spacing:.5px;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+  .evidence .ev-d{font-size:13px;color:var(--ink-2);line-height:1.65;}
+  .evidence .ev-src{font-size:11px;color:var(--ink-4);margin-top:7px;font-style:italic;}
+
+  /* 数字强调 */
+  .stat-row{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap;}
+  .stat{flex:1;min-width:130px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;box-shadow:var(--shadow);}
+  .stat .sv{font-size:22px;font-weight:900;background:linear-gradient(120deg,#3d6bfa,#7c6cff);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.2;}
+  .stat .sl{font-size:11.5px;color:var(--ink-3);margin-top:4px;}
+
+  /* 竞品对比表 */
+  .vs{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin:14px 0;}
+  .vs-row{display:grid;grid-template-columns:82px 1fr;border-bottom:1px solid var(--line);}
+  .vs-row:last-child{border-bottom:none;}
+  .vs-row.head{background:rgba(61,107,250,.06);}
+  .vs-row .vc{padding:11px 13px;font-size:12.5px;}
+  .vs-row .vc.name{font-weight:700;color:var(--ink);border-right:1px solid var(--line);display:flex;align-items:center;gap:7px;}
+  .vs-row .vc.desc{color:var(--ink-2);}
+  .vs-row.head .vc{font-weight:800;color:var(--ink);font-size:12px;}
+  .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+
+  /* 观点列表 */
+  .points{list-style:none;}
+  .points li{position:relative;padding:11px 0 11px 30px;font-size:14px;color:var(--ink-2);border-bottom:1px dashed var(--line);}
+  .points li:last-child{border-bottom:none;}
+  .points li::before{position:absolute;left:0;top:11px;width:20px;height:20px;border-radius:6px;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .points.good li::before{content:"✓";background:rgba(15,185,104,.12);color:var(--green);}
+  .points.risk li::before{content:"!";background:rgba(240,78,78,.12);color:var(--red);}
+  .points li b{color:var(--ink);}
+
+  /* 深色灵感块 */
+  .spark{background:linear-gradient(140deg,#1f2540,#2b3566);color:#fff;border-radius:16px;padding:22px 20px;box-shadow:0 16px 40px rgba(30,40,90,.28);}
+  .spark h3{color:#fff;font-size:16.5px;margin-bottom:14px;}
+  .spark .sp{padding:13px 0;border-bottom:1px solid rgba(255,255,255,.12);}
+  .spark .sp:last-child{border-bottom:none;}
+  .spark .sp .stt{font-size:14.5px;font-weight:700;margin-bottom:4px;display:flex;gap:8px;align-items:flex-start;}
+  .spark .sp .sdd{font-size:13px;color:rgba(255,255,255,.75);line-height:1.65;padding-left:26px;}
+
+  /* 提问卡 */
+  .q{background:linear-gradient(160deg,#fff,#f7f9ff);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:12px;}
+  .q .qt{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:6px;}
+  .q .qq{font-size:14.5px;font-weight:600;color:var(--ink);line-height:1.6;}
+  .q .qh{font-size:12px;color:var(--ink-3);margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);}
+
+  .callout{background:rgba(61,107,250,.07);border-left:3px solid var(--blue);border-radius:0 12px 12px 0;padding:14px 16px;font-size:13.5px;color:var(--ink-2);margin-top:14px;line-height:1.7;}
+  .callout b{color:var(--blue);}
+
+  .foot{text-align:center;margin-top:40px;color:var(--ink-4);font-size:12px;line-height:1.8;}
+  .foot .dv{width:36px;height:3px;background:var(--blue);border-radius:2px;margin:0 auto 14px;opacity:.5;}
+
+  /* 回到顶部 */
+  .top-btn{position:fixed;right:16px;bottom:calc(20px + env(safe-area-inset-bottom));width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(61,107,250,.4);text-decoration:none;font-size:20px;opacity:0;pointer-events:none;transition:.25s var(--ease);z-index:50;}
+  .top-btn.show{opacity:1;pointer-events:auto;}
+
+  @media(min-width:560px){
+    .hero h1{font-size:32px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">◈ 系统性洞察 · 移动端阅读版</div>
+    <h1>QQ浏览器 <span class="grad">工作台模式</span><br>系统性洞察报告</h1>
+    <p class="sub">把零散的评审意见，重构成 5 个模块的系统性判断。附竞品参照与可追溯论据，供你在路上快速读完并带走几个真问题。</p>
+    <div class="meta">交付人 <b>Geoffreyyou</b> · 基于工作台模式高保真原型</div>
+  </div>
+
+  <!-- 目录 -->
+  <div class="toc">
+    <div class="tc-t">目录 · 五个模块</div>
+    <a href="#s1"><span class="n">1</span>行业大势：浏览器正在被 AI 重写</a>
+    <a href="#s2"><span class="n">2</span>收藏资产：从"存"到"用"的断层</a>
+    <a href="#s3"><span class="n">3</span>首页与指令框：效率的取舍</a>
+    <a href="#s4"><span class="n">4</span>工作台与看板：聚合的价值边界</a>
+    <a href="#s5"><span class="n">5</span>落地策略：怎么赢，先赢哪一步</a>
+    <a href="#spark"><span class="n">✦</span>灵感 · 五个可能改变方向的念头</a>
+    <a href="#q"><span class="n">?</span>留给你的六个深度问题</a>
+  </div>
+
+  <!-- 模块1 -->
+  <div class="section" id="s1">
+    <div class="sec-head">
+      <div class="sec-num" style="background:linear-gradient(135deg,#5b83ff,#3d6bfa)">1</div>
+      <div><div class="st">行业大势</div><div class="sd">浏览器正在被 AI 重写——你踩在一个真实的风口上</div></div>
+    </div>
+    <div class="card">
+      <h3>这不是"加个 AI 侧边栏"，而是一场形态战争</h3>
+      <p>2025 年被业内称为 <b>"AI 浏览器元年"</b>。头部玩家几乎在同一时间下注："浏览器首页/地址栏 = AI 的主入口"这一判断，已从假设变成行业共识。工作台模式的方向，站在了正确的一侧。</p>
+      <div class="vs">
+        <div class="vs-row head"><div class="vc name">竞品</div><div class="vc">动作与定位</div></div>
+        <div class="vs-row"><div class="vc name"><span class="dot" style="background:#10a37f"></span>ChatGPT Atlas</div><div class="vc desc">OpenAI 2025.10 发布，主打"会替你动手做事"的 Agent 浏览器</div></div>
+        <div class="vs-row"><div class="vc name"><span class="dot" style="background:#20808d"></span>Perplexity Comet</div><div class="vc desc">2025.10 全球免费，主打"会思考、边浏览边回答"</div></div>
+        <div class="vs-row"><div class="vc name"><span class="dot" style="background:#4285f4"></span>Chrome + Gemini</div><div class="vc desc">巨头把 AI 直接缝进最大流量入口，防守 + 反击</div></div>
+        <div class="vs-row"><div class="vc name"><span class="dot" style="background:#111"></span>Arc → Dia</div><div class="vc desc">The Browser Company 砍掉 Arc，从零做 AI 原生浏览器 Dia</div></div>
+      </div>
+      <div class="evidence">
+        <div class="ev-t">◆ 论据</div>
+        <div class="ev-d">Arc 是过去几年口碑最好的"创新浏览器"，但其母公司 2024 年主动停止 Arc 迭代、全面转向 AI 原生的 Dia。创始人公开判断：未来数年 AI 主导的人机界面可能<b>直接取代传统浏览器</b>形态。</div>
+        <div class="ev-src">来源：The Browser Company 公开声明 / 36氪、TechCrunch 报道（2024–2025）</div>
+      </div>
+      <p><b>对你的意义：</b>方向没错，但你不是在无人区——你是在和 OpenAI、Google、Perplexity 抢同一块地。差异化不能只是"也有 AI"，而要回答"<em>QQ浏览器的 AI，凭什么不一样</em>"。你的答案很可能就藏在"用户已经沉淀多年的书签/历史/文件"这份别人没有的私有资产里。</p>
+    </div>
+  </div>
+
+  <!-- 模块2 -->
+  <div class="section" id="s2">
+    <div class="sec-head">
+      <div class="sec-num" style="background:linear-gradient(135deg,#4dd07b,#0fb968)">2</div>
+      <div><div class="st">收藏资产</div><div class="sd">最大的机会与最大的陷阱，都在"存了但不用"这件事上</div></div>
+    </div>
+    <div class="card">
+      <h3>"收藏即遗忘"是这个品类的百年顽疾</h3>
+      <p>书签、稍后读、收藏夹——这些功能诞生二十多年，共同的宿命是：<b>用户热衷于"存"，却极少"取"</b>。收藏行为满足的是"我怕错过"的焦虑，而不是"我要再用"的需求。</p>
+      <div class="evidence">
+        <div class="ev-t">◆ 论据一：稍后读之死</div>
+        <div class="ev-d">最经典的稍后读产品 Pocket 于 <b>2025 年 7 月正式关停</b>。母公司 Mozilla 给的理由很诚实：<em>"人们浏览网页的方式正在改变"</em>——单纯的"存起来以后看"已经撑不起一个产品。</div>
+        <div class="ev-src">来源：TechCrunch《Pocket is shutting down》2025-05-27</div>
+      </div>
+      <div class="evidence">
+        <div class="ev-t">◆ 论据二：书签研究</div>
+        <div class="ev-d">早期 HCI 研究就发现，书签被用户当作"个人网络信息空间"，但大量书签一旦存下就<b>极少被再次访问</b>——归档的动作本身给了人"我掌控了信息"的安全感，而非真的会回来用。</div>
+        <div class="ev-src">来源：Abrams/Baecker 等书签行为研究 / Nielsen Norman "信息气味"理论（定性结论，非精确统计）</div>
+      </div>
+      <p><b>结论：</b>如果工作台只是把收藏"排得更好看"，那是在优化一个伪需求。真正的破局点是——<em>让 AI 把"沉睡的收藏"重新激活成"能用的东西"</em>。这恰恰是 AI 时代给这个老问题的新解药，也是你相较纯 AI 浏览器（它们没有用户的历史资产）的独特壁垒。</p>
+      <ul class="points risk">
+        <li><b>新闻/资讯类历史不该挂"引用"：</b>用户不会想"帮我总结这条黄岩岛新闻收藏"，这类只做浏览入口。</li>
+        <li><b>"图文"和"文件"语义重叠：</b>一张截图该进哪个 tab？建议合并为"素材"，内部再筛选。</li>
+        <li><b>小云盘/最近下载偏系统功能：</b>放进 AI 收藏夹会稀释"这里都是我精选知识"的心智。</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 模块3 -->
+  <div class="section" id="s3">
+    <div class="sec-head">
+      <div class="sec-num" style="background:linear-gradient(135deg,#9a8cff,#7c6cff)">3</div>
+      <div><div class="st">首页与指令框</div><div class="sd">别为了"更聪明"，牺牲了那个最高频的动作</div></div>
+    </div>
+    <div class="card">
+      <h3>首页的第一性原则：别挡住"输入网址/搜索"</h3>
+      <p>无论浏览器怎么进化，用户打开首页最高频的动作永远是<b>「输入一个地址或搜一个词」</b>。工作台模式把首页变成 AI 主场，风险是——那个最该"零阻力"的动作，会不会被更重的界面拖慢。</p>
+      <div class="stat-row">
+        <div class="stat"><div class="sv">#1</div><div class="sl">"搜索/输入网址"始终是<br>首页最高频动作</div></div>
+        <div class="stat"><div class="sv">2 态</div><div class="sl">搜网页 / 问 AI<br>需要清晰可辨</div></div>
+      </div>
+      <ul class="points risk">
+        <li><b>搜/问语义要分清：</b>同一个框既搜网页又问 AI，用户必须一眼知道"我现在按回车会发生什么"。搜索引擎选择 与 AI/网页模式，建议拆成两个独立控件。</li>
+        <li><b>模式切换入口太深：</b>决定产品形态的"工作台开关"埋在设置二级菜单，发现成本极高。建议做成顶部显性分段，或首次引导。</li>
+        <li><b>空指令框是最大启动阻力：</b>让用户对着空框打字，转化会很低。</li>
+      </ul>
+      <ul class="points good">
+        <li><b>做对的：</b>指令框保留了熟悉的搜索框形态，老用户零学习成本过渡。</li>
+        <li><b>做对的：</b>引用 chip 把"喂给 AI"这件抽象的事，变成了看得见、可增删的具体操作。</li>
+      </ul>
+      <div class="callout"><b>一个反直觉的建议：</b>工作台不该急着让用户"打字问 AI"，而该<b>基于当前任务和最近收藏，预填 2-3 条高相关指令</b>，把"从零打字"降级为"点一下确认"。降低启动阻力，比增加能力更重要。</div>
+    </div>
+  </div>
+
+  <!-- 模块4 -->
+  <div class="section" id="s4">
+    <div class="sec-head">
+      <div class="sec-num" style="background:linear-gradient(135deg,#ffb057,#ff8f28)">4</div>
+      <div><div class="st">工作台与看板</div><div class="sd">聚合本身不产生价值，"聚合后多做一步"才产生价值</div></div>
+    </div>
+    <div class="card">
+      <h3>智能看板：警惕沦为"信息的搬运工"</h3>
+      <p>股票、日历、邮件、资讯聚在一屏，观感很"驾驶舱"。但要问一个尖锐的问题：<b>它和手机负一屏/桌面小组件，本质区别是什么？</b>如果只是把各处信息搬到一起展示，而没有"因为聚在一起所以产生了新价值"，那它就只是搬运，用户没有理由为此改变习惯。</p>
+      <ul class="points risk">
+        <li><b>整屏跳转割裂工作流：</b>看板与首页是两个全屏，想引用看板一条内容还得切回来。建议看板做成首页可下滑的"第二层"，或让指令框常驻。</li>
+        <li><b>固定 6 块 ≠ 智能：</b>股票对做设计的人价值为零。既然叫"智能看板"+有"编辑"，就该真正支持增删/排序/换源。</li>
+        <li><b>两套设计语言：</b>看板的深色卡、高密度与首屏的克制留白像两个产品，需统一卡片规范。</li>
+      </ul>
+      <p><b>更高阶的思路：</b>把资产从"库"进化到"意图"。用户收藏 5 篇 AI 浏览器文章，背后是同一个意图——<em>"我在研究 AI 浏览器"</em>。与其平铺 5 个孤立条目，不如让 AI 识别并外显这个"项目/意图"，让 AI 主动聚合成一张<em>主题合集卡</em>，直接问："已为你聚好一个主题，要生成综述吗？"</p>
+    </div>
+  </div>
+
+  <!-- 模块5 -->
+  <div class="section" id="s5">
+    <div class="sec-head">
+      <div class="sec-num" style="background:linear-gradient(135deg,#3d6bfa,#7c6cff)">5</div>
+      <div><div class="st">落地策略</div><div class="sd">这么大的方案，先赢哪一步，怎么控成本</div></div>
+    </div>
+    <div class="card">
+      <h3>别 all-in，让工作台"渗透"而非"替换"</h3>
+      <p>强行让全量用户二选一（传统 or 工作台）风险极高。更稳的路径是让 AI 能力<b>渐进式渗透</b>：先在熟悉的传统首页搜索框下方，长出一小块"AI 收藏夹"，让用户在不改变习惯的前提下先尝到甜头。</p>
+      <div class="card" style="box-shadow:none;border:1px dashed var(--blue-line,rgba(61,107,250,.3));background:rgba(61,107,250,.04);margin:0;">
+        <h3 style="color:var(--blue)">🎯 MVP 建议：只做三件事</h3>
+        <ul class="points good" style="margin-top:6px">
+          <li><b>① 模式切换显性化</b>——让用户知道它存在。</li>
+          <li><b>② 打通一条主链路</b>——收藏（书签+文件+图文）→ 引用 → 一个真实可用的 AI 动作（如"生成综述"）。</li>
+          <li><b>③ 砍掉长尾</b>——股票等弱相关看板先不做。</li>
+        </ul>
+      </div>
+      <div class="callout"><b>核心判断：</b>下一步的胜负手不在于再加模块，而在于把"<b>收藏 → 引用 → 产出 → 再回来</b>"这条最短闭环打磨到让人上瘾。先验证留存，再谈扩展。</div>
+    </div>
+  </div>
+
+  <!-- 灵感 -->
+  <div class="section" id="spark">
+    <div class="spark">
+      <h3>✦ 五个可能改变方向的念头</h3>
+      <div class="sp"><div class="stt"><span>🧲</span>收藏是"未来的自己"给"现在的自己"派任务</div><div class="sdd">杀手锏不是更好地展示收藏，而是到点主动提醒消费——收藏三天后 AI 问一句"这篇还想看吗？要我提炼吗？"</div></div>
+      <div class="sp"><div class="stt"><span>🧩</span>从"资产库"进化到"意图库"</div><div class="sdd">识别收藏背后的意图/项目，让首页围绕 2-3 个活跃意图来组织，而非罗列孤立条目。</div></div>
+      <div class="sp"><div class="stt"><span>⏳</span>时间线可能比分类更贴浏览器心智</div><div class="sdd">浏览器天然是"时间流"产品。"今天/本周你在忙什么"的纵向时间线，可能才是工作台最自然的骨架。</div></div>
+      <div class="sp"><div class="stt"><span>🎯</span>指令框应该"知道你想问什么"</div><div class="sdd">基于活跃任务与最近收藏预填高相关指令，把"从零打字"变成"点一下确认"。</div></div>
+      <div class="sp"><div class="stt"><span>🔗</span>引用应该是"关系"，不只是"选中"</div><div class="sdd">"把这 3 篇对比"和"合并综述"是不同的关系动作。引用后可选"如何组合它们"。</div></div>
+    </div>
+  </div>
+
+  <!-- 提问 -->
+  <div class="section" id="q">
+    <div class="sec-head">
+      <div class="sec-num" style="background:linear-gradient(135deg,#3d6bfa,#7c6cff)">?</div>
+      <div><div class="st">留给你的六个问题</div><div class="sd">没有标准答案，但值得在下一轮前想清楚</div></div>
+    </div>
+    <div class="q"><div class="qt">关于资产收藏</div><div class="qq">如果绝大多数收藏永远不会被再打开，"更好地组织收藏"是不是伪需求？该优化"存"、"取"，还是"主动推"？</div><div class="qh">💡 Pocket 之死已经给了一半答案。</div></div>
+    <div class="q"><div class="qt">关于首页</div><div class="qq">把首页做成工作台，会不会拖慢了"输入网址/搜索"这个最高频、最不该被打扰的动作？</div><div class="qh">💡 效率工具第一原则：别挡路。</div></div>
+    <div class="q"><div class="qt">关于工作台</div><div class="qq">"工作台"暗示是给工作用的。它服务全量用户，还是只服务"重度知识工作者"这一细分？</div><div class="qh">💡 定位越窄价值越锋利，但盘子越小。</div></div>
+    <div class="q"><div class="qt">关于 AI 主动权</div><div class="qq">用户想要"听话的工具"还是"会替我做主的助手"？主动性这条线画在哪？</div><div class="qh">💡 给多了叫惊喜，给错了叫冒犯。</div></div>
+    <div class="q"><div class="qt">关于差异化</div><div class="qq">当 Chrome、Atlas、Comet 都有 AI，QQ浏览器的 AI 凭什么不一样？私有的历史资产是不是唯一的护城河？</div><div class="qh">💡 别人有模型，你有用户的"过去"。</div></div>
+    <div class="q"><div class="qt">关于留存</div><div class="qq">什么样的"啊哈时刻"，能让用户第二天主动切回工作台，而不是切回熟悉的传统首页？</div><div class="qh">💡 找到那个"用了回不去"的单点。</div></div>
+    <div class="callout"><b>一句话总结：</b>这版原型在"把 AI 能力具象成可交互界面"上完成度很高。真正的胜负手，是回答上面这几个问题——<b>找到"收藏→引用→产出→再回来"的最短闭环，打磨到让人上瘾。</b></div>
+  </div>
+
+  <div class="foot">
+    <div class="dv"></div>
+    QQ浏览器 · 工作台模式系统性洞察<br>
+    交付人 Geoffreyyou · 论据均可追溯至公开信源<br>
+    <span style="color:var(--ink-3)">数据说明：文中竞品动态、Pocket 关停、Arc→Dia 均引自公开报道；书签"收藏即遗忘"为业界经典定性结论，非某机构精确统计。</span>
+  </div>
+
+</div>
+
+<a href="#" class="top-btn" id="topBtn">↑</a>
+<script>
+  const topBtn=document.getElementById('topBtn');
+  window.addEventListener('scroll',()=>{topBtn.classList.toggle('show',window.scrollY>500);});
+</script>
+</body>
+</html>
