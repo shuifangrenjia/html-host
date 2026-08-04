@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a"/>
+<title>大湾区迎宝 · 13 日漫游</title>
+<link rel="stylesheet" href="https://lib.baomitu.com/leaflet/1.9.4/leaflet.css" />
+<script src="https://lib.baomitu.com/leaflet/1.9.4/leaflet.js"></script>
+<style>
+:root{
+  --bg:#f6f4f1;--white:#fff;--ink:#1a1a2e;--muted:#8a8f9c;--line:#ececec;
+  --indigo:#5B6CFF;--coral:#FF7A59;--purple:#9B5DE5;--teal:#2EC4B6;--slate:#94a3b8;
+  --gold:#c9a45c;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{font:14px/1.6 -apple-system,'PingFang SC',sans-serif;color:var(--ink);-webkit-text-size-adjust:100%;min-height:100vh;background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:
+ radial-gradient(42vw 42vw at 12% 16%, rgba(255,180,180,.22), transparent 60%),
+ radial-gradient(40vw 40vw at 88% 20%, rgba(160,190,255,.22), transparent 60%),
+ radial-gradient(44vw 44vw at 82% 84%, rgba(170,230,200,.20), transparent 60%),
+ radial-gradient(42vw 42vw at 16% 86%, rgba(210,190,255,.20), transparent 60%);
+ filter:blur(8px)}
+/* ---------- Banner (no photo, gradient only) ---------- */
+.banner{position:relative;padding:46px 24px 40px;color:#fff;text-align:center;border-radius:0 0 30px 30px;overflow:hidden;background:linear-gradient(135deg,#1e293b,#0f172a)}
+.banner::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.18) 0%,rgba(15,23,42,.50) 60%,rgba(15,23,42,.78) 100%)}
+.banner-inner{position:relative;z-index:1;max-width:900px;margin:0 auto}
+.b-eyebrow{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--gold);margin-bottom:10px}
+.b-title{font-size:36px;font-weight:900;letter-spacing:-.5px;line-height:1.25;text-shadow:0 2px 18px rgba(0,0,0,.35)}
+.b-meta{margin-top:12px;display:inline-flex;gap:8px;align-items:center;font-size:13px;font-weight:600;color:rgba(255,255,255,.82)}
+.b-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--gold)}
+/* ---------- Overview ---------- */
+.overview{max-width:1100px;margin:18px auto 0;padding:0 18px}
+.ov-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.ov-title{font-size:22px;font-weight:900;color:var(--ink)}
+.ov-sub{font-size:13px;color:var(--muted);font-weight:600}
+.ov-stats{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
+.ov-stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ov-stat b{font-size:17px;font-weight:900;color:var(--indigo)}
+.ov-stat span{font-size:12px;color:var(--muted);margin-left:5px}
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.ov-chip{text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 13px;cursor:pointer;transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.ov-chip:hover{border-color:var(--indigo);transform:translateY(-1px);box-shadow:0 4px 12px rgba(91,108,255,.12)}
+.ov-chip.active{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(91,108,255,.15)}
+.ov-d{font-size:12px;font-weight:800;color:var(--muted)}
+.ov-t{font-size:14px;font-weight:800;color:var(--ink);margin:3px 0 6px;line-height:1.3}
+.ov-tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:#eef1ff;color:var(--indigo)}
+@media(max-width:920px){.overview{padding:0 12px}.ov-title{font-size:19px}}
+/* ---------- Tabs ---------- */
+.tabs{display:flex;gap:10px;padding:20px 18px 4px;flex-wrap:wrap}
+.tab{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--muted);padding:11px 18px;border-radius:14px;font-size:15px;font-weight:700;transition:.18s;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.tab:hover{transform:translateY(-1px)}
+.tab.active{color:#fff;border-color:transparent;background:linear-gradient(120deg,var(--indigo),var(--purple));box-shadow:0 6px 18px rgba(91,108,255,.35)}
+/* ---------- Mobile view switch ---------- */
+.view-switch{display:none;position:sticky;top:0;z-index:600;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line);padding:10px 14px;gap:8px}
+.view-switch button{flex:1;padding:11px 8px;border:1.5px solid var(--line);background:#fff;border-radius:12px;font-weight:700;font-size:14px;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;user-select:none;transition:.15s}
+.view-switch button.active{border-color:var(--indigo);color:var(--indigo);background:#eef1ff;box-shadow:0 2px 8px rgba(91,108,255,.18)}
+/* ---------- Layout ---------- */
+.layout{display:flex;gap:18px;padding:14px 18px 28px;align-items:flex-start}
+.timeline{flex:1 1 0;min-width:0}.map-panel{flex:0 0 420px;position:sticky;top:12px}
+#map{width:100%;height:72vh;min-height:480px;border-radius:16px;border:1px solid var(--line);z-index:1;background:#eef1f6}
+.map-head{padding:10px 2px 8px}
+.mh-title{font-weight:800;font-size:17px}
+.day-head{font-weight:800;font-size:19px;margin:18px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--indigo)}
+.tl{display:flex;flex-direction:column;gap:11px}
+.tl-card{position:relative;background:#fff;border-radius:14px;padding:13px 16px 13px 18px;cursor:pointer;border:1px solid var(--line);transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.04);overflow:hidden}
+.tl-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--slate)}
+.tl-card.cat-景点::before,.tl-card.cat-机场::before{background:var(--indigo)}
+.tl-card.cat-美食::before{background:var(--coral)}
+.tl-card.cat-文化::before{background:var(--purple)}
+.tl-card.cat-购物::before{background:var(--teal)}
+.tl-card.cat-酒店::before,.tl-card.cat-其它::before{background:var(--slate)}
+.tl-card:hover{border-color:var(--indigo);transform:translateY(-1px);box-shadow:0 4px 12px rgba(91,108,255,.12)}
+.tl-card.active{border-color:var(--indigo);box-shadow:0 0 0 3px rgba(91,108,255,.15)}
+.tl-time{font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.tl-cat{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;color:#fff;margin-left:8px}
+.tl-name{font-weight:700;font-size:15px;margin-top:4px}.tl-en{font-size:12px;color:var(--muted);margin-top:1px}
+#map .leaflet-popup-content-wrapper{border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,.12)}
+@media(max-width:920px){.banner{padding:38px 20px 32px}.b-title{font-size:28px}.layout{flex-direction:column;gap:0;padding:12px 12px 24px}.timeline{width:100%}.map-panel{position:relative;top:0;width:100%;margin-top:14px}#map{height:55vh;min-height:360px}.view-switch{display:flex!important}}
+@media(max-width:768px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;padding:14px 14px 6px}.tabs::-webkit-scrollbar{display:none}body.m-view-list .map-panel{display:none!important}body.m-view-map .timeline{display:none!important}.map-panel{margin-top:0;border-radius:16px}#map{height:calc(100vh - 132px);min-height:unset}}
+.route-panel{position:absolute;left:10px;right:10px;bottom:10px;max-width:400px;background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:14px;box-shadow:0 10px 34px rgba(15,23,42,.20);padding:12px 14px;z-index:500;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.route-detail{display:flex;align-items:center;gap:10px;padding:8px 11px;background:var(--bg);border-radius:10px;font-weight:700}
+.route-soft{font-size:11.5px;color:var(--muted);margin-top:7px;line-height:1.5}
+.route-actions{display:flex;gap:8px;margin-top:9px}
+.route-actions a,.route-actions .route-keyhint{flex:1;text-align:center;font-size:12px;font-weight:700;color:var(--indigo);background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px;cursor:pointer;text-decoration:none}
+.route-actions .route-keyhint{color:var(--gold);border-color:var(--gold)}
+.route-actions a.nav{background:var(--indigo);color:#fff;border-color:var(--indigo);font-size:13px}
+@media(max-width:768px){.route-panel{left:8px;right:8px;bottom:8px;max-width:none;padding:11px 12px}}
+</style>
+</head><body class="m-view-list">
+<header class="banner"><div class="banner-inner">
+  <div class="b-eyebrow">SHENZHEN · GREATER BAY AREA</div>
+  <h1 class="b-title">大湾区迎宝 · 13 日漫游</h1>
+  <div class="b-meta"><span>2026.09.25 – 10.07</span><span class="dot"></span><span>接风 · 大湾区跨境</span></div>
+</div></header>
+<nav class="tabs" id="tabs"></nav>
+<nav class="view-switch" id="viewSwitch">
+  <button data-view="list" class="active">📋 行程列表</button>
+  <button data-view="map">🗺️ 地图导航</button>
+</nav>
+<main class="layout">
+<section class="timeline"><div class="day-head" id="day-head"></div><div class="tl" id="tl"></div></section>
+<aside class="map-panel"><div class="map-head"><div class="mh-title" id="map-title">行程地图</div></div><div id="map"></div><div class="route-panel" id="routePanel" style="display:none"></div></aside>
+</main>
+<script>
+const CATS={"机场":{c:"#64748b",i:"✈️"},"酒店":{c:"#94a3b8",i:"🏨"},"景点":{c:"#5B6CFF",i:"🎯"},"美食":{c:"#FF7A59",i:"🍜"},"文化":{c:"#9B5DE5",i:"🎭"},"其它":{c:"#94a3b8",i:"📌"}};
+const cc=function(p){(CATS[p.c]||CATS["其它"]).c;return (CATS[p.c]||CATS["其它"]).c;};
+const ci=function(p){return (CATS[p.c]||CATS["其它"]).i;};
+const HOME={n:"深圳·丹华公馆",en:"Home · Danhua Xili Shenzhen",lat:22.578,lng:113.962};
+const D=[
+{n:"9/25 周五",t:"欢迎来深 · 接风 + 深圳湾日落",p:[
+ {tm:"07:20",c:"机场",n:"✈️ 白塔 → 宝安机场",en:"Arrive Shenzhen (SZX)",la:22.641,ln:113.815},
+ {tm:"中午",c:"美食",n:"🦀 一大桌接风菜，欢迎宝宝！",en:"Welcome feast at home",la:HOME.lat,ln:HOME.lng,sk:1},
+ {tm:"下午",c:"酒店",n:"♨️ 舟车劳顿，先歇会儿",en:"Rest at home",la:HOME.lat,ln:HOME.lng,sk:1},
+ {tm:"傍晚",c:"景点",n:"🌄 深圳湾日落",en:"Shenzhen Bay Park",la:22.482,ln:113.951},
+ {tm:"傍晚",c:"景点",n:"人才公园",en:"Talent Park",la:22.517,ln:113.935},
+ {tm:"傍晚",c:"景点",n:"海上世界",en:"Sea World (Shekou)",la:22.487,ln:113.911}]},
+{n:"9/26 周六",t:"高铁赴广州 · 利苑 + 广州塔",p:[
+ {tm:"上午",c:"景点",n:"🚄 深圳北 → 广州南",en:"HSR to Guangzhou",la:23.005,ln:113.240},
+ {tm:"中午",c:"美食",n:"🍚 利苑酒家",en:"Lei Garden (Guangzhou)",la:23.135,ln:113.329},
+ {tm:"下午",c:"景点",n:"🌊 逛天鹅湖",en:"Lu Hu Park (Swan Lake)",la:23.148,ln:113.272},
+ {tm:"晚上",c:"景点",n:"🗼 广州塔",en:"Canton Tower",la:23.106,ln:113.324},
+ {tm:"晚上",c:"酒店",n:"🏠 住广州",en:"Overnight in Guangzhou",la:23.130,ln:113.320,sk:1}]},
+{n:"9/27 周日",t:"顺德一日 · 鱼生 + 桑拿鸡",p:[
+ {tm:"上午",c:"景点",n:"🚄 赴顺德",en:"To Shunde",la:22.840,ln:113.252},
+ {tm:"中午",c:"美食",n:"🐟 顺德鱼生（鳗鱼饭·煲仔饭·双皮奶·蒸鱼）",en:"Shunde Raw Fish Feast",la:22.840,ln:113.252},
+ {tm:"晚上",c:"美食",n:"🐔 桑拿鸡",en:"Shunde Sauna Chicken",la:22.845,ln:113.255},
+ {tm:"晚上",c:"景点",n:"🚄 返深圳",en:"Back to Shenzhen",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"9/28 周一",t:"深圳休整 · 西丽生态公园",p:[
+ {tm:"上午",c:"酒店",n:"💤 睡到自然醒",en:"Sleep in",la:HOME.lat,ln:HOME.lng,sk:1},
+ {tm:"下午",c:"景点",n:"🌳 西丽生态公园",en:"Xili Ecological Park",la:22.596,ln:113.955},
+ {tm:"晚上",c:"美食",n:"🍜 清淡饮食，备战体检",en:"Light dinner",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"9/29 周二",t:"深圳日常 · 体检 + 电影",p:[
+ {tm:"白天",c:"其它",n:"🏥 给宝子安排体检",en:"Medical check-up (Futian)",la:22.545,ln:114.060},
+ {tm:"下午",c:"其它",n:"🪪 check 港澳通行证",en:"Check HK/Macau permit",la:HOME.lat,ln:HOME.lng,sk:1},
+ {tm:"晚上",c:"文化",n:"🌃 一起看个电影",en:"Movie night",la:22.538,ln:114.058}]},
+{n:"9/30 周三",t:"香港迪士尼 day trip",p:[
+ {tm:"上午",c:"景点",n:"🚄 赴香港",en:"To Hong Kong",la:22.320,ln:114.170},
+ {tm:"全天",c:"景点",n:"🎢 迪士尼乐园！",en:"Hong Kong Disneyland",la:22.313,ln:113.918},
+ {tm:"傍晚",c:"文化",n:"📷 快乐出片",en:"Photo time",la:22.313,ln:113.918,sk:1},
+ {tm:"晚上",c:"景点",n:"🚄 返深圳",en:"Back to Shenzhen",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"10/1 周四",t:"深圳灵活日",p:[
+ {tm:"全天",c:"其它",n:"♻️ 暂不安排，灵活处理",en:"Flexible / Open",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"10/2 周五",t:"澳门 day trip · 大三巴 + 赌场",p:[
+ {tm:"上午",c:"景点",n:"🚄 赴澳门",en:"To Macau",la:22.200,ln:113.540},
+ {tm:"中午",c:"美食",n:"🧇 蛋挞 + 鸡蛋仔",en:"Egg tart & bubble waffle",la:22.197,ln:113.543},
+ {tm:"下午",c:"景点",n:"🎲 赌场逛逛 + 观光车",en:"Casino & sightseeing bus",la:22.200,ln:113.550},
+ {tm:"傍晚",c:"景点",n:"🏰 大三巴牌坊 + 茶餐厅",en:"Ruins of St. Paul & tea cafe",la:22.197,ln:113.543,sk:1},
+ {tm:"晚上",c:"景点",n:"🚄 返深圳",en:"Back to Shenzhen",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"10/3 周六",t:"香港 day trip · 西九龙 + 维港",p:[
+ {tm:"上午",c:"景点",n:"🚄 赴香港",en:"To Hong Kong",la:22.320,ln:114.170},
+ {tm:"上午",c:"景点",n:"⛲️ 西九龙公园 + 展览",en:"West Kowloon Park & Exhibition",la:22.306,ln:114.170},
+ {tm:"下午",c:"景点",n:"🚢 天星小轮 + 维多利亚港",en:"Star Ferry & Victoria Harbour",la:22.294,ln:114.172},
+ {tm:"下午",c:"美食",n:"🥤 茶餐厅 + 丝袜奶茶",en:"Cha chaan teng & milk tea",la:22.280,ln:114.160},
+ {tm:"傍晚",c:"文化",n:"📷 落日飞车 · 二层公交",en:"Double-decker bus sunset",la:22.280,ln:114.160,sk:1},
+ {tm:"晚上",c:"景点",n:"🚄 返深圳",en:"Back to Shenzhen",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"10/4 周日",t:"珠海长隆 · 海洋王国",p:[
+ {tm:"上午",c:"景点",n:"🚄 赴珠海长隆",en:"To Zhuhai Chimelong",la:22.075,ln:113.573},
+ {tm:"全天",c:"景点",n:"🐳 世界最大海洋馆",en:"Chimelong Ocean Kingdom",la:22.075,ln:113.573,sk:1},
+ {tm:"下午",c:"文化",n:"🌊 海底世界 + 演出",en:"Ocean theatre show",la:22.075,ln:113.573,sk:1},
+ {tm:"晚上",c:"酒店",n:"🏠 住长隆",en:"Overnight at Chimelong",la:22.078,ln:113.568,sk:1}]},
+{n:"10/5 周一",t:"长隆续 · 返深",p:[
+ {tm:"上午",c:"景点",n:"🎠 长隆水上乐园 / 野生动物园",en:"Water Park / Safari",la:22.075,ln:113.573,sk:1},
+ {tm:"下午",c:"景点",n:"🚄 返深圳",en:"Back to Shenzhen",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"10/6 周二",t:"深圳灵活日",p:[
+ {tm:"全天",c:"其它",n:"♻️ 暂不安排，灵活处理",en:"Flexible / Open",la:HOME.lat,ln:HOME.lng,sk:1}]},
+{n:"10/7 周三",t:"欢送 · 宝安机场",p:[
+ {tm:"下午",c:"文化",n:"💬 深度聊天，欢送宝宝",en:"Farewell chat",la:HOME.lat,ln:HOME.lng,sk:1},
+ {tm:"20:20",c:"机场",n:"✈️ 宝安 → 白塔",en:"Depart Shenzhen (SZX)",la:22.641,ln:113.815}]}
+];
+let map=null,dL=null,cD=0;
+function amapMarkerUrl(p){return "https://uri.amap.com/marker?position="+p.lng+","+p.lat+"&name="+encodeURIComponent(p.n)+"&src=szplan&coordinate=gaode&callnative=1";}
+function amapNavUrl(p){return "https://uri.amap.com/navigation?to="+p.lng+","+p.lat+","+encodeURIComponent(p.n)+"&mode=car&policy=1&src=szplan&coordinate=gaode&callnative=1";}
+function pI(p,idx){const c=cc(p);return L.divIcon({html:'<svg xmlns="http://www.w3.org/2000/svg" width="32" height="42" viewBox="0 0 32 42"><path d="M16 41 C16 41 2 26 2 16 A14 14 0 1 1 30 16 C30 26 16 41 16 41 Z" fill="'+c+'"/><circle cx="16" cy="16" r="11" fill="#fff"/><text x="16" y="21" font-size="14" font-weight="700" fill="'+c+'" text-anchor="middle">'+(idx+1)+'</text></svg>',className:'',iconSize:[32,42],iconAnchor:[16,42],popupAnchor:[0,-40]});}
+function hI(){return L.divIcon({html:'<svg xmlns="http://www.w3.org/2000/svg" width="34" height="44" viewBox="0 0 34 44"><path d="M17 43 C17 43 3 27 3 17 A14 14 0 1 1 31 17 C31 27 17 43 17 43 Z" fill="#1a2b4a"/><circle cx="17" cy="17" r="12" fill="#fff"/><text x="17" y="23" font-size="16" text-anchor="middle">🏠</text></svg>',className:'',iconSize:[34,44],iconAnchor:[17,44],popupAnchor:[0,-40]});}
+function iH(p){const c=cc(p);return'<div style="font:600 14px/1.4 sans-serif;min-width:160px"><div style="font-weight:800;color:#0a1f44">'+p.n+'</div><div style="color:#5b6b8c;font-size:11px;margin:2px 0">'+p.en+'</div><span style="background:'+c+';color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px">'+p.c+' · '+p.tm+'</span></div>';}
+function rT(){const e=document.getElementById("tabs");const b=document.createElement("button");b.className="tab active";b.textContent="📋 行程一览";b.onclick=()=>sD(-1);e.appendChild(b);D.forEach((d,i)=>{const tb=document.createElement("button");tb.className="tab";tb.textContent=d.n;tb.onclick=()=>sD(i);e.appendChild(tb);});}
+function renderOverview(){document.getElementById("day-head").innerHTML='<span>📋 行程一览</span> <small style="color:var(--muted);font-weight:600;font-size:13px;margin-left:8px">13 天 · 6 城 · 4 次跨境</small>';const tl=document.getElementById("tl");tl.innerHTML='<div class="ov-stats" style="display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 14px"><div class="ov-stat" style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><b style="font-size:17px;font-weight:900;color:var(--indigo)">13</b><span style="font-size:12px;color:var(--muted);margin-left:5px">天</span></div><div class="ov-stat" style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><b style="font-size:17px;font-weight:900;color:var(--indigo)">6</b><span style="font-size:12px;color:var(--muted);margin-left:5px">城</span></div><div class="ov-stat" style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:9px 14px;box-shadow:0 1px 3px rgba(0,0,0,.04)"><b style="font-size:17px;font-weight:900;color:var(--indigo)">4</b><span style="font-size:12px;color:var(--muted);margin-left:5px">次跨境</span></div></div><div class="ov-grid" id="ovGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px"></div>';const g=document.getElementById("ovGrid");D.forEach((d,i)=>{if(/灵活|欢送/.test(d.t))return;const tag=/香港|澳门|珠海/.test(d.t)?"🌉 跨境":/广州|顺德/.test(d.t)?"🚄 出城":/迪士尼|长隆/.test(d.t)?"🎡 游玩":"🏠 深圳";const c=document.createElement("button");c.className="ov-chip";c.style.cssText="text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:11px 13px;cursor:pointer;transition:.15s;box-shadow:0 1px 3px rgba(0,0,0,.04)";c.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--muted)">'+d.n+'</div><div style="font-size:14px;font-weight:800;color:var(--ink);margin:3px 0 6px;line-height:1.3">'+d.t.split("·")[0].trim()+'</div><div style="display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:#eef1ff;color:var(--indigo)">'+tag+'</div>';c.onclick=()=>sD(i);g.appendChild(c);});}
+function rTL(di){const d=D[di];document.getElementById("day-head").innerHTML="<span>"+d.n+"</span> <small style=\"color:var(--muted);font-weight:600;font-size:13px;margin-left:8px\">"+d.t+"</small>";const tl=document.getElementById("tl");tl.innerHTML="";d.p.forEach((p,idx)=>{const c=document.createElement("div");c.className="tl-card cat-"+p.c;c.dataset.idx=idx;c.innerHTML='<div><span class="tl-time">'+p.tm+"</span><span class='tl-cat' style=\"background:"+cc(p)+"\">"+ci(p)+" "+p.c+'</span></div><div class="tl-name">'+p.n+'</div><div class="tl-en">'+p.en+"</div>";c.onclick=()=>fP(di,idx);tl.appendChild(c);});}
+function rDM(di){if(!map)return;const d=D[di];if(dL)map.removeLayer(dL);dL=L.layerGroup().addTo(map);d.p.forEach((p,idx)=>{if(p.sk)return;const m=L.marker([p.la,p.ln],{icon:pI(p,idx)});m.on("click",()=>fP(di,idx));dL.addLayer(m);});L.marker([HOME.lat,HOME.lng],{icon:hI()}).bindPopup('<div style="font:600 14px/1.4 sans-serif"><b>🏠 '+HOME.n+'</b><br><span style="color:#5b6b8c;font-size:11px">'+HOME.en+"</span></div>").addTo(dL);const rc=d.p.filter(p=>!p.sk).map(p=>[p.la,p.ln]);if(rc.length>=2)L.polyline(rc,{color:"#c0c8d8",weight:3,opacity:.6}).addTo(dL);fF(d.p.filter(p=>!p.sk));}
+function fF(ps){if(!ps.length)return;const la=ps.map(p=>p.la),ln=ps.map(p=>p.ln);map.fitBounds([[Math.min(...la),Math.min(...ln)],[Math.max(...la),Math.max(...ln)]],{padding:[50,50]});}
+function sD(i){cD=i;document.querySelectorAll(".tab").forEach((t,j)=>t.classList.toggle("active",j===i+1));if(i===-1){renderOverview();document.getElementById("map-title").textContent="行程总览";const rp=document.getElementById("routePanel");if(rp)rp.style.display="none";if(map&&innerWidth<=768)setTimeout(()=>{try{map.invalidateSize(true);}catch(e){}},200);return;}rTL(i);rDM(i);document.getElementById("map-title").textContent=D[i].n+" · "+D[i].t.split("·")[0];const rp=document.getElementById("routePanel");if(rp)rp.style.display="none";if(map&&innerWidth<=768)setTimeout(()=>{try{map.invalidateSize(true);}catch(e){}},200);}
+function fP(di,idx){if(di!==cD)sD(di);const p=D[di].p[idx];const m=matchMedia("(max-width:768px)").matches;
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(p.n).catch(()=>{});}
+ if(map){if(m&&!document.body.classList.contains("m-view-map"))setMV("map");if(!p.sk){const prev=D[di].p.slice(0,idx).filter(x=>!x.sk);const bnd=(prev.length>0)?[[prev[prev.length-1].la,prev[prev.length-1].ln],[p.la,p.ln]]:[[HOME.lat,HOME.lng],[p.la,p.ln]];map.flyToBounds(bnd,{padding:[42,42],maxZoom:17,duration:.8});L.popup({offset:[0,-40],closeButton:true}).setLatLng([p.la,p.ln]).setContent(iH(p)).openOn(map);}renderPanel(p);}
+ document.querySelectorAll(".tl-card").forEach(c=>c.classList.remove("active"));const cd=document.querySelector('.tl-card[data-idx="'+idx+'"]');if(cd){cd.classList.add("active");if(!m)cd.scrollIntoView({behavior:"smooth",block:"center"});}}
+function renderPanel(p){const rp=document.getElementById("routePanel");if(!rp)return;rp.style.display="block";const addr=p.en||p.n;
+ rp.innerHTML='<div class="route-detail"><div>'+p.n+'</div></div><div class="route-soft">📍 '+addr+'</div>'+
+  '<div class="route-actions"><a class="nav" href="'+amapNavUrl(p)+'" target="_blank" rel="noopener">🧭 高德导航</a>'+
+  '<span class="route-keyhint" onclick="copyAddr(\''+addr.replace(/'/g,"\\'")+'\')">📋 复制</span></div>';}
+function copyAddr(t){if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>{});}
+function setMV(v){const toMap=(v==="map");document.body.classList.toggle("m-view-map",toMap);document.body.classList.toggle("m-view-list",!toMap);document.querySelectorAll("#viewSwitch button").forEach(b=>b.classList.toggle("active",b.dataset.view===v));if(toMap){setTimeout(()=>{try{map.invalidateSize(true);fF(D[cD].p.filter(p=>!p.sk));}catch(e){}},220);}window.scrollTo({top:0,behavior:"smooth"});}
+(function(){rT();map=L.map("map",{scrollWheelZoom:true,zoomControl:false}).setView([22.54,114.06],11);L.control.zoom({position:'topright'}).addTo(map);L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}',{attribution:'© 高德地图 AutoNavi',subdomains:'1234',maxZoom:20}).addTo(map);sD(-1);document.querySelectorAll("#viewSwitch button").forEach(b=>b.addEventListener("click",()=>setMV(b.dataset.view)));})();
+</script></body></html>
