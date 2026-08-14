@@ -1,0 +1,3249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>QQ浏览器首页 · 看世界双列 ｜ 高保真原型</title>
+<style>
+/* ============================================================
+   视觉系统（沿用看世界，配合 QB 首页底色）
+   ============================================================ */
+:root{
+  --page:#F2F3F5; --card:#FFFFFF; --brand:#FF6B35; --link:#2B6CB0;
+  --t1:#1A1A1E; --t2:#5A5A66; --t3:#9A9AA6; --line:#EDEEF0;
+  --r-card:12px; --r-btn:12px; --safe-b:34px;
+  --mono:ui-monospace,Menlo,"SF Mono",Consolas,monospace;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0;height:100%}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(160deg,#2C2C2E 0%,#1C1C1E 100%);color:var(--t1);font-size:15px;line-height:1.5;overflow:hidden;
+}
+button{font-family:inherit;border:0;background:none;padding:0;color:inherit;cursor:pointer}
+a{color:var(--link);text-decoration:none}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+.tap{transition:opacity .16s ease,transform .16s ease}
+.tap:active{opacity:.6;transform:scale(.98)}
+
+/* ============ iPhone 外壳 ============ */
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:40px 20px;overflow:auto}
+#phone{position:relative;width:393px;height:852px;flex:0 0 auto;border-radius:56px;background:#08080A;
+  border:2px solid #101014;box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06)}
+#screen{position:absolute;inset:0;border-radius:54px;overflow:hidden;background:var(--page)}
+#island{position:absolute;left:50%;top:11px;transform:translateX(-50%);width:126px;height:37px;border-radius:20px;
+  background:#000;z-index:1090;pointer-events:none}
+#island::after{content:"";position:absolute;right:13px;top:12.5px;width:12px;height:12px;border-radius:99px;background:#0E1418}
+#statusbar{position:absolute;left:0;right:0;top:0;height:54px;z-index:1080;pointer-events:none;display:flex;
+  align-items:center;justify-content:space-between;padding:0 30px 0 32px;color:var(--t1);transition:color .25s ease}
+#statusbar.light{color:#fff}
+#statusbar .stime{font-size:17px;font-weight:700;letter-spacing:.2px;padding-top:2px}
+#statusbar .sright{display:flex;align-items:center;gap:6px;padding-top:2px}
+#homeind{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);width:140px;height:5px;border-radius:3px;
+  background:rgba(0,0,0,.3);z-index:1075;pointer-events:none}
+
+/* ============ 底部 Tab Bar（QB 五格） ============ */
+#tabbar{position:absolute;left:0;right:0;bottom:0;height:83px;padding-bottom:var(--safe-b);z-index:940;display:flex;
+  align-items:flex-start;background:rgba(255,255,255,.92);backdrop-filter:blur(20px) saturate(180%);
+  -webkit-backdrop-filter:blur(20px) saturate(180%);box-shadow:inset 0 .5px 0 rgba(0,0,0,.1)}
+#tabbar button{flex:1 1 0;height:49px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#9A9AA6}
+#tabbar button.on{color:var(--t1)}
+#tabbar span{font-size:10px;font-weight:500}
+#tabbar .num{position:absolute;font-size:8.5px;font-weight:700;margin-top:-3px}
+#tabbar button:active{opacity:.55}
+
+/* ============ 页面容器 ============ */
+.page{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:83px;
+  opacity:0;visibility:hidden;transition:opacity .18s ease,visibility .18s;background:var(--page)}
+.page.on{opacity:1;visibility:visible}
+.page::-webkit-scrollbar{display:none}
+.blank{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--t3);padding-bottom:120px}
+.blank b{font-size:15px;color:var(--t2);font-weight:600}
+.blank i{font-size:12px;font-style:normal}
+
+/* ============ QB 首页顶部 ============ */
+#sbbg{position:absolute;left:0;right:0;top:0;height:54px;z-index:70;background:rgba(242,243,245,.94);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);opacity:0;transition:opacity .2s ease;pointer-events:none}
+#sbbg.on{opacity:1}
+.qbtop{padding:54px 16px 0;background:linear-gradient(180deg,#F7F8FA 0%,#F2F3F5 100%)}
+.qbrow1{height:46px;display:flex;align-items:center}
+.iconbtn{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#3A3A42}
+.qblogo{text-align:center;font-size:26px;font-weight:800;letter-spacing:.5px;padding:16px 0 18px;color:#17171B}
+.qbsearch{height:48px;border-radius:24px;background:#fff;display:flex;align-items:center;gap:10px;padding:0 16px 0 18px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.qbsearch .ph{flex:1 1 auto;font-size:15.5px;color:#A2A2AC}
+.qbbtns{display:flex;gap:12px;margin-top:12px}
+.qbbtn{flex:1 1 0;height:44px;border-radius:22px;background:#fff;display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:14px;font-weight:500;color:#33333B;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.qblinks{display:flex;gap:0;margin:18px 0 16px}
+.qblink{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:6px}
+.qblink .ico{width:48px;height:48px;border-radius:14px;background:#fff;display:grid;place-items:center;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);font-size:20px;font-weight:700}
+.qblink .ico.add{background:rgba(255,255,255,.5);box-shadow:none;border:1px dashed #D6D7DC;color:#A2A2AC;font-weight:400}
+.qblink span{font-size:11px;color:#5A5A66}
+
+/* ============ 内容面板 + 频道条 ============ */
+.panel{background:#F2F3F5;border-radius:16px 16px 0 0;min-height:640px;padding-bottom:24px}
+.chbar{position:sticky;top:54px;z-index:60;background:rgba(242,243,245,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border-radius:16px 16px 0 0;
+  display:flex;align-items:center;gap:2px;padding:0 6px;height:46px;box-shadow:inset 0 -.5px 0 rgba(0,0,0,.06)}
+.chbar button{position:relative;flex:0 0 auto;height:46px;padding:0 10px;font-size:15px;color:var(--t2);font-weight:400;white-space:nowrap}
+.chbar button.on{font-size:17px;font-weight:700;color:var(--t1)}
+.chbar button.on::after{content:"";position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:18px;height:3px;
+  border-radius:999px;background:var(--brand)}
+.chbar .grow{flex:1 1 auto}
+.chbar .more{color:var(--t3);padding-right:6px}
+
+/* ============ 热点话题：App Store 主打推荐式横向卡 ============ */
+.thead{display:flex;align-items:center;gap:6px;padding:12px 14px 8px}
+.thead b{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.thead .live{display:inline-flex;align-items:center;gap:4px;height:18px;padding:0 6px;border-radius:4px;
+  background:#FFF1EA;color:var(--brand);font-size:9.5px;font-weight:700}
+.thead .live i{width:5px;height:5px;border-radius:99px;background:var(--brand);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+.thead .upd{margin-left:auto;font-size:10.5px;color:var(--t3);font-variant-numeric:tabular-nums}
+.trail{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x proximity;padding:0 14px 14px;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.trail::-webkit-scrollbar{display:none}
+.tcard{position:relative;flex:0 0 auto;width:300px;scroll-snap-align:center;text-align:left;
+  display:block;transition:transform .2s cubic-bezier(.32,.72,0,1)}
+.tcard:active{transform:scale(.978)}
+.tcard .thero{border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.07),0 10px 26px rgba(0,0,0,.13)}
+.tcard .thero::before{height:60px;border-radius:18px 18px 0 0;background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,0))}
+/* 图内底部毛玻璃条 */
+.tbar{position:absolute;left:8px;right:8px;bottom:8px;z-index:4;height:56px;padding:8px;border-radius:13px;
+  background:rgba(255,255,255,.72);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);
+  display:flex;align-items:center;gap:9px;box-shadow:0 1px 6px rgba(0,0,0,.12)}
+.tcard .tico{width:40px!important;height:40px;flex:0 0 auto;border-radius:9px;overflow:hidden;aspect-ratio:1/1!important;
+  box-shadow:0 1px 3px rgba(0,0,0,.22)}
+.tcard .tico::before{display:none}
+.tinfo{min-width:0;flex:1 1 auto}
+.tinfo b{display:block;font-size:13.5px;font-weight:700;line-height:1.25;color:#16161A;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tinfo .tn{display:block;margin-top:2px;font-size:10.5px;line-height:1.3;color:#5A5A66;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tgo{flex:0 0 auto;height:28px;padding:0 14px;border-radius:999px;background:rgba(255,107,53,.14);
+  color:#D2551F;font-size:13px;font-weight:700;display:inline-flex;align-items:center}
+
+/* ============ 下拉刷新 ============ */
+.ptr{height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--t3);font-size:12.5px}
+.ptr.anim{transition:height .32s cubic-bezier(.32,.72,0,1)}
+.spin{width:16px;height:16px;border-radius:99px;border:2px solid rgba(0,0,0,.12);border-top-color:var(--brand);animation:sp .7s linear infinite}
+@keyframes sp{100%{transform:rotate(360deg)}}
+
+/* ============ 双列瀑布流（App Store 风格白卡） ============ */
+.feed{display:flex;gap:11px;padding:2px 14px 20px;align-items:flex-start}
+.colm{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:12px}
+.qcard{position:relative;background:#fff;border-radius:16px;overflow:hidden;opacity:0;transform:translateY(10px);
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 6px 18px rgba(0,0,0,.07);
+  transition:opacity .38s ease,transform .38s cubic-bezier(.32,.72,0,1)}
+.qcard.in{opacity:1;transform:none}
+.qcard:active{opacity:.86;transform:scale(.985)}
+.qcard.fresh .qtitle::after{content:"新";display:inline-block;margin-left:5px;font-size:9px;color:#fff;background:var(--brand);
+  border-radius:4px;padding:1px 3px;vertical-align:2px;font-weight:700}
+/* 图片 */
+.cimg{position:relative;width:100%;overflow:hidden;background:#EDEEF0;border-radius:var(--r-card);display:block}
+.qcard>.cimg{border-radius:16px 16px 0 0}
+.cimg img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s ease}
+.cimg img.loaded{opacity:1}
+.cimg .shim{position:absolute;inset:0;background:#EDEEF0;overflow:hidden}
+.cimg .shim::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.7),rgba(255,255,255,0));animation:shim 1.2s infinite}
+@keyframes shim{100%{transform:translateX(100%)}}
+.cimg.img-fallback img,.cimg.img-fallback .shim{display:none}
+.cimg.img-fallback{background:linear-gradient(135deg,#E7E9EC 0%,#D7DAE0 52%,#EEF0F3 100%)}
+.cimg.img-fallback::after{content:attr(data-emoji);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px;opacity:.85}
+.cimg::before{content:"";position:absolute;left:0;right:0;top:0;height:52px;border-radius:var(--r-card) var(--r-card) 0 0;
+  background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,0))}
+.playbig{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;width:34px;height:34px;border-radius:99px;
+  background:rgba(0,0,0,.42);backdrop-filter:blur(4px);display:grid;place-items:center}
+.mtag{position:absolute;right:7px;bottom:7px;z-index:3;height:19px;padding:0 6px;border-radius:5px;background:rgba(0,0,0,.5);
+  color:#fff;font-size:10px;font-weight:600;display:inline-flex;align-items:center;gap:3px;font-variant-numeric:tabular-nums}
+/* 文字区（只保留标题 + 小来源，外层不露出 AI 结论 / 亮评 / 互动数据） */
+.qbody{padding:9px 11px 11px}
+.qtitle{font-size:14.5px;font-weight:600;line-height:1.4;letter-spacing:-.2px;color:#16161A;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.qtitle.sm{font-size:13px;font-weight:500;color:#3A3A44;line-height:1.45}
+.qtitle.big{font-size:16px;font-weight:700;line-height:1.34;-webkit-line-clamp:3;margin-top:6px}
+/* 文字大字卡（图位即排版） */
+.poster{padding:12px 12px 11px;min-height:120px;display:flex;flex-direction:column}
+.poster .prow{display:flex;align-items:center;gap:5px;font-size:11px;color:#2A2A32;font-weight:700}
+.poster .prow .ptag{margin-left:auto;font-style:normal;font-size:9.5px;font-weight:600;color:#5A5A66;
+  background:rgba(255,255,255,.72);border-radius:999px;padding:2px 7px}
+.poster .pbig{margin-top:10px;font-size:19px;font-weight:800;line-height:1.32;letter-spacing:-.4px;color:#111116;
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.poster .pfoot{margin-top:auto;padding-top:10px;font-size:10px;color:#6A6A76;font-variant-numeric:tabular-nums}
+.t-violet{background:#EFEBFF}.t-green{background:#E8F4EA}.t-yellow{background:#FDF3D8}
+.t-blue{background:#E7F0FE}.t-pink{background:#FDECEF}.t-mint{background:#E4F4F1}
+/* AI 聚合卡 */
+.agtag{position:absolute;left:8px;top:8px;z-index:3;height:20px;padding:0 8px;border-radius:999px;
+  background:rgba(20,20,26,.62);backdrop-filter:blur(10px);color:#fff;font-size:9.5px;font-weight:700;
+  display:inline-flex;align-items:center;letter-spacing:.2px}
+.agfoot{margin-top:0!important;margin-bottom:2px}
+.pstack{display:inline-flex;align-items:center;flex:0 0 auto}
+.pstack i{display:inline-flex;width:15px;height:15px;border-radius:5px;overflow:hidden;background:#fff;
+  box-shadow:0 0 0 1.4px #fff;margin-left:-5px}
+.pstack i:first-child{margin-left:0}
+.agstat{margin-top:8px;font-size:11px;font-weight:700;color:var(--link)}
+.ai-chip{position:absolute;right:4px;top:4px;height:12px;padding:0 3px;border-radius:3px;background:rgba(255,107,53,.14);
+  color:#C4491C;font-size:8px;font-weight:700;display:inline-flex;align-items:center}
+/* 底部来源行（铁律一：平台 + 原作者常驻） */
+.qfoot{display:flex;align-items:center;gap:4px;margin-top:7px;min-width:0}
+.qfoot svg{flex:0 0 auto}
+.ava{width:18px;height:18px;border-radius:999px;flex:0 0 auto;display:grid;place-items:center;color:#fff;font-size:9px;font-weight:700}
+.qauth{font-size:10.5px;color:var(--t3);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qlike{margin-left:auto;flex:0 0 auto;display:inline-flex;align-items:center;gap:3px;color:#9A9AA6;
+  font-size:10.5px;font-variant-numeric:tabular-nums}
+/* 骨架 / 触底 */
+.sk{border-radius:16px;overflow:hidden;background:#fff;padding-bottom:10px;
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 6px 18px rgba(0,0,0,.07)}
+.sk .m{background:#EDEEF0;position:relative;overflow:hidden;border-radius:16px 16px 0 0}
+.sk .l{height:12px;border-radius:5px;margin:8px 11px 0;background:#EDEEF0;position:relative;overflow:hidden}
+.sk .m::after,.sk .l::after{content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.7),rgba(255,255,255,0));animation:shim 1.2s infinite}
+.loadmore{display:flex;justify-content:center;padding:16px 0}
+.endtip{text-align:center;padding:18px 24px 6px;font-size:11px;color:var(--t3);line-height:1.7}
+.endtip b{display:block;font-size:12.5px;color:var(--t2);margin-bottom:3px}
+.emptytip{text-align:center;padding:48px 32px;color:var(--t3);font-size:12.5px;line-height:1.8}
+.emptytip b{display:block;font-size:14px;color:var(--t2);margin-bottom:6px}
+
+/* ============ Push 页 ============ */
+.push{position:absolute;inset:0;z-index:945;background:#fff;transform:translateX(100%);
+  transition:transform .32s cubic-bezier(.32,.72,0,1);display:flex;flex-direction:column}
+.push.on{transform:translateX(0)}
+.pnav{position:absolute;left:0;right:0;top:0;height:98px;padding:54px 10px 0;z-index:70;display:flex;align-items:center;gap:2px;
+  color:#fff;background:transparent;transition:background .25s ease,color .25s ease,box-shadow .25s ease}
+.pnav.solid{background:rgba(255,255,255,.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  color:var(--t1);box-shadow:0 .5px 0 rgba(0,0,0,.08)}
+.pnav .back{display:inline-flex;align-items:center;height:40px;padding:0 6px;color:inherit}
+.pnav .ptitle{flex:1 1 auto;min-width:0;text-align:center;font-size:15.5px;font-weight:600;opacity:0;transition:opacity .2s;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pnav.solid .ptitle{opacity:1}
+.pnav .navico{width:34px;height:34px;border-radius:99px;display:grid;place-items:center;color:inherit;flex:0 0 auto}
+.pscroll{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.pscroll::-webkit-scrollbar{display:none}
+/* 详情内容 */
+.hero{position:relative;width:100%;aspect-ratio:16/9;background:#E7E9EC;overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;display:block;opacity:0;transition:opacity .35s}
+.hero img.loaded{opacity:1}
+.hero.img-fallback{background:linear-gradient(135deg,#E7E9EC,#D7DAE0 52%,#EEF0F3)}
+.hero.img-fallback img{display:none}
+.hero.img-fallback::after{content:attr(data-emoji);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:60px;opacity:.85}
+.hero .playbig{width:52px;height:52px}
+.hero .mtag{right:14px;bottom:14px;height:22px;font-size:11px}
+/* ① 作者行（置顶）：平台 / 原作者 / 原发布时间 / 回原站 */
+.dauthor{display:flex;gap:9px;align-items:center;padding:8px 16px 12px}
+.dauthor .ava{width:34px;height:34px;font-size:13px}
+.dauthor .m{min-width:0;flex:1 1 auto}
+.dauthor .nm{font-size:14.5px;font-weight:700;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dauthor .ot{font-size:11px;color:var(--t3);margin-top:2px;display:flex;align-items:center;gap:4px}
+.dauthor .go{flex:0 0 auto;height:30px;padding:0 13px;border-radius:999px;background:#FFF1EA;color:var(--brand);font-size:12.5px;font-weight:700;
+  display:inline-flex;align-items:center;gap:3px}
+/* 话题全屏页 */
+.subbtn{flex:0 0 auto;height:30px;padding:0 15px;border-radius:999px;border:1.4px solid var(--brand);color:var(--brand);
+  background:#fff;font-size:13px;font-weight:700}
+.subbtn.on{background:#F2F3F5;border-color:transparent;color:var(--t3)}
+.subbtn:active{opacity:.6}
+.thero2{position:relative;margin:0 14px 12px;border-radius:16px;overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,.05),0 8px 22px rgba(0,0,0,.1)}
+.thero2 .cimg{border-radius:16px}
+.thero2 .tmeta{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:26px 14px 12px;color:#fff;
+  background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.72))}
+.thero2 .tmeta b{display:block;font-size:19px;font-weight:800;letter-spacing:-.4px;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.thero2 .tmeta span{display:block;margin-top:3px;font-size:11px;color:rgba(255,255,255,.86)}
+.din{padding:16px}
+.dh1{font-size:21px;font-weight:700;line-height:1.36;letter-spacing:-.3px}
+.dh1en{font-size:12px;color:var(--t3);line-height:1.5;margin-top:7px;font-style:italic}
+.dconcl{margin-top:13px;position:relative;padding:11px 40px 11px 13px;border-radius:10px;background:#FFF4EE;font-size:13.5px;
+  font-weight:600;line-height:1.55}
+.dconcl::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:999px;background:var(--brand)}
+/* 详情页正文（短的直出，不加壳） */
+.dtext{margin-top:14px}
+.dtext p{margin:0 0 13px;font-size:15.5px;line-height:1.82;color:#25252C}
+.dtext p:last-child{margin-bottom:0}
+.dtext.rawon p{font-family:Georgia,"Times New Roman",serif}
+.dmore{display:inline-flex;align-items:center;gap:5px;margin-top:14px;height:36px;padding:0 15px;border-radius:999px;
+  background:#F2F3F5;font-size:13px;font-weight:700;color:var(--link)}
+/* 文字大字卡（详情页 / 分享卡） */
+.poster.big{padding:20px 18px 18px;min-height:auto}
+.poster.big .pbig{font-size:26px;line-height:1.34;-webkit-line-clamp:8;margin-top:12px}
+.poster.big .pfoot{font-size:11px;padding-top:14px}
+.poster.shr{padding:14px;min-height:132px;display:flex;align-items:center}
+.poster.shr .pbig{font-size:15px;font-weight:800;line-height:1.36;margin:0;-webkit-line-clamp:5}
+/* AI 聚合详情页 */
+.agmeta{display:flex;align-items:center;gap:7px;margin-bottom:11px;font-size:11px;color:var(--t3)}
+.aglead{margin-top:11px;font-size:14px;line-height:1.7;color:#3A3A44;padding-left:11px;border-left:3px solid #E4E5EA}
+.agsec{margin-top:22px}
+.agsec h3{margin:0 0 8px;font-size:16.5px;font-weight:700;letter-spacing:-.2px}
+.agsec p{margin:0;font-size:15px;line-height:1.82;color:#25252C}
+.ref{display:inline-flex;align-items:center;justify-content:center;min-width:17px;height:17px;padding:0 4px;margin-left:4px;
+  border-radius:5px;background:#EDEEF2;color:#5A5A66;font-size:10.5px;font-weight:700;vertical-align:2px;
+  font-variant-numeric:tabular-nums}
+.ref:active{background:var(--brand);color:#fff}
+.agpic{margin-top:12px;border-radius:12px;overflow:hidden}
+.srclist{display:flex;flex-direction:column;gap:8px}
+.srcitem{display:flex;gap:9px;align-items:flex-start;padding:11px;border-radius:12px;background:#F7F8FA;text-decoration:none}
+.srcitem:active{background:#EFF0F3}
+.srcitem .n{flex:0 0 18px;height:18px;border-radius:5px;background:#E4E5EA;color:#5A5A66;font-size:10.5px;font-weight:800;
+  display:grid;place-items:center;margin-top:1px}
+.srcitem .m{min-width:0;flex:1 1 auto}
+.srcitem .top{display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--t3)}
+.srcitem .tt{display:block;margin-top:3px;font-size:13px;font-weight:600;color:#25252C;line-height:1.45;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.srcitem .goto{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--link);margin-top:2px}
+.agnote{margin:20px 0 6px;font-size:10.5px;color:var(--t3);line-height:1.7}
+/* 来源浮层 */
+.refpop{position:absolute;left:16px;right:16px;z-index:80;opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .18s ease,transform .18s ease}
+.refpop.on{opacity:1;transform:none;pointer-events:auto}
+.rp-in{background:#fff;border-radius:12px;padding:12px;box-shadow:0 6px 24px rgba(0,0,0,.18),0 0 0 .5px rgba(0,0,0,.06)}
+.rp-in .tt{font-size:13.5px;font-weight:600;line-height:1.45;color:#25252C}
+.rp-in .mt{display:flex;align-items:center;gap:4px;margin-top:6px;font-size:10.5px;color:var(--t3)}
+.rp-go{display:inline-block;margin-top:9px;font-size:12px;font-weight:700;color:var(--link);text-decoration:none}
+/* 模块标题 */
+.dsect{display:flex;align-items:center;gap:7px;margin:22px 0 10px}
+.dsect h3{margin:0;font-size:16px;font-weight:700}
+.dsect .sub{font-size:10.5px;color:var(--t3);font-weight:500}
+.dsect .rt{margin-left:auto;display:inline-flex;align-items:center;gap:6px}
+.swbtn{height:24px;padding:0 9px;border-radius:999px;border:1px solid var(--line);font-size:10.5px;font-weight:600;color:var(--t2);
+  background:#fff;display:inline-flex;align-items:center;gap:4px}
+.swbtn.on{border-color:var(--brand);color:var(--brand);background:#FFF6F2}
+/* 优质评论 */
+.cmt{display:flex;gap:9px;padding:11px 0;box-shadow:inset 0 -.5px 0 var(--line)}
+.cmt:last-child{box-shadow:none}
+.cmt .no{flex:0 0 18px;height:18px;border-radius:5px;background:#FFF1EA;color:var(--brand);font-size:10.5px;font-weight:800;
+  display:grid;place-items:center;margin-top:2px}
+.cmt .m{min-width:0;flex:1 1 auto}
+.cmt .u{font-size:11px;color:var(--t3);font-weight:600;display:flex;align-items:center;gap:6px}
+.cmt .en{font-size:11.5px;color:var(--t3);line-height:1.5;font-style:italic;margin-top:4px}
+.cmt .zh{font-size:14px;color:#25252C;line-height:1.6;margin-top:4px;font-weight:500}
+.cmt .lk{display:flex;align-items:center;justify-content:flex-end;gap:4px;font-size:10.5px;color:#9A9AA6;
+  margin-top:6px;font-variant-numeric:tabular-nums}
+/* 垂类结构化卡 */
+.speccard{display:flex;margin-top:13px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.speccard div{flex:1 1 0;padding:10px 8px;text-align:center;box-shadow:inset -.5px 0 0 var(--line)}
+.speccard div:last-child{box-shadow:none}
+.speccard b{display:block;font-size:14px;font-weight:700;font-variant-numeric:tabular-nums}
+.speccard span{display:block;font-size:10px;color:var(--t3);margin-top:3px}
+.speccard b.good{color:#2F9E63}.speccard b.bad{color:#C53030}.speccard b.mid{color:#B87A1B}
+/* 底部固定条（铁律二） */
+.dact{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:9px 16px calc(var(--safe-b) - 10px);
+  background:rgba(255,255,255,.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:0 -.5px 0 var(--line)}
+.btn-main{flex:0 0 66%;height:50px;border-radius:var(--r-btn);background:var(--brand);color:#fff;font-size:16px;font-weight:700;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.btn-ghost{flex:1 1 0;height:50px;border:1px solid var(--line);border-radius:var(--r-btn);background:#fff;font-size:11px;
+  font-weight:600;color:var(--t2);display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.btn-ghost.done{border-color:var(--brand);color:var(--brand);background:#FFF6F2}
+
+/* ============ 底部弹层（分享） ============ */
+#sheetMask{position:absolute;inset:0;z-index:1000;background:rgba(0,0,0,.42);opacity:0;pointer-events:none;transition:opacity .3s ease}
+#sheetMask.on{opacity:1;pointer-events:auto}
+.bsheet{position:absolute;left:0;right:0;bottom:0;z-index:1010;transform:translateY(110%);
+  transition:transform .34s cubic-bezier(.32,.72,0,1)}
+.bsheet.on{transform:translateY(0)}
+/* 分享 */
+#share{padding:0 8px var(--safe-b);max-height:calc(100% - 62px);overflow-y:auto}
+#share::-webkit-scrollbar{display:none}
+.as-card{background:rgba(255,255,255,.97);backdrop-filter:blur(20px);border-radius:14px;overflow:hidden;margin-bottom:8px}
+.as-ttl{padding:11px 16px;text-align:center;font-size:12px;color:var(--t3);box-shadow:0 .5px 0 rgba(0,0,0,.07)}
+.as-body{padding:13px}
+.as-cancel{width:100%;height:54px;border-radius:14px;background:#fff;font-size:17px;font-weight:700;color:var(--t1)}
+.as-cancel:active{background:rgba(0,0,0,.05)}
+.chans{display:flex;padding:8px 4px 4px}
+.chan{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:10px;color:var(--t2)}
+.chan .ci{width:40px;height:40px;border-radius:99px;display:grid;place-items:center;color:#fff;font-size:17px}
+/* 9:16 分享卡 */
+.scard{width:190px;margin:0 auto;border-radius:12px;overflow:hidden;background:#fff;position:relative;
+  box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.scard .top{position:relative;width:100%;aspect-ratio:4/3;background:#E7E9EC;overflow:hidden}
+.scard .top img{width:100%;height:100%;object-fit:cover;display:block}
+.scard .top.img-fallback{background:linear-gradient(135deg,#E7E9EC,#D7DAE0 52%,#EEF0F3)}
+.scard .top.img-fallback img{display:none}
+.scard .top.img-fallback::after{content:attr(data-emoji);position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;opacity:.85}
+.scard .plat{position:absolute;left:9px;top:9px;height:20px;padding:0 7px;border-radius:999px;background:rgba(255,255,255,.9);
+  backdrop-filter:blur(10px);font-size:9.5px;font-weight:700;display:inline-flex;align-items:center;gap:3px}
+.scard .in{padding:11px}
+.scard .st{font-size:13px;font-weight:700;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.scard .sc{margin-top:8px;position:relative;padding:6px 8px 6px 9px;border-radius:6px;background:#FFF4EE;font-size:10px;
+  font-weight:600;line-height:1.45;color:#3A2B24}
+.scard .sc::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:2.5px;border-radius:999px;background:var(--brand)}
+.scard .sq{margin-top:8px;font-size:10px;line-height:1.5;color:#4A4A56;background:#F7F8FA;border-radius:6px;padding:6px 8px}
+.scard .sq b{color:var(--brand);font-size:9px}
+.scard .ft{margin-top:9px;padding-top:9px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px}
+.qr{width:36px;height:36px;flex:0 0 auto;border-radius:4px;border:2.5px solid #1A1A1E;
+  background:conic-gradient(from 0deg,#1A1A1E 0 25%,#fff 0 50%,#1A1A1E 0 75%,#fff 0);background-size:6px 6px}
+.scard .ft .t{font-size:8.5px;color:var(--t2);line-height:1.5;flex:1 1 auto}
+.scard .ft .t b{display:block;font-size:9.5px;color:var(--t1)}
+
+/* ============ 我的 ============ */
+.mehead{padding:66px 16px 16px;display:flex;align-items:center;gap:13px}
+.mehead .av{width:54px;height:54px;border-radius:999px;background:linear-gradient(135deg,#FF6B35,#F2A25C);display:grid;
+  place-items:center;color:#fff;font-size:19px;font-weight:700;flex:0 0 auto}
+.mehead .t b{font-size:18px;display:block}
+.mehead .t span{font-size:12px;color:var(--t3)}
+.group{margin:12px 16px;background:#fff;border-radius:12px;overflow:hidden}
+.gtitle{font-size:11.5px;color:var(--t3);padding:0 16px 6px;margin-top:18px;font-weight:600}
+.item{display:flex;align-items:center;gap:11px;padding:13px 14px;box-shadow:0 .5px 0 var(--line);width:100%;text-align:left}
+.item:last-child{box-shadow:none}
+.item:active{background:rgba(0,0,0,.04)}
+.item .ic{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;flex:0 0 auto;color:#fff}
+.item .tx{flex:1 1 auto;min-width:0}
+.item .tx b{font-size:14.5px;font-weight:500;display:block}
+.item .tx i{font-size:11px;color:var(--t3);font-style:normal}
+.item .val{font-size:12.5px;color:var(--t3);flex:0 0 auto}
+.item .ar{color:#C4C4CC;flex:0 0 auto}
+/* 内部看板 */
+#pushBoard{background:#0F1419}
+.seg{display:flex;padding:3px;border-radius:9px;background:rgba(120,120,128,.2);margin:8px 16px 4px}
+.seg button{flex:1 1 0;height:30px;border-radius:7px;font-size:13px;font-weight:600;color:#8E8E93;transition:.2s}
+.seg button.on{background:#fff;color:var(--t1);box-shadow:0 1px 3px rgba(0,0,0,.14)}
+#boardBody{padding:8px 16px 56px}
+.bdark{color:#E6EDF3}
+.pcard{background:#1A1F26;border:1px solid #232C36;border-radius:12px;padding:14px}
+.kgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi .lb{font-size:11.5px;color:#8896A4;font-weight:600}
+.kpi .v{font-family:var(--mono);font-size:22px;font-weight:700;color:#F2F7FA;margin-top:6px}
+.kpi .v small{font-size:11px;color:#8896A4;font-weight:500;margin-left:3px}
+.kpi .dt{font-family:var(--mono);font-size:11px;font-weight:700;color:#00D9A3;margin-left:4px}
+.kpi .note{font-size:10px;color:#6E7C8A;margin-top:5px;line-height:1.5}
+.bsec{margin-top:18px}
+.bsec h3{margin:0 0 9px;font-size:13.5px;font-weight:700}
+.bsec .hint{font-size:10.5px;color:#6E7C8A;font-weight:400;margin-left:6px}
+.fun{display:flex;flex-direction:column;gap:10px}
+.fseg .fl{display:flex;align-items:baseline;gap:6px;font-size:11.5px;color:#8896A4;margin-bottom:5px}
+.fseg .fl b{font-family:var(--mono);font-size:15px;color:#00D9A3;font-weight:700}
+.fseg .fl .pc{font-family:var(--mono);margin-left:auto;font-size:10.5px}
+.fbar{height:9px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}
+.fbar i{display:block;height:100%;border-radius:999px;background:rgba(0,217,163,.55);width:0;transition:width .8s cubic-bezier(.32,.72,0,1)}
+.fseg.hot .fl b{color:#FFB454}
+.fseg.hot .fbar i{background:rgba(255,180,84,.6)}
+.floss{font-size:10px;color:#6E7C8A;margin-top:5px;line-height:1.5}
+.fseg.hot .floss{color:#FFB454;font-weight:600}
+.blight{color:#1A2230}
+.ccard{background:#fff;border:1px solid #E3E7ED;border-radius:12px;padding:14px}
+.cm .lb{font-size:11.5px;color:#5A6472;font-weight:600}
+.cm .v{font-size:25px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.cm .note{font-size:10.5px;color:#7A8494;margin-top:5px;line-height:1.6}
+.vs{display:grid;grid-template-columns:1fr 1fr;border-radius:10px;overflow:hidden;border:1px solid #E3E7ED;background:#fff}
+.vs>div{padding:12px}
+.vs .bad{background:#FDF7F7;border-right:1px solid #E3E7ED}
+.vs .good{background:#F4FAF6}
+.vs h5{margin:0 0 9px;font-size:11.5px}
+.vs .bad h5{color:#C53030}.vs .good h5{color:#2F9E63}
+.vs ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.vs li{font-size:11.5px;line-height:1.45;color:#3A4452;display:flex;gap:5px}
+.note-line{margin-top:11px;font-size:10.5px;color:#7A8494;line-height:1.7}
+
+@media (max-width:480px){
+  #stage{padding:0;align-items:stretch;justify-content:stretch}
+  #phone{width:100%;height:100vh;height:100dvh;border-radius:0;border:0;box-shadow:none}
+  #screen{border-radius:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important}
+  .qcard{opacity:1!important;transform:none!important;transition:none!important}
+  .push{transition:none}
+}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="phone">
+    <div id="screen">
+
+      <div id="statusbar">
+        <span class="stime">9:41</span>
+        <span class="sright">
+          <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true">
+            <rect x="0" y="8" width="3" height="4" rx="1" fill="currentColor"/>
+            <rect x="5" y="6" width="3" height="6" rx="1" fill="currentColor"/>
+            <rect x="10" y="3.5" width="3" height="8.5" rx="1" fill="currentColor"/>
+            <rect x="15" y="1" width="3" height="11" rx="1" fill="currentColor"/>
+          </svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true">
+            <path d="M1.2 4.1C3 2.4 5.4 1.5 8 1.5s5 .9 6.8 2.6"/><path d="M3.8 6.9C4.9 5.8 6.4 5.2 8 5.2s3.1.6 4.2 1.7"/>
+            <circle cx="8" cy="9.9" r="1.1" fill="currentColor" stroke="none"/>
+          </svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" aria-hidden="true">
+            <rect x=".6" y=".6" width="21" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-opacity=".45"/>
+            <rect x="2.2" y="2.2" width="15" height="7.6" rx="1.8" fill="currentColor"/>
+            <path d="M23.2 4.2v3.6c.9-.3 1.4-.9 1.4-1.8s-.5-1.5-1.4-1.8z" fill="currentColor" fill-opacity=".45"/>
+          </svg>
+        </span>
+      </div>
+
+      <!-- 首页 -->
+      <section class="page on" id="pg-home">
+        <div class="qbtop">
+          <div class="qbrow1">
+            <button class="iconbtn tap" aria-label="设置">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+                <path d="M3 7h13M19 7h2M3 17h5M11 17h10"/><circle cx="17.5" cy="7" r="2.2"/><circle cx="9.5" cy="17" r="2.2"/>
+              </svg>
+            </button>
+          </div>
+          <div class="qblogo">QQ浏览器</div>
+          <div class="qbsearch tap">
+            <span class="ph">搜索或输入网址</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3A3A42" stroke-width="1.8" stroke-linecap="round">
+              <rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 12a6.5 6.5 0 0 0 13 0M12 18.5V21"/>
+            </svg>
+          </div>
+          <div class="qbbtns">
+            <button class="qbbtn tap">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#5A5A66" stroke-width="1.8" stroke-linecap="round">
+                <circle cx="12" cy="12" r="9"/><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.3c-.7.3-1 .8-1 1.6M12 16.6h.01"/>
+              </svg>问元宝</button>
+            <button class="qbbtn tap">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#5A5A66" stroke-width="1.8" stroke-linecap="round">
+                <path d="M4 8.5A2.5 2.5 0 0 1 6.5 6h1.2l1-2h4.6l1 2h1.2A2.5 2.5 0 0 1 20 8.5v8A2.5 2.5 0 0 1 17.5 19h-11A2.5 2.5 0 0 1 4 16.5z"/>
+                <circle cx="12" cy="12.5" r="3.1"/></svg>拍照搜索</button>
+          </div>
+          <div class="qblinks">
+            <button class="qblink tap"><span class="ico" style="color:#2CA76B">豆</span><span>豆瓣</span></button>
+            <button class="qblink tap"><span class="ico" style="color:#F24E1E">F</span><span>Figma</span></button>
+            <button class="qblink tap"><span class="ico" style="color:#111">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.9-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.7 2.3-1.6 2.8-.4 6.9 1.1 9.1.8 1.1 1.6 2.3 2.8 2.3 1.1 0 1.5-.7 2.9-.7 1.3 0 1.7.7 2.9.7 1.2 0 2-1.1 2.7-2.2.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.2-.9-2.2-3.3zM14.3 5.6c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.6-1 1.6-.9 2.6 1 .1 2-.5 2.6-1.2z"/></svg>
+            </span><span>Apple</span></button>
+            <button class="qblink tap"><span class="ico">
+              <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
+                <rect x="1" y="1" width="8" height="8" rx="2.4" fill="#FF6B35"/>
+                <rect x="11" y="1" width="8" height="8" rx="2.4" fill="#2B6CB0"/>
+                <rect x="1" y="11" width="8" height="8" rx="2.4" fill="#2CA76B"/>
+                <rect x="11" y="11" width="8" height="8" rx="2.4" fill="#F2C037"/>
+              </svg>
+            </span><span>全部快链</span></button>
+            <button class="qblink tap"><span class="ico add">＋</span><span>添加</span></button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="chbar" id="chbar"></div>
+          <div id="tzone"></div>
+          <div class="ptr" id="ptr"><span class="spin"></span><span>正在获取全球内容…</span></div>
+          <div class="feed" id="feed"></div>
+        </div>
+      </section>
+
+      <section class="page" id="pg-news"></section>
+      <section class="page" id="pg-drama"></section>
+      <section class="page" id="pg-win"></section>
+      <section class="page" id="pg-me"></section>
+
+      <div class="push" id="pushTopic"></div>
+      <div class="push" id="pushDetail"></div>
+      <div class="push" id="pushBoard"></div>
+
+      <div id="sheetMask"></div>
+      <div class="bsheet" id="share"></div>
+
+      <nav id="tabbar"></nav>
+      <div id="sbbg"></div>
+      <div id="homeind"></div>
+      <div id="island"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* =========================================================================
+   === 数据层 ===
+   平台：B站 / 小红书 / Twitter    垂类：户外装备测评 / 爬山路线 / AI 前沿
+   三层标签：authorRole（来源人设）· hotTag（爆点标签）· tags + spec（垂类结构化）
+   图片 URL 由 imgKeywords + imgSeed 运行时拼接
+   ========================================================================= */
+const DATA = {
+  /* 一级 tab：只回答「哪个领域」 */
+  channels:[
+    {key:"rec",     name:"推荐"},
+    {key:"movie",   name:"影视"},
+    {key:"outdoor", name:"户外"},
+    {key:"ai",      name:"AI 前沿"},
+    {key:"digital", name:"数码"},
+    {key:"life",    name:"生活"}
+  ],
+  /* 二级：实时热点话题（聚类产出，非人工标签）——一张横向卡代表一个话题，点开即该话题的双列流 */
+  topics:[
+    {key:"spider", ch:"movie", name:"蜘蛛侠：交错宇宙", note:"上映第 6 天 · 口碑两极", hot:"1.4 万条讨论 · 3 平台",
+     live:"6 分钟前更新", emoji:"🕷️"},
+    {key:"dragon", ch:"movie", name:"欢迎来龙餐馆", note:"暑期档黑马 · 猫眼 9.1", hot:"2.1 万条讨论 · 3 平台",
+     live:"3 分钟前更新", emoji:"🐉"},
+    {key:"odyssey",ch:"movie", name:"奥德赛", note:"70mm 场次一票难求", hot:"9,842 条讨论 · 3 平台",
+     live:"11 分钟前更新", emoji:"⛵"},
+    {key:"baxian", ch:"movie", name:"八仙", note:"打戏被逐帧拆解", hot:"7,516 条讨论 · 3 平台",
+     live:"19 分钟前更新", emoji:"🎭"},
+    {key:"gear",   ch:"outdoor", name:"户外装备", note:"实测向 · 避坑清单", hot:"10 篇实测 · 3 平台",
+     live:"8 分钟前更新", emoji:"🎒"},
+    {key:"trail",  ch:"outdoor", name:"徒步路线", note:"含距离 / 爬升 / 下撤点", hot:"10 条路线 · 3 平台",
+     live:"14 分钟前更新", emoji:"⛰️"},
+    {key:"aibench",ch:"ai", name:"跑分与成本实测", note:"数据打脸宣传口径", hot:"4 篇实测 · 2 平台",
+     live:"5 分钟前更新", emoji:"📊"},
+    {key:"aifail", ch:"ai", name:"AI 落地翻车实录", note:"上线之后发生了什么", hot:"3 篇复盘 · 2 平台",
+     live:"22 分钟前更新", emoji:"⚠️"},
+    {key:"ailocal",ch:"ai", name:"本地部署与生成", note:"显卡 / 电费 / 一致性", hot:"3 篇实录 · 2 平台",
+     live:"31 分钟前更新", emoji:"🖥️"}
+  ],
+  /* 平台注册表：人设称谓 / 亮评区标题 / 互动数据语态 —— 一套 UI，平台原生语态 */
+  platforms:{
+    "B站":     {color:"#FB7299", role:"B站UP主",       cmtTitle:"热评", cmtUnit:"点赞", site:"bilibili.com"},
+    "小红书":  {color:"#FF2E4D", role:"小红书博主",     cmtTitle:"热评", cmtUnit:"赞",   site:"xiaohongshu.com"},
+    "Twitter": {color:"#1D9BF0", role:"Twitter 观察者", cmtTitle:"热评", cmtUnit:"喜欢", site:"twitter.com"},
+    "知乎":    {color:"#0F6FFF", role:"知乎答主",       cmtTitle:"热评", cmtUnit:"赞同", site:"zhihu.com"},
+    "虎扑":    {color:"#D62B2B", role:"虎扑评论员",     cmtTitle:"热评", cmtUnit:"亮",   site:"hupu.com"},
+    "豆瓣":    {color:"#2CA76B", role:"豆瓣影迷",       cmtTitle:"热评", cmtUnit:"有用", site:"douban.com"}
+  },
+  img:{
+    dir:"img/", ext:".jpg",
+    emoji:{gear:"🎒",trail:"⛰️",ai:"🤖",movie:"🎬"}
+  },
+  posts:[
+    {
+      id:"WS-2601", platform:"B站", vertical:"gear",
+      author:{name:"硬核老王测装备", avatarColor:"#FB7299"},
+      hotTag:"弹幕最密", tags:["装备实测","避坑"],
+      title:"三双千元登山鞋泡水 24 小时，只有一双第二天还能穿",
+      conclusion:"防水失效几乎都在鞋舌与鞋帮的缝线，不在面料",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"18:24", imgCount:0},
+      metrics:{views:426000, danmu:12000, likes:38000},
+      spec:{verdict:"看情况", price:"¥899–1,380", test:"实测 24h 浸泡"},
+      excerpt:[
+        "三双鞋都标了防水，价格在 899 到 1380 之间。我把它们同时泡进水箱，水位到鞋帮上沿以下 1 厘米，泡满 24 小时，然后倒出内部积水称重。",
+        "结果差得很明显：A 双内部进水 42 克，B 双 18 克，C 双几乎没有。我拆开鞋舌看了一眼，A 双的防水膜在鞋舌与鞋帮的接缝处只是压胶，没有二次热熔，针脚位置能看到明显渗痕。",
+        "第二天早上我又穿着三双各走了 5 公里。C 双还是干的，A 双的袜子在第 2 公里就湿了 —— 所以这个价位真正的差别不在面料标号，在缝线怎么处理。"
+      ],
+      comments:[
+        {u:"雪线之上", lv:"Lv6", zh:"缝线才是防水的第一失效点，面料参数全是给人看的。", score:21400},
+        {u:"一步一个坑", lv:"Lv5", zh:"我那双大牌也是鞋舌先进水，售后说属于正常渗透，笑死。", score:14200},
+        {u:"老张爱徒步", lv:"Lv4", zh:"建议加测一次冻融循环，冬天开裂全在这个位置。", score:8600}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1x8s411k7Yq", siteName:"哔哩哔哩", publishedAt:"2026-08-12 20:14"},
+      timeAgo:"18 小时前"
+    },
+    {
+      id:"WS-2602", platform:"小红书", vertical:"gear",
+      author:{name:"山野杂货铺", avatarColor:"#FF2E4D"},
+      hotTag:"笔记高赞", tags:["装备实测","值得买"],
+      title:"买了 8 件冲锋衣，只有 3 件能扛住一场真雨",
+      conclusion:"决定成败的是压胶宽度和帽檐结构，不是防水指数",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:9},
+      metrics:{likes:32000, saves:8914, comments:1240},
+      spec:{verdict:"值得买", price:"¥799 档", test:"实测 6 场雨"},
+      excerpt:[
+        "8 件冲锋衣，价格从 499 到 3200，我在山里遇到过 6 场真雨，每次都记录了穿哪件、雨多大、下山后内层湿了没有。",
+        "能完整扛住的只有 3 件。它们的共同点不是防水指数最高，而是两处细节：压胶带宽度都在 13 毫米以上，帽檐有独立支撑不会塌到眼睛上。塌帽檐的那几件，水会顺着帽沿灌进领口，衣服本身没漏，但人湿了。",
+        "最贵那件反而排在中间：它的透气性最好，但帽子软，中雨以上就开始灌水。所以我现在给姐妹的建议是先看压胶和帽子，再看参数。"
+      ],
+      comments:[
+        {u:"喜欢下雨的阿元", lv:"", zh:"帽檐这条太真实了，我以前一直以为是自己戴法不对。", score:12400},
+        {u:"露营不吃苦", lv:"", zh:"压胶 13mm 这个标准哪里能查到？求补一张对比图。", score:6820},
+        {u:"周末在山上", lv:"", zh:"3200 那件我也有，透气第一，防雨确实一般，认同。", score:4310}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b8f2a1e4b0", siteName:"小红书", publishedAt:"2026-08-11 19:02"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"WS-2603", platform:"Twitter", vertical:"gear",
+      author:{name:"@gearlab_mark", avatarColor:"#1D9BF0"},
+      hotTag:"原文英文", tags:["数据实测","避坑"],
+      title:"他把 12 款头灯拆了，标称流明没有一款达标",
+      titleOriginal:"Tore down 12 headlamps. Not one hits its advertised lumen number. Here is the data.",
+      conclusion:"虚标不是骗人，是把峰值当成了持续输出在卖",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:6},
+      metrics:{likes:18000, reposts:2140, comments:640},
+      spec:{verdict:"看情况", price:"$29–189", test:"12 款拆解"},
+      excerpt:[
+        "12 款头灯，全部在同一个积分球里测，室温 22 度，电池充满。没有一款达到包装上的标称流明，缺口最小 12%，最大 61%。",
+        "但这不完全是欺骗：几乎所有厂商测的是开机瞬间 30 秒内的峰值，而不是能维持的输出。多数灯在 90 秒后就掉到标称值的一半以下，因为散热跟不上。",
+        "真正值得看的数字是「30 分钟后的稳定流明」和「掉到 50% 亮度所需时间」。我把 12 款的这两项列成了表格，其中两款便宜的表现比旗舰更稳。"
+      ],
+      excerptEn:[
+        "Twelve headlamps, same integrating sphere, 22C ambient, full batteries. Not one reaches its advertised lumen figure. The smallest gap is 12%, the largest 61%.",
+        "This is not purely dishonest: almost every brand quotes a 30-second peak rather than a sustainable output. Most lamps fall below half of the claimed number within 90 seconds because they cannot dump the heat.",
+        "The numbers that matter are stabilised lumens at 30 minutes and time-to-50%. I have tabulated both for all twelve, and two cheap units beat the flagships on stability."
+      ],
+      comments:[
+        {u:"@trail_ohm", lv:"", en:"Time-to-50% is the only spec I trust now. Peak lumens is marketing.", zh:"现在我只信「掉到一半亮度的时间」，峰值流明纯营销。", score:3204},
+        {u:"@nightrunner_k", lv:"", en:"The cheap ones win because they run cooler, not because they are better built.", zh:"便宜的赢是因为它们发热低，不是因为做得更好。", score:2140},
+        {u:"@sarah_hikes", lv:"", en:"Please add battery temperature. Cold kills output faster than heat.", zh:"建议加上电池温度，低温对输出的影响比过热更狠。", score:1180}
+      ],
+      source:{url:"https://twitter.com/gearlab_mark/status/1882440021", siteName:"Twitter", publishedAt:"2026-08-13 04:36"},
+      timeAgo:"9 小时前"
+    },
+    {
+      id:"WS-2604", platform:"B站", vertical:"trail",
+      author:{name:"阿雷跑山", avatarColor:"#FB7299"},
+      hotTag:"UP主亲测", tags:["路线实况","强度警告"],
+      title:"一天连穿三座 2000 米，我在第 8 小时开始后悔",
+      conclusion:"连穿的瓶颈不是体能，是第三段的补水点距离",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"32:07", imgCount:0},
+      metrics:{views:812000, danmu:24000, likes:61000},
+      spec:{dist:"31.4km", gain:"2,380m", hours:"13.5h", level:"硬核"},
+      excerpt:[
+        "路线是三座 2000 米级连穿，全程 31.4 公里，累计爬升 2380 米。前两段状态都还行，问题出在第三段：从第二座下撤到第三座上山口之间，有 9 公里完全没有水源。",
+        "我出发时带了 3 升水，在第 8 小时喝完。那之后的 5 公里是这一整天最难受的部分，不是腿的问题，是渴了以后判断力明显下降 —— 我在一个岔路口走错了 800 米。",
+        "如果重来，我会把第二座下撤点作为唯一的补水计划点，宁可背 1.5 升上第三座也不省重量。视频里我把每一段的时间与水量都打在了进度条上。"
+      ],
+      comments:[
+        {u:"山脊线追风", lv:"Lv6", zh:"9 公里无水这一条应该放到标题里，很多人是看完标题就出发的。", score:32100},
+        {u:"打卡型选手", lv:"Lv5", zh:"第三段那个岔路口我也走错过，指示牌被树挡住了。", score:18400},
+        {u:"背夫小陈", lv:"Lv4", zh:"实测数据比攻略靠谱，这种把耗时钉在进度条上的做法建议全行业学。", score:9600}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1qL4y1x7Zt", siteName:"哔哩哔哩", publishedAt:"2026-08-10 21:40"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"WS-2605", platform:"小红书", vertical:"trail",
+      author:{name:"是野莓不是野梅", avatarColor:"#FF2E4D"},
+      hotTag:"收藏破万", tags:["路线实况","新手友好"],
+      title:"北京周边最被低估的一条山脊线，全程 14km 没有一个人",
+      conclusion:"这条线的价值不是风景，是全程有信号且能随时下撤",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:12},
+      metrics:{likes:41000, saves:16800, comments:2140},
+      spec:{dist:"14.2km", gain:"1,180m", hours:"7.5h", level:"中等"},
+      excerpt:[
+        "整条线走完 14.2 公里，累计爬升 1180 米，我们四个人走了 7 小时 20 分钟，全程只遇到两个当地人。不是因为难，是因为它没有网红机位，所以没人来。",
+        "我最推荐它的原因反而很无聊：全程手机有信号，而且有三个位置可以在 40 分钟内下撤到公路。带新手最怕的不是累，是出问题以后走不掉。",
+        "唯一要注意的是 7 公里处那段碎石坡，下雨后会打滑，我们那天有一位姐妹在这里滑了一次。护膝和登山杖别省。"
+      ],
+      comments:[
+        {u:"周末去哪儿野", lv:"", zh:"能下撤这一点太重要了，比风景重要一百倍。", score:16800},
+        {u:"小满不满", lv:"", zh:"求碎石坡具体位置，我上次也是在类似地形摔的。", score:9240},
+        {u:"户外新手报道", lv:"", zh:"第一次跟队就走了这条，确实友好，全程没有手脚并用的路段。", score:5410}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b7c410d92a", siteName:"小红书", publishedAt:"2026-08-09 18:26"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"WS-2606", platform:"Twitter", vertical:"ai",
+      author:{name:"@promptledger", avatarColor:"#1D9BF0"},
+      hotTag:"推上热议", tags:["AI 观点","原文英文"],
+      title:"一个开发者把全部提示词公开了，评论区在争这到底值不值钱",
+      titleOriginal:"I open-sourced every prompt in my product. Here is what happened to my moat.",
+      conclusion:"提示词不是护城河，能被公开说明壁垒在别处",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:2},
+      metrics:{likes:28000, reposts:4210, comments:1620},
+      spec:{kind:"观点", lang:"EN", fresh:"3 小时前"},
+      excerpt:[
+        "我把产品里的每一条提示词都公开了，包括那条被同行反复打听的长提示词。三天后我的付费转化没有变化，竞品也没有因此追上来。",
+        "原因很简单：提示词只是把模型的行为对齐到我们的数据结构和评估集上。没有那套评估集和用户反馈闭环，同一条提示词在别人产品里跑出来的结果并不一样。",
+        "真正难复制的是三件事：我们标注了 14 个月的失败案例库、把校验规则写进工具层的那套代码、以及知道哪些请求应该直接拒答。这三件都不在提示词里。"
+      ],
+      excerptEn:[
+        "I published every prompt in my product, including the long one competitors kept asking about. Three days later my paid conversion is unchanged and no competitor has caught up.",
+        "The reason is simple: a prompt only aligns model behaviour to your data structures and your eval set. Without that eval set and the user feedback loop behind it, the same prompt produces different results in someone else's product.",
+        "What is actually hard to copy is three things: fourteen months of labelled failure cases, the validators we pushed down into the tool layer, and knowing which requests to refuse outright. None of that lives in a prompt."
+      ],
+      comments:[
+        {u:"@evalpilot", lv:"", en:"Prompts are the cheapest part of the system and the loudest part of the discourse.", zh:"提示词是系统里最便宜的一环，却是讨论里声量最大的一环。", score:6840},
+        {u:"@hn_lurker42", lv:"", en:"Your failure case library is the real product. Nobody can screenshot that.", zh:"你的失败案例库才是真正的产品，那东西没法截图抄走。", score:4120},
+        {u:"@ship_it_karen", lv:"", en:"Counterpoint: for thin wrappers the prompt genuinely is the whole product.", zh:"反面观点：对薄封装产品来说，提示词确实就是整个产品。", score:2380}
+      ],
+      source:{url:"https://twitter.com/promptledger/status/1882501877", siteName:"Twitter", publishedAt:"2026-08-14 08:12"},
+      timeAgo:"3 小时前"
+    },
+    {
+      id:"WS-2607", platform:"B站", vertical:"ai",
+      author:{name:"显卡不够用了", avatarColor:"#FB7299"},
+      hotTag:"三连破万", tags:["真人实测","硬件"],
+      title:"本地跑 70B 模型，我用了三张二手显卡，电费比想象贵",
+      conclusion:"本地部署省的是数据主权，不是钱",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"24:53", imgCount:0},
+      metrics:{views:1240000, danmu:38000, likes:96000},
+      spec:{kind:"实测", lang:"中文", fresh:"1 天前"},
+      excerpt:[
+        "三张二手卡一共花了 9600，加上电源和机箱大约 1.2 万。70B 模型量化后能跑，长上下文时速度掉得厉害，但日常问答够用。",
+        "我记了 30 天电表：满负载时整机 780 瓦，平均每天有效使用 4 小时，一个月电费 178 元。折算下来，如果只算推理成本，同样的用量走云端 API 反而更便宜。",
+        "所以我在视频最后说清楚了：本地部署真正买到的是数据不出门、随时可用、以及可以随便折腾，不是省钱。想省钱的话这套设备的回本周期算不出来。"
+      ],
+      comments:[
+        {u:"矿卡幸存者", lv:"Lv6", zh:"电费这段应该置顶，很多人只算了显卡价格。", score:42100},
+        {u:"本地部署爱好者", lv:"Lv5", zh:"数据不出门这一条对我来说值这个价，公司资料不敢上云。", score:28600},
+        {u:"云上飘", lv:"Lv4", zh:"我算过同样用量的 API 费用，确实比自建便宜，但也确实没自建自由。", score:15400}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1mS421k9Xf", siteName:"哔哩哔哩", publishedAt:"2026-08-13 19:20"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"WS-2608", platform:"小红书", vertical:"gear",
+      author:{name:"露营不吃苦小队", avatarColor:"#FF2E4D"},
+      hotTag:"避坑", tags:["装备实测","别买"],
+      title:"露营椅别买贵的，这三个位置一坏整把就废了",
+      conclusion:"椅子的寿命由铰接件决定，布面和铝管都不是问题",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:8},
+      metrics:{likes:26000, saves:11200, comments:1840},
+      spec:{verdict:"别买贵的", price:"¥199–299", test:"用坏 5 把"},
+      excerpt:[
+        "两年我用坏了 5 把露营椅，价格从 129 到 1080。坏的位置高度一致：三处铰接件、椅腿脚垫、以及承重带与布面的缝合口。",
+        "贵的那把只是布更好、包装更精致，铰接件用的还是同一类塑料件。它比 199 那把多撑了三个月，然后一样是铰接处崩口。",
+        "所以我的结论是这个品类不值得升级预算：买 199 到 299 档，坏了直接换，把钱花在睡垫上。反过来，如果哪家愿意单卖铰接件，我会立刻回购。"
+      ],
+      comments:[
+        {u:"钢丝球本人", lv:"", zh:"能不能单卖配件，直接决定我下次买谁。", score:11800},
+        {u:"周末在山上", lv:"", zh:"1080 那把我也买了，铰接件确实一模一样，血亏。", score:7640},
+        {u:"户外老白", lv:"", zh:"补充一个：脚垫掉了之后铝管会直接插进土里，别硬用。", score:3920}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b6a83fd110", siteName:"小红书", publishedAt:"2026-08-08 20:55"},
+      timeAgo:"3 天前"
+    },
+    {
+      id:"WS-2609", platform:"Twitter", vertical:"ai",
+      author:{name:"@bench_skeptic", avatarColor:"#1D9BF0"},
+      hotTag:"AI 圈刷屏", tags:["数据实测","AI 观点"],
+      title:"新模型跑分被质疑：测试集和训练数据重合了 31%",
+      titleOriginal:"That benchmark score is doing a lot of work. We found 31% overlap with public training data.",
+      conclusion:"跑分通胀的根因不是作弊，是评测集是公开的",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:3},
+      metrics:{likes:34000, reposts:8600, comments:2410},
+      spec:{kind:"新闻", lang:"EN", fresh:"6 小时前"},
+      excerpt:[
+        "我们对那份被广泛引用的跑分做了污染检查：测试集里有 31% 的题目能在公开网页语料里找到近似重复，其中 12% 是逐字重合。",
+        "这不一定意味着谁在作弊。真正的结构性问题是：评测集只要公开，就一定会进入下一轮训练数据，几个月后它就不再测试泛化能力，只测试记忆。",
+        "可行的做法是滚动评测集加私有留出集，并且公布检查方法。我们把这次检查的脚本和重合样本都放出来了，欢迎复现和反驳。"
+      ],
+      excerptEn:[
+        "We ran contamination checks on the widely cited benchmark: 31% of test items have near-duplicates in public web corpora, and 12% match verbatim.",
+        "This does not necessarily mean anyone cheated. The structural problem is that any public eval set eventually lands in the next training run, and a few months later it stops measuring generalisation and starts measuring memorisation.",
+        "The workable fix is rolling eval sets plus a private holdout, with the contamination method published. Our script and the overlapping samples are both public — please reproduce or refute."
+      ],
+      comments:[
+        {u:"@holdout_only", lv:"", en:"Any benchmark older than six months is a memorisation test with extra steps.", zh:"任何超过半年的基准，本质上就是一场绕了几道弯的记忆力测试。", score:9840},
+        {u:"@lab_intern_x", lv:"", en:"Publishing the script is the part that makes this credible.", zh:"公开脚本这一点，才让这份质疑站得住。", score:5120},
+        {u:"@modelops_dan", lv:"", en:"We keep a private set now. Scores dropped 9 points and became useful.", zh:"我们现在留了私有集，分数掉了 9 分，但终于有参考价值了。", score:3260}
+      ],
+      source:{url:"https://twitter.com/bench_skeptic/status/1882470110", siteName:"Twitter", publishedAt:"2026-08-14 05:28"},
+      timeAgo:"6 小时前"
+    },
+    {
+      id:"WS-2610", platform:"B站", vertical:"gear",
+      author:{name:"风洞里的帐篷", avatarColor:"#FB7299"},
+      hotTag:"UP主亲测", tags:["数据实测","装备实测"],
+      title:"2000 块的帐篷和 400 块的，在风洞里差了多少",
+      conclusion:"抗风差距真实存在，但它出现在 12 级之后",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"21:16", imgCount:0},
+      metrics:{views:684000, danmu:19000, likes:52000},
+      spec:{verdict:"看情况", price:"¥400 vs ¥2,000", test:"风洞 6 组"},
+      excerpt:[
+        "同一个风洞，六档风速，两顶帐篷交替测。8 级以下两顶都没问题，形变肉眼几乎看不出差别；10 级时 400 块那顶开始明显鼓包，但没有塌。",
+        "分水岭在 12 级：便宜那顶的杆件在迎风面出现永久形变，撤下来之后回不去了；2000 块那顶杆件回弹正常，问题只出在门厅噪音。",
+        "结论对大多数人不友好但很实在：如果你只在营地和成熟路线用，400 块够了；如果你会在山脊线上过夜，多花的钱买的是那 12 级以后的一次容错。"
+      ],
+      comments:[
+        {u:"山脊过夜党", lv:"Lv6", zh:"12 级之后才分高下这句总结太到位了，省了很多人的预算。", score:26400},
+        {u:"新手第一顶", lv:"Lv4", zh:"看完直接下单 400 那顶，反正我只去营地。", score:14100},
+        {u:"杆件工程师", lv:"Lv5", zh:"永久形变这个指标建议加进所有帐篷评测，比参数有用。", score:8300}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1dP411t7Wq", siteName:"哔哩哔哩", publishedAt:"2026-08-07 18:44"},
+      timeAgo:"4 天前"
+    },
+    {
+      id:"WS-2611", platform:"小红书", vertical:"trail",
+      author:{name:"泰山脚下的桃子", avatarColor:"#FF2E4D"},
+      hotTag:"姐妹实测", tags:["路线实况","避坑"],
+      title:"五一去泰山，我选了这条没人的路线，全程只排了一次队",
+      conclusion:"节假日的体验差距由上山时段决定，不由路线决定",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:14},
+      metrics:{likes:58000, saves:24100, comments:3210},
+      spec:{dist:"9.8km", gain:"1,320m", hours:"5.5h", level:"中等"},
+      excerpt:[
+        "五一我从西侧一条老路上山，全程 9.8 公里，爬升 1320 米。整条路上山的人不到二十个，只有到了接近顶部与主线合并的那 800 米才开始排队。",
+        "但我必须说实话：真正让体验变好的不是这条路线，是我凌晨 4 点就开始爬。同一条路我十月份下午走过一次，一样堵在合并口，因为堵的是主线不是支线。",
+        "所以攻略的正确写法应该是：先定时段，再定路线。我把两次的时间轴和排队位置都标在图上了，含下撤方案。"
+      ],
+      comments:[
+        {u:"节假日恐惧症", lv:"", zh:"先定时段再定路线，这句话应该刻在所有节假日攻略开头。", score:24100},
+        {u:"爬山搭子招募中", lv:"", zh:"凌晨 4 点这条路黑不黑？需要头灯吗？", score:13600},
+        {u:"山东本地人", lv:"", zh:"西侧这条老路确实少人，但下雨后石阶很滑，务必提醒。", score:8900}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b5d271ac03", siteName:"小红书", publishedAt:"2026-08-06 07:30"},
+      timeAgo:"5 天前"
+    },
+    {
+      id:"WS-2612", platform:"Twitter", vertical:"ai",
+      author:{name:"@agent_postmortem", avatarColor:"#1D9BF0"},
+      hotTag:"推上热议", tags:["AI 观点","数据实测"],
+      title:"AI 客服上线三周，工单量反而涨了 22%",
+      titleOriginal:"Three weeks after shipping our AI agent, ticket volume is up 22%. Here is the postmortem.",
+      conclusion:"自动化没减少工单，它把简单工单变成了复杂工单",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:2},
+      metrics:{likes:21000, reposts:3640, comments:1420},
+      spec:{kind:"复盘", lang:"EN", fresh:"11 小时前"},
+      excerpt:[
+        "上线三周，一线工单量涨了 22%，但结构完全变了：简单查询下降 61%，而需要人工介入的复杂工单上升 240%。",
+        "原因是自动化解决掉了简单问题之后，用户对复杂问题的期待被抬高了。以前他们会自己放弃的边缘案例，现在会连着追问三轮，然后转人工。",
+        "我们做错的是把成功指标定成了工单总量。第四周我们换成了「首次解决率」和「转人工后的平均处理时长」，数字才开始说真话。"
+      ],
+      excerptEn:[
+        "Three weeks in, frontline ticket volume is up 22%, but the mix changed completely: simple queries down 61%, tickets requiring human intervention up 240%.",
+        "Once automation cleared the easy problems, expectations for the hard ones rose. Edge cases users used to abandon now get three rounds of follow-up and then an escalation.",
+        "Our mistake was choosing total ticket volume as the success metric. In week four we switched to first-contact resolution and post-escalation handling time, and the numbers started telling the truth."
+      ],
+      comments:[
+        {u:"@cx_ops_lead", lv:"", en:"Automation does not reduce work. It changes which work is left.", zh:"自动化不会减少工作量，它只是改变了剩下哪些工作。", score:5640},
+        {u:"@queue_watcher", lv:"", en:"Ticket count is a vanity metric. Resolution time is the real one.", zh:"工单总量是虚荣指标，处理时长才是真的。", score:3280},
+        {u:"@support_sam", lv:"", en:"We saw the same 240% jump. Nobody warned us in the vendor deck.", zh:"我们也遇到了同样 240% 的上涨，供应商的方案里一个字都没提。", score:2140}
+      ],
+      source:{url:"https://twitter.com/agent_postmortem/status/1882388904", siteName:"Twitter", publishedAt:"2026-08-14 00:18"},
+      timeAgo:"11 小时前"
+    },
+    {
+      id:"WS-2613", platform:"B站", vertical:"trail",
+      author:{name:"四姑娘山常客", avatarColor:"#FB7299"},
+      hotTag:"弹幕最密", tags:["路线实况","强度警告"],
+      title:"四姑娘山大峰单日往返，我把高反发作的过程全录下来了",
+      conclusion:"高反的转折点不是海拔数字，是你在 4000 米上方待了多久",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"41:32", imgCount:0},
+      metrics:{views:1620000, danmu:52000, likes:124000},
+      spec:{dist:"22.6km", gain:"1,640m", hours:"11h", level:"硬核"},
+      excerpt:[
+        "大峰海拔 5025 米，我从海子沟单日往返，全程 22.6 公里。上到 4200 米时血氧 82，还能正常说话；在 4600 米停留超过 40 分钟之后，头痛开始明显。",
+        "视频里我每半小时报一次血氧和心率。可以很清楚地看到：真正让状态崩掉的不是某个海拔数字，而是在 4000 米以上累计停留的时间。我为了拍延时多待了近一小时，代价就是最后 3 公里全程扶着膝盖。",
+        "如果重来我会把拍摄计划全部放在下撤段。这条线的正确打法是快速登顶、快速下降，把停留时间压到最短。"
+      ],
+      comments:[
+        {u:"高原护士", lv:"Lv6", zh:"停留时间比海拔重要，这条应该写进所有登山科普。", score:52400},
+        {u:"血氧仪爱好者", lv:"Lv5", zh:"每半小时报血氧的做法太好了，比事后回忆靠谱一百倍。", score:31200},
+        {u:"川西向导阿甲", lv:"Lv6", zh:"补充：单日往返务必 6 点前出发，晚了下撤要摸黑。", score:18700}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1nR4y1s7Km", siteName:"哔哩哔哩", publishedAt:"2026-08-05 20:02"},
+      timeAgo:"6 天前"
+    },
+    {
+      id:"WS-2614", platform:"小红书", vertical:"ai",
+      author:{name:"打工人用 AI", avatarColor:"#FF2E4D"},
+      hotTag:"笔记高赞", tags:["真人实测","工作流"],
+      title:"非技术岗用 AI 提效，我把自己一周的工作流拍下来了",
+      conclusion:"提效最大的一步不是写提示词，是先把交付物格式定死",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:11},
+      metrics:{likes:36000, saves:19400, comments:2680},
+      spec:{kind:"实测", lang:"中文", fresh:"2 天前"},
+      excerpt:[
+        "我是市场岗，一周里有 12 项重复工作。我把每一项的耗时记了两周，第一周不用 AI，第二周用，合计省下 6.5 小时。",
+        "省时间最多的不是让它写文案，而是我先把交付物的格式固定成模板：标题几个字、要几条要点、每条多长。格式定死之后，返工次数从平均 3 次降到 1 次。",
+        "完全没提效的有三项：需要内部数据的、需要跨部门确认口径的、以及要求准确引用政策原文的。这三项我现在直接不用 AI，反而更快。"
+      ],
+      comments:[
+        {u:"隔壁组的运营", lv:"", zh:"先定格式再提问，这一条我照做之后返工确实少了。", score:19400},
+        {u:"表格苦手", lv:"", zh:"求那三项不适合用 AI 的详细判断标准，这部分最有价值。", score:11200},
+        {u:"HRBP 小周", lv:"", zh:"引用政策原文这项确实不能用，我们被坑过一次。", score:6840}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b4e9c8b721", siteName:"小红书", publishedAt:"2026-08-12 12:40"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"WS-2615", platform:"B站", vertical:"gear",
+      author:{name:"背包塞不下了", avatarColor:"#FB7299"},
+      hotTag:"三连破万", tags:["真人实测","减重"],
+      title:"我背着 18kg 走完 40km，然后把包里 6 件东西永久扔了",
+      conclusion:"减重的收益不在肩上，在第 30 公里之后的判断力",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"27:48", imgCount:0},
+      metrics:{views:920000, danmu:28000, likes:74000},
+      spec:{verdict:"减重优先", price:"—", test:"40km 负重"},
+      excerpt:[
+        "第一次 18 公斤走 40 公里，用了 14 小时。第二次我把包减到 11.4 公斤，同一条路线用了 11 小时 20 分，但真正的差别不是时间。",
+        "18 公斤那次，我在第 30 公里之后开始不愿意做任何决定：不想拿地图、不想脱鞋检查脚、不想吃东西。这些偷懒最后都变成了代价 —— 我磨破了两个脚趾。",
+        "被永久扔掉的 6 件是：备用炉头、第二个保温杯、折叠桌、多余的充电宝、纸质地图册、以及一把从没用过的斧头。视频里逐件说明了扔的理由。"
+      ],
+      comments:[
+        {u:"轻量化教徒", lv:"Lv6", zh:"减重真正省的是意志力，这个说法我第一次听到但完全同意。", score:28900},
+        {u:"斧头党", lv:"Lv4", zh:"斧头我也从没用过，但每次都带，图个心理安慰。", score:16400},
+        {u:"脚趾保护协会", lv:"Lv5", zh:"第 30 公里不愿意脱鞋检查，这个细节太真实了。", score:9800}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1cQ4y1m7Xj", siteName:"哔哩哔哩", publishedAt:"2026-08-04 19:12"},
+      timeAgo:"1 周前"
+    }    ,{
+      id:"WS-2616", platform:"小红书", vertical:"gear",
+      author:{name:"登山杖研究所", avatarColor:"#FF2E4D"},
+      hotTag:"姐妹实测", tags:["装备实测","避坑"],
+      title:"登山杖的锁扣才是命门，实测 5 款只有 2 款下坡没滑",
+      conclusion:"外锁不一定比内锁强，关键是能不能徒手调紧",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:10},
+      metrics:{likes:19000, saves:9240, comments:1120},
+      spec:{verdict:"看情况", price:"¥168–620", test:"5 款下坡实测"},
+      excerpt:[
+        "5 款登山杖，同一段 600 米连续下坡，同一个人、同样重量，反复走三趟。判断标准只有一个：下坡结束后杖节有没有回缩。",
+        "只有 2 款完全没滑。它们不是最贵的，共同点是锁扣能徒手调紧 —— 山里滑了可以立刻处理。另外 3 款要用内六角，等于在路上没法救。",
+        "还有一个细节：外锁在低温下塑料变硬会打滑，内锁在泥沙进入后会卡死。两种都会坏，区别只在坏了以后你能不能自己修。"
+      ],
+      comments:[
+        {u:"下坡专业户", lv:"", zh:"能徒手调紧这条太关键了，我在山上找不到内六角只能忍着走。", score:9240},
+        {u:"泥地爱好者", lv:"", zh:"内锁进沙卡死我遇到过，回家拆了半小时。", score:5810},
+        {u:"冬季徒步党", lv:"", zh:"补充低温这条：零下十度外锁基本必滑，别问我怎么知道的。", score:3120}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b3f1a27c48", siteName:"小红书", publishedAt:"2026-08-03 21:10"},
+      timeAgo:"1 周前"
+    },
+    {
+      id:"WS-2617", platform:"Twitter", vertical:"gear",
+      author:{name:"@stove_metrics", avatarColor:"#1D9BF0"},
+      hotTag:"原文英文", tags:["数据实测","装备实测"],
+      title:"四款便携气炉实测热效率，最贵那台在有风时垫底",
+      titleOriginal:"Measured real thermal efficiency on four canister stoves. The most expensive one loses in wind.",
+      conclusion:"户外炉具的效率是防风结构决定的，不是火力",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:4},
+      metrics:{likes:12000, reposts:1640, comments:410},
+      spec:{verdict:"看情况", price:"$34–129", test:"无风/5m·s 两组"},
+      excerpt:[
+        "四款炉具，煮沸同样 500 毫升 8 度的水，记录燃气消耗。无风条件下差距很小，最快和最慢只差 22 秒，燃气消耗差 7%。",
+        "加上 5 米每秒的侧风之后局面完全反转：最贵那台的火力最猛，但没有挡风结构，燃气消耗上升 68%；一台 34 美元、带一体式挡风圈的反而只上升 19%。",
+        "所以真实使用场景里该看的不是标称火力，是有风时的效率衰减。我把四款的两组数据和挡风结构照片都放在下面了。"
+      ],
+      excerptEn:[
+        "Four stoves, boiling the same 500ml of 8C water, gas consumption logged. In still air the spread is small: 22 seconds between fastest and slowest, 7% on fuel.",
+        "Add 5 m/s of crosswind and it inverts. The most expensive unit has the highest output but no wind structure, and burns 68% more gas. A 34 dollar stove with an integrated wind collar only loses 19%.",
+        "So the number that matters in the field is efficiency decay under wind, not rated output. Both data sets and photos of each wind structure are below."
+      ],
+      comments:[
+        {u:"@alpine_kettle", lv:"", en:"Wind decay should be on every box. It never is.", zh:"有风衰减这项该印在每个包装上，但从来没有。", score:2410},
+        {u:"@fuel_nerd", lv:"", en:"Integrated wind collar beats raw output every single time above treeline.", zh:"在林线以上，一体挡风圈永远赢过纯火力。", score:1620},
+        {u:"@ul_ben", lv:"", en:"Add altitude next. Canister performance falls off a cliff at 4000m.", zh:"建议再加海拔变量，4000 米以上气罐性能直接跳崖。", score:940}
+      ],
+      source:{url:"https://twitter.com/stove_metrics/status/1882212004", siteName:"Twitter", publishedAt:"2026-08-13 12:26"},
+      timeAgo:"23 小时前"
+    },
+    {
+      id:"WS-2618", platform:"小红书", vertical:"gear",
+      author:{name:"穿三年不换", avatarColor:"#FF2E4D"},
+      hotTag:"笔记高赞", tags:["装备实测","值得买"],
+      title:"冲锋裤挑了两年，最后我回到了 399 这一条",
+      conclusion:"这个品类的溢价买的是重量，不是耐用度",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:7},
+      metrics:{likes:24000, saves:12800, comments:1560},
+      spec:{verdict:"值得买", price:"¥399", test:"三条对比 2 年"},
+      excerpt:[
+        "两年我买过三条冲锋裤：399、1299、2100。三条都还活着，磨损集中在同一个位置 —— 坐下时的臀部和背包腰带摩擦的髋部。",
+        "1299 和 2100 确实更轻、更软、打包体积更小，长线徒步会舒服。但如果按「穿坏为止」来算，399 那条的耐磨表现和它们没有量级差别。",
+        "我现在的分配方式是：一日往返和通勤穿 399，多天重装才拿贵的。这不是消费降级，是把预算挪去了睡袋和鞋。"
+      ],
+      comments:[
+        {u:"预算有限但想去", lv:"", zh:"把钱挪到睡袋和鞋这句太对了，穿的其实最不吃预算。", score:12800},
+        {u:"髋部磨损同款", lv:"", zh:"髋部磨损这个位置我也一样，建议厂家在这里加片。", score:7420},
+        {u:"重装十天党", lv:"", zh:"长线还是贵的舒服，重量和打包体积是实打实的。", score:4160}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b2c0e91d55", siteName:"小红书", publishedAt:"2026-08-02 18:34"},
+      timeAgo:"1 周前"
+    },
+    {
+      id:"WS-2619", platform:"B站", vertical:"gear",
+      author:{name:"泡水实验室", avatarColor:"#FB7299"},
+      hotTag:"弹幕最密", tags:["数据实测","避坑"],
+      title:"防水袋泡水池 2 小时，最贵那个先进水",
+      conclusion:"卷边次数比材料等级更能决定进不进水",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"14:39", imgCount:0},
+      metrics:{views:512000, danmu:16000, likes:41000},
+      spec:{verdict:"看情况", price:"¥59–329", test:"泡水 2 小时"},
+      excerpt:[
+        "六个防水袋，每个里面放一张吸水纸，同时压进水池 2 小时，深度 60 厘米。我按厂家说明各自卷了三圈。",
+        "结果最贵的 329 那个先湿。拆开看原因很清楚：它的袋口更硬更厚，卷三圈时封不严，需要卷五圈才行 —— 而说明书上写的是三圈。",
+        "所以这类产品的真实变量是「你实际卷了几圈」。视频后半段我把每个袋子改成卷五圈重测了一次，六个全部没进水。"
+      ],
+      comments:[
+        {u:"漂流常客", lv:"Lv5", zh:"卷五圈这条比任何参数都实用，说明书该改了。", score:16200},
+        {u:"手机进水两次", lv:"Lv4", zh:"贵的封不严真的很讽刺，材料太硬反而是缺点。", score:9840},
+        {u:"实验党", lv:"Lv6", zh:"建议再测一次带压力变化的，下潜时进水概率完全不同。", score:5310}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1kJ411p7Ln", siteName:"哔哩哔哩", publishedAt:"2026-08-01 20:28"},
+      timeAgo:"1 周前"
+    },
+    {
+      id:"WS-2620", platform:"小红书", vertical:"trail",
+      author:{name:"武功山反穿日记", avatarColor:"#FF2E4D"},
+      hotTag:"收藏破万", tags:["路线实况","避坑"],
+      title:"武功山反穿完整攻略，含我们犯过的 3 个错误",
+      conclusion:"反穿的难点不是体力，是最后 4 公里的下撤时间窗",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:16},
+      metrics:{likes:47000, saves:21600, comments:2940},
+      spec:{dist:"18.5km", gain:"1,480m", hours:"9h", level:"中等偏难"},
+      excerpt:[
+        "我们从沈子村反穿到发云界，全程 18.5 公里，爬升 1480 米，走了 9 小时。三个错误按代价从大到小排：出发晚了两小时、没查末班车、以及在草甸上多拍了 40 分钟。",
+        "这三个错误其实是同一个错误：都在挤压最后 4 公里的下撤时间。我们最后是打着头灯下的，末班车没赶上，多花了 300 块包车。",
+        "如果只记一条：反穿务必 7 点前进山。草甸再好看也别在下午三点后停留超过 20 分钟。"
+      ],
+      comments:[
+        {u:"末班车受害者", lv:"", zh:"没查末班车这个坑我踩过两次，山里的时刻表和 App 上不一样。", score:21600},
+        {u:"草甸拍照狂", lv:"", zh:"下午三点后不停留超过 20 分钟，这句我记住了。", score:12400},
+        {u:"江西本地", lv:"", zh:"补充：夏天反穿注意雷暴，草甸上无遮挡非常危险。", score:8100}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b1a7f3e8d2", siteName:"小红书", publishedAt:"2026-07-31 19:48"},
+      timeAgo:"2 周前"
+    },
+    {
+      id:"WS-2621", platform:"小红书", vertical:"trail",
+      author:{name:"第一座三千米", avatarColor:"#FF2E4D"},
+      hotTag:"笔记高赞", tags:["新手友好","行程规划"],
+      title:"新手第一座 3000 米，选它别选那座，差别在下撤",
+      conclusion:"新手选山的第一标准是能不能中途放弃",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:9},
+      metrics:{likes:33000, saves:17200, comments:2260},
+      spec:{dist:"12.4km", gain:"1,050m", hours:"6.5h", level:"新手可"},
+      excerpt:[
+        "两座山高度差不多，都是 3000 米出头，路程也接近。但我推荐前者，原因只有一个：它每 2 公里就有一个可以原路折返的节点，而后者一旦上了主脊就必须走完。",
+        "第一次爬 3000 米，最大的风险不是走不完，是走到一半发现状态不对却没得选。有退路的山会让你敢往上走一点，没退路的山会让你在山脊上硬撑。",
+        "装备我列在图三，含租用清单。除此之外只有一条建议：把出发时间提前一小时，这一小时是你所有容错的来源。"
+      ],
+      comments:[
+        {u:"社恐但爱爬山", lv:"", zh:"能中途放弃这个标准太反常识了，但确实最重要。", score:17200},
+        {u:"第一次就上主脊", lv:"", zh:"我第一次就走了后者，在脊上崩溃过，认同这个建议。", score:10600},
+        {u:"装备出租老板", lv:"", zh:"租用清单很实用，补一句：鞋千万别租，磨脚。", score:5920}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b09c22f4a7", siteName:"小红书", publishedAt:"2026-07-30 20:16"},
+      timeAgo:"2 周前"
+    },
+    {
+      id:"WS-2622", platform:"Twitter", vertical:"trail",
+      author:{name:"@ridgewater", avatarColor:"#1D9BF0"},
+      hotTag:"原文英文", tags:["路线实况","数据实测"],
+      title:"一个长线徒步者把 40km 山脊上的水源全部实地标了一遍",
+      titleOriginal:"I ground-truthed every water source on a 40km ridge. Half of the mapped ones were dry.",
+      conclusion:"地图上的水源不可信，可信的是最近一次实地记录",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:5},
+      metrics:{likes:16000, reposts:2840, comments:720},
+      spec:{dist:"40km", gain:"2,100m", hours:"2 天", level:"硬核"},
+      excerpt:[
+        "我沿这条 40 公里山脊走了两天，逐个核对了公开地图上标注的 14 个水源。其中 7 个是干的，2 个位置偏差超过 200 米，只有 5 个可用且好找。",
+        "更有价值的是我发现了 3 个地图上没有的稳定水源，都在背阴侧的岩壁下方。我把 GPS 点和当天流量照片一起上传了，标注了核对日期。",
+        "结论是这类信息必须带时间戳：水源是季节性的，去年的记录在今年八月毫无参考价值。任何不写日期的水源图都不该被信任。"
+      ],
+      excerptEn:[
+        "I walked this 40km ridge over two days and ground-truthed all 14 water sources marked on public maps. Seven were dry, two were off by more than 200 metres, and only five were usable and easy to find.",
+        "More useful: I found three reliable sources that are not on any map, all under shaded rock faces. GPS points and same-day flow photos are uploaded with the survey date attached.",
+        "The takeaway is that this data must carry a timestamp. Water is seasonal, and last year's note is worthless in August. Any water map without a date should not be trusted."
+      ],
+      comments:[
+        {u:"@thru_maggie", lv:"", en:"A water map without a survey date is a rumour, not data.", zh:"没有核对日期的水源图是传闻，不是数据。", score:2840},
+        {u:"@dry_creek_dan", lv:"", en:"Shaded rock faces are the trick nobody writes down. Thanks for this.", zh:"背阴岩壁这个诀窍没人写下来过，谢谢分享。", score:1740},
+        {u:"@packlight_jo", lv:"", en:"Carried 4L because of stale maps. Now I plan around your points.", zh:"以前因为地图过期背了 4 升水，现在照你的点位规划。", score:1120}
+      ],
+      source:{url:"https://twitter.com/ridgewater/status/1882101764", siteName:"Twitter", publishedAt:"2026-08-12 22:04"},
+      timeAgo:"13 小时前"
+    },
+    {
+      id:"WS-2623", platform:"B站", vertical:"trail",
+      author:{name:"追云海的老陈", avatarColor:"#FB7299"},
+      hotTag:"三连破万", tags:["路线实况","行程规划"],
+      title:"凌晨 3 点出发拍云海，我失败了两次才成功",
+      conclusion:"云海不是靠运气，是靠前一天的湿度和温差判断",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"22:41", imgCount:0},
+      metrics:{views:740000, danmu:21000, likes:58000},
+      spec:{dist:"8.6km", gain:"960m", hours:"4h", level:"中等"},
+      excerpt:[
+        "同一座山，同一个机位，我去了三次。前两次都空手而归，第三次成了。差别不在运气，在我第三次出发前查了两个数字：前一天的相对湿度和当夜的地面温差。",
+        "规律很朴素：湿度高于 80%、夜间温差大于 8 度、且风速小于 3 米每秒时，出云海的概率明显更高。我把三次的气象数据并排放在视频第 6 分钟。",
+        "另外一个实用信息：凌晨 3 点上山这条路有两段需要手脚并用，头灯必须是双光源，一个坏了还有备用。"
+      ],
+      comments:[
+        {u:"气象爱好者", lv:"Lv6", zh:"湿度加温差这个组合我验证过三次，确实比看天气预报准。", score:24100},
+        {u:"夜爬新手", lv:"Lv4", zh:"双光源头灯这条太实在了，我上次唯一一个灯没电，差点下不来。", score:14700},
+        {u:"机位守候者", lv:"Lv5", zh:"三次数据并排的做法比任何攻略都有说服力。", score:8300}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1yH4y1c7Rp", siteName:"哔哩哔哩", publishedAt:"2026-07-29 19:36"},
+      timeAgo:"2 周前"
+    },
+    {
+      id:"WS-2624", platform:"小红书", vertical:"trail",
+      author:{name:"杭州周末计划", avatarColor:"#FF2E4D"},
+      hotTag:"收藏破万", tags:["行程规划","新手友好"],
+      title:"杭州最好走的 5 条一日路线，我按累计爬升排了序",
+      conclusion:"一日线该按爬升排序，不该按距离排序",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:15},
+      metrics:{likes:52000, saves:28400, comments:3410},
+      spec:{dist:"6–17km", gain:"180–860m", hours:"2–6h", level:"新手可"},
+      excerpt:[
+        "5 条线我全部走过至少两次，按累计爬升从 180 米排到 860 米。为什么按爬升排？因为距离骗人：17 公里的平缓茶园线比 8 公里的连续台阶线轻松得多。",
+        "每条我都记了三个数字：累计爬升、公共交通接驳时间、以及中途能不能吃到热的东西。最后一项对带家人出门的人来说比风景重要。",
+        "第 3 条是我最推荐给新手的：爬升 420 米，全程有石阶，中段有小店，下撤点两个，地铁直达起点。"
+      ],
+      comments:[
+        {u:"带娃出门", lv:"", zh:"能不能吃到热的东西 —— 这个指标才是真实需求。", score:28400},
+        {u:"距离迷惑受害者", lv:"", zh:"按爬升排序太对了，我被 8 公里台阶线坑过。", score:16800},
+        {u:"地铁直达党", lv:"", zh:"接驳时间也算进去这点非常加分，省了我半小时查路线。", score:9200}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66af88b0c3e1", siteName:"小红书", publishedAt:"2026-07-28 18:02"},
+      timeAgo:"2 周前"
+    },
+    {
+      id:"WS-2625", platform:"Twitter", vertical:"trail",
+      author:{name:"@trailcond_report", avatarColor:"#1D9BF0"},
+      hotTag:"推上热议", tags:["路线实况","强度警告"],
+      title:"强风把栈桥掀了，这条线未来两周别去",
+      titleOriginal:"High winds took out the footbridge at km 22. Do not attempt this route for two weeks.",
+      conclusion:"路况信息的价值随时间衰减，最新的一条最值钱",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:3},
+      metrics:{likes:9800, reposts:5240, comments:860},
+      spec:{dist:"—", gain:"—", hours:"—", level:"暂勿前往"},
+      excerpt:[
+        "昨夜的强风把 22 公里处的栈桥整段掀翻，现场照片见下。溪流水位比平时高约 60 厘米，绕行需要额外 5 公里且有一段陡坡。",
+        "管理方今早已确认要两周左右完成修复。这期间进入的话唯一安全方案是从北侧起点走出入折返，不要尝试徒涉。",
+        "如果你在这两周内看到有人发这条线的美图，注意看拍摄日期 —— 很可能是风灾之前拍的。"
+      ],
+      excerptEn:[
+        "Last night's winds flipped the entire footbridge section at km 22; photos below. The creek is running about 60cm above normal and the detour adds 5km including a steep section.",
+        "The land manager confirmed this morning that repairs will take roughly two weeks. Until then the only safe option is an out-and-back from the north trailhead. Do not attempt to ford.",
+        "If you see pretty photos of this route in the next two weeks, check the capture date — they were almost certainly taken before the storm."
+      ],
+      comments:[
+        {u:"@northtrail_ops", lv:"", en:"Confirmed. Signage goes up tomorrow. Please do not ford, the creek is moving fast.", zh:"确认属实，警示牌明天设立。请不要徒涉，水流很急。", score:5240},
+        {u:"@weekend_walker", lv:"", en:"This is why route reports need timestamps, not just photos.", zh:"这就是路况信息必须带时间戳而不只是照片的原因。", score:2610},
+        {u:"@sar_volunteer", lv:"", en:"We pulled two people out of that creek last spring. Take this seriously.", zh:"去年春天我们从那条溪里救出两个人，请认真对待。", score:1840}
+      ],
+      source:{url:"https://twitter.com/trailcond_report/status/1882521330", siteName:"Twitter", publishedAt:"2026-08-14 09:40"},
+      timeAgo:"1 小时前"
+    },
+    {
+      id:"WS-2626", platform:"B站", vertical:"ai",
+      author:{name:"重构十二年老代码", avatarColor:"#FB7299"},
+      hotTag:"三连破万", tags:["真人实测","AI 观点"],
+      title:"我用 AI 重写了公司 12 年的老代码，第 4 天出事了",
+      conclusion:"AI 能读懂代码，但读不懂当年为什么这么写",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"35:12", imgCount:0},
+      metrics:{views:1480000, danmu:44000, likes:112000},
+      spec:{kind:"复盘", lang:"中文", fresh:"1 天前"},
+      excerpt:[
+        "前三天非常顺利：4 万行老代码，AI 帮我梳理出调用关系、补了缺失的注释、重写了 60% 的模块，测试全绿。",
+        "第 4 天线上出问题。原因是一段看起来完全多余的重试逻辑被删掉了 —— 那段代码是 2019 年为了绕过某个上游接口的偶发超时加的，注释里没写，只有当年那位同事知道。",
+        "我的结论是：AI 能理解代码写了什么，但不知道它为什么这么写。凡是「看起来多余」的代码，都应该先去翻提交记录和工单，而不是直接删。"
+      ],
+      comments:[
+        {u:"祖传代码维护者", lv:"Lv6", zh:"看起来多余的代码往往是最贵的教训换来的，这句该刻在墙上。", score:44100},
+        {u:"提交记录考古学", lv:"Lv5", zh:"我们的规范是删任何一行都要贴出对应工单，就是因为这类事。", score:26800},
+        {u:"上游接口受害者", lv:"Lv4", zh:"偶发超时的重试逻辑，谁删谁哭，一模一样的经历。", score:15200}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1tW4y1d7Vs", siteName:"哔哩哔哩", publishedAt:"2026-08-13 20:50"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"WS-2627", platform:"Twitter", vertical:"ai",
+      author:{name:"@datarecipe", avatarColor:"#1D9BF0"},
+      hotTag:"AI 圈刷屏", tags:["AI 观点","原文英文"],
+      title:"前研究员：规模不是终点，数据配方才是那条护城河",
+      titleOriginal:"Scaling was never the moat. The data recipe is, and almost nobody publishes theirs.",
+      conclusion:"能公开的都是参数，不公开的才是配方",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:1},
+      metrics:{likes:42000, reposts:11200, comments:3140},
+      spec:{kind:"观点", lang:"EN", fresh:"7 小时前"},
+      excerpt:[
+        "过去两年公开的技术报告里，参数量、层数、上下文长度这些都写得很清楚。但真正决定模型差异的是数据配方：各来源的比例、清洗规则、去重强度、以及课程式训练的顺序。",
+        "这部分几乎没有人公开。原因不是保密文化，而是它确实是唯一无法通过增加算力抹平的差距 —— 同样的算力，配方不同，结果能差出一个代际。",
+        "我认为接下来的竞争会集中在两件事：谁能拿到别人拿不到的数据，谁能把数据的清洗与配比工程化。模型架构会趋同，配方不会。"
+      ],
+      excerptEn:[
+        "Every technical report from the last two years is explicit about parameter counts, layers and context length. What actually separates models is the data recipe: source ratios, cleaning rules, dedup aggressiveness, and curriculum ordering.",
+        "Almost nobody publishes that part. Not because of secrecy culture, but because it is the one gap you cannot close by buying more compute. Same compute, different recipe, a full generation apart.",
+        "The next round of competition will be about two things: who can obtain data others cannot, and who can industrialise cleaning and blending. Architectures will converge. Recipes will not."
+      ],
+      comments:[
+        {u:"@tokenwrangler", lv:"", en:"Everyone published their architecture. Nobody published their dedup threshold.", zh:"所有人都公开了架构，没有人公开去重阈值。", score:11400},
+        {u:"@openset_amy", lv:"", en:"This is why open-weight is not open-source. The recipe is the source.", zh:"这就是「开放权重」不等于「开源」的原因，配方才是源码。", score:7620},
+        {u:"@compute_poor", lv:"", en:"Good news for small labs: recipe work is cheap. Bad news: data access is not.", zh:"对小团队是好消息：配方研究很便宜。坏消息：数据获取不便宜。", score:4180}
+      ],
+      source:{url:"https://twitter.com/datarecipe/status/1882455092", siteName:"Twitter", publishedAt:"2026-08-14 04:20"},
+      timeAgo:"7 小时前"
+    },
+    {
+      id:"WS-2628", platform:"Twitter", vertical:"ai",
+      author:{name:"@token_ledger", avatarColor:"#1D9BF0"},
+      hotTag:"原文英文", tags:["数据实测","AI 观点"],
+      title:"有人量了 6 个编程助手的真实 token 成本，差了 4.7 倍",
+      titleOriginal:"Metered real token cost across six coding assistants on the same 40 tasks. 4.7x spread.",
+      conclusion:"成本差距来自上下文管理，不来自单价",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:4},
+      metrics:{likes:26000, reposts:5410, comments:1240},
+      spec:{kind:"实测", lang:"EN", fresh:"5 小时前"},
+      excerpt:[
+        "同样 40 个任务、同一个代码库，我记录了 6 个编程助手的实际 token 消耗。最贵和最便宜之间差了 4.7 倍，而它们的官方单价只差 1.8 倍。",
+        "差距主要来自上下文管理：有的工具每一轮都把整个文件塞进去，有的会做检索和裁剪。前者在大文件项目上成本爆炸，任务完成质量却没有更好。",
+        "如果你在为团队选工具，我建议直接量一次真实用量，别看单价表。我把 40 个任务的原始日志和统计脚本都公开了。"
+      ],
+      excerptEn:[
+        "Same 40 tasks, same repository, metered actual token consumption across six coding assistants. The spread between cheapest and most expensive is 4.7x, while their list prices differ by only 1.8x.",
+        "The gap comes from context management: some tools stuff whole files every turn, others retrieve and trim. The former explodes on large-file repos without producing better completions.",
+        "If you are choosing tools for a team, meter real usage rather than reading price sheets. Raw logs for all 40 tasks and the analysis script are public."
+      ],
+      comments:[
+        {u:"@ctx_window", lv:"", en:"Price per million tokens is meaningless if the tool wastes ten times as many.", zh:"如果工具多浪费十倍 token，每百万单价就毫无意义。", score:5610},
+        {u:"@repo_giant", lv:"", en:"On a 400k-line repo the spread was worse than yours. Way worse.", zh:"在 40 万行的库上，这个差距比你测的还要大得多。", score:3240},
+        {u:"@finops_lee", lv:"", en:"Metering before procurement should just be standard practice by now.", zh:"采购前先实测用量，这件事现在早就该是标准动作了。", score:1980}
+      ],
+      source:{url:"https://twitter.com/token_ledger/status/1882480221", siteName:"Twitter", publishedAt:"2026-08-14 06:34"},
+      timeAgo:"5 小时前"
+    },
+    {
+      id:"WS-2629", platform:"B站", vertical:"ai",
+      author:{name:"提示词跑八次", avatarColor:"#FB7299"},
+      hotTag:"UP主亲测", tags:["真人实测","AI 观点"],
+      title:"同一句提示词跑 8 个视频模型，只有 2 个能保持人物一致",
+      conclusion:"当前视频模型的分水岭是跨镜头一致性，不是画质",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"29:05", imgCount:0},
+      metrics:{views:1080000, danmu:34000, likes:88000},
+      spec:{kind:"实测", lang:"中文", fresh:"2 天前"},
+      excerpt:[
+        "同一句提示词，同样的时长和分辨率要求，跑了 8 个视频模型，每个生成 3 次取最好的一次。单帧画质上有 5 个已经很难分出高下。",
+        "但要求同一个人物出现在三个不同镜头里时，只有 2 个模型能保持发型、服装和脸型基本一致。其余 6 个都会在第二个镜头开始漂移，越是复杂动作漂得越快。",
+        "所以现在拼画质的评测意义已经不大了。真正影响能不能用在实际项目里的是跨镜头一致性和可控性，视频第 12 分钟起是逐个模型的对比。"
+      ],
+      comments:[
+        {u:"分镜苦手", lv:"Lv5", zh:"跨镜头一致性才是能不能商用的门槛，画质早就够了。", score:34200},
+        {u:"广告公司乙方", lv:"Lv6", zh:"客户改一版就漂移一次，这个痛点太真实。", score:19800},
+        {u:"AI 剪辑爱好者", lv:"Lv4", zh:"建议加一个「同一提示词跑十次的稳定度」指标。", score:11400}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1vE4y1n7Qb", siteName:"哔哩哔哩", publishedAt:"2026-08-12 19:58"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"WS-2630", platform:"Twitter", vertical:"ai",
+      author:{name:"@longctx_lab", avatarColor:"#1D9BF0"},
+      hotTag:"推上热议", tags:["数据实测","AI 观点"],
+      title:"上下文窗口越长越好？一份 128k 实测反例",
+      titleOriginal:"Longer context is not free: retrieval accuracy drops 34% past 60k tokens in our tests.",
+      conclusion:"长窗口不等于长记忆，中段信息是最先被丢的",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:3},
+      metrics:{likes:31000, reposts:6820, comments:1840},
+      spec:{kind:"实测", lang:"EN", fresh:"9 小时前"},
+      excerpt:[
+        "我们把同一份资料分别塞进 8k、32k、64k、128k 的上下文里，问同样 200 个问题，只统计答案是否引用了正确段落。",
+        "8k 到 32k 之间几乎没有衰减。超过 60k 之后检索准确率下降了 34%，而且错误高度集中在文档中段 —— 开头和结尾的信息几乎总能被找到。",
+        "这意味着把所有资料一次性塞进长窗口，往往比先做检索再喂给模型更差、也更贵。我们把 200 个问题和逐档结果都公开了。"
+      ],
+      excerptEn:[
+        "We placed the same corpus into 8k, 32k, 64k and 128k contexts and asked the same 200 questions, scoring only whether the answer cited the correct passage.",
+        "There is almost no degradation from 8k to 32k. Past 60k, retrieval accuracy drops 34%, and the failures cluster heavily in the middle of the document — the beginning and the end are nearly always found.",
+        "This means dumping everything into a long context is often worse and more expensive than retrieving first. All 200 questions and per-tier results are public."
+      ],
+      comments:[
+        {u:"@rag_not_dead", lv:"", en:"Long context did not kill retrieval. It made retrieval quality measurable.", zh:"长上下文没有干掉检索，它让检索质量变得可量化了。", score:6820},
+        {u:"@middle_lost", lv:"", en:"Lost-in-the-middle is real and it is worse on non-English text.", zh:"「中段丢失」是真实存在的，而且在非英文文本上更严重。", score:4210},
+        {u:"@cost_aware", lv:"", en:"Also 128k costs 4x per call. Worse answers for more money.", zh:"而且 128k 每次调用贵四倍，花更多钱换更差的答案。", score:2640}
+      ],
+      source:{url:"https://twitter.com/longctx_lab/status/1882430118", siteName:"Twitter", publishedAt:"2026-08-14 02:12"},
+      timeAgo:"9 小时前"
+    },
+
+    /* ================= 影视：四个实时聚类话题 ================= */
+    {
+      id:"WS-2701", platform:"B站", vertical:"movie", topic:"spider",
+      author:{name:"拉片老张", avatarColor:"#FB7299"},
+      tags:["逐帧拆解","口碑争议"],
+      title:"《蜘蛛侠：交错宇宙》第 47 分钟那段转场，我逐帧拆了 12 遍",
+      conclusion:"画面确实赢了，代价是三条故事线被压成了一条",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"22:41", imgCount:0},
+      metrics:{views:1240000, danmu:38000, likes:96000},
+      spec:{kind:"逐帧解析", score:"豆瓣 7.9", spoiler:"含中度剧透"},
+      excerpt:[
+        "第 47 分钟那段转场只有 3 秒，但它同时切换了三种画风：主线是网点印刷，插入的回忆是水彩，最后半秒回到 3D。我逐帧看了 12 遍，中间有 4 帧是完全手绘的过渡帧，没有任何三维辅助。",
+        "但这段炫技也暴露了问题：为了让转场成立，编剧把原本属于第二条故事线的动机塞进了这 3 秒里。所以很多人看完会觉得「好看但没懂」——不是你没看懂，是这条线真的被压缩了。"
+      ],
+      comments:[
+        {u:"帧率警察", lv:"Lv6", zh:"手绘过渡帧这个发现太顶了，我重看了一遍确实能看出笔触。", score:24800},
+        {u:"只看爆米花", lv:"Lv5", zh:"我就是那个「好看但没懂」的人，原来不是我的问题。", score:16200},
+        {u:"分镜本收藏家", lv:"Lv4", zh:"第二条线被砍这事导演访谈里也承认了，说是时长压力。", score:9400}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1sp411m7Kd", siteName:"哔哩哔哩", publishedAt:"2026-08-13 21:10"},
+      timeAgo:"18 小时前"
+    },
+    {
+      id:"WS-2702", platform:"小红书", vertical:"movie", topic:"spider",
+      author:{name:"爆米花不加盐", avatarColor:"#FF2E4D"},
+      tags:["带娃观影","观众实录"],
+      title:"带 6 岁小孩去看《蜘蛛侠》，他中途问了我三次「这是谁」",
+      conclusion:"低龄观众的门槛不在剧情，在同一个角色的多种画风",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:8},
+      metrics:{likes:38000, saves:9120, comments:2860},
+      spec:{kind:"观影记录", score:"豆瓣 7.9", spoiler:"轻剧透"},
+      excerpt:[
+        "全片 132 分钟，我儿子问了三次「这是谁」，三次都发生在同一个角色换画风出场的时候。他能分清不同的人，但分不清同一个人的不同画法。",
+        "第二个坎是节奏：前 20 分钟他非常投入，中段那场信息量极大的多线追逐之后他明显开始扭动。如果带 6 岁上下的小孩，我的建议是选下午场，并且提前用海报告诉他「这几个都是蜘蛛侠」。"
+      ],
+      comments:[
+        {u:"两个娃的妈", lv:"", zh:"画风这条太准了，我女儿也一直问「刚才那个哪去了」。", score:14100},
+        {u:"影院爆米花", lv:"", zh:"提前看海报这招我下次试试，谢谢！", score:7320},
+        {u:"周末双人场", lv:"", zh:"中段那场追逐连我都要缓一下，信息量真的大。", score:4180}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66ba01c7f2d3", siteName:"小红书", publishedAt:"2026-08-12 20:40"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"WS-2703", platform:"Twitter", vertical:"movie", topic:"spider",
+      author:{name:"@frame_by_frame", avatarColor:"#1D9BF0"},
+      tags:["海外口碑","原文英文"],
+      title:"外国影迷吵起来了：这部续集是不是把叙事让给了画面",
+      titleOriginal:"The sequel traded story for spectacle, and the thread arguing about it is now 900 replies deep.",
+      conclusion:"争议焦点其实是「视觉是不是叙事的一部分」",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:4},
+      metrics:{likes:26000, reposts:4120, comments:900},
+      spec:{kind:"海外讨论", score:"IMDb 8.2", spoiler:"无剧透"},
+      excerpt:[
+        "这条推底下已经 900 多条回复，两派的分歧不在好不好看，而在「视觉能不能算叙事」。反对方说这片用画风替代了人物动机；支持方说画风的切换本身就是人物状态。",
+        "值得注意的是：吵得最凶的两个人最后达成了一个共识——如果这是系列的第二部，那它可以这么拍；如果它是独立作品，就站不住。"
+      ],
+      excerptEn:[
+        "Nine hundred replies in, and the split is not about whether it looks good. It is about whether visuals can carry narrative. One camp says the art style replaces character motivation; the other says the shifting style is the character's state.",
+        "The interesting part: the two loudest people eventually agreed on one thing. As part two of a series this approach works. As a standalone film it does not hold."
+      ],
+      comments:[
+        {u:"@panel_gutter", lv:"", en:"Style IS the story here. The gutters between panels are the edit.", zh:"在这部里画风就是故事本身，分格之间的空白就是剪辑。", score:8420},
+        {u:"@plot_first", lv:"", en:"Gorgeous frames cannot fix a motivation you never wrote.", zh:"再漂亮的画面也补不上你根本没写的人物动机。", score:6210},
+        {u:"@second_watch", lv:"", en:"Rewatch changed my mind. First time I was just overwhelmed.", zh:"二刷改变了我的看法，第一遍纯粹是被信息量砸晕了。", score:3140}
+      ],
+      source:{url:"https://twitter.com/frame_by_frame/status/1882560914", siteName:"Twitter", publishedAt:"2026-08-14 11:26"},
+      timeAgo:"4 小时前"
+    },
+    {
+      id:"WS-2704", platform:"小红书", vertical:"movie", topic:"spider",
+      author:{name:"影院前排", avatarColor:"#FF2E4D"},
+      tags:["版本对比","值不值"],
+      title:"IMAX 和普通厅差多少？同一部我连看了两场",
+      conclusion:"这部值得加钱的不是画幅，是低频声场",
+      aiGenerated:true,
+      imgRatio:"1:1",
+      media:{type:"note", duration:"", imgCount:6},
+      metrics:{likes:29000, saves:11400, comments:1620},
+      spec:{kind:"版本对比", score:"豆瓣 7.9", spoiler:"无剧透"},
+      excerpt:[
+        "同一天连看两场，普通厅 45 元，IMAX 128 元。画幅差异只在三段大场面里明显，其余时间几乎看不出。真正拉开差距的是声音：那几段低频在普通厅是「听到」，在 IMAX 是「感觉到」。",
+        "所以我的结论是：如果只看一次，选声音好的厅比选大画幅更值；如果所在城市没有激光 IMAX，普通厅完全够用，省下的钱够二刷。"
+      ],
+      comments:[
+        {u:"声学发烧友", lv:"", zh:"终于有人说声音了，画幅营销这几年被吹得太过。", score:10600},
+        {u:"票根收集癖", lv:"", zh:"128 换 45 我选二刷，赞同结论。", score:6240},
+        {u:"小城观众", lv:"", zh:"我们这只有普通厅，看完这篇心里舒服了。", score:3810}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b9d3a0e1b7", siteName:"小红书", publishedAt:"2026-08-11 21:18"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"WS-2705", platform:"小红书", vertical:"movie", topic:"dragon",
+      author:{name:"汤勺不锈钢", avatarColor:"#FF2E4D"},
+      tags:["取景地","实地探访"],
+      title:"《欢迎来龙餐馆》里那家店真的存在，我按片尾字幕找过去了",
+      conclusion:"原型店确实在，但片中的招牌菜是剧组自己设计的",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:12},
+      metrics:{likes:62000, saves:24800, comments:4120},
+      spec:{kind:"取景地探访", score:"猫眼 9.1", spoiler:"轻剧透"},
+      excerpt:[
+        "片尾字幕里有一行很小的鸣谢，写了一家店名。我按这条线索找过去，店确实在，位置在老城区一条要拐两次的巷子里，门口的旧灯箱和电影里几乎一样。",
+        "但老板说得很实在：电影里那道招牌菜是剧组设计的，店里从来没做过。他现在每天要跟三十多个来打卡的人解释这件事，最后干脆在门口贴了一张纸——「本店没有那道菜」。"
+      ],
+      comments:[
+        {u:"巷子里的猫", lv:"", zh:"门口贴纸这个细节比电影本身还有意思。", score:21600},
+        {u:"打卡不排队", lv:"", zh:"求求大家别一窝蜂去了，人家真的只是开个店。", score:15400},
+        {u:"美术组路人", lv:"", zh:"招牌菜是设计的很正常，剧组要考虑颜色和拍摄稳定性。", score:8720}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66ba18d4c0a6", siteName:"小红书", publishedAt:"2026-08-13 18:52"},
+      timeAgo:"21 小时前"
+    },
+    {
+      id:"WS-2706", platform:"B站", vertical:"movie", topic:"dragon",
+      author:{name:"灶台边的电影课", avatarColor:"#FB7299"},
+      tags:["幕后拆解","美食镜头"],
+      title:"《欢迎来龙餐馆》的美食镜头怎么拍的，我请了做菜的朋友一起看",
+      conclusion:"看着最香的三个镜头，现实里都不能吃",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"26:08", imgCount:0},
+      metrics:{views:964000, danmu:31000, likes:78000},
+      spec:{kind:"幕后拆解", score:"猫眼 9.1", spoiler:"轻剧透"},
+      excerpt:[
+        "我请了一位做了十六年粤菜的朋友一起看，他一眼指出三处：颠锅那段的火是煤气加了额外的燃气条，蒸汽是干冰补的，最后那盘炒饭的油光是刷上去的——都是为了上镜，现实里这三样都不能吃。",
+        "但他也说了一句让我记很久的话：这些手法不是造假，是把「香」这个嗅觉信息翻译成视觉信息。观众闻不到，所以剧组必须让你用眼睛闻到。"
+      ],
+      comments:[
+        {u:"厨房里的UP", lv:"Lv6", zh:"「把香翻译成视觉」这句话值得单独做一期。", score:26400},
+        {u:"干冰爱好者", lv:"Lv5", zh:"蒸汽用干冰是行业标配了，热蒸汽在镜头里根本不成形。", score:13800},
+        {u:"炒饭原教旨", lv:"Lv4", zh:"刷油这条我不能接受，但确实好看，矛盾。", score:7960}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1fq4y1w7Tn", siteName:"哔哩哔哩", publishedAt:"2026-08-12 19:34"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"WS-2707", platform:"Twitter", vertical:"movie", topic:"dragon",
+      author:{name:"@dimsum_diary", avatarColor:"#1D9BF0"},
+      tags:["文化差异","原文英文"],
+      title:"海外观众最想不通的那个情节，其实是一句中文玩笑",
+      titleOriginal:"The scene everyone abroad calls a plot hole is actually a Chinese pun that subtitles could not carry.",
+      conclusion:"不是剧情漏洞，是字幕装不下的一个谐音梗",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:3},
+      metrics:{likes:21000, reposts:5240, comments:1180},
+      spec:{kind:"海外讨论", score:"IMDb 7.8", spoiler:"含情节说明"},
+      excerpt:[
+        "几乎所有英文影评都提到同一个「逻辑不通」的情节：儿子听完父亲那句话之后突然改变主意。英文字幕把那句话直译了，于是它看起来毫无信息量。",
+        "但原文是一个谐音梗，父亲说的是一道菜名，同时也是一句「我记得你小时候爱吃」。这句话在中文里同时完成了道歉和示爱两件事，字幕只能选一个意思，所以海外观众看到的是一个空白。"
+      ],
+      excerptEn:[
+        "Almost every English review flags the same moment as a plot hole: the son changes his mind right after his father speaks one line. Subtitles translated it literally, so it reads as empty.",
+        "In Mandarin the line is a pun. It is the name of a dish and also 'I remember you loved this as a kid'. It apologises and says I love you at the same time. Subtitles can only pick one, so what audiences abroad got was a blank."
+      ],
+      comments:[
+        {u:"@sub_localise", lv:"", en:"This is why a good localiser rewrites instead of translating.", zh:"这就是为什么好的本地化是重写而不是翻译。", score:9240},
+        {u:"@second_gen", lv:"", en:"My dad talks exactly like this. Food is how he says sorry.", zh:"我爸就是这样说话的，他用菜来道歉。", score:6810},
+        {u:"@puzzled_viewer", lv:"", en:"So it was not lazy writing. I owe the film a rewatch.", zh:"所以不是编剧偷懒，我欠这部电影一次二刷。", score:4120}
+      ],
+      source:{url:"https://twitter.com/dimsum_diary/status/1882549001", siteName:"Twitter", publishedAt:"2026-08-14 10:04"},
+      timeAgo:"6 小时前"
+    },
+    {
+      id:"WS-2708", platform:"小红书", vertical:"movie", topic:"dragon",
+      author:{name:"眼泪不值钱", avatarColor:"#FF2E4D"},
+      tags:["观影感受","泪点预警"],
+      title:"看完哭了两次，第二次是为了那盘炒饭",
+      conclusion:"泪点不在离别，在那句没说出口的「你回来吃饭」",
+      aiGenerated:true,
+      imgRatio:"1:1",
+      media:{type:"note", duration:"", imgCount:5},
+      metrics:{likes:47000, saves:12600, comments:5240},
+      spec:{kind:"观影感受", score:"猫眼 9.1", spoiler:"含中度剧透"},
+      excerpt:[
+        "第一次哭是意料之中的那场离别，第二次完全没防备：父亲把炒饭推过来的时候什么都没说，只是把盘子转了一下，让鸡蛋那面朝着儿子。",
+        "我旁边那排也有抽纸声。散场的时候我听到一个女生跟朋友说「我妈也会转盘子」——这大概就是这部电影真正厉害的地方，它没有台词，你也懂。"
+      ],
+      comments:[
+        {u:"纸巾带够了", lv:"", zh:"转盘子这个动作我看的时候没注意，现在想起来又要哭。", score:18700},
+        {u:"离家第七年", lv:"", zh:"我爸不会说想我，只会问我到没到。一样的。", score:13200},
+        {u:"影院第五排", lv:"", zh:"散场后没人急着走，这在暑期档很少见。", score:6940}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b9e820af31", siteName:"小红书", publishedAt:"2026-08-11 22:06"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"WS-2709", platform:"B站", vertical:"movie", topic:"odyssey",
+      author:{name:"胶片守夜人", avatarColor:"#FB7299"},
+      tags:["版本对比","放映格式"],
+      title:"《奥德赛》的 70mm 和数字版，我买了两张票逐场对比",
+      conclusion:"70mm 赢在暗部，但只有 6 场戏能看出差别",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"34:52", imgCount:0},
+      metrics:{views:742000, danmu:22000, likes:64000},
+      spec:{kind:"版本对比", score:"豆瓣 8.6", spoiler:"无剧透"},
+      excerpt:[
+        "同一天先看数字版，隔三小时再看 70mm，两场都坐在同一排的中间位置。差别集中在六场戏：全部是夜景或船舱内景，70mm 的暗部层次明显更多，数字版会糊成一整片黑。",
+        "白天的海面几乎看不出差异。所以如果 70mm 场次要加价一倍还得跨城，我的建议是别执着；但如果本地有场次，那六场戏值得。"
+      ],
+      comments:[
+        {u:"暗部控", lv:"Lv6", zh:"暗部层次这条太对了，数字版那场船舱我全程看不清人脸。", score:19800},
+        {u:"跨城观影", lv:"Lv5", zh:"我为了 70mm 坐了 4 小时高铁，看完觉得值但不推荐别人学我。", score:12400},
+        {u:"放映员老李", lv:"Lv4", zh:"补充一点：70mm 拷贝放映次数多了会有划痕，越早看越好。", score:8600}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1zx411v7Pm", siteName:"哔哩哔哩", publishedAt:"2026-08-13 20:22"},
+      timeAgo:"19 小时前"
+    },
+    {
+      id:"WS-2710", platform:"Twitter", vertical:"movie", topic:"odyssey",
+      author:{name:"@reel_dispute", avatarColor:"#1D9BF0"},
+      tags:["海外影评","原文英文"],
+      title:"英文影评人打起来了：这是史诗，还是三小时的行为艺术",
+      titleOriginal:"Critics are split down the middle: a genuine epic, or three hours of very expensive performance art?",
+      conclusion:"分歧的真正来源是有没有读过原著",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:2},
+      metrics:{likes:18400, reposts:3620, comments:1420},
+      spec:{kind:"海外讨论", score:"IMDb 8.4", spoiler:"无剧透"},
+      excerpt:[
+        "我把 40 篇英文长评按打分排了一遍，发现一个规律：给出高分的评论里有 31 篇提到了原著的具体章节，而低分的评论几乎都在讨论「节奏」和「观众耐心」。",
+        "换句话说，这不是好坏之争，是两种观看契约的冲突。一方认为电影应该自足，另一方认为它是一次改编，可以要求观众带着背景进场。"
+      ],
+      excerptEn:[
+        "I sorted forty long English reviews by score and found a pattern. Thirty-one of the positive ones cite specific chapters of the poem. Almost every negative one argues about pacing and audience patience.",
+        "So this is not a fight about quality. It is a clash of two viewing contracts: one says a film must stand alone, the other says an adaptation may ask you to bring context with you."
+      ],
+      comments:[
+        {u:"@classics_prof", lv:"", en:"You cannot adapt a poem about delay and then apologise for being slow.", zh:"你没法改编一首关于「延宕」的长诗，然后又为慢节奏道歉。", score:7420},
+        {u:"@no_homework", lv:"", en:"A film that needs homework is a film that failed at least once.", zh:"需要预习的电影，至少已经失败了一次。", score:5810},
+        {u:"@third_act", lv:"", en:"The last forty minutes justify everything. Sit through it.", zh:"最后四十分钟能把前面全部兑现，坐住就行。", score:3960}
+      ],
+      source:{url:"https://twitter.com/reel_dispute/status/1882533640", siteName:"Twitter", publishedAt:"2026-08-14 08:48"},
+      timeAgo:"7 小时前"
+    },
+    {
+      id:"WS-2711", platform:"小红书", vertical:"movie", topic:"odyssey",
+      author:{name:"读过原著的人", avatarColor:"#FF2E4D"},
+      tags:["观影前必读","背景补课"],
+      title:"《奥德赛》看不懂的人，缺的其实是这 5 个背景",
+      conclusion:"补这 5 条只要十分钟，观感差别很大",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:9},
+      metrics:{likes:53000, saves:31200, comments:2740},
+      spec:{kind:"观影前必读", score:"豆瓣 8.6", spoiler:"轻剧透"},
+      excerpt:[
+        "五条都很短：一是主角为什么不能直接回家，二是那段海上「绕路」在原著里是十年，三是家里的求婚者代表什么，四是儿子这条线的作用，五是结尾那个测试的规则。",
+        "我把这五条讲给两个没看过原著的朋友，他们看完的评价从「有点闷」变成了「后半程一直起鸡皮疙瘩」。电影没变，缺的只是十分钟的背景。"
+      ],
+      comments:[
+        {u:"进场前五分钟", lv:"", zh:"看完这篇再进场，体验完全不同，建议置顶。", score:16800},
+        {u:"高中读过", lv:"", zh:"第五条那个测试的规则太关键了，不知道就少一半震撼。", score:9420},
+        {u:"不想做功课", lv:"", zh:"虽然有用，但电影要靠攻略才好看这件事本身有点问题吧。", score:6240}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b9c7f1d84c", siteName:"小红书", publishedAt:"2026-08-10 19:26"},
+      timeAgo:"3 天前"
+    },
+    {
+      id:"WS-2712", platform:"B站", vertical:"movie", topic:"odyssey",
+      author:{name:"海上摄制组", avatarColor:"#FB7299"},
+      tags:["幕后拆解","长镜头"],
+      title:"《奥德赛》那个海上长镜头，剧组真的把船开出去了",
+      conclusion:"这段没有绿幕，代价是拍了 23 天只用了 1 条",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"19:36", imgCount:0},
+      metrics:{views:1080000, danmu:29000, likes:88000},
+      spec:{kind:"幕后拆解", score:"豆瓣 8.6", spoiler:"无剧透"},
+      excerpt:[
+        "那个 7 分钟的长镜头是真的在海上拍的，摄影机装在一条改装过的双体船上，主船和摄影船靠缆绳保持相对位置。剧组在同一片海域拍了 23 天，最后用的是第 61 条。",
+        "为什么不用绿幕？摄影指导的解释很直接：海面的反光会同时落在脸上、帆上和甲板上，三处光的关系一旦是假的，观众说不出哪里不对，但会觉得不对。"
+      ],
+      comments:[
+        {u:"打光组阿明", lv:"Lv6", zh:"「说不出哪里不对但觉得不对」——这就是实拍存在的全部理由。", score:23400},
+        {u:"晕船患者", lv:"Lv5", zh:"23 天海上拍摄，演员的敬业程度不敢想。", score:14100},
+        {u:"预算敏感", lv:"Lv4", zh:"61 条里只用 1 条，这成本也是这部票价高的原因之一。", score:7820}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1hy4y1k7Cw", siteName:"哔哩哔哩", publishedAt:"2026-08-09 20:44"},
+      timeAgo:"4 天前"
+    },
+    {
+      id:"WS-2713", platform:"B站", vertical:"movie", topic:"baxian",
+      author:{name:"动作拆解阿宽", avatarColor:"#FB7299"},
+      tags:["动作设计","逐帧拆解"],
+      title:"《八仙》的打戏为什么好看，我把动作拆成了 6 拍",
+      conclusion:"关键不是招式，是每一拍都留了半帧的停顿",
+      aiGenerated:true,
+      imgRatio:"16:9",
+      media:{type:"video", duration:"28:14", imgCount:0},
+      metrics:{views:1360000, danmu:42000, likes:104000},
+      spec:{kind:"动作拆解", score:"豆瓣 8.1", spoiler:"轻剧透"},
+      excerpt:[
+        "我把庙前那场三分钟打戏按拍点切开，一共 6 拍。每一拍的收招处都留了大约半帧的停顿——这半帧让观众的眼睛来得及「读」完动作，也是港片武行的老办法。",
+        "对比同档期另一部：那部的动作更快更密，但每一拍都不停，看起来就成了一团。快不等于好看，能被看清的快才好看。"
+      ],
+      comments:[
+        {u:"武行后代", lv:"Lv6", zh:"留半帧这事我爸讲过，他们那代叫「亮相」。", score:31200},
+        {u:"帧率党", lv:"Lv5", zh:"拿另一部对比这段太狠了，一眼看出差距。", score:17400},
+        {u:"打戏收藏夹", lv:"Lv4", zh:"建议再拆一下结尾那场，八个人同框的调度更难。", score:9860}
+      ],
+      source:{url:"https://www.bilibili.com/video/BV1jn411q7Bs", siteName:"哔哩哔哩", publishedAt:"2026-08-13 19:08"},
+      timeAgo:"20 小时前"
+    },
+    {
+      id:"WS-2714", platform:"小红书", vertical:"movie", topic:"baxian",
+      author:{name:"织造局小裁缝", avatarColor:"#FF2E4D"},
+      tags:["服化道","细节图鉴"],
+      title:"《八仙》里 8 个人的服装细节，我截了 40 张图",
+      conclusion:"每个人的破损位置都对应他的故事线",
+      aiGenerated:true,
+      imgRatio:"3:4",
+      media:{type:"note", duration:"", imgCount:40},
+      metrics:{likes:68000, saves:41600, comments:3820},
+      spec:{kind:"服化道拆解", score:"豆瓣 8.1", spoiler:"轻剧透"},
+      excerpt:[
+        "40 张截图排下来能看出一条规律：八个人衣服的磨损位置各不相同，而且都不是随机的——常年握东西的那位磨在右手袖口，走路多的那位磨在膝盖和下摆，被困过的那位磨在腕部。",
+        "更细的是颜色：随着剧情推进，有三个人的主色在慢慢褪，最后一场戏里已经褪成了灰。服装组用这种方式讲了台词里没讲的时间。"
+      ],
+      comments:[
+        {u:"戏服修复师", lv:"", zh:"做旧要做到「位置正确」比做旧本身难十倍，这组用心了。", score:22400},
+        {u:"截图侠", lv:"", zh:"褪色这条我完全没注意，回去要重看一遍。", score:14800},
+        {u:"汉服日常", lv:"", zh:"求出个服装图鉴，这些细节值得单独成册。", score:8120}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b9a2e6b40f", siteName:"小红书", publishedAt:"2026-08-12 21:32"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"WS-2715", platform:"Twitter", vertical:"movie", topic:"baxian",
+      author:{name:"@myth_curious", avatarColor:"#1D9BF0"},
+      tags:["海外观众","原文英文"],
+      title:"外国观众第一次看《八仙》，被人物关系绕晕了",
+      titleOriginal:"First time watching Baxian with no background. I could not tell who owed what to whom, and I loved it anyway.",
+      conclusion:"看不懂关系不影响好看，但会丢掉一半信息",
+      aiGenerated:true,
+      imgRatio:"4:3",
+      media:{type:"post", duration:"", imgCount:2},
+      metrics:{likes:14200, reposts:2840, comments:1060},
+      spec:{kind:"海外观众实录", score:"IMDb 7.6", spoiler:"无剧透"},
+      excerpt:[
+        "我对这八个人物一无所知就进场了。视觉和动作完全不需要背景，但人物之间的「欠」与「还」我几乎全程没跟上——中文观众似乎在某些台词处会同时反应，而我不知道他们在反应什么。",
+        "散场后我问了排队的一位本地观众，他花了两分钟把八个人的关系讲完，我当场觉得自己少看了一半电影。建议发行方在海外版加一页人物关系图，真的会救很多人。"
+      ],
+      excerptEn:[
+        "I walked in knowing nothing about these eight figures. The visuals and the fights need no context, but the web of debts between them went completely over my head. The local audience reacted together at certain lines and I had no idea why.",
+        "Afterwards someone in the queue explained all eight relationships in two minutes and I felt like I had missed half the film. Distributors: please put a one-page relationship chart in the overseas release."
+      ],
+      comments:[
+        {u:"@subtitle_nerd", lv:"", en:"A relationship chart before the film is not spoon-feeding. It is access.", zh:"开场前给一张人物关系图不是喂饭，是可及性。", score:6420},
+        {u:"@grew_up_with_it", lv:"", en:"We grew up with these eight. That is the unfair advantage.", zh:"我们是听着这八个人的故事长大的，这就是不公平的先天优势。", score:4980},
+        {u:"@watch_twice", lv:"", en:"Watch it once for the fights, once for the debts.", zh:"第一遍看打，第二遍看人情债。", score:2740}
+      ],
+      source:{url:"https://twitter.com/myth_curious/status/1882571208", siteName:"Twitter", publishedAt:"2026-08-14 12:40"},
+      timeAgo:"3 小时前"
+    },
+    {
+      id:"WS-2716", platform:"小红书", vertical:"movie", topic:"baxian",
+      author:{name:"陪爸妈看电影", avatarColor:"#FF2E4D"},
+      tags:["代际观感","家庭观影"],
+      title:"带爸妈去看《八仙》，他们的反应和我完全不一样",
+      conclusion:"同一部电影，他们在听故事，我在看视效",
+      aiGenerated:true,
+      imgRatio:"1:1",
+      media:{type:"note", duration:"", imgCount:7},
+      metrics:{likes:44000, saves:10800, comments:6120},
+      spec:{kind:"代际观感", score:"豆瓣 8.1", spoiler:"轻剧透"},
+      excerpt:[
+        "我全程在注意特效和调度，我妈全程在跟我爸小声说「这段跟评书里不一样」。散场后他们讨论的是改编哪里动了，我讨论的是那场雨怎么做的。",
+        "最有意思的是结尾：我觉得收得仓促，他们觉得刚好——因为他们早就知道结局，电影只要走到那个点就行。这大概是同一部片在两代人眼里最大的差别。"
+      ],
+      comments:[
+        {u:"评书爱好者", lv:"", zh:"「他们早就知道结局」这句话解释了我爸为什么从不催剧情。", score:19400},
+        {u:"周末带娃又带爸妈", lv:"", zh:"我家也是，我妈全程在做旁白解说，前排回头看了我们三次。", score:12600},
+        {u:"两代人观影", lv:"", zh:"这种代际差别其实是这部片最值钱的地方。", score:7240}
+      ],
+      source:{url:"https://www.xiaohongshu.com/explore/66b98d33ca27", siteName:"小红书", publishedAt:"2026-08-11 20:14"},
+      timeAgo:"2 天前"
+    },
+
+    /* ================= 文字卡：图位就是排版好的大字，说清楚了就不再重复标题 ================= */
+    {
+      id:"TX-01", type:"text", platform:"知乎", vertical:"movie", topic:"spider",
+      author:{name:"沈非", avatarColor:"#0F6FFF"},
+      poster:{theme:"violet", tag:"问答", big:"多画风到底是创新，还是用画面遮住了没写完的剧本？", foot:"5,100 赞同 · 720 评论"},
+      title:"", summary:"能靠画风顶住的是气质，顶不住的是动机",
+      conclusion:"画风解决了「好看」，没解决「为什么」",
+      excerpt:[
+        "先说结论：这部的画风切换是有叙事功能的，它对应的是角色所处的世界与心理状态，这一点不是遮丑。",
+        "但第二条故事线确实被压缩了。判断标准很简单：如果把画风统一成一种，这条线还能不能自己站住？答案是站不住 —— 它的动机全部依赖那 3 秒转场里的暗示。"
+      ],
+      comments:[
+        {u:"看片一万小时", zh:"这个判断标准太好用了，以后可以拿来量所有炫技电影。", score:12400},
+        {u:"分镜练习生", zh:"画风是状态这句我同意，但状态不能替代动机。", score:8210},
+        {u:"周末影院", zh:"我二刷之后反而更喜欢了，可能我本来就不看剧本。", score:3140}
+      ],
+      metrics:{likes:5100, comments:720},
+      source:{url:"https://www.zhihu.com/question/6188214/answer/992130", siteName:"知乎", publishedAt:"2026-08-13 22:40"},
+      timeAgo:"17 小时前"
+    },
+    {
+      id:"TX-02", type:"text", platform:"虎扑", vertical:"movie", topic:"spider",
+      author:{name:"步行街观影团", avatarColor:"#D62B2B"},
+      poster:{theme:"pink", tag:"社区", big:"这片到底适不适合带小孩看？楼里吵了 300 层", foot:"142 亮 · 306 回复"},
+      title:"", summary:"",
+      conclusion:"分歧点是家长以为的看不懂和小孩真正的看不懂不是一回事",
+      excerpt:[
+        "楼主问的是六到八岁能不能看，回帖分成两派：一派说画面太快会累，一派说小孩根本不在乎剧情。",
+        "有个当小学老师的 JR 说得最实在：小孩卡住的不是剧情复杂，是同一个角色换了画风他认不出来 —— 提前讲一句「这几个都是他」就解决了。"
+      ],
+      comments:[
+        {u:"带娃十级", zh:"提前讲一句真的有用，我家娃第二次就不问了。", score:2140},
+        {u:"影院常客", zh:"票钱不是问题，问题是娃闹起来我得抱出去。", score:1620},
+        {u:"街薪三千", zh:"六岁看这个纯属浪费钱，等流媒体不迟。", score:980}
+      ],
+      metrics:{likes:142, comments:306},
+      source:{url:"https://bbs.hupu.com/6621004821.html", siteName:"虎扑", publishedAt:"2026-08-14 10:26"},
+      timeAgo:"6 小时前"
+    },
+    {
+      id:"TX-03", type:"text", platform:"豆瓣", vertical:"movie", topic:"dragon",
+      author:{name:"半熟影迷", avatarColor:"#2CA76B"},
+      poster:{theme:"green", tag:"影评", big:"它没有一句台词说想你，但每道菜都在说", foot:"3,860 有用 · 412 回应"},
+      title:"", summary:"",
+      conclusion:"这部把亲情写成了菜单，而不是台词",
+      excerpt:[
+        "全片父亲说过的话不超过四十句，但他做了十一次饭。每一次的分量、火候和摆盘位置都在变，变化对应的是他和儿子关系的解冻程度。",
+        "最后那盘炒饭没有任何台词，他只是把盘子转了一下，让鸡蛋那面朝着儿子 —— 这是全片信息量最大的一个动作。"
+      ],
+      comments:[
+        {u:"一天一部", zh:"十一次饭这个统计太狠了，看完想重看一遍数一数。", score:1820},
+        {u:"厨房观察", zh:"转盘子那下我当场绷不住了。", score:1240},
+        {u:"冷静派", zh:"手法不新，但用得干净，这就够了。", score:760}
+      ],
+      metrics:{likes:3860, comments:412},
+      source:{url:"https://movie.douban.com/review/16482210/", siteName:"豆瓣", publishedAt:"2026-08-12 23:10"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"TX-04", type:"text", platform:"知乎", vertical:"movie", topic:"dragon",
+      author:{name:"做过八年餐饮", avatarColor:"#0F6FFF"},
+      poster:{theme:"yellow", tag:"问答", big:"片里那家店的经营方式，现实中能活下来吗？", foot:"1.2 万赞同 · 1,840 评论"},
+      title:"", summary:"一个开了八年小店的人算了一遍账",
+      conclusion:"能活，但活法和电影里演的不一样",
+      excerpt:[
+        "按片中的店面大小和上客速度，一天满打满算能做四十桌。以那种出餐精细度，两个人做不下来，至少要三个半人工。",
+        "真正救它的不是手艺，是房租 —— 电影里那种位置在现实中已经不可能是自有产权的老房子。把房租换成市价，这家店第三个月就得关。"
+      ],
+      comments:[
+        {u:"隔壁开面馆", zh:"房租这条戳心了，我们这行赚的都交给房东。", score:6240},
+        {u:"想开店的人", zh:"看完这条我把创业计划书关了，谢谢。", score:4120},
+        {u:"电影就是电影", zh:"人家拍的是童话，你在这算成本表。", score:2860}
+      ],
+      metrics:{likes:12000, comments:1840},
+      source:{url:"https://www.zhihu.com/question/6190882/answer/998420", siteName:"知乎", publishedAt:"2026-08-13 12:04"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"TX-05", type:"text", platform:"虎扑", vertical:"movie", topic:"odyssey",
+      author:{name:"影音区老哥", avatarColor:"#D62B2B"},
+      poster:{theme:"blue", tag:"社区", big:"三小时零中场休息，这是艺术追求还是折磨观众？", foot:"318 亮 · 742 回复"},
+      title:"", summary:"",
+      conclusion:"不给中场是导演的表达，但影院可以给观众选择",
+      excerpt:[
+        "楼里统计了一下，看 70mm 场次的人有六成中途去过洗手间，其中三成表示错过了关键情节。",
+        "有个放映员回帖说，胶片场次不能随意暂停，这是格式决定的，不是导演傲慢。但他也承认：排片时把开场时间放在饭点，这就是影院自己的问题了。"
+      ],
+      comments:[
+        {u:"膀胱容量小", zh:"我买了大杯可乐，这是我的错。", score:4820},
+        {u:"胶片党", zh:"格式限制这条科普得好，很多人以为是导演故意。", score:3140},
+        {u:"实用主义", zh:"建议影院直接标注无中场，别让人猜。", score:2210}
+      ],
+      metrics:{likes:318, comments:742},
+      source:{url:"https://bbs.hupu.com/6620884210.html", siteName:"虎扑", publishedAt:"2026-08-14 09:12"},
+      timeAgo:"7 小时前"
+    },
+    {
+      id:"TX-06", type:"text", platform:"豆瓣", vertical:"movie", topic:"odyssey",
+      author:{name:"读诗的人", avatarColor:"#2CA76B"},
+      poster:{theme:"mint", tag:"影评", big:"它慢，是因为原著就是一首关于回不去的诗", foot:"5,240 有用 · 968 回应"},
+      title:"", summary:"",
+      conclusion:"节奏是内容的一部分，不是缺点",
+      excerpt:[
+        "抱怨节奏慢的人其实抱怨的是延宕本身，而延宕正是这个故事唯一的主题：他不是不能回家，是不被允许立刻回家。",
+        "如果这部电影拍得紧凑，它就变成了一部冒险片。导演选择让你在船上待够时间，你才会在最后四十分钟真正明白「到家」意味着什么。"
+      ],
+      comments:[
+        {u:"古典系", zh:"延宕是主题这句话该印在票根上。", score:2640},
+        {u:"看完睡了", zh:"我承认我中间睡了二十分钟，但结尾把我叫醒了。", score:1840},
+        {u:"不服气", zh:"忠于原著不等于电影就成立，这是两回事。", score:1120}
+      ],
+      metrics:{likes:5240, comments:968},
+      source:{url:"https://movie.douban.com/review/16480092/", siteName:"豆瓣", publishedAt:"2026-08-13 08:30"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"TX-07", type:"text", platform:"知乎", vertical:"movie", topic:"baxian",
+      author:{name:"民俗学在读", avatarColor:"#0F6FFF"},
+      poster:{theme:"yellow", tag:"问答", big:"八个人的关系到底怎么排？一张图理清所有欠与还", foot:"2.4 万赞同 · 2,610 评论"},
+      title:"", summary:"进场前花三分钟看这条，后半程完全不一样",
+      conclusion:"八个人的动机全部来自两次旧账，理清就不会乱",
+      excerpt:[
+        "电影没有交代前史，因为原本的观众都知道。八个人里有两组是师徒、一组是同乡、剩下三个各自欠着其中一人一次救命。",
+        "所有的选择都能用这两次旧账解释：第一次是有人替另一个人担了罪，第二次是有人没能救回同乡。片中每个转折点都在还这两笔账。"
+      ],
+      comments:[
+        {u:"看不懂的路人", zh:"看完这条我才明白那场雨里为什么没人说话。", score:9420},
+        {u:"神话爱好者", zh:"补充一点：第二次旧账在原本的传说里是没有的，是电影加的。", score:6180},
+        {u:"想二刷", zh:"发行方应该把这个当片头放出来。", score:4210}
+      ],
+      metrics:{likes:24000, comments:2610},
+      source:{url:"https://www.zhihu.com/question/6187740/answer/990018", siteName:"知乎", publishedAt:"2026-08-13 19:48"},
+      timeAgo:"20 小时前"
+    },
+    {
+      id:"TX-08", type:"text", platform:"虎扑", vertical:"movie", topic:"baxian",
+      author:{name:"武侠区常驻", avatarColor:"#D62B2B"},
+      poster:{theme:"pink", tag:"社区", big:"近十年国产打戏排个序，这部能进前三吗？", foot:"426 亮 · 1,120 回复"},
+      title:"", summary:"",
+      conclusion:"能进前三，靠的不是难度而是可看清",
+      excerpt:[
+        "楼里主流意见是能进，理由不是招式难，而是它敢慢：收招处留了停顿，观众看得清动作从哪来到哪去。",
+        "反对方举了另一部作为例子，那部的动作难度更高但剪得太碎，一秒里换三个机位，最后只剩下噪音。"
+      ],
+      comments:[
+        {u:"武行世家", zh:"我们管那个停顿叫亮相，现在很少有人愿意留了。", score:5240},
+        {u:"剪辑狂", zh:"碎剪不是能力问题，是没信心让观众看清。", score:3820},
+        {u:"老港片党", zh:"跟九十年代比还是差一截，但这几年确实最好。", score:2140}
+      ],
+      metrics:{likes:426, comments:1120},
+      source:{url:"https://bbs.hupu.com/6620774102.html", siteName:"虎扑", publishedAt:"2026-08-14 08:04"},
+      timeAgo:"8 小时前"
+    },
+    {
+      id:"TX-09", type:"text", platform:"知乎", vertical:"gear", topic:"gear",
+      author:{name:"户外老登", avatarColor:"#0F6FFF"},
+      poster:{theme:"green", tag:"问答", big:"一千块的登山鞋和三千的，差的到底是什么？", foot:"1.8 万赞同 · 2,240 评论"},
+      title:"", summary:"差的不是面料，是缝线工艺和大底配方",
+      conclusion:"三千块买的是耐久与缝线，不是防水指标",
+      excerpt:[
+        "同价位对比过十几双之后我的结论是：一千块能买到合格的防水面料，但买不到二次热熔的鞋舌接缝，也买不到耐磨配方的大底。",
+        "换算成使用寿命：一千块那双通常在三百公里后开始渗水，三千那双能到八百公里以上。按每公里成本算，贵的反而便宜，前提是你真的走得够多。"
+      ],
+      comments:[
+        {u:"一年两百公里", zh:"按每公里成本算这个思路太清醒了。", score:8420},
+        {u:"重装党", zh:"补充：负重超过 15kg 时中底支撑差距会更明显。", score:5210},
+        {u:"穷玩派", zh:"我一年走不到一百公里，那还是买便宜的。", score:3140}
+      ],
+      metrics:{likes:18000, comments:2240},
+      source:{url:"https://www.zhihu.com/question/6181120/answer/981002", siteName:"知乎", publishedAt:"2026-08-12 21:16"},
+      timeAgo:"1 天前"
+    },
+    {
+      id:"TX-10", type:"text", platform:"虎扑", vertical:"gear", topic:"gear",
+      author:{name:"装备区版主", avatarColor:"#D62B2B"},
+      poster:{theme:"blue", tag:"社区", big:"你买过最后悔的一件户外装备是什么？楼里全是血泪", foot:"1,240 亮 · 3,860 回复"},
+      title:"", summary:"",
+      conclusion:"后悔榜前三：便宜登山杖、大容量水袋、多功能刀",
+      excerpt:[
+        "统计了前三百条回帖，被点名最多的是三样：锁不住的便宜登山杖、漏水的大容量水袋、以及买了从来没用过的多功能刀。",
+        "有个细节很有意思：几乎没人后悔买贵的睡袋和鞋，后悔的都是「看起来能省钱」的那一类。"
+      ],
+      comments:[
+        {u:"杖断三次", zh:"便宜登山杖下坡直接缩，差点摔下去。", score:9240},
+        {u:"背了三斤水", zh:"水袋漏在睡袋上，那一夜我记一辈子。", score:6420},
+        {u:"刀客", zh:"多功能刀我用过一次，开的是快递。", score:4820}
+      ],
+      metrics:{likes:1240, comments:3860},
+      source:{url:"https://bbs.hupu.com/6619884210.html", siteName:"虎扑", publishedAt:"2026-08-13 20:40"},
+      timeAgo:"19 小时前"
+    },
+    {
+      id:"TX-11", type:"text", platform:"小红书", vertical:"gear", topic:"gear",
+      author:{name:"山系整理癖", avatarColor:"#FF2E4D"},
+      poster:{theme:"mint", tag:"清单", big:"第一次露营别乱买，这 9 件先够用，剩下都能租", foot:"4.2 万赞 · 2.6 万收藏"},
+      title:"", summary:"",
+      conclusion:"新手真正必须自购的只有贴身与安全相关的九件",
+      excerpt:[
+        "必须自己买的是贴身和安全相关的：鞋、袜、冲锋衣、头灯、急救包、水具、手套、帽子、充电宝。其余的帐篷、椅子、桌子、炉具，第一次全部可以租。",
+        "我第一次露营花了四千二，其中两千八买的东西第二次就没带 —— 这九件是复盘之后真正每次都在用的。"
+      ],
+      comments:[
+        {u:"刚入坑", zh:"太及时了，我购物车里六件都在你说的可租列表里。", score:14200},
+        {u:"营地老板", zh:"作为出租方我也建议先租，装备不合适退换很麻烦。", score:8600},
+        {u:"极简露营", zh:"充电宝我会换成备用电池，低温掉电太快。", score:5240}
+      ],
+      metrics:{likes:42000, saves:26000, comments:1840},
+      source:{url:"https://www.xiaohongshu.com/explore/66b8d1f0aa21", siteName:"小红书", publishedAt:"2026-08-10 20:12"},
+      timeAgo:"3 天前"
+    },
+    {
+      id:"TX-12", type:"text", platform:"知乎", vertical:"trail", topic:"trail",
+      author:{name:"救援队志愿者", avatarColor:"#0F6FFF"},
+      poster:{theme:"yellow", tag:"问答", big:"山里出事的人，大多不是体力不行，而是这三个判断错了", foot:"3.1 万赞同 · 4,120 评论"},
+      title:"", summary:"参与过 60 多次救援之后总结的三个判断点",
+      conclusion:"下撤时机、天气窗口、水源估算，错一个就可能出事",
+      excerpt:[
+        "六十多次救援里，真正体力不支的不到两成。绝大多数是三类判断失误：该下撤时舍不得、看错天气窗口、把水源当成一定有。",
+        "最危险的其实是第一条。人在快到顶的时候最不愿意回头，而事故几乎都发生在原定下撤时间之后的那两小时里。"
+      ],
+      comments:[
+        {u:"走过长线", zh:"原定下撤时间之后那两小时，这个说法太准了。", score:16400},
+        {u:"气象爱好者", zh:"补充：山区天气窗口要按小时看，不能看全天预报。", score:9820},
+        {u:"新手一枚", zh:"看完把这三条抄在手机壁纸上了。", score:6140}
+      ],
+      metrics:{likes:31000, comments:4120},
+      source:{url:"https://www.zhihu.com/question/6178820/answer/975410", siteName:"知乎", publishedAt:"2026-08-14 07:26"},
+      timeAgo:"9 小时前"
+    },
+    {
+      id:"TX-13", type:"text", platform:"小红书", vertical:"trail", topic:"trail",
+      author:{name:"周末不在家", avatarColor:"#FF2E4D"},
+      poster:{theme:"green", tag:"路线", big:"不想爬台阶又想看云海，选这三条缓坡就行", foot:"3.6 万赞 · 2.1 万收藏"},
+      title:"", summary:"",
+      conclusion:"三条线累计爬升都在 800 米以内，且有公路撤离点",
+      excerpt:[
+        "三条线的共同点是累计爬升都不超过八百米，路面以土径和木栈为主，几乎没有连续石阶，膝盖友好。",
+        "更重要的是每条线中段都有公路可以撤，带老人和小孩最怕的不是累，是走到一半发现只能硬撑到底。"
+      ],
+      comments:[
+        {u:"膝盖不好", zh:"没有连续石阶这条太重要了，比风景重要。", score:12400},
+        {u:"带娃徒步", zh:"中段能撤这个信息我在别的攻略里从来没见过。", score:8240},
+        {u:"云海收集", zh:"第二条我上周走了，云海确实给面子。", score:4620}
+      ],
+      metrics:{likes:36000, saves:21000, comments:2140},
+      source:{url:"https://www.xiaohongshu.com/explore/66b8b204c9d7", siteName:"小红书", publishedAt:"2026-08-09 19:40"},
+      timeAgo:"4 天前"
+    },
+    {
+      id:"TX-14", type:"text", platform:"虎扑", vertical:"trail", topic:"trail",
+      author:{name:"跑山十年", avatarColor:"#D62B2B"},
+      poster:{theme:"blue", tag:"社区", big:"打卡式徒步算不算徒步？楼里已经吵到第 500 层", foot:"862 亮 · 2,410 回复"},
+      title:"", summary:"",
+      conclusion:"争的其实不是徒步的定义，是拍照占道",
+      excerpt:[
+        "表面吵的是定义，实际吵的是行为：在窄脊上摆拍十分钟不让路，这跟你走多少公里没关系。",
+        "有个回帖点破了：如果打卡的人愿意在安全位置拍、拍完就走，没人会有意见。所有的火气都来自被堵在半山腰的那二十分钟。"
+      ],
+      comments:[
+        {u:"被堵过", zh:"窄脊摆拍真的危险，不只是烦。", score:6820},
+        {u:"也爱拍照", zh:"我也拍，但我会先让人过去，互相体谅而已。", score:4210},
+        {u:"纯爬山", zh:"定义之争没意义，规则之争才有。", score:2840}
+      ],
+      metrics:{likes:862, comments:2410},
+      source:{url:"https://bbs.hupu.com/6618992104.html", siteName:"虎扑", publishedAt:"2026-08-13 21:52"},
+      timeAgo:"18 小时前"
+    },
+    {
+      id:"TX-15", type:"text", platform:"知乎", vertical:"ai", topic:"aibench",
+      author:{name:"做过评测的人", avatarColor:"#0F6FFF"},
+      poster:{theme:"violet", tag:"问答", big:"为什么每家的跑分都第一？因为题是自己出的", foot:"4.6 万赞同 · 5,820 评论"},
+      title:"", summary:"三种常见的跑分包装手法，一次说清",
+      conclusion:"分数不假，但比较的前提被悄悄换掉了",
+      excerpt:[
+        "三种常见手法：一是换测试集，二是换推理预算，三是只报最好的一次。这三样都不算造假，但都让横向比较失效。",
+        "真正有用的做法是把测试脚本、随机种子和调用次数一起公开。凡是只给你一张柱状图的，基本可以当广告看。"
+      ],
+      comments:[
+        {u:"审稿人", zh:"只报最好的一次这条在论文里也很常见，苦。", score:18200},
+        {u:"工程视角", zh:"推理预算不对齐的比较全是废纸。", score:11400},
+        {u:"看热闹", zh:"所以以后先看有没有脚本，没有就划走。", score:7240}
+      ],
+      metrics:{likes:46000, comments:5820},
+      source:{url:"https://www.zhihu.com/question/6192240/answer/1002104", siteName:"知乎", publishedAt:"2026-08-14 06:12"},
+      timeAgo:"10 小时前"
+    },
+    {
+      id:"TX-16", type:"text", platform:"虎扑", vertical:"ai", topic:"aibench",
+      author:{name:"科技区路人", avatarColor:"#D62B2B"},
+      poster:{theme:"mint", tag:"社区", big:"公司让全员用 AI 提效，最后效率去哪了？", foot:"1,640 亮 · 4,210 回复"},
+      title:"", summary:"",
+      conclusion:"省下的时间被新增的检查工作吃掉了",
+      excerpt:[
+        "回帖里最普遍的情况是：写东西的时间确实少了，但检查和返工的时间多了，总时长基本没变。",
+        "少数说真提效的，共同点是把 AI 用在了有明确验收标准的活上 —— 翻译、格式转换、写测试。没有标准的活，越用越乱。"
+      ],
+      comments:[
+        {u:"表格工人", zh:"有明确验收标准这条是关键，其他都是玄学。", score:8420},
+        {u:"审稿到深夜", zh:"我现在的工作变成了给 AI 擦屁股。", score:6240},
+        {u:"乐观派", zh:"至少初稿有了，从零开始最难。", score:3810}
+      ],
+      metrics:{likes:1640, comments:4210},
+      source:{url:"https://bbs.hupu.com/6621104882.html", siteName:"虎扑", publishedAt:"2026-08-14 11:04"},
+      timeAgo:"5 小时前"
+    },
+    {
+      id:"TX-17", type:"text", platform:"知乎", vertical:"ai", topic:"aifail",
+      author:{name:"救过三次线上事故", avatarColor:"#0F6FFF"},
+      poster:{theme:"blue", tag:"问答", big:"AI 写的代码上线前，最该被人工看的是哪一部分？", foot:"2.8 万赞同 · 3,140 评论"},
+      title:"", summary:"",
+      conclusion:"最该看的不是逻辑，是它悄悄改掉的边界条件",
+      excerpt:[
+        "三次事故有两次出在同一个地方：模型把原来的边界判断改成了看起来更简洁的写法，逻辑等价，但对空值和超时的处理没了。",
+        "所以我的检查顺序是：先看删掉了什么，再看新增了什么。人容易审新增的代码，而风险往往藏在被删掉的那几行里。"
+      ],
+      comments:[
+        {u:"值班到天亮", zh:"先看删掉了什么，这句应该写进团队规范。", score:14200},
+        {u:"代码洁癖", zh:"简洁往往就是把异常分支吃掉了。", score:9240},
+        {u:"新人", zh:"学到了，我以前只看新增的 diff。", score:5140}
+      ],
+      metrics:{likes:28000, comments:3140},
+      source:{url:"https://www.zhihu.com/question/6189920/answer/996210", siteName:"知乎", publishedAt:"2026-08-13 23:26"},
+      timeAgo:"16 小时前"
+    },
+    {
+      id:"TX-18", type:"text", platform:"小红书", vertical:"ai", topic:"aifail",
+      author:{name:"运营小张不加班", avatarColor:"#FF2E4D"},
+      poster:{theme:"pink", tag:"笔记", big:"被 AI 客服气到的人，最后都去哪了？我们看了 8 千条工单", foot:"2.8 万赞 · 1.1 万收藏"},
+      title:"", summary:"",
+      conclusion:"用户不是讨厌机器人，是讨厌找不到人",
+      excerpt:[
+        "八千条工单里，用户真正的不满集中在一件事：转人工的入口藏起来了。只要三轮内能转人工，评分反而比纯人工时期更高。",
+        "所以我们把转人工按钮放回第一屏，机器人只负责查询类问题。工单量当月降了 31%，比换模型有效得多。"
+      ],
+      comments:[
+        {u:"客服主管", zh:"藏转人工是最短视的省钱方式。", score:9420},
+        {u:"消费者", zh:"我只想知道我的退款到哪了，别跟我聊天。", score:7240},
+        {u:"做产品的", zh:"把入口放回第一屏这个决定很需要勇气，赞。", score:4610}
+      ],
+      metrics:{likes:28000, saves:11000, comments:1620},
+      source:{url:"https://www.xiaohongshu.com/explore/66b9f4d2ba18", siteName:"小红书", publishedAt:"2026-08-12 18:20"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"TX-19", type:"text", platform:"虎扑", vertical:"ai", topic:"ailocal",
+      author:{name:"数码区显卡佬", avatarColor:"#D62B2B"},
+      poster:{theme:"yellow", tag:"社区", big:"本地跑模型这件事，电费比显卡更劝退", foot:"2,140 亮 · 5,620 回复"},
+      title:"", summary:"",
+      conclusion:"三张卡满载一个月的电费，够买两年的云端调用",
+      excerpt:[
+        "楼里有人实测：三张卡日均满载六小时，一个月电费接近四百块。同样的任务量走云端 API，两百出头。",
+        "但也有人说得对：本地的价值不在便宜，在数据不出门和随时能改。愿意为这两点付电费的人，才适合本地跑。"
+      ],
+      comments:[
+        {u:"电表在转", zh:"夏天还得加空调电费，实际更高。", score:11200},
+        {u:"隐私第一", zh:"数据不出门这条对我来说无价，电费认了。", score:8420},
+        {u:"云端党", zh:"折腾一年不如安心调 API。", score:5240}
+      ],
+      metrics:{likes:2140, comments:5620},
+      source:{url:"https://bbs.hupu.com/6620114820.html", siteName:"虎扑", publishedAt:"2026-08-13 22:14"},
+      timeAgo:"18 小时前"
+    },
+    {
+      id:"TX-20", type:"text", platform:"知乎", vertical:"ai", topic:"ailocal",
+      author:{name:"做视频生成的", avatarColor:"#0F6FFF"},
+      poster:{theme:"violet", tag:"问答", big:"为什么同一个人物，第二段就变脸了？", foot:"1.6 万赞同 · 1,920 评论"},
+      title:"", summary:"人物一致性到底卡在哪一步",
+      conclusion:"一致性问题出在参考条件，不在模型能力",
+      excerpt:[
+        "变脸的直接原因是每段生成都在重新采样身份特征，只靠文字描述锚不住。文字能描述发型和衣服，锚不住骨骼比例。",
+        "目前有效的做法只有两类：给一张固定参考图，或者在同一次推理里连续出多段。跨会话生成想保持一致，基本靠运气。"
+      ],
+      comments:[
+        {u:"做动画的", zh:"参考图这条实测有效，但服装还是会漂。", score:7420},
+        {u:"甲方视角", zh:"所以短片可以做，连续剧还早。", score:5210},
+        {u:"研究生", zh:"补充一句：帧间一致和身份一致是两个问题。", score:3140}
+      ],
+      metrics:{likes:16000, comments:1920},
+      source:{url:"https://www.zhihu.com/question/6186640/answer/988210", siteName:"知乎", publishedAt:"2026-08-12 20:48"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"TX-21", type:"text", platform:"豆瓣", vertical:"movie", topic:"spider",
+      author:{name:"配乐笔记", avatarColor:"#2CA76B"},
+      poster:{theme:"mint", tag:"影评", big:"它的配乐在第三幕换了乐器，很多人没注意", foot:"1,840 有用 · 216 回应"},
+      title:"", summary:"",
+      conclusion:"第三幕换成弦乐，是给角色的一次表态",
+      excerpt:[
+        "前两幕的主题动机一直由合成器承担，第三幕同一段旋律换成了弦乐四重奏，速度慢了大约百分之十五。",
+        "这个处理很克制：它不解释角色的转变，只是让你在听觉上先接受了转变。等台词说出来的时候，你已经信了。"
+      ],
+      comments:[
+        {u:"原声党", zh:"听觉先接受这个说法太准，我当时就是莫名想哭。", score:920},
+        {u:"学音乐的", zh:"速度那 15% 很关键，再慢就腻了。", score:640},
+        {u:"路人", zh:"看完想去听原声带。", score:310}
+      ],
+      metrics:{likes:1840, comments:216},
+      source:{url:"https://movie.douban.com/review/16483720/", siteName:"豆瓣", publishedAt:"2026-08-13 15:02"},
+      timeAgo:"1 天前"
+    },
+
+    {
+      id:"TX-22", type:"text", platform:"豆瓣", vertical:"gear", topic:"gear",
+      author:{name:"山野小组", avatarColor:"#2CA76B"},
+      poster:{theme:"mint", tag:"小组", big:"用了五年的装备，最后留在包里的只有这几件", foot:"2,140 有用 · 386 回应"},
+      title:"", summary:"",
+      conclusion:"留下来的都是修得起、换得起的那一类",
+      excerpt:[
+        "五年里换过三个背包、四双鞋，最后固定下来的东西有个共同点：坏了能单独换零件，而不是整件报废。",
+        "反过来说，那些一体成型、看着高级的设计，往往一个部件失效就等于整件废掉。户外装备的耐用性不只是材料问题，是可维修性问题。"
+      ],
+      comments:[
+        {u:"修补匠", zh:"可维修性这条太少人讲了，值得单独发一篇。", score:820},
+        {u:"背包控", zh:"我那个一体成型的腰带断了，官方说只能整包换。", score:540},
+        {u:"极简派", zh:"东西越少越好，这才是真结论。", score:310}
+      ],
+      metrics:{likes:2140, comments:386},
+      source:{url:"https://www.douban.com/group/topic/302118840/", siteName:"豆瓣", publishedAt:"2026-08-11 21:04"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"TX-23", type:"text", platform:"知乎", vertical:"gear", topic:"gear",
+      author:{name:"材料工程师", avatarColor:"#0F6FFF"},
+      poster:{theme:"blue", tag:"问答", big:"防水指数标到 20000，实际能挡多大的雨？", foot:"9,640 赞同 · 1,120 评论"},
+      title:"", summary:"数字对应的是实验室水压，不是雨量",
+      conclusion:"决定体感的是透气与结构，不是那个数字",
+      excerpt:[
+        "20000 指的是静水压毫米数，测的是布料在实验室里能顶住多大水压，跟雨下得多大没有直接对应关系。",
+        "日常场景里，中雨走两小时，10000 和 20000 的差别几乎感受不到；真正让人觉得湿的是汗排不出去，以及水从帽檐、袖口、拉链这些结构缝隙进来。"
+      ],
+      comments:[
+        {u:"淋过大雨", zh:"结构进水这条完全同意，衣服没漏但人湿透。", score:4210},
+        {u:"参数党", zh:"那这个数字基本没有比较意义了？", score:2840},
+        {u:"卖装备的", zh:"我们店里也不建议只看这个数，太容易误导。", score:1620}
+      ],
+      metrics:{likes:9640, comments:1120},
+      source:{url:"https://www.zhihu.com/question/6180410/answer/978220", siteName:"知乎", publishedAt:"2026-08-12 09:26"},
+      timeAgo:"2 天前"
+    },
+    {
+      id:"TX-24", type:"text", platform:"豆瓣", vertical:"trail", topic:"trail",
+      author:{name:"周末徒步小组", avatarColor:"#2CA76B"},
+      poster:{theme:"green", tag:"小组", big:"组队走线，最容易翻脸的其实不是体力差距", foot:"1,860 有用 · 742 回应"},
+      title:"", summary:"",
+      conclusion:"矛盾几乎都出在等人、拍照和下撤决定这三件事上",
+      excerpt:[
+        "组内讨论了几十条经历，翻脸的原因排前三的是：快的人不愿意等、慢的人不愿意说、以及要不要下撤时没人拍板。",
+        "有效的做法很土：出发前先说清三件事——最慢的人是谁、几点必须掉头、谁做最终决定。把这三条讲明白，后面的争执基本不会发生。"
+      ],
+      comments:[
+        {u:"带队三年", zh:"出发前定掉头时间，这一条能省掉一半矛盾。", score:920},
+        {u:"永远最慢", zh:"慢的人不敢说这条太真实了，怕被嫌弃。", score:640},
+        {u:"独行侠", zh:"所以我现在只自己走。", score:410}
+      ],
+      metrics:{likes:1860, comments:742},
+      source:{url:"https://www.douban.com/group/topic/302096210/", siteName:"豆瓣", publishedAt:"2026-08-10 20:36"},
+      timeAgo:"3 天前"
+    },
+
+    /* ================= AI 聚合卡：同一件事，多平台多帖子的交叉整理 ================= */    {
+      id:"AG-spider", type:"agg", vertical:"movie", topic:"spider", imgFile:"T-spider",
+      title:"蜘蛛侠新作口碑两极：画面被封神，叙事被追问",
+      plats:["B站","知乎","Twitter","豆瓣"],
+      metrics:{likes:18600}, timeAgo:"1 小时前",
+      lead:"上映第 6 天，三个平台的讨论最后都收敛到同一个问题：视觉能不能算叙事。",
+      sections:[
+        {h:"争议起点是第 47 分钟那段 3 秒转场",
+         p:"这段转场同时切换了三种画风，其中有 4 帧是纯手绘过渡。技术上被普遍认可，但为了让转场成立，原本属于第二条故事线的动机被压进了这 3 秒，于是出现了大量「好看但没懂」的观感反馈。", refs:[1,2]},
+        {h:"两派的分歧其实是两种观看契约",
+         p:"一方认为画风切换本身就是人物状态的表达，属于叙事；另一方认为再漂亮的画面也补不上没写完的动机。海外讨论里吵得最凶的两个人最终达成了一个共识：作为系列第二部可以这么拍，作为独立作品站不住。", refs:[3,4]},
+        {h:"低龄观众的门槛不在剧情，在画风",
+         p:"多位家长的观影记录指向同一个细节：孩子能分清不同的人，但分不清同一个人的不同画法。提前用海报说明「这几个都是他」，中途提问明显减少。", refs:[5,6]},
+        {h:"值不值得加钱看巨幕，答案是看声音",
+         p:"同日连看两场的对比显示，画幅差异只在三段大场面里明显，真正拉开体验的是低频声场。若本地没有激光巨幕，普通厅完全够用，省下的钱够二刷。", refs:[7]}
+      ],
+      sources:[
+        {platform:"B站",     author:"拉片老张",        time:"18 小时前", title:"第 47 分钟那段转场，我逐帧拆了 12 遍", url:"https://www.bilibili.com/video/BV1sp411m7Kd"},
+        {platform:"豆瓣",    author:"配乐笔记",        time:"1 天前",    title:"它的配乐在第三幕换了乐器，很多人没注意", url:"https://movie.douban.com/review/16483720/"},
+        {platform:"Twitter", author:"@frame_by_frame", time:"4 小时前",  title:"外国影迷吵起来了：续集是不是把叙事让给了画面", url:"https://twitter.com/frame_by_frame/status/1882560914"},
+        {platform:"知乎",    author:"沈非",            time:"17 小时前", title:"多画风是创新，还是用画面遮住了没写完的剧本", url:"https://www.zhihu.com/question/6188214/answer/992130"},
+        {platform:"小红书",  author:"爆米花不加盐",    time:"1 天前",    title:"带 6 岁小孩去看，他中途问了我三次这是谁", url:"https://www.xiaohongshu.com/explore/66ba01c7f2d3"},
+        {platform:"虎扑",    author:"步行街观影团",    time:"6 小时前",  title:"这片到底适不适合带小孩看？楼里吵了 300 层", url:"https://bbs.hupu.com/6621004821.html"},
+        {platform:"小红书",  author:"影院前排",        time:"2 天前",    title:"IMAX 和普通厅差多少？同一部我连看了两场", url:"https://www.xiaohongshu.com/explore/66b9d3a0e1b7"}
+      ]
+    },
+    {
+      id:"AG-dragon", type:"agg", vertical:"movie", topic:"dragon", imgFile:"T-dragon",
+      title:"《欢迎来龙餐馆》为什么能成暑期黑马：一盘炒饭讲完的事",
+      plats:["小红书","B站","知乎","Twitter"],
+      metrics:{likes:24200}, timeAgo:"2 小时前",
+      lead:"取景地被找到、幕后手法被拆解、海外的「剧情漏洞」被解释清楚，这三件事共同构成了它的口碑发酵路径。",
+      sections:[
+        {h:"原型店真实存在，但招牌菜是剧组设计的",
+         p:"有人按片尾鸣谢找到了那家店，旧灯箱与片中几乎一致。老板确认电影里那道招牌菜店里从未做过，如今每天要向三十多个打卡者解释，最后在门口贴了一张说明纸。", refs:[1]},
+        {h:"最香的三个镜头，现实里都不能吃",
+         p:"专业厨师逐镜指出：颠锅那段额外加了燃气条，蒸汽用干冰补，最后那盘炒饭的油光是刷上去的。摄影指导的解释是——观众闻不到，所以必须让你用眼睛闻到。", refs:[2]},
+        {h:"海外观众说的那个「剧情漏洞」，其实是一句谐音梗",
+         p:"英文字幕把父亲的那句台词直译了，于是它看起来毫无信息量。原文是一道菜名，同时也是「我记得你小时候爱吃」，一句话同时完成了道歉与示爱，字幕只能选一个意思。", refs:[3,4]},
+        {h:"真正的泪点是一个没有台词的动作",
+         p:"多篇观影记录都提到同一处：父亲把炒饭推过来时什么都没说，只是把盘子转了一下，让鸡蛋那面朝着儿子。有影评统计全片父亲只说了不到四十句话，却做了十一次饭。", refs:[5,6]}
+      ],
+      sources:[
+        {platform:"小红书",  author:"汤勺不锈钢",    time:"21 小时前", title:"里那家店真的存在，我按片尾字幕找过去了", url:"https://www.xiaohongshu.com/explore/66ba18d4c0a6"},
+        {platform:"B站",     author:"灶台边的电影课", time:"1 天前",   title:"美食镜头怎么拍的，我请了做菜的朋友一起看", url:"https://www.bilibili.com/video/BV1fq4y1w7Tn"},
+        {platform:"Twitter", author:"@dimsum_diary", time:"6 小时前",  title:"海外观众最想不通的那个情节，其实是一句中文玩笑", url:"https://twitter.com/dimsum_diary/status/1882549001"},
+        {platform:"知乎",    author:"做过八年餐饮",  time:"1 天前",    title:"片里那家店的经营方式，现实中能活下来吗", url:"https://www.zhihu.com/question/6190882/answer/998420"},
+        {platform:"小红书",  author:"眼泪不值钱",    time:"2 天前",    title:"看完哭了两次，第二次是为了那盘炒饭", url:"https://www.xiaohongshu.com/explore/66b9e820af31"},
+        {platform:"豆瓣",    author:"半熟影迷",      time:"1 天前",    title:"它没有一句台词说想你，但每道菜都在说", url:"https://movie.douban.com/review/16482210/"}
+      ]
+    },
+    {
+      id:"AG-odyssey", type:"agg", vertical:"movie", topic:"odyssey", imgFile:"T-odyssey",
+      title:"《奥德赛》的三小时之争：慢是缺点，还是就是内容本身",
+      plats:["Twitter","B站","豆瓣","虎扑"],
+      metrics:{likes:12800}, timeAgo:"3 小时前",
+      lead:"影评人分成两派，观众吵的却是另一件事：为什么没有中场休息。",
+      sections:[
+        {h:"高分与低分评论，差别在有没有读过原著",
+         p:"把 40 篇英文长评按分数排序后可以看到规律：给高分的有 31 篇引用了原著具体章节，低分的几乎都在讨论节奏与观众耐心。这不是质量之争，是两种观看契约的冲突。", refs:[1,2]},
+        {h:"70mm 与数字版的差别只在六场戏",
+         p:"同日连看两场的对比结论是：差异集中在夜景与船舱内景，70mm 的暗部层次更多，数字版会糊成一片黑；白天的海面几乎看不出区别。跨城看不必执着，本地有场次值得。", refs:[3]},
+        {h:"那个七分钟长镜头是真出海拍的",
+         p:"摄影机装在改装双体船上与主船靠缆绳保持相对位置，同一片海域拍了 23 天，最后用的是第 61 条。不用绿幕的理由是：海面反光同时落在脸、帆和甲板上，三处光的关系一假，观众说不出哪里不对但会觉得不对。", refs:[4]},
+        {h:"观众真正的抱怨是没有中场休息",
+         p:"社区统计显示 70mm 场次有六成观众中途离席，其中三成错过关键情节。放映员解释胶片场次不能随意暂停，属于格式限制；但把开场排在饭点，是影院可以改的。", refs:[5,6]}
+      ],
+      sources:[
+        {platform:"Twitter", author:"@reel_dispute", time:"7 小时前",  title:"影评人打起来了：这是史诗还是三小时的行为艺术", url:"https://twitter.com/reel_dispute/status/1882533640"},
+        {platform:"豆瓣",    author:"读诗的人",      time:"1 天前",    title:"它慢，是因为原著就是一首关于回不去的诗", url:"https://movie.douban.com/review/16480092/"},
+        {platform:"B站",     author:"胶片守夜人",    time:"19 小时前", title:"70mm 和数字版，我买了两张票逐场对比", url:"https://www.bilibili.com/video/BV1zx411v7Pm"},
+        {platform:"B站",     author:"海上摄制组",    time:"4 天前",    title:"那个海上长镜头，剧组真的把船开出去了", url:"https://www.bilibili.com/video/BV1hy4y1k7Cw"},
+        {platform:"虎扑",    author:"影音区老哥",    time:"7 小时前",  title:"三小时零中场休息，这是艺术追求还是折磨观众", url:"https://bbs.hupu.com/6620884210.html"},
+        {platform:"小红书",  author:"读过原著的人",  time:"3 天前",    title:"看不懂的人，缺的其实是这 5 个背景", url:"https://www.xiaohongshu.com/explore/66b9c7f1d84c"}
+      ]
+    },
+    {
+      id:"AG-baxian", type:"agg", vertical:"movie", topic:"baxian", imgFile:"T-baxian",
+      title:"《八仙》被逐帧拆解：打戏好看的原因，和它的门槛",
+      plats:["B站","知乎","小红书","Twitter"],
+      metrics:{likes:15400}, timeAgo:"4 小时前",
+      lead:"技术讨论集中在动作与服化，观众讨论集中在「看不懂人物关系」。",
+      sections:[
+        {h:"打戏的秘密是每一拍都留了半帧停顿",
+         p:"庙前那场三分钟打戏可以按拍点切成 6 段，每段收招处留了约半帧停顿，让眼睛来得及读完动作，这是港片武行的老办法。对比同档期另一部：动作更快更密但每拍不停，看起来就成了一团。", refs:[1,2]},
+        {h:"八个人的衣服磨损位置都对应各自的故事线",
+         p:"40 张截图的对比显示，常年握东西的磨在右手袖口，走路多的磨在膝盖与下摆，被困过的磨在腕部；还有三个人的主色随剧情推进逐渐褪成灰。服装讲了台词没讲的时间。", refs:[3]},
+        {h:"门槛在人物关系，不在剧情",
+         p:"海外观众普遍反馈视觉与动作不需要背景，但人物之间的「欠」与「还」跟不上。中文观众的动机地图来自两次旧账：一次替人担罪，一次没救回同乡，片中每个转折都在还这两笔账。", refs:[4,5]},
+        {h:"两代人看到的是两部电影",
+         p:"多篇观影记录提到同一种反差：年轻观众关注特效与调度，父母一代讨论的是改编动了哪里；对结尾的评价也相反——前者觉得仓促，后者觉得刚好，因为他们早就知道结局。", refs:[6]}
+      ],
+      sources:[
+        {platform:"B站",     author:"动作拆解阿宽",  time:"20 小时前", title:"打戏为什么好看，我把动作拆成了 6 拍", url:"https://www.bilibili.com/video/BV1jn411q7Bs"},
+        {platform:"虎扑",    author:"武侠区常驻",    time:"8 小时前",  title:"近十年国产打戏排个序，这部能进前三吗", url:"https://bbs.hupu.com/6620774102.html"},
+        {platform:"小红书",  author:"织造局小裁缝",  time:"1 天前",    title:"8 个人的服装细节，我截了 40 张图", url:"https://www.xiaohongshu.com/explore/66b9a2e6b40f"},
+        {platform:"Twitter", author:"@myth_curious", time:"3 小时前",  title:"外国观众第一次看，被人物关系绕晕了", url:"https://twitter.com/myth_curious/status/1882571208"},
+        {platform:"知乎",    author:"民俗学在读",    time:"20 小时前", title:"八个人的关系到底怎么排？一张图理清所有欠与还", url:"https://www.zhihu.com/question/6187740/answer/990018"},
+        {platform:"小红书",  author:"陪爸妈看电影",  time:"2 天前",    title:"带爸妈去看，他们的反应和我完全不一样", url:"https://www.xiaohongshu.com/explore/66b98d33ca27"}
+      ]
+    },
+    {
+      id:"AG-gear", type:"agg", vertical:"gear", topic:"gear", imgFile:"T-gear",
+      title:"这一轮装备实测的共同结论：贵的不一定强，缝线和结构才是命门",
+      plats:["B站","小红书","Twitter","知乎"],
+      metrics:{likes:9600}, timeAgo:"5 小时前",
+      lead:"把本周三个平台的九篇实测放在一起看，防水、抗风、照明三类产品指向了同一个规律。",
+      sections:[
+        {h:"防水失效几乎都不在面料，在缝线与结构",
+         p:"登山鞋 24 小时浸泡实测显示，进水位置集中在鞋舌与鞋帮接缝的压胶处；冲锋衣的六场真雨实测则指向压胶带宽度与帽檐支撑——帽檐一塌，水顺着领口灌进去，衣服没漏但人湿了。", refs:[1,2]},
+        {h:"标称参数与可持续输出是两回事",
+         p:"12 款头灯拆解实测中没有一款达到标称流明，缺口 12% 到 61%。原因是厂商普遍报开机 30 秒的峰值而非可维持输出，多数灯 90 秒后掉到标称值一半以下。真正有用的是 30 分钟稳定流明与掉到 50% 的时间。", refs:[3]},
+        {h:"最贵的那件常常败在具体场景",
+         p:"四款气炉的热效率对比中，最贵那台在有风条件下垫底；防水袋泡水实测里最贵那只先进水；风洞测试中 2000 元与 400 元帐篷的差距主要体现在杆件形变而非面料。价格与场景表现并不线性。", refs:[4,5]},
+        {h:"新手最该自购的只有贴身与安全相关的部分",
+         p:"多份清单交叉后的共识是：鞋袜、外层、头灯、急救、水具这几类必须自购，帐篷桌椅炉具第一次都可以租。后悔榜前三则集中在便宜登山杖、大容量水袋和多功能刀。", refs:[6,7]}
+      ],
+      sources:[
+        {platform:"B站",     author:"硬核老王测装备", time:"2 天前",   title:"三双千元登山鞋泡水 24 小时，只有一双第二天还能穿", url:"https://www.bilibili.com/video/BV1x8s411k7Yq"},
+        {platform:"小红书",  author:"山野杂货铺",     time:"3 天前",   title:"买了 8 件冲锋衣，只有 3 件能扛住一场真雨", url:"https://www.xiaohongshu.com/explore/66b8f2a1e4b0"},
+        {platform:"Twitter", author:"@gearlab_mark",  time:"9 小时前", title:"他把 12 款头灯拆了，标称流明没有一款达标", url:"https://twitter.com/gearlab_mark/status/1882440021"},
+        {platform:"Twitter", author:"@stove_metrics", time:"1 天前",   title:"四款便携气炉实测热效率，最贵那台在有风时垫底", url:"https://twitter.com/stove_metrics/status/1882212004"},
+        {platform:"B站",     author:"老张的装备柜",   time:"2 天前",   title:"防水袋泡水池 2 小时，最贵那个先进水", url:"https://www.bilibili.com/video/BV1kJ411p7Ln"},
+        {platform:"小红书",  author:"山系整理癖",     time:"3 天前",   title:"第一次露营别乱买，这 9 件先够用", url:"https://www.xiaohongshu.com/explore/66b8d1f0aa21"},
+        {platform:"虎扑",    author:"装备区版主",     time:"19 小时前", title:"你买过最后悔的一件户外装备是什么", url:"https://bbs.hupu.com/6619884210.html"}
+      ]
+    },
+    {
+      id:"AG-trail", type:"agg", vertical:"trail", topic:"trail", imgFile:"T-trail",
+      title:"这周的路线情报汇总：一条线暂时别去，三条线适合带人",
+      plats:["Twitter","B站","小红书","知乎"],
+      metrics:{likes:11200}, timeAgo:"2 小时前",
+      lead:"把本周的路况通报、实走记录与救援经验放在一起，可以直接得出一份行动建议。",
+      sections:[
+        {h:"先看风险：有一段栈桥被强风掀了",
+         p:"路况通报显示某条线的木质栈道被强风损毁，木板断裂、护栏歪斜，未来两周不建议进入。救援志愿者的经验则指出，事故里体力不支不到两成，八成来自下撤时机、天气窗口与水源估算三类判断失误。", refs:[1,2]},
+        {h:"连穿的瓶颈是补水点，不是体能",
+         p:"一天连穿三座 2000 米的实走记录显示，真正难的是第二座下撤点到第三座上山口之间 9 公里无水源；缺水后判断力下降，直接导致岔路口走错 800 米。另有长线徒步者把 40 公里山脊上的水源全部实地标注了一遍。", refs:[3,4]},
+        {h:"带新手看的是下撤条件，不是风景",
+         p:"多条被推荐的线路共同点并非景观，而是全程有信号、中段有公路撤离点、无连续石阶。累计爬升控制在 800 米以内的三条缓坡线被反复提到，适合带老人小孩。", refs:[5,6]},
+        {h:"高海拔单日往返要给高反留余量",
+         p:"四姑娘山大峰的单日往返记录完整呈现了高反发作过程，提示上升速度而非绝对海拔是主因。新手第一座 3000 米的选择建议同样强调下撤便利度优先于风景。", refs:[7]}
+      ],
+      sources:[
+        {platform:"Twitter", author:"@trailcond_report", time:"6 小时前",  title:"强风把栈桥掀了，这条线未来两周别去", url:"https://twitter.com/trailcond_report/status/1882521330"},
+        {platform:"知乎",    author:"救援队志愿者",     time:"9 小时前",  title:"山里出事的人，大多不是体力不行", url:"https://www.zhihu.com/question/6178820/answer/975410"},
+        {platform:"B站",     author:"阿雷跑山",         time:"2 天前",    title:"一天连穿三座 2000 米，我在第 8 小时开始后悔", url:"https://www.bilibili.com/video/BV1qL4y1x7Zt"},
+        {platform:"Twitter", author:"@ridgewater",      time:"2 天前",    title:"把 40km 山脊上的水源全部实地标了一遍", url:"https://twitter.com/ridgewater/status/1882101764"},
+        {platform:"小红书",  author:"是野莓不是野梅",   time:"5 天前",    title:"北京周边最被低估的一条山脊线", url:"https://www.xiaohongshu.com/explore/66b7c410d92a"},
+        {platform:"小红书",  author:"周末不在家",       time:"4 天前",    title:"不想爬台阶又想看云海，选这三条缓坡就行", url:"https://www.xiaohongshu.com/explore/66b8b204c9d7"},
+        {platform:"B站",     author:"高原不缺氧",       time:"9 天前",    title:"四姑娘山大峰单日往返，我把高反发作全录下来了", url:"https://www.bilibili.com/video/BV1nR4y1s7Km"}
+      ]
+    },
+    {
+      id:"AG-aibench", type:"agg", vertical:"ai", topic:"aibench", imgFile:"T-aibench",
+      title:"这一波跑分争议的共同点：数字没假，比较的前提被换了",
+      plats:["Twitter","知乎","虎扑"],
+      metrics:{likes:8400}, timeAgo:"1 小时前",
+      lead:"测试集重合、成本口径不一致、上下文长度的反例，三件事指向同一个问题：可比性。",
+      sections:[
+        {h:"测试集与训练数据重合 31%",
+         p:"质疑者复现后发现基准测试集与训练数据存在 31% 重合，分数因此失去横向意义。评测从业者补充了三种常见包装手法：换测试集、换推理预算、只报最好的一次——都不算造假，但都让比较失效。", refs:[1,2]},
+        {h:"真实成本差 4.7 倍",
+         p:"对 6 个编程助手的实测显示，完成同一组任务的真实 token 成本相差 4.7 倍，差异主要来自隐式上下文注入与重试策略，而不是标称单价。", refs:[3]},
+        {h:"上下文更长不等于更准",
+         p:"128k 实测给出反例：超过一定长度后，中段信息的召回明显下降，答案质量反而低于先检索再回答的方案，同时每次调用成本上升约四倍。", refs:[4]},
+        {h:"落到公司里，提效也需要可验收",
+         p:"社区反馈显示，写作时间确实减少，但检查与返工时间上升，总时长基本不变；真正提效的场景都有明确验收标准，例如翻译、格式转换与写测试。", refs:[5]}
+      ],
+      sources:[
+        {platform:"Twitter", author:"@bench_skeptic", time:"11 小时前", title:"新模型跑分被质疑：测试集和训练数据重合了 31%", url:"https://twitter.com/bench_skeptic/status/1882470110"},
+        {platform:"知乎",    author:"做过评测的人",   time:"10 小时前", title:"为什么每家的跑分都第一？因为题是自己出的", url:"https://www.zhihu.com/question/6192240/answer/1002104"},
+        {platform:"Twitter", author:"@token_ledger",  time:"10 小时前", title:"有人量了 6 个编程助手的真实 token 成本，差了 4.7 倍", url:"https://twitter.com/token_ledger/status/1882480221"},
+        {platform:"Twitter", author:"@longctx_lab",   time:"9 小时前",  title:"上下文窗口越长越好？一份 128k 实测反例", url:"https://twitter.com/longctx_lab/status/1882430118"},
+        {platform:"虎扑",    author:"科技区路人",     time:"5 小时前",  title:"公司让全员用 AI 提效，最后效率去哪了", url:"https://bbs.hupu.com/6621104882.html"}
+      ]
+    },
+    {
+      id:"AG-aifail", type:"agg", vertical:"ai", topic:"aifail", imgFile:"T-aifail",
+      title:"AI 落地翻车的三个共同现场：入口、边界条件、验收标准",
+      plats:["Twitter","B站","知乎","小红书"],
+      metrics:{likes:7200}, timeAgo:"3 小时前",
+      lead:"客服工单上涨、老代码重写出事、提示词该不该公开，三件事看起来无关，问题却出在同一层。",
+      sections:[
+        {h:"工单上涨 22%，问题不在模型在入口",
+         p:"AI 客服上线三周后工单量反而上涨 22%。八千条工单的分析显示，用户的不满集中于转人工入口被隐藏；把按钮放回第一屏、机器人只负责查询类问题后，工单量当月下降 31%。", refs:[1,2]},
+        {h:"AI 重写老代码，风险藏在被删掉的几行里",
+         p:"第 4 天出事的复盘指向同一处：模型把边界判断改成更简洁的等价写法，却丢掉了空值与超时处理。有效的审查顺序是先看删掉了什么，再看新增了什么。", refs:[3,4]},
+        {h:"提示词值不值钱，取决于有没有验收标准",
+         p:"围绕公开全部提示词的争论中，双方最终的共识是：提示词本身不构成壁垒，能被复用的是配套的评测集与验收标准。没有标准的场景，越用越乱。", refs:[5]}
+      ],
+      sources:[
+        {platform:"Twitter", author:"@agent_postmortem", time:"16 小时前", title:"AI 客服上线三周，工单量反而涨了 22%", url:"https://twitter.com/agent_postmortem/status/1882388904"},
+        {platform:"小红书",  author:"运营小张不加班",   time:"2 天前",    title:"被 AI 客服气到的人，最后都去哪了", url:"https://www.xiaohongshu.com/explore/66b9f4d2ba18"},
+        {platform:"B站",     author:"重构翻车实录",     time:"20 小时前", title:"我用 AI 重写了公司 12 年的老代码，第 4 天出事了", url:"https://www.bilibili.com/video/BV1tW4y1d7Vs"},
+        {platform:"知乎",    author:"救过三次线上事故", time:"16 小时前", title:"AI 写的代码上线前，最该被人工看的是哪一部分", url:"https://www.zhihu.com/question/6189920/answer/996210"},
+        {platform:"Twitter", author:"@promptledger",    time:"8 小时前",  title:"一个开发者把全部提示词公开了，评论区在争值不值钱", url:"https://twitter.com/promptledger/status/1882501877"}
+      ]
+    },
+    {
+      id:"AG-ailocal", type:"agg", vertical:"ai", topic:"ailocal", imgFile:"T-ailocal",
+      title:"本地部署这笔账：省的是隐私，花的是电费与一致性",
+      plats:["B站","虎扑","知乎","小红书"],
+      metrics:{likes:6800}, timeAgo:"6 小时前",
+      lead:"三张二手显卡的实测、社区的电费统计与视频一致性的解释，凑成了一份决策依据。",
+      sections:[
+        {h:"三张二手卡能跑 70B，但电费不便宜",
+         p:"实测记录显示三张二手显卡可以支撑 70B 模型的日常推理，日均满载六小时时月电费接近四百元，同等任务量走云端 API 约两百出头。本地的价值不在便宜，在数据不出门与随时可改。", refs:[1,2]},
+        {h:"生成一致性卡在参考条件，不在模型能力",
+         p:"同一句提示词跑 8 个视频模型只有 2 个能保持人物一致。原因是每段生成都在重新采样身份特征，文字能描述发型衣服，锚不住骨骼比例；目前有效的只有固定参考图或同一次推理内连续出多段。", refs:[3,4]},
+        {h:"非技术岗的用法反而更稳",
+         p:"一份完整工作流记录显示，把 AI 限定在有明确产出标准的环节（整理、翻译、初稿）时提效明显；一旦进入需要判断的环节，返工时间会吃掉全部收益。", refs:[5]}
+      ],
+      sources:[
+        {platform:"B站",    author:"显卡不够用",     time:"1 天前",    title:"本地跑 70B 模型，我用了三张二手显卡", url:"https://www.bilibili.com/video/BV1mS421k9Xf"},
+        {platform:"虎扑",   author:"数码区显卡佬",   time:"18 小时前", title:"本地跑模型这件事，电费比显卡更劝退", url:"https://bbs.hupu.com/6620114820.html"},
+        {platform:"B站",    author:"提示词工坊",     time:"2 天前",    title:"同一句提示词跑 8 个视频模型，只有 2 个能保持人物一致", url:"https://www.bilibili.com/video/BV1vE4y1n7Qb"},
+        {platform:"知乎",   author:"做视频生成的",   time:"2 天前",    title:"为什么同一个人物，第二段就变脸了", url:"https://www.zhihu.com/question/6186640/answer/988210"},
+        {platform:"小红书", author:"非技术岗自救",   time:"2 天前",    title:"非技术岗用 AI 提效，我把一周的工作流拍下来了", url:"https://www.xiaohongshu.com/explore/66b4e9c8b721"}
+      ]
+    }
+  ],
+  /* 内部数据看板（精简保留） */
+  pipeKpis:[
+    {lb:"今日入库", v:"1,247", u:"篇",  dt:"↑23%",   note:"6 平台：B站 / 小红书 / Twitter / 知乎 / 虎扑 / 豆瓣"},
+    {lb:"单篇成本", v:"¥0.38", u:"",    dt:"↓12%",   note:"云端浏览器机时 + 模型调用"},
+    {lb:"原帖跳转率", v:"18.6", u:"%",  dt:"↑2.1pt", note:"闭环核心 —— 我们导流而非截流"},
+    {lb:"无搜索意图启动占比", v:"7.2", u:"%", dt:"↑0.8pt", note:"北极星 —— 浏览器新增的打开理由"}
+  ],
+  funnel:[
+    {name:"种子",       n:3200, pct:"100%", loss:"垂类订阅源 2,100 + 人工池 1,100", hot:false},
+    {name:"取回成功",   n:2880, pct:"90%",  loss:"访问失败 8%（其中需登录 5.1%）", hot:false},
+    {name:"结构化成功", n:2592, pct:"90%",  loss:"页面结构变更 6%", hot:false},
+    {name:"过审入库",   n:1247, pct:"48%",  loss:"低质与合规过滤 34% —— 当前最大瓶颈", hot:true}
+  ],
+  compKpis:[
+    {lb:"AI 标识覆盖率", v:"100%",  note:"显式标识（界面可见）+ 元数据隐式标识双重生效"},
+    {lb:"来源署名完整率", v:"100%", note:"平台 / 作者 / 原标题 / 原发布时间 四要素透传，缺一不入库"},
+    {lb:"今日拦截", v:"218 条",     note:"版权受限 96 ／ 敏感 74 ／ 低质 48"}
+  ],
+  vsLeft:["抹除来源，把内容变成自己的","全文转码，用户不必回原站","做成替代品，替代原站体验","屏蔽原站商业化组件"],
+  vsRight:["来源与人设全程在场","只做固定截取 + 亮评，正文回原站","做翻译层，不做替代品","为原站导流，跳转率是核心指标"]
+};
+
+/* =========================================================================
+   === 公共工具 ===
+   ========================================================================= */
+const $  = (s,r)=>(r||document).querySelector(s);
+const $$ = (s,r)=>Array.prototype.slice.call((r||document).querySelectorAll(s));
+const esc = s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+const wan = n=>n>=10000?(n/10000).toFixed(1).replace(/\.0$/,"")+"万":n.toLocaleString();
+const cma = n=>n.toLocaleString("en-US");
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const PF = k=>DATA.platforms[k]||{color:"#9A9AA6",role:"作者",cmtTitle:"这些回帖亮了",cmtUnit:"赞"};
+/* ---- 话题归属：聚类结果（demo 用固定映射模拟实时聚类），未标注的按垂类兜底 ---- */
+const TOPIC_OF = {
+  "WS-2606":"aifail", "WS-2607":"ailocal", "WS-2609":"aibench", "WS-2612":"aifail", "WS-2614":"ailocal",
+  "WS-2626":"aifail", "WS-2627":"aibench", "WS-2628":"aibench", "WS-2629":"ailocal", "WS-2630":"aibench"
+};
+const CH_OF = {gear:"outdoor", trail:"outdoor", ai:"ai", movie:"movie"};
+const TOPIC_MAP = {};
+DATA.topics.forEach(t=>{TOPIC_MAP[t.key]=t;});
+const POST_MAP = {};
+DATA.posts.forEach(p=>{
+  p.topic   = p.topic || TOPIC_OF[p.id] || p.vertical;
+  p.channel = CH_OF[p.vertical] || "rec";
+  POST_MAP[p.id]=p;
+});
+const TOPIC_N = {};
+DATA.posts.forEach(p=>{ TOPIC_N[p.topic]=(TOPIC_N[p.topic]||0)+1; });
+/* 来源行日期：2026-08-11 19:02 → 8月11日 */
+function dateCn(s){
+  const m=/(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s||"");
+  return m ? (+m[2])+"月"+(+m[3])+"日" : "";
+}
+function throttle(fn,wait){
+  let last=0,timer=null;
+  return function(){
+    const now=Date.now();
+    if(now-last>=wait){last=now;fn();}
+    else if(!timer){timer=setTimeout(()=>{timer=null;last=Date.now();fn();},wait-(now-last));}
+  };
+}
+/* ---- 图片：本条内容专属配图（看世界配图/<编号>.jpg）→ CSS 渐变 + 主题 emoji 兜底 ---- */
+function imgSrc(p){ return DATA.img.dir + encodeURIComponent(p.imgFile||p.id) + DATA.img.ext; }
+function emojiOf(p){ return p.emoji || DATA.img.emoji[p.vertical] || "🌍"; }
+window.imgOk = function(el){
+  el.classList.add("loaded");
+  const sh = el.parentNode.querySelector(".shim"); if(sh) sh.remove();
+};
+window.imgFail = function(el){
+  const box = el.parentNode;
+  box.classList.add("img-fallback");
+  const sh = box.querySelector(".shim"); if(sh) sh.remove();
+};
+function imgTag(p, ratio, cls, overlay){
+  return '<div class="'+(cls||"cimg")+'" data-emoji="'+emojiOf(p)+'" style="aspect-ratio:'+ratio.replace(":","/")+'">'
+    + '<span class="shim"></span>'
+    + '<img loading="lazy" width="900" height="900" draggable="false" alt="'+esc(p.altText||(p.title+'（来源：'+p.platform+'）'))+'" '
+    +   'src="'+imgSrc(p)+'" onload="imgOk(this)" onerror="imgFail(this)">'
+    + (overlay||"") + '</div>';
+}
+/* ---- 平台标识 inline SVG（来源徽章，铁律一） ---- */
+function platIcon(name,size){
+  const s=size||11, c=PF(name).color;
+  const w=b=>'<svg width="'+s+'" height="'+s+'" viewBox="0 0 16 16" aria-hidden="true">'+b+'</svg>';
+  switch(name){
+    case "B站": return w('<rect x="1" y="3.4" width="14" height="10.4" rx="3" fill="'+c+'"/>'
+      + '<path d="M4.6 1.6 6.6 3.4M11.4 1.6 9.4 3.4" stroke="'+c+'" stroke-width="1.5" stroke-linecap="round"/>'
+      + '<circle cx="5.6" cy="8.4" r="1" fill="#fff"/><circle cx="10.4" cy="8.4" r="1" fill="#fff"/>');
+    case "小红书": return w('<rect x="1" y="1" width="14" height="14" rx="4" fill="'+c+'"/>'
+      + '<path d="M4.4 5.4v5.2M4.4 8h2.3M6.7 5.8v4.8" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>'
+      + '<path d="M9.4 5.4v5.2h2.4" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>');
+    case "Twitter": return w('<path d="M15 3.6c-.5.8-1.2 1.5-2 2v.5c0 4.2-3.2 9-9.1 9-1.8 0-3.5-.5-4.9-1.5.3 0 .5.1.8.1 1.5 0 2.9-.5 4-1.4-1.4 0-2.6-1-3-2.3.2 0 .4.1.6.1.3 0 .6 0 .8-.1-1.5-.3-2.6-1.6-2.6-3.2v-.1c.4.2.9.4 1.4.4C.2 6.5-.1 4.6.7 3.3c1.6 2 4 3.3 6.6 3.4-.1-.2-.1-.5-.1-.7 0-1.8 1.4-3.2 3.2-3.2.9 0 1.7.4 2.3 1 .7-.1 1.4-.4 2-.8-.2.7-.7 1.3-1.4 1.7.6-.1 1.2-.2 1.7-.5z" fill="'+c+'" transform="translate(.6 .6) scale(.94)"/>');
+    case "知乎": return w('<rect x="1" y="1" width="14" height="14" rx="4" fill="'+c+'"/>'
+      + '<path d="M3.6 5.2h4.6M5.9 5.2v5.6M4 8.1h3.4M9.4 5.2h3.1v5.6l-1.5-1.2-1.2 1.2V6.6" stroke="#fff" stroke-width="1.15" stroke-linecap="round" fill="none"/>');
+    case "虎扑": return w('<rect x="1" y="1" width="14" height="14" rx="4" fill="'+c+'"/>'
+      + '<path d="M5 4.2v7.6M5 7.8h3.2M8.2 4.6v7M10.6 5.4c1.2.6 1.6 1.8 1.2 3-.3 1-1 1.7-1.8 2.2" stroke="#fff" stroke-width="1.15" stroke-linecap="round" fill="none"/>');
+    case "豆瓣": return w('<rect x="1" y="1" width="14" height="14" rx="4" fill="'+c+'"/>'
+      + '<path d="M3.4 4.4h9.2M4.8 6.6h6.4v3H4.8zM3.2 11.8h9.6M6.2 9.8l-.8 2M9.8 9.8l.8 2" stroke="#fff" stroke-width="1.1" stroke-linecap="round" fill="none"/>');
+    default: return w('<circle cx="8" cy="8" r="6" fill="'+c+'"/>');
+  }
+}
+/* ---- 点赞：灰色小 icon + 数字 ---- */
+function likeIcon(size){
+  const s=size||11;
+  return '<svg width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" '
+    + 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    + '<path d="M7 20.5V10.2l3.7-6.7c1.6.2 2.4 1.2 2.4 2.9 0 .9-.2 1.9-.6 3h4.2c1.3 0 2.1.8 2.1 2 0 .4-.1.8-.2 1.1l-1.7 5.6c-.4 1.4-1.3 2.4-2.9 2.4z"/>'
+    + '<path d="M7 10.6H4.6c-.7 0-1.1.4-1.1 1.1v7.7c0 .7.4 1.1 1.1 1.1H7z"/></svg>';
+}
+function likesOf(p){ return (p.metrics&&(p.metrics.likes||p.metrics.views))||0; }
+function likeChip(p,cls){
+  return '<span class="'+(cls||"qlike")+'">'+likeIcon(11)+wan(likesOf(p))+'</span>';
+}
+/* ---- 垂类结构化数据（体验创新：把垂类关键决策项前置） ---- */
+function verdictCls(v){
+  if(/别买/.test(v)) return "bad";
+  if(/值得买|优先/.test(v)) return "good";
+  return "mid";
+}
+function specCard(p){
+  const s=p.spec||{};
+  const cell=(v,l,c)=>'<div><b'+(c?' class="'+c+'"':'')+'>'+esc(v)+'</b><span>'+l+'</span></div>';
+  if(p.vertical==="gear")  return '<div class="speccard">'+cell(s.verdict,"选购结论",verdictCls(s.verdict))+cell(s.price,"价格带")+cell(s.test,"实测方式")+'</div>';
+  if(p.vertical==="trail") return '<div class="speccard">'+cell(s.dist,"全程距离")+cell("↑"+s.gain,"累计爬升")+cell(s.hours,"参考耗时")
+    +cell(s.level,"强度",/硬核|偏难|暂勿/.test(s.level)?"bad":/新手/.test(s.level)?"good":"mid")+'</div>';
+  if(p.vertical==="movie")  return '<div class="speccard">'+cell(s.kind,"内容类型")+cell(s.score,"平台评分")
+    +cell(s.spoiler,"剧透程度",/中度|含情节/.test(s.spoiler)?"mid":"good")+'</div>';
+  return '<div class="speccard">'+cell(s.kind,"内容类型")+cell(s.lang,"原文语言")+cell(s.fresh,"时效")+'</div>';
+}
+
+/* =========================================================================
+   === QB 外壳：状态栏 / 五格 Tab / 页面切换 ===
+   ========================================================================= */
+const statusbar = $("#statusbar");
+function setStatus(light){ statusbar.classList.toggle("light", !!light); }
+const TABS = [
+  {k:"news", name:"资讯"},{k:"drama",name:"短剧"},{k:"home",name:"首页"},{k:"win",name:"窗口"},{k:"me",name:"我的"}
+];
+function tabIcon(k,on){
+  const f = on?"currentColor":"none", sw = on?0:1.7;
+  switch(k){
+    case "news":  return '<svg width="23" height="23" viewBox="0 0 24 24" fill="'+f+'" stroke="currentColor" stroke-width="'+(on?1.2:1.7)+'" stroke-linejoin="round"><rect x="3.2" y="4.2" width="17.6" height="15.6" rx="3.2"/><path d="M7 9h7M7 13h10M7 16.6h5" stroke="'+(on?"#fff":"currentColor")+'" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>';
+    case "drama": return '<svg width="23" height="23" viewBox="0 0 24 24" fill="'+f+'" stroke="currentColor" stroke-width="'+(on?1.2:1.7)+'" stroke-linejoin="round"><rect x="3.2" y="4.6" width="17.6" height="14.8" rx="3.6"/><path d="M10.6 9.6 15 12l-4.4 2.4z" fill="'+(on?"#fff":"currentColor")+'" stroke="none"/></svg>';
+    case "home":  return '<svg width="25" height="25" viewBox="0 0 24 24" fill="'+f+'" stroke="currentColor" stroke-width="'+(on?1.4:1.8)+'" stroke-linecap="round"><circle cx="12" cy="12" r="9.2"/><path d="M12 7.6v8.8M7.6 12h8.8" stroke="'+(on?"#fff":"currentColor")+'" stroke-width="1.9" fill="none"/></svg>';
+    case "win":   return '<svg width="23" height="23" viewBox="0 0 24 24" fill="'+f+'" stroke="currentColor" stroke-width="'+(on?1.2:1.7)+'" stroke-linejoin="round"><rect x="3.6" y="4.6" width="16.8" height="14.8" rx="3.4"/><text x="12" y="15.4" text-anchor="middle" font-size="8.6" font-weight="700" fill="'+(on?"#fff":"currentColor")+'" stroke="none">2</text></svg>';
+    default:      return '<svg width="23" height="23" viewBox="0 0 24 24" fill="'+f+'" stroke="currentColor" stroke-width="'+(on?1.3:1.7)+'" stroke-linecap="round"><circle cx="12" cy="8" r="3.8"/><path d="M4.6 20.2c.9-3.8 3.9-6 7.4-6s6.5 2.2 7.4 6" '+(on?'fill="currentColor"':'fill="none"')+'/></svg>';
+  }
+}
+let curTab="home";
+const tabbar=$("#tabbar");
+function renderTabbar(){
+  tabbar.innerHTML = TABS.map(t=>'<button class="'+(t.k===curTab?"on":"")+'" data-t="'+t.k+'" aria-label="'+t.name+'">'
+    + tabIcon(t.k,t.k===curTab)+'<span>'+t.name+'</span></button>').join("");
+}
+tabbar.addEventListener("click",e=>{
+  const b=e.target.closest("button[data-t]"); if(!b) return;
+  const k=b.dataset.t;
+  if(k===curTab) return;
+  $("#pg-"+curTab).classList.remove("on");
+  $("#pg-"+k).classList.add("on");
+  curTab=k; renderTabbar(); setStatus(false);
+});
+renderTabbar();
+function blank(icon,name,note){
+  return '<div class="blank">'+icon+'<b>'+name+'</b><i>'+note+'</i></div>';
+}
+$("#pg-news").innerHTML  = blank('<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C9C9D1" stroke-width="1.5"><rect x="3.2" y="4.2" width="17.6" height="15.6" rx="3.2"/><path d="M7 9h7M7 13h10" stroke-linecap="round"/></svg>',"资讯","即将上线");
+$("#pg-drama").innerHTML = blank('<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C9C9D1" stroke-width="1.5"><rect x="3.2" y="4.6" width="17.6" height="14.8" rx="3.6"/><path d="M10.6 9.6 15 12l-4.4 2.4z"/></svg>',"短剧","即将上线");
+$("#pg-win").innerHTML   = blank('<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#C9C9D1" stroke-width="1.5"><rect x="3.6" y="4.6" width="16.8" height="14.8" rx="3.4"/></svg>',"窗口","当前 2 个标签页");
+
+/* =========================================================================
+   === 两级导航：一级 tab（领域） → 二级横向话题聚合卡（实时聚类） ===
+   ========================================================================= */
+const pgHome=$("#pg-home"), feed=$("#feed"), ptr=$("#ptr"), sbbg=$("#sbbg"), tzone=$("#tzone");
+let curCh="rec";
+const chbar=$("#chbar");
+chbar.innerHTML = DATA.channels.map(c=>'<button data-ch="'+c.key+'"'+(c.key==="rec"?' class="on"':'')+'>'+c.name+'</button>').join("")
+  + '<span class="grow"></span><button class="more" aria-label="频道管理">☰</button>';
+chbar.addEventListener("click",e=>{
+  const b=e.target.closest("button[data-ch]"); if(!b) return;
+  $$("button[data-ch]",chbar).forEach(x=>x.classList.toggle("on",x===b));
+  curCh=b.dataset.ch;
+  pgHome.scrollTop=Math.min(pgHome.scrollTop,320);
+  renderTopics(); renderFeed();
+});
+
+/* ---- 话题横向卡（App Store「主打推荐」结构：大图 + 图内毛玻璃条） ---- */
+function topicsOf(ch){ return DATA.topics.filter(t=>ch==="rec"||t.ch===ch); }
+function topicPseudo(t){
+  return { title:t.name, platform:"热点话题", emoji:t.emoji,
+    altText:t.name+" 话题主视觉", imgFile:"T-"+t.key };
+}
+/* 话题缩略图用该话题里第一条内容的真实封面 */
+function topicThumb(t){
+  const first=DATA.posts.filter(p=>p.topic===t.key&&!p.type)[0];
+  return first ? {title:t.name, platform:first.platform, emoji:t.emoji, imgFile:first.id,
+    altText:t.name+" 话题代表内容封面"} : topicPseudo(t);
+}
+/* 话题热度：讨论量取自聚类，平台数按真实来源计算 */
+function platCountOf(key){
+  const set=new Set();
+  DATA.posts.filter(p=>p.topic===key).forEach(p=>{
+    if(p.type==="agg") (p.plats||[]).forEach(x=>set.add(x)); else set.add(p.platform);
+  });
+  return set.size;
+}
+function hotOf(t){ return t.hot.split("·")[0].trim()+" · "+platCountOf(t.key)+" 平台"; }
+function topicCardHTML(t){
+  const bar = '<span class="tbar">'
+    + imgTag(topicThumb(t),"1:1","cimg tico")
+    + '<span class="tinfo"><b>'+esc(t.name)+'</b><span class="tn">'+esc(hotOf(t))+'</span></span>'
+    + '<span class="tgo">查看</span></span>';
+  return '<button class="tcard" data-topic="'+t.key+'">'
+    + imgTag(topicPseudo(t),"300/176","cimg thero", bar)
+    + '</button>';
+}
+function renderTopics(){
+  const list=topicsOf(curCh);
+  if(!list.length){ tzone.innerHTML=""; return; }
+  tzone.innerHTML = '<div class="thead"><b>热点话题</b>'
+    + '<span class="live"><i></i>实时聚类</span>'
+    + '<span class="upd">'+list[0].live+'</span></div>'
+    + '<div class="trail" id="trail">'+list.map(topicCardHTML).join("")+'</div>';
+}
+tzone.addEventListener("click",e=>{
+  if(dragged){ dragged=false; return; }
+  const b=e.target.closest("[data-topic]"); if(!b) return;
+  openTopic(b.dataset.topic);
+});
+renderTopics();
+renderTopics();
+
+/* =========================================================================
+   === 双列瀑布流：三种卡片形态（图文卡 / 文字大字卡 / AI 聚合卡） ===
+   ========================================================================= */
+function srcRow(p){
+  return '<div class="qfoot">'+platIcon(p.platform,11)
+    + '<span class="qauth">'+esc(p.author.name)+'</span>'
+    + likeChip(p) + '</div>';
+}
+function mediaOverlay(p){
+  const m=p.media||{};
+  return (m.type==="video" ? '<span class="playbig"><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>'
+        + '<span class="mtag">'+esc(m.duration)+'</span>' : '')
+    + (m.imgCount>1 ? '<span class="mtag">'+m.imgCount+' 图</span>' : '');
+}
+function picCardHTML(p,fresh){
+  return '<article class="qcard'+(fresh?" fresh":"")+'" data-id="'+p.id+'" tabindex="0" role="button">'
+    + imgTag(p,p.imgRatio,"cimg",mediaOverlay(p))
+    + '<div class="qbody"><div class="qtitle">'+esc(p.title)+'</div>'+srcRow(p)+'</div></article>';
+}
+function textCardHTML(p,fresh){
+  const po=p.poster||{};
+  return '<article class="qcard tx'+(fresh?" fresh":"")+'" data-id="'+p.id+'" tabindex="0" role="button">'
+    + '<div class="poster t-'+(po.theme||"violet")+'">'
+    +   '<span class="prow">'+platIcon(p.platform,13)+'<b>'+esc(p.platform)+'</b>'
+    +     '<i class="ptag">'+esc(po.tag||"")+'</i></span>'
+    +   '<div class="pbig">'+esc(po.big||p.title)+'</div>'
+    +   '<div class="pfoot">'+esc(po.foot||"")+'</div>'
+    + '</div>'
+    + '<div class="qbody">'
+    +   (p.summary?'<div class="qtitle sm">'+esc(p.summary)+'</div>':'')
+    +   srcRow(p)+'</div></article>';
+}
+function platStack(list){
+  return '<span class="pstack">'+(list||[]).slice(0,4).map(k=>'<i>'+platIcon(k,15)+'</i>').join("")+'</span>';
+}
+function aggStat(p){
+  const set=new Set((p.sources||[]).map(s=>s.platform));
+  return (p.sources||[]).length+" 条讨论 · "+set.size+" 个平台";
+}
+function aggCardHTML(p,fresh){
+  return '<article class="qcard ag'+(fresh?" fresh":"")+'" data-id="'+p.id+'" tabindex="0" role="button">'
+    + imgTag(p,"4:3","cimg",'<span class="agtag">AI 聚合</span>')
+    + '<div class="qbody">'
+    +   '<div class="qfoot agfoot">'+platStack(p.plats)
+    +     '<span class="qauth">AI辅助生成 · '+esc(p.timeAgo)+'</span>'+likeChip(p)+'</div>'
+    +   '<div class="qtitle big">'+esc(p.title)+'</div>'
+    +   '<div class="agstat">'+aggStat(p)+' →</div>'
+    + '</div></article>';
+}
+function cardHTML(p,fresh){
+  if(p.type==="agg")  return aggCardHTML(p,fresh);
+  if(p.type==="text") return textCardHTML(p,fresh);
+  return picCardHTML(p,fresh);
+}
+function skHTML(h){
+  return '<div class="sk"><div class="m" style="aspect-ratio:'+h+'"></div>'
+    + '<div class="l" style="width:96%"></div><div class="l" style="width:64%"></div></div>';
+}
+function estHeight(p){
+  const w=166;
+  if(p.type==="text"){
+    const big=((p.poster&&p.poster.big)||"").length;
+    return 42 + Math.ceil(big/9)*29 + 28 + (p.summary?38:0) + 34;
+  }
+  if(p.type==="agg") return w*3/4 + 30 + Math.ceil((p.title||"").length/12)*23 + 28 + 16;
+  const r=p.imgRatio;
+  const ih = r==="16:9"?w*9/16 : r==="4:3"?w*3/4 : r==="1:1"?w : w*4/3;
+  return ih + 20 + 41 + 25;
+}
+const BATCH=8;
+let flow=[], cursor=0, loading=false, firstPaint=true, colH=[0,0], cols=[];
+const rendered=new Set();
+/* 排序：话题页聚合卡打头；信息流按 图·图·文·图·文·聚合 的节奏交替，避免整屏同形态 */
+function mixTypes(list){
+  const agg=list.filter(p=>p.type==="agg");
+  const pic=list.filter(p=>!p.type);
+  const txt=list.filter(p=>p.type==="text");
+  const out=agg.slice(); let i=0,j=0;
+  while(i<pic.length||j<txt.length){
+    if(i<pic.length) out.push(pic[i++]);
+    if(i<pic.length) out.push(pic[i++]);
+    if(j<txt.length) out.push(txt[j++]);
+  }
+  return out;
+}
+function rrByTopic(pool,pred){
+  const buckets=DATA.topics.map(t=>pool.filter(p=>p.topic===t.key&&pred(p)));
+  const out=[]; let i=0, more=true;
+  while(more){ more=false; buckets.forEach(b=>{ if(b[i]){ out.push(b[i]); more=true; } }); i++; }
+  return out;
+}
+function compose(pic,txt,agg){
+  const out=[]; let i=0,j=0,k=0;
+  while(i<pic.length||j<txt.length||k<agg.length){
+    if(i<pic.length) out.push(pic[i++]);
+    if(i<pic.length) out.push(pic[i++]);
+    if(j<txt.length) out.push(txt[j++]);
+    if(i<pic.length) out.push(pic[i++]);
+    if(j<txt.length) out.push(txt[j++]);
+    if(k<agg.length) out.push(agg[k++]);
+  }
+  return out;
+}
+function buildFlow(){
+  const pool = curCh==="rec" ? DATA.posts : DATA.posts.filter(p=>p.channel===curCh);
+  return compose(rrByTopic(pool,p=>!p.type), rrByTopic(pool,p=>p.type==="text"), rrByTopic(pool,p=>p.type==="agg"));
+}
+function paint(nodes){
+  nodes.forEach((el,i)=>{
+    if(REDUCED){ el.classList.add("in"); return; }
+    el.style.transitionDelay=(i*38)+"ms";
+    requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add("in")));
+  });
+}
+function renderBatch(){
+  const slice=flow.slice(cursor,cursor+BATCH);
+  if(!slice.length) return;
+  const frags=[document.createDocumentFragment(),document.createDocumentFragment()];
+  slice.forEach(p=>{
+    const idx = colH[0]<=colH[1] ? 0 : 1;        /* 插入累计高度较短的一列 */
+    const holder=document.createElement("div");
+    holder.innerHTML=cardHTML(p);
+    frags[idx].appendChild(holder.firstChild);
+    colH[idx]+=estHeight(p)+14;
+    rendered.add(p.id);
+  });
+  const fresh=[...$$(".qcard",frags[0]),...$$(".qcard",frags[1])];
+  cols[0].appendChild(frags[0]); cols[1].appendChild(frags[1]);
+  cursor+=slice.length;
+  paint(fresh);
+}
+function renderFeed(){
+  flow=buildFlow(); cursor=0; colH=[0,0]; rendered.clear();
+  const old=$(".endtip",feed.parentNode); if(old) old.remove();
+  feed.innerHTML="";
+  if(!flow.length){
+    feed.innerHTML='<div class="emptytip" style="flex:1 1 auto"><b>这个领域还在接入</b>'
+      + '我们只在有把握把它翻译清楚、并且能标注来源时才收录 —— 先看看「推荐 / 影视 / 户外 / AI 前沿」。</div>';
+    return;
+  }
+  feed.innerHTML='<div class="colm">'+skHTML("3/4")+skHTML("16/9")+'</div><div class="colm">'+skHTML("1/1")+skHTML("4/3")+'</div>';
+  setTimeout(()=>{
+    feed.innerHTML='<div class="colm"></div><div class="colm"></div>';
+    cols=$$(".colm",feed);
+    renderBatch();
+    if(cursor>=flow.length) appendEnd();
+  }, firstPaint?520:300);
+  firstPaint=false;
+}
+function appendEnd(){
+  if($(".endtip",feed.parentNode)) return;
+  const d=document.createElement("div");
+  d.className="endtip";
+  d.innerHTML="<b>已经看到底了</b>每一条都保留来源平台、作者与原发布时间，点开可回原站看全文";
+  feed.parentNode.appendChild(d);
+}
+function maybeLoadMore(){
+  if(loading||cursor>=flow.length) return;
+  if(pgHome.scrollTop+pgHome.clientHeight < pgHome.scrollHeight-460) return;
+  loading=true;
+  const lm=document.createElement("div");
+  lm.className="loadmore"; lm.innerHTML='<span class="spin"></span>';
+  feed.parentNode.appendChild(lm);
+  setTimeout(()=>{
+    lm.remove(); renderBatch(); loading=false;
+    if(cursor>=flow.length) appendEnd();
+  },520);
+}
+pgHome.addEventListener("scroll",throttle(()=>{
+  sbbg.classList.toggle("on", pgHome.scrollTop>10);
+  maybeLoadMore();
+},100),{passive:true});
+
+/* ---- 下拉刷新 ---- */
+let pullY=null, pullOn=false, dragFrom=null, dragged=false;
+pgHome.addEventListener("pointerdown",e=>{
+  dragFrom={x:e.clientX,y:e.clientY}; dragged=false;
+  pullY = pgHome.scrollTop<=0 ? e.clientY : null;
+});
+pgHome.addEventListener("pointermove",e=>{
+  if(dragFrom&&(Math.abs(e.clientX-dragFrom.x)>8||Math.abs(e.clientY-dragFrom.y)>8)) dragged=true;
+  if(pullY===null||pgHome.scrollTop>0) return;
+  const dy=e.clientY-pullY; if(dy<=0) return;
+  pullOn=true; ptr.classList.remove("anim");
+  ptr.style.height=Math.min(dy*0.5,70)+"px";
+});
+function endPull(){
+  if(pullY===null) return;
+  pullY=null; if(!pullOn) return;
+  pullOn=false;
+  const h=parseFloat(ptr.style.height)||0;
+  ptr.classList.add("anim");
+  if(h>=40){ ptr.style.height="54px"; setTimeout(()=>{ ptr.style.height="0px"; prependFresh(); },800); }
+  else ptr.style.height="0px";
+}
+["pointerup","pointercancel","pointerleave"].forEach(t=>pgHome.addEventListener(t,endPull));
+function prependFresh(){
+  if(!cols.length) return;
+  let picks=flow.filter(p=>!rendered.has(p.id)).slice(-2);
+  if(picks.length<2) picks=flow.slice(-2);
+  const fresh=[];
+  picks.forEach((p,i)=>{
+    const old=feed.querySelector('.qcard[data-id="'+p.id+'"]'); if(old) old.remove();
+    const holder=document.createElement("div");
+    holder.innerHTML=cardHTML(p,true);
+    const node=holder.firstChild;
+    cols[i%2].insertBefore(node, cols[i%2].firstChild);
+    colH[i%2]+=estHeight(p)+14;
+    rendered.add(p.id); fresh.push(node);
+  });
+  paint(fresh);
+}
+/* ---- 卡片交互 ---- */
+feed.addEventListener("click",e=>{
+  if(dragged){ dragged=false; return; }
+  const card=e.target.closest(".qcard");
+  if(card) openDetail(card.dataset.id);
+});
+feed.addEventListener("keydown",e=>{
+  if(e.key!=="Enter"&&e.key!==" ") return;
+  const card=e.target.closest(".qcard");
+  if(card){ e.preventDefault(); openDetail(card.dataset.id); }
+});
+
+/* =========================================================================
+   === 话题全屏页（左上返回 · 右上订阅 · 该话题的双列流，聚合卡打头） ===
+   ========================================================================= */
+const pushTopic=$("#pushTopic");
+const SUBS=new Set();
+function subBtnHTML(key){
+  const on=SUBS.has(key);
+  return '<button class="subbtn'+(on?" on":"")+'" id="tSub">'+(on?"已订阅":"订阅")+'</button>';
+}
+function openTopic(key){
+  const t=TOPIC_MAP[key]; if(!t) return;
+  const list=mixTypes(DATA.posts.filter(p=>p.topic===key));
+  const colA=[], colB=[], h=[0,0];
+  list.forEach(p=>{ const i=h[0]<=h[1]?0:1; (i?colB:colA).push(p); h[i]+=estHeight(p)+12; });
+  pushTopic.innerHTML='<div class="pnav solid" id="tnav"><button class="back tap" id="tBack">'+backIcon()+'</button>'
+    + '<span class="ptitle" style="opacity:1">'+esc(t.name)+'</span>'+subBtnHTML(key)+'</div>'
+    + '<div class="pscroll" id="tscroll" style="padding-top:98px;background:#F2F3F5">'
+    +   '<div class="thero2">'+imgTag(topicPseudo(t),"16:9","cimg")
+    +     '<div class="tmeta"><b>'+esc(t.name)+'</b><span>'+esc(hotOf(t))+' · '+esc(t.live)+'</span></div></div>'
+    +   '<div class="feed"><div class="colm">'+colA.map(p=>cardHTML(p)).join("")+'</div>'
+    +     '<div class="colm">'+colB.map(p=>cardHTML(p)).join("")+'</div></div>'
+    +   '<div class="endtip"><b>本话题已看完</b>共 '+list.length+' 条，来自 '+platCountOf(key)+' 个平台，点开任意一条都能回到原站</div>'
+    + '</div>';
+  requestAnimationFrame(()=>{
+    pushTopic.classList.add("on"); setStatus(false);
+    $$(".qcard",pushTopic).forEach((el,i)=>{ el.style.transitionDelay=(i*26)+"ms"; el.classList.add("in"); });
+  });
+  $("#tBack").addEventListener("click",closeTopic);
+  $("#tSub").addEventListener("click",e=>{
+    const b=e.currentTarget;
+    if(SUBS.has(key)){ SUBS.delete(key); b.classList.remove("on"); b.textContent="订阅"; }
+    else{ SUBS.add(key); b.classList.add("on"); b.textContent="已订阅"; }
+  });
+  $("#tscroll").addEventListener("click",e=>{
+    const c=e.target.closest(".qcard"); if(c) openDetail(c.dataset.id);
+  });
+}
+function closeTopic(){
+  pushTopic.classList.remove("on"); setStatus(false);
+  setTimeout(()=>{ if(!pushTopic.classList.contains("on")) pushTopic.innerHTML=""; },340);
+}
+
+/* =========================================================================
+   === 详情页（重点）：来源条 · 垂类数据卡 · 原帖固定截取 · 亮评 top3 · 回原站 ===
+   ========================================================================= */
+const pushDetail=$("#pushDetail");
+let curPost=null, rawOn=false;
+function backIcon(){ return '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 5 8 12l6.5 7"/></svg>'; }
+function shareIcon(){ return '<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15.5V4.2M8.4 7.6 12 4l3.6 3.6"/><path d="M5.4 12.6v6.2a1.6 1.6 0 0 0 1.6 1.6h10a1.6 1.6 0 0 0 1.6-1.6v-6.2"/></svg>'; }
+/* 正文：短的直接展示；视频给「视频总结」；确实很长才给回原站入口 */
+function bodyBlock(p){
+  const isVideo=(p.media||{}).type==="video";
+  const paras=isVideo?p.excerpt.slice(0,2):p.excerpt;
+  const hasEn=!!p.excerptEn;
+  const total=p.excerpt.join("").length;
+  const long = total>420 || (isVideo&&p.excerpt.length>2);
+  const zh='<div class="dtext" id="exZh">'+paras.map(t=>'<p>'+esc(t)+'</p>').join("")+'</div>';
+  const en=hasEn?'<div class="dtext rawon" id="exEn" hidden>'+p.excerptEn.map(t=>'<p>'+esc(t)+'</p>').join("")+'</div>':"";
+  const head = (isVideo||hasEn)
+    ? '<div class="dsect"><h3>'+(isVideo?"视频总结":"正文")+'</h3>'
+      + '<span class="rt">'+(hasEn?'<button class="swbtn" id="swRaw">原文 ⇄ 译文</button>':'')+'</span></div>'
+    : '';
+  return head + zh + en
+    + (long?'<div class="dmore" data-go="'+esc(p.source.url)+'">'+(isVideo?"到原站看完整视频":"回原站读完整原文")+' →</div>':'');
+}
+function cmtList(p){
+  const pf=PF(p.platform);
+  return p.comments.map((c,i)=>'<div class="cmt"><span class="no">'+(i+1)+'</span><div class="m">'
+    + '<div class="u">'+esc(c.u)+'</div>'
+    + (c.en?'<div class="en">'+esc(c.en)+'</div>':'')
+    + '<div class="zh">'+esc(c.zh)+'</div>'
+    + '<div class="lk">'+likeIcon(12)+cma(c.score)+'</div></div></div>').join("");
+}
+/* 作者行置顶 —— 铁律一：平台 / 原作者 / 原发布时间 / 回原站入口 */
+function authorBar(p){
+  return '<div class="dauthor"><span class="ava" style="background:'+p.author.avatarColor+'">'+esc(p.author.name.charAt(0))+'</span>'
+    + '<span class="m"><span class="nm">'+esc(p.author.name)+'</span>'
+    +   '<span class="ot">'+platIcon(p.platform,10)+' '+esc(p.source.siteName)+' · '+esc(dateCn(p.source.publishedAt))+'</span></span>'
+    + '<a class="go tap" href="'+esc(p.source.url)+'" target="_blank" rel="noopener noreferrer">原帖 ↗</a></div>';
+}
+function mediaBlock(p){
+  const m=p.media||{};
+  if(p.type==="text"){
+    const po=p.poster||{};
+    return '<div class="poster big t-'+(po.theme||"violet")+'">'
+      + '<span class="prow">'+platIcon(p.platform,14)+'<b>'+esc(p.platform)+'</b>'
+      +   '<i class="ptag">'+esc(po.tag||"")+'</i></span>'
+      + '<div class="pbig">'+esc(po.big||p.title)+'</div>'
+      + '<div class="pfoot">'+esc(po.foot||"")+'</div></div>';
+  }
+  return imgTag(p,"16:9","hero", m.type==="video"
+    ? '<span class="playbig"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8 5v14l11-7z"/></svg></span>'
+      + '<span class="mtag">'+esc(m.duration)+'</span>'
+    : (m.imgCount>1?'<span class="mtag">共 '+m.imgCount+' 图</span>':''));
+}
+function detailHTML(p){
+  const showTitle = !(p.type==="text" && !p.title);
+  return '<div class="pnav solid" id="dnav"><button class="back tap" id="dBack">'+backIcon()+'</button>'
+    +   '<span class="ptitle" style="opacity:1">'+esc(p.platform)+'</span>'
+    +   '<button class="navico tap" id="dShareTop">'+shareIcon()+'</button></div>'
+    + '<div class="pscroll" id="dscroll" style="padding-top:98px">'
+    +   authorBar(p)
+    +   mediaBlock(p)
+    +   '<div class="din">'
+    +     (showTitle?'<h1 class="dh1">'+esc(p.title)+'</h1>':'')
+    +     (p.titleOriginal?'<div class="dh1en">原标题：'+esc(p.titleOriginal)+'</div>':'')
+    +     '<div class="dconcl"><span style="color:#FF6B35">◆ </span>'+esc(p.conclusion)
+    +       '<span class="ai-chip" style="top:9px;right:9px">AI</span></div>'
+    +     (p.spec?specCard(p):'')
+    +     bodyBlock(p)
+    +     '<div class="dsect"><h3>优质评论</h3></div>'
+    +     cmtList(p)
+    +   '</div></div>'
+    + '<div class="dact">'
+    +   '<a class="btn-main tap" href="'+esc(p.source.url)+'" target="_blank" rel="noopener noreferrer">查看原帖 →</a>'
+    +   '<button class="btn-ghost tap" id="dFav">☆<span>收藏</span></button>'
+    +   '<button class="btn-ghost tap" id="dShare">⇪<span>分享</span></button>'
+    + '</div>';
+}
+function openDetail(id){
+  const p=POST_MAP[id]; if(!p) return;
+  curPost=p; rawOn=false;
+  pushDetail.innerHTML = p.type==="agg" ? aggDetailHTML(p) : detailHTML(p);
+  requestAnimationFrame(()=>{ pushDetail.classList.add("on"); setStatus(false); });
+  const sc=$("#dscroll");
+  $("#dBack").addEventListener("click",closeDetail);
+  if(p.type==="agg"){ bindAggDetail(p); return; }
+  $("#dShare").addEventListener("click",()=>openShare(p));
+  $("#dShareTop").addEventListener("click",()=>openShare(p));
+  $("#dFav").addEventListener("click",e=>{
+    const b=e.currentTarget; b.classList.toggle("done");
+    b.innerHTML=b.classList.contains("done")?"★<span>已收藏</span>":"☆<span>收藏</span>";
+  });
+  const sw=$("#swRaw");
+  if(sw) sw.addEventListener("click",()=>{
+    rawOn=!rawOn;
+    $("#exZh").hidden=rawOn; $("#exEn").hidden=!rawOn;
+    sw.classList.toggle("on",rawOn);
+    sw.textContent=rawOn?"译文 ⇄ 原文":"原文 ⇄ 译文";
+  });
+  sc.addEventListener("click",e=>{
+    const g=e.target.closest("[data-go]");
+    if(g) window.open(g.dataset.go,"_blank","noopener");
+  });
+}
+function closeDetail(){
+  pushDetail.classList.remove("on"); setStatus(false);
+  setTimeout(()=>{ if(!pushDetail.classList.contains("on")) pushDetail.innerHTML=""; },340);
+}
+
+/* =========================================================================
+   === AI 聚合详情页：一篇文章 + 段末来源角标 + 底部引用清单 ===
+   ========================================================================= */
+function refChips(refs){
+  return (refs||[]).map(n=>'<button class="ref" data-ref="'+n+'">'+n+'</button>').join("");
+}
+function srcCardHTML(s,n){
+  return '<a class="srcitem" href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">'
+    + '<span class="n">'+n+'</span>'
+    + '<span class="m"><span class="top">'+platIcon(s.platform,11)+esc(s.platform)+' · '+esc(s.author)+' · '+esc(s.time)+'</span>'
+    +   '<span class="tt">'+esc(s.title)+'</span></span>'
+    + '<span class="goto">前往 ↗</span></a>';
+}
+function aggDetailHTML(p){
+  const secs=p.sections.map((s,i)=>'<div class="agsec">'
+    + '<h3>'+esc(s.h)+'</h3>'
+    + '<p>'+esc(s.p)+refChips(s.refs)+'</p>'
+    + (i===0?'<div class="agpic">'+imgTag(p,"16:9","cimg")+'</div>':'')
+    + '</div>').join("");
+  return '<div class="pnav solid" id="dnav"><button class="back tap" id="dBack">'+backIcon()+'</button>'
+    +   '<span class="ptitle" style="opacity:1">AI 聚合</span>'
+    +   '<button class="navico tap" id="dShareTop">'+shareIcon()+'</button></div>'
+    + '<div class="pscroll" id="dscroll" style="padding-top:98px">'
+    +   '<div class="din">'
+    +     '<div class="agmeta">'+platStack(p.plats)
+    +       '<span>AI辅助生成 · 综合 '+p.sources.length+' 个来源 · '+esc(p.timeAgo)+'</span></div>'
+    +     '<h1 class="dh1">'+esc(p.title)+'</h1>'
+    +     '<div class="aglead">'+esc(p.lead)+'</div>'
+    +     secs
+    +     '<div class="dsect"><h3>'+p.sources.length+' 个引用</h3></div>'
+    +     '<div class="srclist">'+p.sources.map((s,i)=>srcCardHTML(s,i+1)).join("")+'</div>'
+    +     '<div class="agnote">本页由 AI 交叉整理多平台公开讨论生成，观点与数据均来自上方引用；每段结论都可点角标回到出处。</div>'
+    +   '</div></div>'
+    + '<div class="refpop" id="refPop"></div>';
+}
+function bindAggDetail(p){
+  const sc=$("#dscroll"), pop=$("#refPop");
+  $("#dShareTop").addEventListener("click",()=>openShare(p));
+  sc.addEventListener("click",e=>{
+    const r=e.target.closest("[data-ref]");
+    if(r){
+      const s=p.sources[(+r.dataset.ref)-1]; if(!s) return;
+      const rect=r.getBoundingClientRect(), host=pushDetail.getBoundingClientRect();
+      pop.innerHTML='<div class="rp-in"><div class="tt">'+esc(s.title)+'</div>'
+        + '<div class="mt">'+platIcon(s.platform,11)+esc(s.platform)+' · '+esc(s.author)+' · '+esc(s.time)+'</div>'
+        + '<a class="rp-go" href="'+esc(s.url)+'" target="_blank" rel="noopener noreferrer">前往查看 ↗</a></div>';
+      pop.style.top=(rect.bottom-host.top+8)+"px";
+      pop.classList.add("on");
+      return;
+    }
+    if(!e.target.closest(".rp-in")) pop.classList.remove("on");
+  });
+}
+
+/* =========================================================================
+   === 分享页（分享出去包含什么，写清楚） ===
+   ========================================================================= */
+const sheetMask=$("#sheetMask"), share=$("#share");
+function chanIcon(bg,glyph){ return '<span class="ci" style="background:'+bg+'">'+glyph+'</span>'; }
+function openShare(p){
+  const pf=PF(p.platform);
+  const isAgg=p.type==="agg";
+  const cover = p.type==="text"
+    ? '<div class="top poster shr t-'+((p.poster||{}).theme||"violet")+'">'
+      + '<div class="pbig">'+esc((p.poster||{}).big||p.title)+'</div></div>'
+    : imgTag(p, isAgg?"4:3":"1:1", "top");
+  const foot = isAgg
+    ? '<span class="t"><b>扫码看原帖</b>AI 聚合 · '+(p.sources?p.sources.length:0)+' 个来源</span>'
+    : '<span class="t"><b>扫码看原帖</b>'+esc(p.author.name)+'<br>'+esc(dateCn(p.source.publishedAt))+'</span>';
+  const mid = isAgg
+    ? '<div class="sc">'+esc(p.lead)+'</div>'
+    : '<div class="sc">◆ '+esc(p.conclusion)+'</div>'
+      + '<div class="sq"><b>热评</b><br>'+esc(p.comments[0].zh)+'</div>';
+  share.innerHTML='<div class="as-card">'
+    + '<div class="as-ttl">分享预览 · 竖版卡片</div>'
+    + '<div class="as-body"><div class="scard">'
+    +   cover
+    +   '<span class="plat">'+platIcon(isAgg?(p.plats||[])[0]:p.platform,10)+esc(isAgg?"AI 聚合":p.platform)+'</span>'
+    +   '<div class="in"><div class="st">'+esc(p.title)+'</div>'
+    +     mid
+    +     '<div class="ft"><span class="qr"></span>'+foot+'</div>'
+    +   '</div></div></div>'
+    + '<div class="chans">'
+    +   '<button class="chan tap">'+chanIcon("#07C160","💬")+'微信</button>'
+    +   '<button class="chan tap">'+chanIcon("#2AAE67","🖼")+'朋友圈</button>'
+    +   '<button class="chan tap">'+chanIcon("#12B7F5","🐧")+'QQ</button>'
+    +   '<button class="chan tap">'+chanIcon("#5A5A66","🔗")+'复制链接</button>'
+    +   '<button class="chan tap" id="saveImg">'+chanIcon("#FF6B35","⬇")+'保存图片</button>'
+    + '</div></div>'
+    + '<button class="as-cancel" id="asCancel">取消</button>';
+  sheetMask.classList.add("on");
+  requestAnimationFrame(()=>share.classList.add("on"));
+  $("#asCancel").addEventListener("click",closeSheets);
+  $("#saveImg").addEventListener("click",e=>{
+    const t=e.currentTarget.lastChild;
+    e.currentTarget.replaceChild(document.createTextNode("已保存"),t);
+  });
+}
+function closeSheets(){
+  share.classList.remove("on"); sheetMask.classList.remove("on");
+  setTimeout(()=>{
+    if(!share.classList.contains("on")) share.innerHTML="";
+  },340);
+}
+sheetMask.addEventListener("click",closeSheets);
+document.addEventListener("keydown",e=>{
+  if(e.key!=="Escape") return;
+  if(sheetMask.classList.contains("on")) closeSheets();
+  else if($("#pushBoard").classList.contains("on")) closeBoard();
+  else if(pushDetail.classList.contains("on")) closeDetail();
+});
+
+/* =========================================================================
+   === 我的 + 内部数据看板（收纳，不占顶层） ===
+   ========================================================================= */
+function meIcon(path,bg){
+  return '<span class="ic" style="background:'+bg+'"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" '
+    + 'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+path+'</svg></span>';
+}
+const AR='<svg class="ar" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+$("#pg-me").innerHTML=''
+  + '<div class="mehead"><span class="av">看</span><span class="t"><b>看世界 · 内测用户</b>'
+  +   '<span>已读 128 条 · 回访原站 26 次</span></span></div>'
+  + '<div class="group">'
+  +   '<button class="item tap">'+meIcon('<path d="M6 3.6h12v16.8L12 15.6 6 20.4z"/>',"#FF6B35")+'<span class="tx"><b>我的收藏</b></span><span class="val">18</span>'+AR+'</button>'
+  +   '<button class="item tap">'+meIcon('<circle cx="12" cy="12" r="9"/><path d="M12 7.5V12l3.2 2"/>',"#2B6CB0")+'<span class="tx"><b>阅读历史</b></span><span class="val">128</span>'+AR+'</button>'
+  +   '<button class="item tap">'+meIcon('<circle cx="12" cy="12" r="9"/><path d="M3.2 12h17.6M12 3.2c2.4 2.4 2.4 15.2 0 17.6-2.4-2.4-2.4-15.2 0-17.6z"/>',"#FB7299")+'<span class="tx"><b>关注的来源</b><i>6 个平台</i></span>'+AR+'</button>'
+  + '</div>'
+  + '<div class="gtitle">团队</div>'
+  + '<div class="group"><button class="item tap" id="toBoard">'
+  +   meIcon('<path d="M4 20V9M10 20V4M16 20v-7M22 20H2"/>',"#8E8E93")
+  +   '<span class="tx"><b>内部数据看板</b><i>生产链路 / 内容合规 · 仅团队可见</i></span>'+AR+'</button></div>'
+  + '<div class="endtip" style="padding:24px 24px 40px">内容均来自公开站点，来源与作者全程可见<br>完整阅读一律跳转原站</div>';
+$("#toBoard").addEventListener("click",openBoard);
+
+const pushBoard=$("#pushBoard");
+let boardSeg="pipe";
+function pipeHTML(){
+  const total=DATA.funnel[0].n;
+  return '<div class="bdark"><div class="kgrid">'+DATA.pipeKpis.map(k=>'<div class="pcard kpi">'
+    + '<div class="lb">'+k.lb+'</div><div class="v">'+k.v+'<small>'+k.u+'</small><span class="dt">'+k.dt+'</span></div>'
+    + '<div class="note">'+k.note+'</div></div>').join("")+'</div>'
+    + '<div class="bsec"><h3>生产漏斗<span class="hint">种子 → 取回 → 结构化 → 过审入库</span></h3><div class="pcard"><div class="fun">'
+    + DATA.funnel.map(f=>'<div class="fseg'+(f.hot?" hot":"")+'">'
+    +   '<div class="fl"><b>'+cma(f.n)+'</b><span>'+f.name+'</span><span class="pc">转化 '+f.pct+'</span></div>'
+    +   '<div class="fbar"><i data-w="'+Math.round(f.n/total*100)+'"></i></div>'
+    +   '<div class="floss">'+f.loss+'</div></div>').join("")
+    + '</div></div></div></div>';
+}
+function compHTML(){
+  return '<div class="blight">'+DATA.compKpis.map(k=>'<div class="ccard cm" style="margin-bottom:10px">'
+    + '<div class="lb">'+k.lb+'</div><div class="v">'+k.v+'</div><div class="note">'+k.note+'</div></div>').join("")
+    + '<div class="bsec"><h3>我们与「内容截流」的区别</h3><div class="vs">'
+    + '<div class="bad"><h5>❌ 内容截流</h5><ul>'+DATA.vsLeft.map(t=>'<li><span>✕</span><span>'+esc(t)+'</span></li>').join("")+'</ul></div>'
+    + '<div class="good"><h5>✅ 看世界</h5><ul>'+DATA.vsRight.map(t=>'<li><span>✓</span><span>'+esc(t)+'</span></li>').join("")+'</ul></div>'
+    + '</div><div class="note-line">商业目标是让浏览器被打开，而不是让用户停在我们的流里 —— 把读者送回原站对我们是收益。</div></div></div>';
+}
+function renderBoard(){
+  const dark=boardSeg==="pipe";
+  pushBoard.style.background=dark?"#0F1419":"#F7F8FA";
+  $("#boardBody").innerHTML=dark?pipeHTML():compHTML();
+  const nav=$("#bnav");
+  nav.style.background=dark?"rgba(15,20,25,.92)":"rgba(247,248,250,.92)";
+  nav.style.color=dark?"#E6EDF3":"#1A2230";
+  setStatus(dark);
+  requestAnimationFrame(()=>{ $$("#boardBody .fbar i").forEach(i=>{ i.style.width=i.dataset.w+"%"; }); });
+}
+function openBoard(){
+  pushBoard.innerHTML='<div class="pnav solid" id="bnav"><button class="back tap" id="bBack">'+backIcon()+'</button>'
+    + '<span class="ptitle" style="opacity:1">内部数据看板</span><span class="navico"></span></div>'
+    + '<div class="pscroll" style="padding-top:98px">'
+    + '<div class="seg" id="bseg"><button class="on" data-b="pipe">生产链路</button><button data-b="comp">内容合规</button></div>'
+    + '<div id="boardBody"></div></div>';
+  boardSeg="pipe"; renderBoard();
+  requestAnimationFrame(()=>pushBoard.classList.add("on"));
+  $("#bBack").addEventListener("click",closeBoard);
+  $("#bseg").addEventListener("click",e=>{
+    const b=e.target.closest("button[data-b]"); if(!b) return;
+    $$("#bseg button").forEach(x=>x.classList.toggle("on",x===b));
+    boardSeg=b.dataset.b; renderBoard();
+  });
+}
+function closeBoard(){
+  pushBoard.classList.remove("on"); setStatus(false);
+  setTimeout(()=>{ if(!pushBoard.classList.contains("on")) pushBoard.innerHTML=""; },340);
+}
+
+/* 首屏 */
+renderFeed();
+</script>
+</body>
+</html>
