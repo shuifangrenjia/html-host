@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="ZBgU3YJSxa7uplWTPcwmMD">
+<head data-page-node-id="gXOchGXXEetVHzmDdg9dUh">
+<meta charset="UTF-8" data-page-node-id="nnqoyBY6AFjb0auUIRzBJB">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="iKUeJ34JS8cHG9NT75UYDO">
+<title>DSH 二期 · 资产线规划｜主线 · 分工 · 待办 · 事项展开</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+  html { scroll-behavior: smooth; }
+
+  /* ============ 弥散光斑背景 · 高级感来源 ============ */
+  body {
+    font-family: -apple-system, "PingFang SC", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    color: #1a1a2e;
+    line-height: 1.75;
+    min-height: 100vh;
+    background: #f4f1ed;  /* 暖灰底色，比纯白柔和 */
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* 弥散光斑层 — 4 团巨大模糊圆形渐变叠加 */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: -20%;
+    z-index: -2;
+    background:
+      radial-gradient(circle at 18% 22%, rgba(255, 200, 215, 0.65) 0%, transparent 30%),
+      radial-gradient(circle at 78% 18%, rgba(190, 215, 255, 0.60) 0%, transparent 32%),
+      radial-gradient(circle at 25% 78%, rgba(220, 235, 215, 0.55) 0%, transparent 32%),
+      radial-gradient(circle at 82% 82%, rgba(255, 225, 195, 0.60) 0%, transparent 32%),
+      radial-gradient(circle at 50% 50%, rgba(225, 215, 240, 0.40) 0%, transparent 40%);
+    filter: blur(20px);
+    animation: breathe 14s ease-in-out infinite;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(244,241,237,0.20) 100%);
+    pointer-events: none;
+  }
+  @keyframes breathe {
+    0%, 100% { transform: scale(1) translate(0, 0); opacity: 0.85; }
+    33% { transform: scale(1.08) translate(-1.5%, 1%); opacity: 1; }
+    66% { transform: scale(1.04) translate(1.5%, -1%); opacity: 0.92; }
+  }
+
+  .container { max-width: 980px; margin: 0 auto; padding: 60px 24px 100px; position: relative; }
+
+  /* HERO */
+  .hero { text-align: center; padding: 20px 0 48px; }
+  .badge {
+    display: inline-block;
+    padding: 7px 18px;
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.7);
+    border-radius: 100px;
+    font-size: 12px;
+    color: #4a5278;
+    margin-bottom: 22px;
+    font-weight: 500;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 4px 16px rgba(180,160,180,0.12);
+  }
+  h1 {
+    font-size: 64px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #5a6fa0 0%, #a085c0 40%, #d895b0 75%, #d8a878 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -1.5px;
+    margin-bottom: 16px;
+    line-height: 1.08;
+  }
+  .hero .sub { font-size: 18px; color: rgba(60,70,100,0.7); font-weight: 400; margin-bottom: 10px; }
+  .hero .meta { font-size: 12px; color: rgba(80,90,120,0.55); }
+
+  /* GLASS CARD */
+  .glass-card {
+    position: relative;
+    background: rgba(255,255,255,0.50);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.75);
+    border-radius: 28px;
+    padding: 34px 30px;
+    margin-bottom: 22px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,1),
+      inset 0 -1px 0 rgba(255,255,255,0.4),
+      inset 1px 0 0 rgba(255,235,245,0.55),
+      inset -1px 0 0 rgba(235,245,255,0.55),
+      0 18px 50px rgba(160,140,170,0.12),
+      0 4px 12px rgba(160,140,170,0.06);
+    overflow: hidden;
+  }
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0) 45%, rgba(255,255,255,0.15) 100%);
+    pointer-events: none;
+  }
+  .glass-card > * { position: relative; z-index: 1; }
+  .glass-card.gold {
+    background: rgba(255,245,225,0.55);
+    border-color: rgba(255,220,160,0.65);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), inset 0 -1px 0 rgba(255,210,140,0.3), 0 18px 50px rgba(220,170,90,0.16);
+  }
+
+  /* TLDR */
+  .tldr-label {
+    font-size: 12px;
+    color: #b08838;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    margin-bottom: 16px;
+  }
+  .tldr-claim { font-size: 25px; font-weight: 600; color: #1a1a2e; line-height: 1.5; margin-bottom: 18px; }
+  .tldr-claim em { font-style: normal; color: #c98a1c; font-weight: 700; }
+  .tldr-body { font-size: 15px; color: rgba(40,50,80,0.85); line-height: 1.9; margin-bottom: 22px; }
+  .perspectives { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 18px; }
+  .persp {
+    background: rgba(255,255,255,0.65);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.85);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 2px 8px rgba(180,160,180,0.08);
+  }
+  .persp .who { font-size: 12px; color: rgba(80,90,120,0.7); margin-bottom: 4px; font-weight: 600; letter-spacing: 0.5px; }
+  .persp .what { font-size: 13px; color: #1a1a2e; line-height: 1.65; }
+
+  /* Section */
+  .section-header { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid rgba(160,140,180,0.15); }
+  .section-num {
+    display: inline-flex;
+    width: 46px; height: 46px;
+    background: linear-gradient(135deg, rgba(160,140,210,0.85), rgba(220,160,180,0.85));
+    border: 1px solid rgba(255,255,255,0.9);
+    border-radius: 14px;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6), 0 4px 14px rgba(180,140,200,0.30);
+  }
+  .section-title { font-size: 26px; font-weight: 600; color: #1a1a2e; }
+  .section-sub { font-size: 12px; color: rgba(80,90,120,0.65); margin-top: 3px; }
+
+  h3 { font-size: 16px; font-weight: 600; color: #b08838; margin: 22px 0 10px; }
+  h3:first-of-type { margin-top: 6px; }
+  h4 { font-size: 14px; font-weight: 600; color: #5a6fa0; margin: 16px 0 8px; }
+
+  p, li { font-size: 14px; color: rgba(40,50,80,0.88); line-height: 1.85; }
+  ul, ol { padding-left: 22px; margin: 8px 0; }
+  li { margin-bottom: 5px; }
+  strong { color: #1a1a2e; font-weight: 600; }
+  em { font-style: normal; color: #c98a1c; }
+  .hl { color: #c98a1c; font-weight: 600; }
+  .hl-blue { color: #5a6fa0; font-weight: 600; }
+  .hl-green { color: #3d9a6a; font-weight: 600; }
+  .hl-red { color: #c25876; font-weight: 600; }
+
+  .quote-list { list-style: none; padding: 0; margin: 12px 0; }
+  .quote-list li {
+    padding: 12px 16px;
+    background: rgba(225,225,255,0.50);
+    backdrop-filter: blur(15px);
+    border-left: 3px solid #8a9adc;
+    border-radius: 0 14px 14px 0;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: rgba(40,50,80,0.92);
+    line-height: 1.7;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+
+  /* 主线三段流水 */
+  .flow3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin: 18px 0 8px; }
+  .flow-node {
+    position: relative;
+    background: rgba(255,255,255,0.60);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.85);
+    border-radius: 18px;
+    padding: 18px 18px 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 4px 14px rgba(180,160,180,0.10);
+  }
+  .flow-node .stage { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 6px; }
+  .flow-node .name { font-size: 17px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+  .flow-node ul { list-style: none; padding: 0; margin: 0; }
+  .flow-node li { font-size: 12.5px; color: rgba(40,50,80,0.88); padding: 5px 0 5px 14px; position: relative; line-height: 1.6; border-top: 1px dashed rgba(160,140,180,0.16); }
+  .flow-node li:first-of-type { border-top: none; }
+  .flow-node li::before { content: ''; position: absolute; left: 0; top: 12px; width: 5px; height: 5px; border-radius: 50%; background: #8a9adc; }
+  .flow-node.up .stage { color: #3d9a6a; }
+  .flow-node.up li::before { background: #3d9a6a; }
+  .flow-node.mid .stage { color: #c98a1c; }
+  .flow-node.mid li::before { background: #c98a1c; }
+  .flow-node.down .stage { color: #5a6fa0; }
+  .flow-node.down li::before { background: #5a6fa0; }
+  .flow-arrow {
+    text-align: center; font-size: 18px; color: rgba(138,154,220,0.55);
+    margin: -4px 0 2px; letter-spacing: 6px; user-select: none;
+  }
+  .flow-cap {
+    display: inline-block; margin-top: 8px; padding: 4px 12px;
+    background: rgba(138,154,220,0.16); border-radius: 10px;
+    font-size: 11.5px; color: #5a6fa0; font-weight: 600; line-height: 1.6;
+  }
+  .flow-node.up .flow-cap { background: rgba(61,154,106,0.14); color: #2e7a52; }
+  .flow-node.mid .flow-cap { background: rgba(201,138,28,0.14); color: #a57118; }
+  .flow-node.down .flow-cap { background: rgba(90,111,160,0.14); color: #5a6fa0; }
+
+  /* 本地知识库三优势 */
+  .advantage-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 14px 0; }
+  .adv {
+    background: rgba(255,255,255,0.60);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.85);
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 4px 12px rgba(180,160,180,0.08);
+  }
+  .adv .anum { font-size: 20px; margin-bottom: 4px; }
+  .adv .atitle { font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .adv .adesc { font-size: 12.5px; color: rgba(40,50,80,0.82); line-height: 1.7; }
+  .adv .adesc b { color: #2e7a52; }
+
+  /* 分工 quote */
+  .duty-quote {
+    background: rgba(225,225,255,0.40);
+    backdrop-filter: blur(20px);
+    border-left: 3px solid #8a9adc;
+    border-radius: 0 18px 18px 0;
+    padding: 22px 24px;
+    margin: 14px 0;
+    font-size: 15px;
+    color: rgba(30,40,70,0.95);
+    line-height: 2.0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);
+  }
+  .duty-quote b { color: #1a1a2e; }
+  .duty-quote .dq-key { color: #c98a1c; font-weight: 700; }
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 14px 0; }
+  .dd-card { border-radius: 16px; padding: 16px 20px; font-size: 13px; line-height: 1.75; }
+  .dd-card.do { background: rgba(220,245,225,0.50); border: 1px solid rgba(61,154,106,0.30); }
+  .dd-card.dont { background: rgba(255,220,225,0.42); border: 1px dashed rgba(194,88,118,0.45); }
+  .dd-card .dhead { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .dd-card.do .dhead { color: #2e7a52; }
+  .dd-card.dont .dhead { color: #8d3550; }
+  .dd-card ul { list-style: none; padding: 0; margin: 0; }
+  .dd-card li { font-size: 12.5px; padding-left: 16px; position: relative; margin-bottom: 5px; color: rgba(40,50,80,0.9); }
+  .dd-card li::before { position: absolute; left: 0; font-size: 12px; }
+  .dd-card.do li::before { content: '✓'; color: #3d9a6a; font-weight: 700; }
+  .dd-card.dont li::before { content: '✕'; color: #c25876; font-weight: 700; }
+
+  /* Todo 泳道 */
+  .lane { border-radius: 20px; padding: 20px 22px; margin-bottom: 16px; }
+  .lane .lhead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .lane .lp {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 46px; height: 26px; padding: 0 10px; border-radius: 8px;
+    font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 0.5px;
+  }
+  .lane.p0 { background: rgba(240,225,255,0.42); border: 1px solid rgba(160,140,210,0.35); }
+  .lane.p0 .lp { background: linear-gradient(135deg, #7a6ab5, #9a7ad0); }
+  .lane.p0 .lt { color: #5a4a9e; }
+  .lane.p1 { background: rgba(255,242,215,0.50); border: 1px solid rgba(255,210,130,0.45); }
+  .lane.p1 .lp { background: linear-gradient(135deg, #d4a040, #e0b860); }
+  .lane.p1 .lt { color: #a57118; }
+  .lane.p2 { background: rgba(230,235,242,0.45); border: 1px dashed rgba(140,150,175,0.40); }
+  .lane.p2 .lp { background: rgba(140,150,175,0.55); }
+  .lane.p2 .lt { color: rgba(90,100,125,0.9); }
+  .lane .lt { font-size: 16px; font-weight: 700; }
+  .lane .lsub { font-size: 12px; color: rgba(80,90,120,0.7); margin-left: auto; white-space: nowrap; }
+  table.todo { width: 100%; border-collapse: separate; border-spacing: 0; margin: 6px 0 2px; font-size: 13px; }
+  table.todo th, table.todo td { padding: 9px 10px; text-align: left; border-bottom: 1px solid rgba(160,140,180,0.12); vertical-align: top; }
+  table.todo th { color: rgba(80,90,120,0.75); font-weight: 600; font-size: 11.5px; letter-spacing: 0.4px; background: transparent; text-transform: none; }
+  table.todo tr:last-child td { border-bottom: none; }
+  table.todo td.tn { font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+  table.todo td.tw { color: rgba(40,50,80,0.88); }
+  table.todo td.tm { color: rgba(90,100,125,0.8); white-space: nowrap; }
+  .pill { display: inline-block; padding: 1px 8px; border-radius: 8px; font-size: 11px; font-weight: 600; margin-right: 4px; }
+  .pill.p0p { background: rgba(122,106,181,0.16); color: #5a4a9e; }
+  .pill.p1p { background: rgba(212,160,64,0.18); color: #a57118; }
+  .pill.p2p { background: rgba(140,150,175,0.18); color: rgba(90,100,125,0.9); }
+
+  /* 事项展开四格 */
+  .case-block {
+    background: rgba(255,255,255,0.50);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 20px;
+    padding: 20px 22px 22px;
+    margin-bottom: 18px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 4px 14px rgba(180,160,180,0.08);
+  }
+  .case-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+  .case-head .cno {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 8px;
+    background: linear-gradient(135deg, #8a9adc, #d896b0);
+    color: #fff; font-size: 13px; font-weight: 700; flex-shrink: 0;
+    transform: translateY(4px);
+  }
+  .case-head .ctitle { font-size: 17px; font-weight: 700; color: #1a1a2e; }
+  .case-head .cpri { margin-left: auto; font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px; }
+  .case-head .cpri.p0p { background: rgba(122,106,181,0.14); color: #5a4a9e; }
+  .case-head .cpri.p1p { background: rgba(212,160,64,0.16); color: #a57118; }
+  .quad { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+  .q {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(20px);
+    border-radius: 14px;
+    padding: 13px 16px;
+    border: 1px solid rgba(255,255,255,0.85);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.95);
+  }
+  .q .qh { font-size: 12px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; }
+  .q.pain .qh { color: #c25876; } .q.pain { background: rgba(255,235,238,0.55); }
+  .q.sol .qh { color: #5a6fa0; }  .q.sol { background: rgba(235,238,255,0.55); }
+  .q.gain .qh { color: #3d9a6a; } .q.gain { background: rgba(235,248,238,0.55); }
+  .q.risk .qh { color: #b08838; } .q.risk { background: rgba(255,248,235,0.55); }
+  .q p { font-size: 12.8px; line-height: 1.78; color: rgba(40,50,80,0.9); margin: 0; }
+  .q p b { color: #1a1a2e; }
+
+  .pending {
+    background: rgba(255,220,225,0.45);
+    backdrop-filter: blur(15px);
+    border: 1px dashed rgba(194,88,118,0.5);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 13px;
+    color: #8d3550;
+    line-height: 1.75;
+  }
+  .pending strong { color: #8d3550; }
+  .pending.ok {
+    background: rgba(220,245,225,0.45);
+    border: 1px dashed rgba(61,154,106,0.45);
+    color: #2e5a42;
+  }
+  .pending.ok strong { color: #2e5a42; }
+
+  .core-mind {
+    margin-top: 12px;
+    padding: 12px 16px;
+    background: rgba(255,235,180,0.50);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    font-size: 13px;
+    color: #8a6610;
+    border: 1px solid rgba(255,210,130,0.55);
+    line-height: 1.7;
+  }
+
+  /* TOC */
+  .toc {
+    background: rgba(255,255,255,0.50);
+    backdrop-filter: blur(30px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.80);
+    border-radius: 22px;
+    padding: 24px 26px;
+    margin-bottom: 28px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.95), 0 8px 24px rgba(180,160,180,0.10);
+  }
+  .toc-title { font-size: 12px; color: rgba(80,90,120,0.7); font-weight: 700; letter-spacing: 2px; margin-bottom: 14px; }
+  .toc-list { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .toc-list li a {
+    display: block; padding: 10px 14px; color: rgba(40,50,80,0.88);
+    text-decoration: none; font-size: 13px; border-radius: 10px;
+    transition: all 0.2s; background: rgba(255,255,255,0.35);
+  }
+  .toc-list li a:hover { background: rgba(138,154,220,0.20); color: #1a1a2e; transform: translateX(2px); }
+  .toc-list li a .n { color: #b08838; font-weight: 700; margin-right: 8px; }
+
+  /* HOOK */
+  .hook-card {
+    background: linear-gradient(135deg, rgba(255,210,225,0.50), rgba(210,225,255,0.50));
+    backdrop-filter: blur(50px) saturate(180%);
+    -webkit-backdrop-filter: blur(50px) saturate(180%);
+    border: 1px solid rgba(255,255,255,0.85);
+    border-radius: 28px;
+    padding: 44px 32px;
+    margin: 44px 0 24px;
+    text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1), 0 24px 60px rgba(200,170,200,0.18);
+  }
+  .hook-label { font-size: 12px; color: rgba(80,90,120,0.8); letter-spacing: 2.5px; font-weight: 700; margin-bottom: 18px; }
+  .hook-text {
+    font-size: 26px; font-weight: 600; line-height: 1.55;
+    background: linear-gradient(135deg, #5a6fa0, #b87aa8, #c98a40);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .footer { text-align: center; font-size: 12px; color: rgba(80,90,120,0.55); margin-top: 40px; line-height: 1.8; }
+
+  @media (max-width: 760px) {
+    h1 { font-size: 42px; }
+    .container { padding: 40px 16px 60px; }
+    .glass-card { padding: 24px 20px; border-radius: 22px; }
+    .perspectives { grid-template-columns: 1fr; }
+    .flow3 { grid-template-columns: 1fr; }
+    .advantage-grid { grid-template-columns: 1fr; }
+    .do-dont { grid-template-columns: 1fr; }
+    .quad { grid-template-columns: 1fr; }
+    .toc-list { grid-template-columns: 1fr; }
+    .hook-card { padding: 30px 22px; }
+    .hook-text { font-size: 20px; }
+    .tldr-claim { font-size: 19px; }
+  }
+</style>
+</head>
+<body data-page-node-id="K3N05lEvm61PoHmrY9nQ7e">
+<div class="container" data-page-node-id="rcHZ4PY9ylNKcxM9RY76Gc">
+
+  <!-- HERO -->
+  <div class="hero" data-page-node-id="OrJ0wTbfLpeyGLdVP4InpE">
+    <div class="badge" data-page-node-id="RY5PAAjOtLecHBfpYtMpoh">DSH 二期 · 资产线规划草案</div>
+    <h1 data-page-node-id="whEBb2pb8PCu11CfSIgO6V">资产供给</h1>
+    <div class="sub" data-page-node-id="ov8jko2HaxhIxScS7zBDtS">不是做"记忆"，是让浏览器攒下的东西变成 AI 用得上的上下文</div>
+    <div class="meta" data-page-node-id="nbY2UC7LeTzckHwmSc1XIL">游杰 · 2026.09.03 · 供二期整体规划会 · 主线梳理 / 分工明确 / 待办与优先级 / 事项展开</div>
+  </div>
+
+  <!-- TLDR -->
+  <div class="glass-card gold" data-page-node-id="plY0Scle3bHwFAJiVGyyCV">
+    <div class="tldr-label" data-page-node-id="LHkibFirtcjRB1bQKhZjw3">TL;DR · 一页看懂</div>
+    <div class="tldr-claim" data-page-node-id="sMM0GEd1yzaVwXEXN5YRTC">
+      一期已把浏览器的<em data-page-node-id="h6W8dHNZD91lnxgxtH8BIg">存量资产</em>交给 DSH（读得到、调得动）；二期资产线只做两件事——<br data-page-node-id="iqyL82b5yOO7Qu2cb3eVvr">
+      上游<em data-page-node-id="N0kvFvvKsUA91EpP7YgEtY">补新资产</em>（灵感捕获 + 本地知识库），下游<em data-page-node-id="hYn7S31POrPsXg3RmiG6ir">开供给通道</em>（引用输入 + 主动想起）。
+    </div>
+    <div class="tldr-body" data-page-node-id="baAMEgc6LkkeSfCLzRB0Ar">
+      整理、归纳、聚类这类加工能力，DSH 用 JSAPI 一句话就能完成，<strong data-page-node-id="8exqLJBJCENHF9mYRAIQXb">不单独建设</strong>。
+      本地知识库是核心：内容<strong data-page-node-id="GjAHKsndd5nKXjAI9Ja0U5">不因页面消失而丢</strong>、处理<strong data-page-node-id="tZsdO9X0jvuhPCYs17cExm">快</strong>、<strong data-page-node-id="dDoc7TjpJcwN7r4oulTMIs">隐私不出设备</strong>，
+      且重加工全在端侧、<span class="hl" data-page-node-id="5G87rGW0yc6TxaFjRFF9i9">不烧云端 TPM</span>——在 DS 额度只到账 7M 的现实下，这是二期少数能直接落地的路径。
+    </div>
+    <div class="perspectives" data-page-node-id="6UxPmwSpv4dMw8FNTD4lVe">
+      <div class="persp" data-page-node-id="snTbdo7FA6Scek9XehoDkD">
+        <div class="who" data-page-node-id="Jyz4XqcT77O9mus0qmbKEi">对汉博 9/2 诉求</div>
+        <div class="what" data-page-node-id="no5uJsW2ZyK2bdJCBLrtru">"一键存本地" → 本地知识库（P0）；"每天投喂" → 主动想起（P1）；"整理" → DSH 一句话，不单建</div>
+      </div>
+      <div class="persp" data-page-node-id="hIj1nEhFlQTDTCgAtIz0Ci">
+        <div class="who" data-page-node-id="tuF8XZrPyVJYHfClC7ci6f">对资源现实</div>
+        <div class="what" data-page-node-id="16zecLjjz6qLJLrpCWTi2H">TPM 7M 到账 vs 测试峰值 1.19M——凡烧云端模型的功能都要掂量，本地资产路径天然不烧</div>
+      </div>
+      <div class="persp" data-page-node-id="y4FRdIDhZLnkgmMWzVDJr2">
+        <div class="who" data-page-node-id="WuAa3MGjjmA564DZIQBvVq">对分工边界</div>
+        <div class="what" data-page-node-id="GzXsu2ONv6CSSezeyDwEwU">不碰 DSH 引擎与版本迭代（光云），专注"浏览器资产 × DSH"的供给侧</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOC -->
+  <div class="toc" data-page-node-id="SesRdFK3gIqCDbCED4phQR">
+    <div class="toc-title" data-page-node-id="M5h9eMM3lVh1KLCLy0IKMp">导航</div>
+    <ul class="toc-list" data-page-node-id="i73b76kBAOJTOmTGfxb6TY">
+      <li data-page-node-id="MtP4PhHWlJLKMLQ57bOXBn"><a href="#s1" data-page-node-id="BFKPhxIYPsiftZWMe8Qgy9"><span class="n" data-page-node-id="UCoTB6NXGnLYGRChGQOGkt">1</span>整体主线 · 重新梳理</a></li>
+      <li data-page-node-id="SFPKTtEZkNpKlKPWrKFBoB"><a href="#s2" data-page-node-id="xUo45JIBjuKnFrsO5r8iqg"><span class="n" data-page-node-id="qmVvtzzN5CteIUJG1skVtj">2</span>分工 · 明确成一段话</a></li>
+      <li data-page-node-id="WqjSnbr4A2HaIl3wPmX3HJ"><a href="#s3" data-page-node-id="KiIPtRl575ozz738aBOHS0"><span class="n" data-page-node-id="OLNc9uWEY9y5CxblboNCqj">3</span>待办 Todo · 优先级</a></li>
+      <li data-page-node-id="NGvdgcSo7yJxrpsxBoudSU"><a href="#s4" data-page-node-id="JIqeOwCsXBNmJ5nHwkZqht"><span class="n" data-page-node-id="dItNyBVxd2l1KYDACu1HeD">4</span>事项展开 · 痛点/解法/收益/风险</a></li>
+      <li data-page-node-id="89nEi0vXdPbu5AAJZLOSYS"><a href="#hook" data-page-node-id="K4yTHKZNrKdP0R6xuRPAZv"><span class="n" data-page-node-id="tjboHtfh5lJT9YdygRWFgk">★</span>一句话钩子</a></li>
+    </ul>
+  </div>
+
+  <!-- ================= 1 主线 ================= -->
+  <div class="glass-card" id="s1" data-page-node-id="KUoErwoLMCHgTu1lMemvpe">
+    <div class="section-header" data-page-node-id="gCtWBpfCGgZlH5nOF7curV">
+      <div class="section-num" data-page-node-id="YNSaruJLv6dLNLqi9H4RyY">1</div>
+      <div data-page-node-id="MTnugmmCMTeGGyuSzBZ9Gg">
+        <div class="section-title" data-page-node-id="QhYfSOplnERAouNSDrcKNN">整体主线 · 重新梳理</div>
+        <div class="section-sub" data-page-node-id="mJxJdmV0s3hBpW5HHGtXkN">一期做了什么 → 二期资产线的位置 → 为什么只做这两件事</div>
+      </div>
+    </div>
+
+    <h3 data-page-node-id="eSISVBgYJc5Eb2SerrmexE">从一期结论出发</h3>
+    <p data-page-node-id="0yJLn5Xq6UnOe33baeUfse">一期把浏览器核心能力封装成 DSH 插件：JSAPI 打通了<strong data-page-node-id="gErcaJw0B6kJKC9pxTm3Ko">历史 / 收藏 / 标签 / 外观</strong>四类读写，加上网页操作与在线文档 MCP，测评 56 题成功率 <span class="hl" data-page-node-id="ZECAAvqrnQVkZvDQOigum5">53.6% → 78.6%</span>。</p>
+    <p style="margin-top:6px;" data-page-node-id="4ObxiRtg0rkZDNbPAMpNG7">一句话总结一期：<strong data-page-node-id="FnCFc8TYgQR6EeJfJyLLM1">浏览器的存量资产（历史/书签/收藏/标签页）已经被 DSH 接住了，"读"与"加工"都通了。</strong></p>
+
+    <h3 data-page-node-id="FmE444fJQI0gKA0Hkf8zbl">二期资产线 = 一条三段水管</h3>
+    <div class="flow3" data-page-node-id="TiYl4qH6tZGnzGjw4TRjbB">
+      <div class="flow-node up" data-page-node-id="klREEidovlYEoTVhMDhMsc">
+        <div class="stage" data-page-node-id="SsnM5fv1ctHvvCIG0tWsaP">上游 · 攒</div>
+        <div class="name" data-page-node-id="bSOWT3GbRetUJE296AMYXZ">补新资产</div>
+        <ul data-page-node-id="FdHZkbkKZhnBKQlh0QPXEb">
+          <li data-page-node-id="uzqRNsH8G1hQ5RknCEJXPj"><strong data-page-node-id="tm5j9CASo4svFZQvISFas4">灵感捕获</strong>：图片/文字/选区/想法一键入本地</li>
+          <li data-page-node-id="FE3rbAFaxWAgjxQbDzgyVP"><strong data-page-node-id="C1Ato9QRNy1K0vq9bZFWJ7">本地知识库</strong>：用户标记过的内容统一沉淀本地</li>
+        </ul>
+        <div class="flow-cap" data-page-node-id="9wu4b9QsuXi2TD9z17eZlQ">浏览器原生能攒 · 别处攒不了</div>
+      </div>
+      <div class="flow-node mid" data-page-node-id="Yau8Mm5bYtyp4V18ytNdQD">
+        <div class="stage" data-page-node-id="V806qxwwNIQlC2A7F6TCCm">中游 · 不重复</div>
+        <div class="name" data-page-node-id="d0hKI894rHRJrzOjHFYX1f">加工交给 DSH</div>
+        <ul data-page-node-id="I4XVDxl205MK96EA3ZlOE6">
+          <li data-page-node-id="CA6jmSuE2TxWnQLJ6asBwv">书签/收藏<strong data-page-node-id="BTJ54DD8OJe6iQb79QH5GO">智能整理</strong></li>
+          <li data-page-node-id="L4FRSphqxaDfKspySbSvzx">归纳 / 聚类 / 打标</li>
+          <li data-page-node-id="fxtxL2OCssjsLmr3f2yCkj">一句话完成，不单独建产线</li>
+        </ul>
+        <div class="flow-cap" data-page-node-id="bU0jKPOKUFHuxNOK8e2Eau">JSAPI 已接 · 不再造轮子</div>
+      </div>
+      <div class="flow-node down" data-page-node-id="LBYAtkrZma5UEiQrGuOZsE">
+        <div class="stage" data-page-node-id="VAlJ9qc8Z5nU5YEu7D7Vk4">下游 · 供</div>
+        <div class="name" data-page-node-id="YYO4JRrPecoQHVQKSSPFQh">开供给通道</div>
+        <ul data-page-node-id="Z8qzCGRRZyd9ogjkkoAnWU">
+          <li data-page-node-id="sUJVEHxXd4JoPrO386e4TM"><strong data-page-node-id="8qHZ5AJhDxLzmEHja5fFKF">引用输入</strong>：对话 @收藏/@历史/@文件/@本地库</li>
+          <li data-page-node-id="r9goCsOwb0iX39am7Wk45F"><strong data-page-node-id="g1OR4980Vu5V3amTgbD4Dh">主动想起</strong>：基于当日积累的轻量投喂</li>
+        </ul>
+        <div class="flow-cap" data-page-node-id="3ocgGgzUOnsEpCI3DOf4cf">资产从存储 → 可调用上下文</div>
+      </div>
+    </div>
+
+    <div class="core-mind" data-page-node-id="joDIX8L6DeLiesjl7NsetA">
+      💡 主线一句话：一期补"读"，二期补"攒"和"供"——<strong data-page-node-id="3dCjMXDNd4Xujlgcy9cNIG">让浏览器攒下的东西，变成 DSH 随手能用、主动想起的上下文</strong>。整理这类中游加工，DSH 能干就不再建。
+    </div>
+
+    <h3 data-page-node-id="hfvWqICrbArzZoDpPZ4T31">为什么本地知识库是核心（三大优势）</h3>
+    <div class="advantage-grid" data-page-node-id="z9VgOr6lVop2WWyYRPKsGJ">
+      <div class="adv" data-page-node-id="khKMxVtDKPGJ9Zt4ZzztrV">
+        <div class="anum" data-page-node-id="VDHcISPVGcXDzykfleOUst">①</div>
+        <div class="atitle" data-page-node-id="C6e8ZBBB3WKkVVWFz3PQBs">内容不丢</div>
+        <div class="adesc" data-page-node-id="e3Mty4SoxB81zebid2B4Fs">网页会改、会删、会失效。云收藏救不了内容消失——<b data-page-node-id="nc7W5DqufMSQg8IC2lDkl8">想留住的东西，只有自己存了才留得住</b>。（成人影片存本地的道理：放云端随时没了）</div>
+      </div>
+      <div class="adv" data-page-node-id="V37Dr5X6zFvaJuOxzFWYpM">
+        <div class="anum" data-page-node-id="9a2MELSzmKlbgsppRZ1oXC">②</div>
+        <div class="atitle" data-page-node-id="aDhviUwOAsmQtJpcmIeDyY">处理快</div>
+        <div class="adesc" data-page-node-id="Sx3aPx1yUZjMD63bcGnJGv">本地抽取/加工不走网络、不排队。云端要上传+等响应，本地是即时。</div>
+      </div>
+      <div class="adv" data-page-node-id="JmEXm1Bc6rJpVyoqneUCVE">
+        <div class="anum" data-page-node-id="BGS0UWQGWLYjaKlhbIV26A">③</div>
+        <div class="atitle" data-page-node-id="93JoByvQWPnIhzcO6DESNT">隐私安全</div>
+        <div class="adesc" data-page-node-id="YEcRcs8gbOO3TiA0MuqPgg">真正在意的东西不出设备。用户才敢把"重要但敏感"的内容交给 AI 处理——这是云方案给不了的信任。</div>
+      </div>
+    </div>
+
+    <h3 data-page-node-id="oK48kqxcdj2A3o1kenlqsQ">三个对账：这是不是老板要的</h3>
+    <ul class="quote-list" data-page-node-id="et599ZO0NAYZ50xBqAgBLZ">
+      <li data-page-node-id="gg6RFfP5ZIHul1DWmTEzDt"><strong data-page-node-id="NHUEjw8ix16Xt6DtKl0CI4">对汉博</strong>（"一键存本地 / 每天投喂 / 网页会丢 / 本地快"）：资产线 P0/P1 全部承接他 9/2 自己提的诉求，不是我们自嗨。</li>
+      <li data-page-node-id="6YgurG8pdptT76xZfR8Tw0"><strong data-page-node-id="C5Ik3xMpc3j7TerpimxmFZ">对颖姐</strong>（能力补齐 / 用户路径 / 体验封装）：灵感捕获+本地库是"能力补齐"，引用输入是"用户路径"，都是她划过的类。</li>
+      <li data-page-node-id="SIj8Y4PL0aadtnq7WdacL0"><strong data-page-node-id="2CaBi1HKXPc7i1UbxzpyJw">对初心</strong>（数字世界 · 资产沉淀到场景化调用）：内核没变，只是把"整理"这一环外包给 DSH，收敛得更锋利。</li>
+    </ul>
+  </div>
+
+  <!-- ================= 2 分工 ================= -->
+  <div class="glass-card" id="s2" data-page-node-id="tzejPjhhGVyvXikVdLJS4c">
+    <div class="section-header" data-page-node-id="R1HC1ooyWZoiJFqdzgSnG6">
+      <div class="section-num" data-page-node-id="5lEapM0pgNYsEyGEhSyHgQ">2</div>
+      <div data-page-node-id="GlwvcN2m14Ypt11P8r4CsI">
+        <div class="section-title" data-page-node-id="OdNPs188sVqmMuAS3xmZBA">分工 · 明确成一段话</div>
+        <div class="section-sub" data-page-node-id="RMwk3qSwYygdtBHRAWhLTL">游杰负责什么 · 明确不做什么（对颖姐划线口径）</div>
+      </div>
+    </div>
+
+    <p data-page-node-id="ThR2BQx6nobC9B6YTQ6bIn"><strong data-page-node-id="6UtHkDn2CoI4aDxPCV6Vdp">一句话分工口径：</strong></p>
+    <div class="duty-quote" data-page-node-id="RV4j13wgm3UMuUOHFkiTdp">
+      <b data-page-node-id="gEnZxLgLiltArIIA72nJ5c">游杰整体负责「浏览器内各类资产与 DSH 的深度融合」</b>——把用户在浏览器里攒下的东西，变成 DSH 随时可引用、可想起的供给源。具体三条线：
+      ① <span class="dq-key" data-page-node-id="L3mBb0CHnjL9yJuCIUqPt6">上游补资产</span>：灵感捕获（图片/文字/想法一键入本地）+ 本地知识库（用户标记内容统一沉淀本地，不丢/快/私，不烧云端 TPM）；
+      ② <span class="dq-key" data-page-node-id="pGFlDkaU3xal7JgNh0oW76">下游开通道</span>：在 DSH 与端内 AI 对话里做引用输入（@收藏 / @历史 / @标签页 / @文件 / @本地库），让资产成为 AI 可调用的上下文，并做"基于积累的主动想起"轻量机制；
+      ③ <span class="dq-key" data-page-node-id="pV4Kg8HvcWV2vUKEGrSDUk">中游不重复</span>：书签/收藏的智能整理、归纳、打标由 DSH 基于 JSAPI 一句话完成，资产侧只保障数据可读、结构可用。
+      <br data-page-node-id="xUsbHfjJAwSEguILehjKXE"><br data-page-node-id="kUQnWled9gz53prTUJhFNV">不做宽泛的"记忆架构"设计，只交付三个可验证结果：<b data-page-node-id="lYsXy8yjHjljKxHo7Rlhks">资产能攒、DSH 能用、用户有感</b>。
+    </div>
+
+    <h3 data-page-node-id="HuufFOroc0fv7h2XPDCppV">拆开看：做什么 vs 不做什么</h3>
+    <div class="do-dont" data-page-node-id="9tkcQhNaFyelsShqdsFOQC">
+      <div class="dd-card do" data-page-node-id="lF8X0zQ0ENgeW3v0KJ1h9N">
+        <div class="dhead" data-page-node-id="oG8QRLBaJwC7x0iRcL7h0N">我负责</div>
+        <ul data-page-node-id="k2p1Ackb9ZtbQJVVXjgUCR">
+          <li data-page-node-id="8QwSYH8GfEjgvk0sc29odD">浏览器内新增资产类型的设计与落地（灵感捕获 / 本地知识库）</li>
+          <li data-page-node-id="UBEi6EoQcg49RqNhcEDvKS">资产 → AI 的引用输入与供给机制（@ 资产 / 主动想起）</li>
+          <li data-page-node-id="cMnMbFX7nySgrJXZbCC8Vx">资产侧数据可读性、结构可用性（供 DSH 消费）</li>
+          <li data-page-node-id="h6VvdwgVFHKgVqcAfs2DEt">与洋哥纯本地资产管线（paw 那套）的产品化衔接</li>
+        </ul>
+      </div>
+      <div class="dd-card dont" data-page-node-id="p3n007qdmMdt50HtkUT24p">
+        <div class="dhead" data-page-node-id="BwAwmNsjqUYCzOmtdviS9I">不碰 / 不重复</div>
+        <ul data-page-node-id="bik7bO9yISO6agJxEaY5kJ">
+          <li data-page-node-id="b3VKE5isr0dVbDVF8ovi7Z">DSH 引擎、版本迭代、插件市场、定时任务（光云）</li>
+          <li data-page-node-id="QgYQaasqJGI6e5P34yzukj">书签/收藏"智能整理"单独建产品——DSH 一句话即可</li>
+          <li data-page-node-id="6wpg5xXRBUvxdCxjzggOvC">云端记忆大系统 / 跨产品记忆中枢（依赖元宝的方向）</li>
+          <li data-page-node-id="AkvUsyLsb4BAgkBbsPR55a">"记忆架构"这类宽泛词汇——只用"资产供给 / 引用输入 / 资产深度"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="pending ok" data-page-node-id="zncGmhqg3gA46gbxI3FS0B">
+      <strong data-page-node-id="NEehwWz4J0evLPQ8HfYsuu">✅ 对颖姐的沟通要点：</strong>分工原文里"主动思考 DSH 记忆架构合理方案"——建议在会上一句话澄清为"资产与 DSH 的主动供给机制"，既认领了深度思考的期待，又不被"记忆架构"带进宏大叙事。
+    </div>
+  </div>
+
+  <!-- ================= 3 Todo ================= -->
+  <div class="glass-card" id="s3" data-page-node-id="qgzALsNigiV2jYLv2MN7Am">
+    <div class="section-header" data-page-node-id="xSkvmq4HH4Pyiym40ybQfo">
+      <div class="section-num" data-page-node-id="NCKVHmUPi7CHMNug3U8MWI">3</div>
+      <div data-page-node-id="92lwMGVqGphqWASSZwtWBJ">
+        <div class="section-title" data-page-node-id="4A7YboJjRV55s2WgLh3SiI">待办 Todo · 优先级</div>
+        <div class="section-sub" data-page-node-id="BAGsKu1XnWJFtNTAWMws88">9-12 月窗口 · P0 先把供给通道跑通，P1 让资产会想起，P2 边界与后置</div>
+      </div>
+    </div>
+
+    <!-- P0 -->
+    <div class="lane p0" data-page-node-id="yIAmaKGsAlPs44S48712gv">
+      <div class="lhead" data-page-node-id="rnmKmTjteEy9Uxb6SSBDvr">
+        <span class="lp" data-page-node-id="PpCxCpoMsiG7GY6zGhjXsy">P0</span>
+        <span class="lt" data-page-node-id="xEt0Ze5q3WQqlRpGUBGH9G">让"资产 → AI"供给通道先跑通</span>
+        <span class="lsub" data-page-node-id="Gvq1H2uSO6ufsU5wWAdupa">9 月启动 · 二期立项必做</span>
+      </div>
+      <table class="todo" data-page-node-id="rDmxxC1Tw3mm87pdEQod9g">
+        <thead data-page-node-id="MOLLO4DrXJUixdIFjlm0BI">
+          <tr data-page-node-id="GUhWhyOIbJVV0uyNWBsJyg"><th style="width:34px;" data-page-node-id="wphLkO53QbQb073Im4f6bo">#</th><th data-page-node-id="iLeZk3BIiHjqpb2q41ySvk">事项</th><th data-page-node-id="Y010A4RHaLeRcDljlE3EZ2">目标（一个可验证结果）</th><th style="width:88px;" data-page-node-id="ZTggk3VtiOVOxahKRAVcxr">依赖</th></tr>
+        </thead>
+        <tbody data-page-node-id="s68uqu2U4GFXc4bXzSJ5k2">
+          <tr data-page-node-id="X8vh5vW50DAX26kUy3hA4I">
+            <td class="tn" data-page-node-id="HAaU2EG1BI4vNeZFsJpFFw">1</td>
+            <td class="tw" data-page-node-id="M9EW2EzAmXZ9l6cF60nyzz"><strong data-page-node-id="GUE4yb9txANTwEt3sCPMEH">本地知识库 MVP 进 DSH</strong><br data-page-node-id="hmSW8Wmyya22fGRwi34EQE"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="EF1JBuEbxdQgR5hZEFel0p">Remora / 洋哥本地资产管线产品化</span></td>
+            <td class="tw" data-page-node-id="vEUVJS1YGjQuxBF4GtvfIy">用户标记+捕获内容统一落本地库，DSH 可检索、可引用</td>
+            <td class="tm" data-page-node-id="l61Rc2Euokeja8uNK2a37X">洋哥管线交接</td>
+          </tr>
+          <tr data-page-node-id="BjfFfaFHGvYsMEADIMqkbb">
+            <td class="tn" data-page-node-id="XsM2aLxY5iWMxcbAlWbJ9D">2</td>
+            <td class="tw" data-page-node-id="3f8UFuVoUnNbBFqsLeRkuJ"><strong data-page-node-id="UcDiaNQiUQX36Hoo2N2FD8">引用输入 @资产</strong><br data-page-node-id="oIg36ulPlp6hiQIYgaY2BM"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="UnQxImDfdiU0BhkJme9DFn">对话里 @收藏/@历史/@文件/@本地库</span></td>
+            <td class="tw" data-page-node-id="ilTJKigC8PdHAFDG56EvBq">端内 AI 与 DSH 对话中 @ 唤起资产选择，选中即注入上下文</td>
+            <td class="tm" data-page-node-id="PdTjhiWj3xg2C6DiM0f2Vu">JSAPI 已就绪</td>
+          </tr>
+          <tr data-page-node-id="lHnXkwcUyh0FX9TG6D9QmK">
+            <td class="tn" data-page-node-id="YQU6CxgO8SRKaJAwvckLwP">3</td>
+            <td class="tw" data-page-node-id="2RkZ3IjPLxem1MopH1FlXX"><strong data-page-node-id="o4gvyOfXjcJhttpl7ijUXS">灵感捕获 MVP</strong><br data-page-node-id="dnHwF4EEbme9eh4fT5G7Ks"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="UlOlgTczL7Ui3i0sPI9HDg">图片 / 文字 / 划词一键入本地库</span></td>
+            <td class="tw" data-page-node-id="Cyz8hSrptbH5OOmO6OEBuW">浏览中任意碎片 ≤1 步进本地库，带来源页与时间</td>
+            <td class="tm" data-page-node-id="kAHKiLhUGVrjTv21WzjhGa">与元素片段收藏边界对齐</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- P1 -->
+    <div class="lane p1" data-page-node-id="NQ7WiROpWEcXQe2qDt8E2W">
+      <div class="lhead" data-page-node-id="NxAHjN3wYpZXQrmZKh6pBQ">
+        <span class="lp" data-page-node-id="t6QfAOCO8OLxqmV078U4X9">P1</span>
+        <span class="lt" data-page-node-id="USFkR6B1tEAk6HIuHEvfPR">让资产"会想起"</span>
+        <span class="lsub" data-page-node-id="HG0ByScRsrVx5wgsEXY8zx">10-11 月 · 依赖 P0 先有量</span>
+      </div>
+      <table class="todo" data-page-node-id="Zf9gILGDBLGBHaCphHDheA">
+        <thead data-page-node-id="NxosC2ufWdlmi08tpb8IDi">
+          <tr data-page-node-id="gBetdDzhmPGhWOQtlAiRrj"><th style="width:34px;" data-page-node-id="XhlaEGhBtn2yDZ28pT9AKc">#</th><th data-page-node-id="ollWl1yYzHatXuEiuNsMyC">事项</th><th data-page-node-id="ASx9JEHgyPGKzQaaPD3WJR">目标（一个可验证结果）</th><th style="width:88px;" data-page-node-id="UW066aH4aSdIhrj2bRu9Jg">依赖</th></tr>
+        </thead>
+        <tbody data-page-node-id="aaWyQkTyr31EEKparc9OZT">
+          <tr data-page-node-id="j0JwFZZgjmXTsGVDIPSKa7">
+            <td class="tn" data-page-node-id="FXr4O6tH697xiwDX3R4jzg">4</td>
+            <td class="tw" data-page-node-id="NF8qKvZcY3Mz4HZvbYegB0"><strong data-page-node-id="uKf6fUzZsx8VZFooOrHcxP">主动想起 · 每日轻投喂</strong><br data-page-node-id="Z74pF9HMo9JDEh8KITikSy"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="mau5YhIrrIykgkLagRQvkP">基于当日积累的摘要注入</span></td>
+            <td class="tw" data-page-node-id="JFDH6fLMQlfgPe9BUe3VWn">DSH 会话开场注入"今日新攒"摘要（≤3 条、可关、不打断）</td>
+            <td class="tm" data-page-node-id="79mqGrEMjr52geOfVlAIln">#1 #3 先有量</td>
+          </tr>
+          <tr data-page-node-id="iJFPwk0WkKWIXZjIXJFke0">
+            <td class="tn" data-page-node-id="18zRMlsF3cpaatCyB0S6Cc">5</td>
+            <td class="tw" data-page-node-id="86VwNDsBpLV7ihvCVm8EYZ"><strong data-page-node-id="XX45autUF0ohqq6n1LqQKO">收藏/书签整理收口 DSH</strong><br data-page-node-id="VQVWSz1PuuLdj75fLK33Ed"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="lZLPU2LcwEWPQSwGgtuZKw">一期 case 沉淀为 DSH 内置技能</span></td>
+            <td class="tw" data-page-node-id="zdg2DjD8hBysRpwDG1hAoC">"帮我整理收藏夹"一句话完成分组/打标/去重，结果可预览可回滚</td>
+            <td class="tm" data-page-node-id="WO18UmAjq3XmFx9DbpIKDz">一期 case 基础</td>
+          </tr>
+          <tr data-page-node-id="Ak9X3PZLMJbbJ2C8eeyOA7">
+            <td class="tn" data-page-node-id="h6NMKyONOjnSepxSRD9UcI">6</td>
+            <td class="tw" data-page-node-id="9GmtoUZjLXZe6FRtuuwOO6"><strong data-page-node-id="6X4uu5FoPzhr34fZgzoUmd">本地库检索增强</strong><br data-page-node-id="uwUO80R5rAEW0UAsPkVLIE"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="8GiiL7LSkdBPkdEXlyVxAF">语义检索 + 引用结果展示形态</span></td>
+            <td class="tw" data-page-node-id="Hs214qPaHXRwTAhJdn0PGn">@ 引用支持语义匹配，结果带原文跳转与来源</td>
+            <td class="tm" data-page-node-id="2gegGIAAhLlocK8aXvcATC">#2 数据回流</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- P2 -->
+    <div class="lane p2" data-page-node-id="5LVEEAlOhhk1Bgr4j9Fhm6">
+      <div class="lhead" data-page-node-id="QKxACmXRV0EjSPCbEDlfBB">
+        <span class="lp" data-page-node-id="XuekhN3uyp2iGhyseHOf5I">P2</span>
+        <span class="lt" data-page-node-id="Oqv6xzpKFrBRVeGY2Q04sU">边界与后置</span>
+        <span class="lsub" data-page-node-id="89FPStdY670UKBytHbib1h">11-12 月 · 看验证结果再定</span>
+      </div>
+      <table class="todo" data-page-node-id="6HqBhMqpkYii1GCGAIA1lC">
+        <thead data-page-node-id="EmUKygiggwVGkekZrgEUxK">
+          <tr data-page-node-id="zS29EZVgyPCumvs2Q86ZdU"><th style="width:34px;" data-page-node-id="usekIOyWeRmiv0TSfbax8X">#</th><th data-page-node-id="hUuHyhDVpBHLXSb9zK2gU4">事项</th><th data-page-node-id="WvtB7lZEER5gF76PA9Ixao">为什么后置 / 观察点</th><th style="width:88px;" data-page-node-id="GHC1CdfzfnFxQGIZmUnaYd">依赖</th></tr>
+        </thead>
+        <tbody data-page-node-id="mpmetEy8O5QHz0x3zOUIIc">
+          <tr data-page-node-id="J0MI4hYLLH7AVdwvXCOXr5">
+            <td class="tn" data-page-node-id="Lw6IqOsWZ9yvBH4ekXnAVr">7</td>
+            <td class="tw" data-page-node-id="AsBrxBhoxLLRfZHGo6m4YD"><strong data-page-node-id="Fj6cHebQQiSC5mdcBmJ7il">跨设备策略</strong><br data-page-node-id="mX07SofpUjUDAU7Fyr71pl"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="ffA6scG2GCj90IEPbv3ewQ">本地库多端可用性</span></td>
+            <td class="tw" data-page-node-id="MdCbBodnzTi925BOBJxceJ">"本地"承诺不能被同步打脸——等账号互通结论再设计可控同步</td>
+            <td class="tm" data-page-node-id="9vk4d6qAk6rnUW3dtVXLZt">账号/OneID 结论</td>
+          </tr>
+          <tr data-page-node-id="d4YVvQcw2ECAEhmX6diJGp">
+            <td class="tn" data-page-node-id="kK3g8c1zRoU9MD0IvW5AIt">8</td>
+            <td class="tw" data-page-node-id="0duHr37kQFkAA4xufFRMyT"><strong data-page-node-id="CwYHu7MeWyiv8zbHRG7SfN">内容安全校验策略</strong><br data-page-node-id="Fv9LDlQh2PrvXt7HFHdBhC"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="YIpIl2Ip62TjaHbqFW4GII">引用输出的合规兜底</span></td>
+            <td class="tw" data-page-node-id="Bt9rq4Eq23w8b8dMkJ6GL2">一期"打击太大未开"——引用本地内容出去前的安全策略要先定</td>
+            <td class="tm" data-page-node-id="d8FtYvGvi0smxBHKsDxndZ">安全侧评估</td>
+          </tr>
+          <tr data-page-node-id="hfDAR33HdLcwt6xJxPO4rB">
+            <td class="tn" data-page-node-id="EyHLIJg92a1o0ubOEKUKCj">9</td>
+            <td class="tw" data-page-node-id="BuINalGQ89A7lfh0l8DbUH"><strong data-page-node-id="dG46iMVPg8S3CyP0rqP8ed">意图事件抽取与主动推荐</strong><br data-page-node-id="PsUGK2qU1EU7cUiBeavMc7"><span style="font-size:12px;color:rgba(80,90,120,0.75);" data-page-node-id="4vym0SHoXTaCXWwX5ZDcEz">从积累推断下一步</span></td>
+            <td class="tw" data-page-node-id="CyDVeiBvkqhRN7C2cMTTVC">依赖激活层立项与 #4 数据积累，先不承诺</td>
+            <td class="tm" data-page-node-id="reiI6sh9XmK4jPjzq1fPvB">激活层立项</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pending" data-page-node-id="h8yxWG5JsT9lRjt74Faps9">
+      <strong data-page-node-id="3WCG0pHp4GSzWJa48l9TnE">⚠️ 二期临时表现状：</strong>"资产深度 + 记忆"相关条目除 QB 文件/产物外基本是空的 → 今天会上主动把这 9 项填进二期拆解表，否则二期资产线无产品可交付。
+    </div>
+  </div>
+
+  <!-- ================= 4 展开 ================= -->
+  <div class="glass-card" id="s4" data-page-node-id="GHpA7AZ6BEY8bLWgHiJpI4">
+    <div class="section-header" data-page-node-id="SFy4tDAwikM6DXo8orHgyn">
+      <div class="section-num" data-page-node-id="H8OupJ9DsguuGzCiE1FHNl">4</div>
+      <div data-page-node-id="xM4IDVlBgEmAb3xF18itBa">
+        <div class="section-title" data-page-node-id="MSR5kQ0gvVrpfEyar48NHf">事项展开 · 痛点 / 解法 / 收益 / 风险</div>
+        <div class="section-sub" data-page-node-id="CCxQd0ZCV4CQfw8hhB0waT">对 P0/P1 六个事项逐项展开，讲清为什么做、怎么做、做成什么样、怕什么</div>
+      </div>
+    </div>
+
+    <!-- A -->
+    <div class="case-block" data-page-node-id="ZZQiyhiPwjD4KcEfyaxbvk">
+      <div class="case-head" data-page-node-id="xaMm0owwIpfkU3PvWm14uH">
+        <span class="cno" data-page-node-id="hf9ONmGCsW4iIJr5VhNg2k">1</span>
+        <span class="ctitle" data-page-node-id="GoAsQtCyX3L5vz9LNeH7mz">本地知识库 MVP 进 DSH</span>
+        <span class="cpri p0p" data-page-node-id="9oh6TF9uwUhDTd1kvvQqBy">P0 · 旗舰</span>
+      </div>
+      <div class="quad" data-page-node-id="k4YkrGDSglwhTmVapXK1pF">
+        <div class="q pain" data-page-node-id="Q6uGVPmtMeDQDFVlimVEd9"><div class="qh" data-page-node-id="xxwrQKkMZLG1OpwSTF7ZlG">😖 痛点</div><p data-page-node-id="kidfyzf7oV9imwFvZvkfPo">云方案三条腿都短：页面会变会死，云收藏救不了内容消失；云端处理慢；<b data-page-node-id="PiL0ksRMZM2HRbqE3nrwbn">用户不敢把真正在意的东西交给云端 AI</b>。且重记忆/重加工全烧云端 TPM——<b data-page-node-id="67isijLlLCEeWwtMGBYZcb">7M 到账 vs 峰值 1.19M</b>，云端重活这条路资源上就走不通。</p></div>
+        <div class="q sol" data-page-node-id="vCKELnJVMqucChiEhi4yS3"><div class="qh" data-page-node-id="ogNKii0ZaIUzoSltr8sigy">🔧 解法</div><p data-page-node-id="3ioTHJZfUGygJ7ZrbT6xfG">把洋哥 paw 那套<b data-page-node-id="wxF5Yd1iMCFcLN5PXPgRDR">纯本地抓取/加工管线</b>产品化（Remora）：用户标记+捕获内容统一落本地库，本地做结构化/摘要/索引；DSH 需要时才按需引用，敏感内容不出设备。</p></div>
+        <div class="q gain" data-page-node-id="WwhGcm7eDAhzLp8YViF8Mk"><div class="qh" data-page-node-id="mAmzrDYFdKwDCysG3jC5uF">📈 预期收益</div><p data-page-node-id="xCky5rkhaHpuF73jvkdssg">不丢/快/隐私三优势一次兑现；<b data-page-node-id="b0YrK4lP3qoW04dXVVBOGb">不烧云端 TPM = 资源侧最硬的论点</b>，是二期立项的筹码；浏览器"独占且别人拿不走"的数据护城河，也是元宝数据合作的地基。</p></div>
+        <div class="q risk" data-page-node-id="rYnmwcsNDAsRulmpO19Lkt"><div class="qh" data-page-node-id="6VWuHsjCG0IQgZ3yINDaKP">⚠️ 风险</div><p data-page-node-id="IR5RLt45B7a4o5AyJYWqbL">本地存储可靠性（损坏/误删/换机）；"本地"与用户"手机也想看"的预期冲突（靠 P2-7 可控同步兜）；本地摘要质量依赖端侧小模型能力——<b data-page-node-id="UpVAmZbwQj0z4CsDDkGZju">先验证摘要够不够用再承诺</b>。</p></div>
+      </div>
+    </div>
+
+    <!-- B -->
+    <div class="case-block" data-page-node-id="JLAc2mPhX03FyTbY1xG9eH">
+      <div class="case-head" data-page-node-id="REhj9tZjrvpMWl8CPYdYAd">
+        <span class="cno" data-page-node-id="DTbzqUdMtIk3tfHvJek2G4">2</span>
+        <span class="ctitle" data-page-node-id="SwrRzBZre00Ny7QcKIMDE4">引用输入 @资产</span>
+        <span class="cpri p0p" data-page-node-id="D6EQxC7hpI2sh4unCWJ8Xj">P0 · 成本最低收益最快</span>
+      </div>
+      <div class="quad" data-page-node-id="n3FpX3837Ez2S4IOyMwP3a">
+        <div class="q pain" data-page-node-id="xiZ6Olqwr76SVEvVdaJINk"><div class="qh" data-page-node-id="4zl88s0lVHYTL9etSBh0Ee">😖 痛点</div><p data-page-node-id="1DEaIU6sX5Clr6BpY5PeCe">DSH 能读资产，但用户在对话里<b data-page-node-id="JAEfzqI6sswy9Vx2JncEcI">没有入口</b>——想让 AI 看"我收藏的那篇"，只能手动复制粘贴。资产仍是"沉默存储"，AI 有手有眼，但没有用户递过来的钩子。</p></div>
+        <div class="q sol" data-page-node-id="ihsZ6qfgxgZocESgw8Xgwc"><div class="qh" data-page-node-id="cWWLgFXUk3nTbjFLRiElK8">🔧 解法</div><p data-page-node-id="lKYVkGS1x3QKmAnDUXf1jA">对话输入 <b data-page-node-id="D8lcrclqOHKpZS4CoxrSyF">@ 唤起资产选择器</b>（类型 Tab + 搜索 + 最近），选中条目即注入上下文；端内 AI 与 DSH 同源实现；先做文本类（收藏/历史），图片给描述占位。</p></div>
+        <div class="q gain" data-page-node-id="KVnlbUJYiGIY6fiJB0lJZR"><div class="qh" data-page-node-id="AgAJNFFUWGGF0hOKPEzfDN">📈 预期收益</div><p data-page-node-id="6McawUYYdEBLBsKjddQyno">资产第一次变成<b data-page-node-id="4BVgkDI6tYFpUhfROymTAi">"AI 可引用输入"</b>；引用行为本身=用户主动标记的又一高信噪比信号（复访当次留存 78.3% 的机制化）；为 AI 收藏夹/本地库导流——引用了才知道"要不要存"。</p></div>
+        <div class="q risk" data-page-node-id="TFKnPcevRitqkWFXEnb32H"><div class="qh" data-page-node-id="8ypA2gngPfZtY1Brsav8jX">⚠️ 风险</div><p data-page-node-id="b7p0eqjP0dLw4mde7Hz3nw">@ 交互太重会打扰主对话；资产内容注入占上下文长度（需截断/摘要策略）；与已有搜索结果注入的边界要理清；<b data-page-node-id="ne6T754HxAG9DGQONEbIyv">真实引用率需埋点验证</b>，别做成没人用的花架子。</p></div>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="case-block" data-page-node-id="Q8LvtB2pwEKunxMQojlXGA">
+      <div class="case-head" data-page-node-id="mSJAabIKdmMkawaLXwm0rn">
+        <span class="cno" data-page-node-id="oRZ7zsAp7PzGFRUiLWN4Eq">3</span>
+        <span class="ctitle" data-page-node-id="3o4dyB6OH3ezkJtAuJUWuS">灵感捕获 MVP</span>
+        <span class="cpri p0p" data-page-node-id="hykL1bMlqrS1aDAOqPwoxb">P0 · 上游水管</span>
+      </div>
+      <div class="quad" data-page-node-id="aavJbS09jk3IXpt8uKBb3O">
+        <div class="q pain" data-page-node-id="ziN752qoS8YBTRhsllgT6L"><div class="qh" data-page-node-id="VOnweIq8ADrOD1OGh4xk4O">😖 痛点</div><p data-page-node-id="wyzRa9YRiDB4xeG98gPBbC">浏览中的碎片（一张图 / 一段话 / 一个临时想法）<b data-page-node-id="3SK764zhjsQcoMEPl7CMoz">没有浏览器原生出口</b>：截图落相册、文字靠复制粘贴，与上下文断裂。浏览器只给了"书签"这一个整页出口，碎片级收藏缺失。<b data-page-node-id="YeUG2rSc58iMqpIN0mWJIf">AI 时代碎片是原料，没有捕获就没有后续一切。</b></p></div>
+        <div class="q sol" data-page-node-id="9rLeQc9xThxifeU45GrIgL"><div class="qh" data-page-node-id="fhM5XFMtjkqCYJfknMYKV1">🔧 解法</div><p data-page-node-id="t9HAAfk29HF36j9TwdbyWx">划词 / 右键 / 快捷键三入口，图片 + 文字 + 选区<b data-page-node-id="sMw1eBMVyvYBxkC8OkUIqE">一键入本地库</b>；捕获即打时间戳 + 来源页；不做多余加工，先保证成本趋近 0。</p></div>
+        <div class="q gain" data-page-node-id="UAISgIGDfuOEHyAKHKOgHg"><div class="qh" data-page-node-id="yUKREBTBOlLOYdzHJqo5Lj">📈 预期收益</div><p data-page-node-id="TLCzCTsMiHMto5d3gvSj8d">上游水管打通，本地知识库才有活水；捕获够轻才有量；主动标记数据持续反哺"高信噪比"叙事；承接汉博"为什么每个男生都有一个硬盘"的强需求——给攒的本能一个出口。</p></div>
+        <div class="q risk" data-page-node-id="baiRrmdln68RsH38SvGrDP"><div class="qh" data-page-node-id="gZDJyPjbZF4Dp9PXnBa7BR">⚠️ 风险</div><p data-page-node-id="BTEXs4qWlBwBf4IrcFPHau">入口打扰度——不能抢划词复制的手势；与现有截图/网页片段收藏/元素捕捉的入口关系（<b data-page-node-id="jlRWv9fgrIelRAlwxiDYwb">晓航/苏导 overlap，需与陈颖重确认边界</b>）；图片碎片的后续理解成本（多模态占位）。</p></div>
+      </div>
+    </div>
+
+    <!-- D -->
+    <div class="case-block" data-page-node-id="sDyAcz420zsf7soC1jLPmC">
+      <div class="case-head" data-page-node-id="8TpQrrApeIqYmV8Wzo5feb">
+        <span class="cno" data-page-node-id="Cyavw9E92TXtuuUa5qETlZ">4</span>
+        <span class="ctitle" data-page-node-id="FFT9JdJknBaCfRMs8jYSTN">主动想起 · 每日轻投喂</span>
+        <span class="cpri p1p" data-page-node-id="XVYRMY5YMjBNtkYmRTIdm9">P1 · 秘书 vs 外包的分水岭</span>
+      </div>
+      <div class="quad" data-page-node-id="2sP2Tn6OvWD74LXxPEVfS1">
+        <div class="q pain" data-page-node-id="1SoCX5JoGXSFbiX8J4fD8M"><div class="qh" data-page-node-id="2azDDwENnwnoqJJ2eOx6Qg">😖 痛点</div><p data-page-node-id="mTpKLHOCOy4E8whlvUEf4e">引用输入是"用户主动"，但汉博 9/2 明说还要<b data-page-node-id="EFtRD1fw3BV7qLEDMmB8OE">"AI 每天基于我的现状投喂"</b>。没有自蒸馏知识库的 DSH 像聪明的外包——你给啥他找啥；有了它，才是每天守在身边的秘书。</p></div>
+        <div class="q sol" data-page-node-id="gdqTiZgG7ikqiDddLuOMrp"><div class="qh" data-page-node-id="4yfQgJCnFd3thtN11xBBFO">🔧 解法</div><p data-page-node-id="5t7VM9BUjzvJnBmjhqgx79">DSH 会话开场/每日首次，把<b data-page-node-id="6USoMxCMpKBxTpqoTC30Vp">当日新攒资产的轻量摘要</b>注入上下文，让 AI 知道用户最近在关注什么；克制：≤3 条、可关闭、不打断主任务。</p></div>
+        <div class="q gain" data-page-node-id="6a2w7A5bNTtslKHq13Z0Av"><div class="qh" data-page-node-id="qCCwRa3qr1aKynoEIRo0Gv">📈 预期收益</div><p data-page-node-id="NpWoa8ysUXmTDCOI8TwYLt">从"引用输入"升级到"主动想起"，资产供给闭环完整；<b data-page-node-id="biJfBBzoSjWMOcNOIAVbew">对应老板点名要的"每天投喂"原话</b>；为后续意图抽取/个性化建议铺路。</p></div>
+        <div class="q risk" data-page-node-id="TCOJytP1q3Y2Fp90VwSzJy"><div class="qh" data-page-node-id="ytSSVkkN0x5nPkiSiQsCAw">⚠️ 风险</div><p data-page-node-id="uwkN6fA2BQZgSbqmwBarNb">打扰与误判——注入不相关 = 负体验，<b data-page-node-id="KJh6929ilty0jlrcqfGeVp">宁缺毋滥</b>；每日注入也占 context（摘要必须极短）；"投喂什么"的筛选逻辑要先小范围验证。</p></div>
+      </div>
+    </div>
+
+    <!-- E -->
+    <div class="case-block" data-page-node-id="hz6HZIEs4oChiPcjgliv1V">
+      <div class="case-head" data-page-node-id="2xi4DhfQ8eMYCOvCJOFjxl">
+        <span class="cno" data-page-node-id="F6NmKqg7lfC0hRdRsTtBir">5</span>
+        <span class="ctitle" data-page-node-id="9igk0GXoOT9f8sRVLI4Fw3">收藏 / 书签整理收口 DSH</span>
+        <span class="cpri p1p" data-page-node-id="aRfeKX8vGtDiW7HHaLEiwU">P1 · 验证型</span>
+      </div>
+      <div class="quad" data-page-node-id="eKm3A1rFMUwjZjvgQqeba5">
+        <div class="q pain" data-page-node-id="zU0fY7ZYykbWHCjsAbaDRB"><div class="qh" data-page-node-id="0qZPPY1M1IaaZ9MvZCFHbO">😖 痛点</div><p data-page-node-id="dqKyHa6P2pbGXuDB0kRFOq">书签智能整理曾被当成<b data-page-node-id="Usx8zXI6hAYc4kS1CCN3np">要单独建的一条产线</b>（分组/打标/健康扫描），投入重、周期长——但 DSH 一期已经证明它一句话就能干。</p></div>
+        <div class="q sol" data-page-node-id="6E0frcp9eUVjJL45bfjeIA"><div class="qh" data-page-node-id="yrBFzExoE5eMwOw1PAdnnO">🔧 解法</div><p data-page-node-id="ULd6jiPk79nAe2e6wtv59z"><b data-page-node-id="wUKmLumE73ZyhwDEDSlFoy">不新建产品</b>：把"收藏夹整理"沉淀为 DSH 的 agent 预设/内置技能（分组/去重/打标/死链提醒）；资产侧只保证 JSAPI 数据可读写；健康扫描这类重活按需调。</p></div>
+        <div class="q gain" data-page-node-id="uja7l7nxefdSqszTuk0lzH"><div class="qh" data-page-node-id="TxFogk1sPAN0RhjQjF1FBq">📈 预期收益</div><p data-page-node-id="RWBkQqcEKIv6VV5a7UvD26">省掉一整条产线的建设成本；验证"资产加工交给 DSH、资产侧只做供给"的架构主张；一期 base 已有，<b data-page-node-id="Io1ARpfMvG3eKsI2wzAn6t">快速出活、马上能讲</b>。</p></div>
+        <div class="q risk" data-page-node-id="5chDus77tHbrBn2MOrjN2N"><div class="qh" data-page-node-id="xdZHksAlE72KDOzfgoY1N5">⚠️ 风险</div><p data-page-node-id="BX6KCWGUWk0hiXUKNCTsBh">一句话整理的"确认-执行"链路要防误操作（批量写不可逆，需预览/回滚）；深度语义聚类质量依赖模型——<b data-page-node-id="LAR18VNPJC4P21CWmL4v4X">本地做不了就烧 TPM</b>，深整理放云端按需、轻整理走本地规则。</p></div>
+      </div>
+    </div>
+
+    <!-- F -->
+    <div class="case-block" data-page-node-id="6JEfE9elgz6ON4iuTNJq6e">
+      <div class="case-head" data-page-node-id="WhKbcplETCUMt7CuxtrJrv">
+        <span class="cno" data-page-node-id="5B5DS2AHqmorJ3ByRv7nio">6</span>
+        <span class="ctitle" data-page-node-id="Dkt7SRTkdbWcGtwa8PUwCF">本地库检索增强</span>
+        <span class="cpri p1p" data-page-node-id="TwBUimHuBMdRnKEGHVEAd1">P1 · 体验补齐</span>
+      </div>
+      <div class="quad" data-page-node-id="0p4FH9K3jWwtozK9yG8EX1">
+        <div class="q pain" data-page-node-id="pxoq5zPVmF52EggDSl1VEA"><div class="qh" data-page-node-id="V7AQIW1MdyvaqZCV1h7VPJ">😖 痛点</div><p data-page-node-id="4fofxm4faeDtqVuPxodYNI">本地库只做关键词匹配，用户说"我上次看的那篇讲 XX 的"<b data-page-node-id="DpLgb3ME2AllGdVVAVu5WC">记不住原文</b>，纯字面检索会落空。</p></div>
+        <div class="q sol" data-page-node-id="AIL7EIpToDPpCXhmfROZn4"><div class="qh" data-page-node-id="iobX50xTHkglfe4pDuHRoD">🔧 解法</div><p data-page-node-id="SByxybWKF1Nzt4sMyczwSa">本地做轻量语义索引（端侧 embedding）；@ 引用结果带<b data-page-node-id="pcQSDo2i990BqqEZGmRGaf">来源页跳转 + 原文摘要</b>，让用户确认"AI 引对了"。</p></div>
+        <div class="q gain" data-page-node-id="C5UhYHeqKi9QLDIg2E1B2B"><div class="qh" data-page-node-id="u6d2b2xaZ5BJZxfc4DFGL4">📈 预期收益</div><p data-page-node-id="hjRNDa1hmdtFb2DoBRqmyj">召回从"字面"到"意思"，引用成功率提升；结果可溯源 → 建立"AI 引用我的东西"的信任。</p></div>
+        <div class="q risk" data-page-node-id="BFDth5xDAvGcR4dcOea3uS"><div class="qh" data-page-node-id="hGQrwbuxv7VDpfAmYzRiav">⚠️ 风险</div><p data-page-node-id="gwnbOYUAL5XMKgO77xSpLI">端侧 embedding 质量与模型体积的取舍；本地索引膨胀后的性能；图片等多模态召回需额外能力，先做文本。</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOOK -->
+  <div class="hook-card" id="hook" data-page-node-id="AoF6dwSqY3UdYOoW6fROyE">
+    <div class="hook-label" data-page-node-id="RyAGPRv7EFH28zCtEfLkeF">★ ONE LINE HOOK</div>
+    <div class="hook-text" data-page-node-id="bnohsteQHLLXwwvOlYWjZ7">
+      不是做"记忆"，是做"资产供给"<br data-page-node-id="BXWRUU8U9wAKJWokNPnONj">
+      让 DSH 从聪明的外包<br data-page-node-id="Jd4EpUUxa0UoLZy83bI6Sn">
+      变成每天守在身边的秘书
+    </div>
+  </div>
+
+  <div class="footer" data-page-node-id="8abx5M2T8WHqhp3FuZuem5">
+    游杰 · DSH 二期 · 资产线规划草案（v1）<br data-page-node-id="xwNGttvyFEBWpeHkbWbSQc">
+    输入：DSH 一期进展汇报 / 一期功能拆解 / 二期临时表 / 汉博 9/2 会议意图 / 洋哥 paw 本地资产管线<br data-page-node-id="ggZYc6ru0YhtzLsYQyw4VT">
+    术语口径：资产供给 · 引用输入 · 资产深度（不用"记忆架构 / 第二大脑"）<br data-page-node-id="TVqw5XbKJD7o0gmPEFnsDM">
+    待办：①与陈颖确认捕获入口边界 ②与光云对齐投喂机制与 JSAPI 写权限 ③验证端侧摘要质量
+  </div>
+
+</div>
+</body>
+</html>
